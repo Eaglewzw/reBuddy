@@ -1,10 +1,8 @@
 #include "pet_ui.h"
+#include "lvgl.h"
 #include "rb_arm.h"
-#include "platform/console_board.h"
-#include "platform/console_memory.h"
-#include "input/console_input.h"
-#include "communication/console_can.h"
-#include "ui_console_display.h"
+#include "rb_board.h"
+#include "rb_memory.h"
 #include "esp_log.h"
 #include "esp_timer.h"
 #include "nvs_flash.h"
@@ -20,11 +18,12 @@ static void update(lv_timer_t *timer)
 {
     (void)timer;
     uint64_t now=rb_platform_now_ms();
-    bool released=console_board_estop_released();
+    bool released=rb_board_estop_released();
     if (!released) rb_engine_stop(&pet,"E-STOP");
-    console_input_event_t input;
-    for (unsigned n=0;n<8 && console_input_read(&input);++n) {
-        if (input.back) rb_engine_stop(&pet,"BACK BUTTON");
+    rb_board_input_t input;
+    for (unsigned n=0;n<8 && rb_board_read_input(&input);++n) {
+        if (input.fault) rb_engine_stop(&pet,"BOARD INPUT FAULT");
+        else if (input.back) rb_engine_stop(&pet,"BACK BUTTON");
         else if (input.enter && pet.state!=RB_STOPPED) (void)rb_engine_event(&pet,RB_HAPPY,now);
         else if (input.dial) rb_engine_style(&pet,input.dial>0?RB_LIVELY:RB_LAZY);
     }
@@ -35,13 +34,9 @@ static void update(lv_timer_t *timer)
 }
 void app_main(void)
 {
-    console_board_init_estop();
-    console_board_init();
+    ESP_ERROR_CHECK(rb_board_init());
     esp_err_t ret=nvs_flash_init();
     if (ret!=ESP_OK) ESP_LOGW("reBuddy","NVS unavailable (%s); using session defaults",esp_err_to_name(ret));
-    ret=console_can_init();
-    if (ret!=ESP_OK) ESP_LOGW("reBuddy","CAN unavailable: %s",esp_err_to_name(ret));
-    console_input_init();
     rb_config_t config=rb_config_default();
     config.drowsy_ms=CONFIG_REBUDDY_DROWSY_SECONDS*1000;
     config.sleep_ms=CONFIG_REBUDDY_SLEEP_SECONDS*1000;
@@ -49,13 +44,12 @@ void app_main(void)
         ESP_LOGE("reBuddy","Invalid idle timers: sleep must exceed drowsy"); return;
     }
     rb_gesture_init(&gesture);
-    ESP_ERROR_CHECK(ui_console_display_set_backlight(true));
-    if (!ui_console_display_lock(0)) return;
+    if (!rb_board_display_lock(0)) return;
     rb_ui_create(&pet,&gesture);
-    if (!console_board_estop_released()) rb_engine_stop(&pet,"E-STOP");
+    if (!rb_board_estop_released()) rb_engine_stop(&pet,"E-STOP");
     rb_ui_update();
     lv_timer_create(update,20,NULL);
-    ui_console_display_unlock();
+    rb_board_display_unlock();
     ESP_LOGI("reBuddy","v0.1 screen demo ready: PREVIEW ONLY; no motor enable or RS motion commands");
-    for (;;) { vTaskDelay(pdMS_TO_TICKS(30000)); console_memory_log((uint32_t)(rb_platform_now_ms()/1000)); }
+    for (;;) { vTaskDelay(pdMS_TO_TICKS(30000)); rb_memory_log(); }
 }

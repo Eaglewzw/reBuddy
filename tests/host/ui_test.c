@@ -69,6 +69,13 @@ int main(void)
     click(257,210); assert(pet.state==RB_STOPPED);
     point=(lv_point_t){257,210}; pressed=true; pump(800); pressed=false; pump(100);
     assert(pet.state==RB_IDLE); assert(pet.action==RB_NONE);
+    /* A board I2C read failure resets the pointer, not a successful release. */
+    point=(lv_point_t){160,100}; pressed=true; pump(100); assert(gesture.down);
+    lv_indev_reset(indev,NULL); assert(!gesture.down && !gesture.tap_pending);
+    pressed=false; pump(500); assert(pet.action==RB_NONE);
+    point=(lv_point_t){257,90}; pressed=true; pump(100);
+    lv_indev_reset(indev,NULL); pressed=false; pump(500);
+    assert(pet.action==RB_NONE); /* No phantom HAPPY click on a failed sample. */
     lv_mem_monitor_t before,after; lv_mem_monitor(&before);
     for (unsigned n=0;n<120;++n) { click(257,90); click(257,130); }
     lv_mem_monitor(&after); assert(after.free_size==before.free_size);

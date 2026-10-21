@@ -58,7 +58,7 @@ cmake --build build-host
 ctest --test-dir build-host --output-on-failure
 ```
 
-构建屏幕固件还需要 ESP-IDF 5.5.5 和外部板级驱动。**当前板级驱动依赖一个私人仓库，未包含在本项目中；没有访问权限时仍可运行核心测试。** 固件构建、烧录和资源制作见[开发指南](docs/GETTING_STARTED.md)，界面测试与截图生成见[测试说明](docs/TESTING.md)。
+**项目可独立构建，不依赖私人仓库。** 屏幕、触摸、IO 扩展和按键适配包含在 [`components/rebuddy_board/`](components/rebuddy_board/) 中，构建屏幕固件只需 ESP-IDF 5.5.5 和公开组件。 固件构建、烧录和资源制作见[开发指南](docs/GETTING_STARTED.md)，界面测试与截图生成见[测试说明](docs/TESTING.md)。
 
 ## 参与开发
 
@@ -70,4 +70,4 @@ ctest --test-dir build-host --output-on-failure
 
 ## 许可证
 
-本项目代码采用 [Apache-2.0](LICENSE) 许可证。外部板级驱动、第三方组件和角色素材的来源见[第三方说明](THIRD_PARTY_NOTICES.md)。
+本项目代码采用 [Apache-2.0](LICENSE) 许可证。第三方组件和角色素材的来源见[第三方说明](THIRD_PARTY_NOTICES.md)。

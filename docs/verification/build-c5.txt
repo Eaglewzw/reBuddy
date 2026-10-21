@@ -1,9 +1,12 @@
 SDK: ESP-IDF v5.5.5 (b774170ff46c393eeb5e495ea37936038d3f4f4f)
 Target: esp32c5
+Board component: components/rebuddy_board (included in this repository)
+Verification: source-only copy to a separate directory, fresh build and sdkconfig
+External application checkout: none
+Dependency downloads: cached public Espressif registry packages
+Public dependencies: LVGL 9.5.0; esp_lvgl_port 2.9.0; esp_lcd_touch 1.2.1; esp_lcd_touch_gt911 1.2.1
+Component path audit: 62 nonempty component paths, all inside source copy or public SDK
+Compiler source audit: 1144 entries, all inside source copy or public SDK
+Application size: 625968 bytes
+Result: Project build complete
 Hardware run: not performed
-Bootloader binary size 0x5670 bytes. 0x990 bytes (10%) free.
-Successfully created ESP32-C5 image.
-reBuddy.bin binary size 0xa3030 bytes. Smallest app partition is 0x7f0000 bytes. 0x74cfd0 bytes (92%) free.
-Project build complete. To flash, run:
-Board checkout: external ../.references/esp32c5_ui_console (no submodule)
-Fresh build after external dependency relocation: passed

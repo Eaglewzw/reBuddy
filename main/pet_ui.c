@@ -26,11 +26,15 @@ static void small(lv_obj_t *o) { lv_obj_set_style_text_font(o,&lv_font_montserra
 static void touch(lv_event_t *event)
 {
     lv_event_code_t code=lv_event_get_code(event);
+    if (code==LV_EVENT_PRESS_LOST || code==LV_EVENT_INDEV_RESET) {
+        rb_gesture_touch(gestures,pet,RB_TOUCH_CANCEL,0,0,rb_platform_now_ms());
+        rb_ui_update();
+        return;
+    }
     rb_touch_phase_t phase;
     if (code==LV_EVENT_PRESSED) phase=RB_TOUCH_DOWN;
     else if (code==LV_EVENT_PRESSING) phase=RB_TOUCH_MOVE;
     else if (code==LV_EVENT_RELEASED) phase=RB_TOUCH_UP;
-    else if (code==LV_EVENT_PRESS_LOST) phase=RB_TOUCH_CANCEL;
     else return;
     lv_indev_t *indev=lv_indev_active(); if (!indev) return;
     lv_point_t point; lv_indev_get_point(indev,&point);

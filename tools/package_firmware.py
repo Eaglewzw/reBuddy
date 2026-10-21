@@ -39,7 +39,7 @@ shutil.copy2(ROOT/'docs/preview/contact-sheet.png',out/'screen-preview.png')
 manifest = {
     'project': 'reBuddy', 'version': '0.1.0', 'target': 'esp32c5', 'sdk': '5.5.5',
     'mode': 'preview_only_no_motor_commands', 'hardware_tested': False,
-    'reference_commit': 'ba288ae49c80f19b10d14dd9d428f63e3dd41486',
+    'board_component': 'rebuddy_board', 'private_dependencies': False,
     'flash_files': flash['flash_files'], 'flash_settings': flash['flash_settings']}
 (out/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 (out/'README.txt').write_text(

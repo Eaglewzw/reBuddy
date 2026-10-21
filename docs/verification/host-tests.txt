@@ -1,34 +1,36 @@
 Internal ctest changing into directory: /home/verser/esp32/reBuddy/build-host
 Test project /home/verser/esp32/reBuddy/build-host
       Start  1: config
- 1/14 Test  #1: config ...........................   Passed    0.00 sec
+ 1/15 Test  #1: config ...........................   Passed    0.00 sec
       Start  2: actions
- 2/14 Test  #2: actions ..........................   Passed    0.00 sec
+ 2/15 Test  #2: actions ..........................   Passed    0.00 sec
       Start  3: styles
- 3/14 Test  #3: styles ...........................   Passed    0.00 sec
+ 3/15 Test  #3: styles ...........................   Passed    0.00 sec
       Start  4: interrupt
- 4/14 Test  #4: interrupt ........................   Passed    0.00 sec
+ 4/15 Test  #4: interrupt ........................   Passed    0.00 sec
       Start  5: sleep
- 5/14 Test  #5: sleep ............................   Passed    0.00 sec
+ 5/15 Test  #5: sleep ............................   Passed    0.00 sec
       Start  6: stop
- 6/14 Test  #6: stop .............................   Passed    0.00 sec
+ 6/15 Test  #6: stop .............................   Passed    0.00 sec
       Start  7: gestures
- 7/14 Test  #7: gestures .........................   Passed    0.00 sec
+ 7/15 Test  #7: gestures .........................   Passed    0.00 sec
       Start  8: arm_timeout
- 8/14 Test  #8: arm_timeout ......................   Passed    0.00 sec
+ 8/15 Test  #8: arm_timeout ......................   Passed    0.00 sec
       Start  9: arm_limit
- 9/14 Test  #9: arm_limit ........................   Passed    0.00 sec
+ 9/15 Test  #9: arm_limit ........................   Passed    0.00 sec
       Start 10: arm_send
-10/14 Test #10: arm_send .........................   Passed    0.00 sec
+10/15 Test #10: arm_send .........................   Passed    0.00 sec
       Start 11: control_timeout
-11/14 Test #11: control_timeout ..................   Passed    0.00 sec
+11/15 Test #11: control_timeout ..................   Passed    0.00 sec
       Start 12: soak
-12/14 Test #12: soak .............................   Passed    0.02 sec
-      Start 13: action_schema
-13/14 Test #13: action_schema ....................   Passed    0.02 sec
-      Start 14: ui_rgb565
-14/14 Test #14: ui_rgb565 ........................   Passed    2.08 sec
+12/15 Test #12: soak .............................   Passed    0.02 sec
+      Start 13: board_input
+13/15 Test #13: board_input ......................   Passed    0.00 sec
+      Start 14: action_schema
+14/15 Test #14: action_schema ....................   Passed    0.02 sec
+      Start 15: ui_rgb565
+15/15 Test #15: ui_rgb565 ........................   Passed    2.15 sec
 
-100% tests passed, 0 tests failed out of 14
+100% tests passed, 0 tests failed out of 15
 
-Total Test time (real) =   2.14 sec
+Total Test time (real) =   2.21 sec
