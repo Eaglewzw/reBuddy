@@ -4,6 +4,8 @@
 
 reBuddy 是一个基于 **ESP32-C5、触摸屏和 reBot RS 机械臂** 的开源桌宠项目。屏幕里的角色负责表情，机械臂负责身体动作：探头回应你的招呼，被抚摸时轻轻蹭蹭，困了就蜷下来打个盹。
 
+**板级适配随项目源码提供，可独立构建。** 屏幕、触摸、IO 扩展和按键支持均包含在仓库中，软件依赖全部来自公开的 ESP-IDF、LVGL 和 Espressif 组件。
+
 项目以直接触摸角色为主要交互方式，希望把触摸输入、表情和实体动作串成一次自然的互动，让机械臂有一点可爱、有一点性格，也有值得反复探索的小反应。
 
 ## 和它相处
@@ -48,17 +50,30 @@ reBuddy 是一个基于 **ESP32-C5、触摸屏和 reBot RS 机械臂** 的开源
 
 ## 快速开始
 
-无需开发板即可运行行为核心测试。准备 Git、CMake、Ninja、C/C++ 编译器和 Python 3 后执行：
+**构建 ESP32-C5 屏幕固件**
+
+安装 ESP-IDF 5.5.5 及 ESP32-C5 工具链后执行以下命令。将 SDK 路径替换为实际安装位置；首次构建会自动下载公开组件，无需克隆其他应用仓库。
 
 ```bash
 git clone https://github.com/Eaglewzw/reBuddy.git
 cd reBuddy
+source /path/to/esp-idf-v5.5.5/export.sh
+idf.py -B build-c5 build
+```
+
+固件输出为 `build-c5/reBuddy.bin`。当前为屏幕预览版本，尚不驱动实体机械臂。接线、烧录和旧版本升级步骤见[开发指南](docs/GETTING_STARTED.md)。
+
+**在电脑上运行测试**
+
+无需开发板或 ESP-IDF。准备 CMake、Ninja、C/C++ 编译器和 Python 3，在项目根目录执行：
+
+```bash
 cmake -S tests/host -B build-host -G Ninja
 cmake --build build-host
 ctest --test-dir build-host --output-on-failure
 ```
 
-**项目可独立构建，不依赖私人仓库。** 屏幕、触摸、IO 扩展和按键适配包含在 [`components/rebuddy_board/`](components/rebuddy_board/) 中，构建屏幕固件只需 ESP-IDF 5.5.5 和公开组件。 固件构建、烧录和资源制作见[开发指南](docs/GETTING_STARTED.md)，界面测试与截图生成见[测试说明](docs/TESTING.md)。
+界面测试与截图生成见[测试说明](docs/TESTING.md)。
 
 ## 参与开发
 
