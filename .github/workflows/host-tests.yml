@@ -1,0 +1,20 @@
+name: Host tests
+on: [push, pull_request]
+jobs:
+  behavior-and-ui:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch public LVGL 9.5.0
+        run: git clone --depth 1 --branch v9.5.0 https://github.com/lvgl/lvgl.git /tmp/lvgl
+      - name: Configure
+        run: cmake -S tests/host -B build-host -G Ninja -DREBUDDY_LVGL_DIR=/tmp/lvgl
+      - name: Build
+        run: cmake --build build-host -j4
+      - name: Test
+        run: ctest --test-dir build-host --output-on-failure
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: lvgl-rgb565-previews
+          path: build-host/*.ppm

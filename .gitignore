@@ -1,0 +1,11 @@
+/build*/
+/managed_components/
+/sdkconfig
+/sdkconfig.old
+/dependencies.lock
+/dist/
+__pycache__/
+*.pyc
+.DS_Store
+/.vscode/
+/.clangd

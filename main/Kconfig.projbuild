@@ -1,0 +1,10 @@
+menu "reBuddy desktop companion"
+    config REBUDDY_DROWSY_SECONDS
+        int "Idle time before drowsiness (seconds)"
+        range 5 600
+        default 30
+    config REBUDDY_SLEEP_SECONDS
+        int "Idle time before dozing (seconds; must exceed drowsy time)"
+        range 10 1800
+        default 60
+endmenu

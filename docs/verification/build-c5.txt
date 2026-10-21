@@ -1,0 +1,9 @@
+SDK: ESP-IDF v5.5.5 (b774170ff46c393eeb5e495ea37936038d3f4f4f)
+Target: esp32c5
+Hardware run: not performed
+Bootloader binary size 0x5670 bytes. 0x990 bytes (10%) free.
+Successfully created ESP32-C5 image.
+reBuddy.bin binary size 0xa3030 bytes. Smallest app partition is 0x7f0000 bytes. 0x74cfd0 bytes (92%) free.
+Project build complete. To flash, run:
+Board checkout: external ../.references/esp32c5_ui_console (no submodule)
+Fresh build after external dependency relocation: passed
