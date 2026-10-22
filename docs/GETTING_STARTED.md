@@ -1,56 +1,51 @@
 # 开发与体验指南
 
-选定素材与旧固件的区别见 [ASSET_STATUS.md](ASSET_STATUS.md)。当前可构建的旧原型实现依据 [资料包对照记录](REFERENCE_IMPLEMENTATION.md)，ESP-IDF 5.5.5 / ESP32-C5 / LVGL 9.5.0。板级支持随仓库提供；首次构建需下载公开组件。
+当前为 ESP32-C5 纯触摸屏桌宠。使用 ESP-IDF 5.5.6、LVGL 9.5.0，板级组件随仓库提供，首次构建只下载公开依赖。
 
 ## 构建与烧录
 
 ```bash
-source /path/to/esp-idf-v5.5.5/export.sh
-idf.py -B build reconfigure build
-# 需要上板测试时执行，串口按实际设备选择：
+source /path/to/esp-idf/export.sh
+idf.py -B build build
+# 由操作者选择实际设备并执行：
 idf.py -B build -p /dev/ttyACM0 flash monitor
 ```
 
-已有 sdkconfig 不会被 defaults 自动覆盖，需通过 `idf.py -B build menuconfig` 调整。旧构建目录仍可使用，但所有命令应指定同一 `-B`。当前产物为 `build/reBuddy.bin`；本轮开发没有执行烧录。
+目标与默认配置见 `sdkconfig.defaults`。已有 `sdkconfig` 不会被 defaults 自动覆盖，需要通过 menuconfig 更新；本版 `CONFIG_ESP_LCD_TOUCH_MAX_BUTTONS=0`。串口不固定为 `/dev/ttyACM0`，请按实际连接选择。
 
-此机器采用 EIM 工具布局时，可使用已安装环境运行（路径按机器调整）：
+## 体验操作
+
+1. 角色识别区域为 x=80～239、y=40～199；轻点并松手探头。
+2. 缓慢抚摸身体可轻蹭；在眼睛上方的头顶缓慢往返，6 秒内累计 3 秒有效摸头后开心。按住不动不计时，头部区域随显示姿态变化。[区域示意](preview/head-petting-guide.png)
+3. 1.2 秒内轻点三次收拢，再累计约 1.2 秒有效抚摸展开。展开后先松手再进行下一次互动。
+4. 快划触发歪头，同一接触只触发一次；松手后可开始新手势。
+5. 无操作 60 秒或设置选择休息后持续睡眠，呼吸和 Z 循环；只有长按左下角恢复按钮才唤醒。
+6. 左下暂停后再次点击继续；右下设置切换活泼／慵懒、进入休息。点击齿轮或菜单外区域关闭设置。
+
+## 修改参数与素材
+
+安装 Pillow 后使用下列独立工具：
 
 ```bash
-export IDF_PATH=/home/verser/.espressif/v5.5.5/esp-idf
-export IDF_TOOLS_PATH=/home/verser/.espressif/tools
-export IDF_PYTHON_ENV_PATH=/home/verser/.espressif/tools/python/v5.5.5/venv
-export PATH="$IDF_PYTHON_ENV_PATH/bin:$IDF_TOOLS_PATH/ninja/1.12.1:$IDF_TOOLS_PATH/riscv32-esp-elf/esp-14.2.0_20260121/riscv32-esp-elf/bin:$PATH"
-python3 "$IDF_PATH/tools/idf.py" -B build build
+python3 tools/generate_pet_config.py
+python3 tools/build_screen_preview.py
+python3 tools/build_room_font.py
+python3 tools/export_action_gifs.py --output build/action-gifs
 ```
 
-## 测试操作
+行为参数在 `config/behavior_defaults.json`；逐姿态头部区域在 `config/design/head_touch_regions.json`。图像导出使用 24 格姿态原图和 4 张睡眠姿态，统一缩放、对齐底座，不生成形变补间。中文字体工具需要 Noto Sans CJK，GIF 工具默认使用 DejaVu Sans，也可用 `--font` 指定字体。
 
-1. 角色区域为 x=80～239、y=40～199；轻点并松手应探头，静止按住只跟随视线。
-2. 缓慢往返滑动 1 秒后松手，观察轻蹭回位；有效移动累计约 3 秒出现一次开心。停住不计时。
-3. 1.2 秒内轻点三次，收拢后继续点击不应再次退缩；温柔抚摸约 1.2 秒后展开，该接触不会立即开心。
-4. 快速划动触发歪头，同一接触继续滑动不应反复触发。
-5. 互动结束后无操作 60 秒入睡，首次角色接触只唤醒；空白区域不会唤醒。
-6. 设置中切换 LIVELY / LAZY、REST / WAKE。STOP、BACK 或急停应冻结身体；急停释放后需长按 RESET 恢复。
+工程已保存生成资源，普通构建不需要 Pillow、图片生成服务或本地字体文件。已选 probe-v2 可使用 `tools/render_approved_probe.py` 在 `build/approved-probe-preview/` 单独重现。
 
-手势阈值是资料包初始值；实际触摸需要持续略长于有效时长门槛，以覆盖去抖、速度估计和换向。风格仅改变播放节奏；ENTER 不再绕过抚摸条件触发开心。CAN 保持待机，日志中的动作事件为 Mock。
-
-## 修改配置和素材
-
-当前配置为 `config/behavior_defaults.json`，原图为 `assets/reference/`。安装 Pillow 后运行：
+## 测试与打包
 
 ```bash
-python3 tools/build_pet_assets.py
-idf.py -B build build
-```
-
-工具验证原图哈希，生成 `assets/animation/frames.bin`、清单、色条、C 帧表与 `rb_pet_config.h`。当前布局/帧率/队列容量等结构性参数有检查；改变这些结构需同步改播放器。旧角色转换工具已清理；`config/actions.json`仍用于历史回归。用户选定的probe-v2使用 `tools/render_approved_probe.py` 重现，两个工具处理不同素材。
-
-## 打包
-
-在带 esptool 的 IDF Python 环境中运行：
-
-```bash
+cmake -S tests/host -B build-host
+cmake --build build-host -j8
+ctest --test-dir build-host --output-on-failure
+python3 tools/render_previews.py build-host build/ui-preview
+# 使用带 esptool 的 ESP-IDF Python 环境：
 python3 tools/package_firmware.py --build build
 ```
 
-输出 `dist/reBuddy-reference-preview/`，含合并固件、分区/引导/应用、配置、资源清单、状态说明、需求对照及 SHA256SUMS。打包清单明确标记仍使用旧原型，尚未集成probe-v2；不附与固件不符的选定GIF。旧分发包已清理，运行该命令才重新生成。它只在本地整理文件，不烧录、不发布。
+打包输出 `dist/reBuddy-esp32c5/`。目录必须为空，也可指定新的 `--output`。包内 `flash.sh` 先校验 SHA256，再按分区地址写入引导、分区表和应用，保留 NVS/PHY 区间；可选 `merged.bin` 从 0x0 写入会覆盖间隙数据。工具只打包，不烧录、不推送。测试与实机验收说明见 [TESTING.md](TESTING.md)。

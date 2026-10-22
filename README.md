@@ -1,62 +1,54 @@
 # reBuddy
 
-基于 XIAO ESP32-C5 CAN Console 的 reBot RS 屏幕桌宠。当前重点是角色动画与动作表现，暂不开展机械臂控制和编舞。
+基于 ESP32-C5 的 reBot RS 屏幕桌宠。它住在带小窗、木地板、地毯与充电角的小屋里，通过触摸、表情和身体动画回应你。
 
-## 当前保留版本：探头 v2
+![当前界面](docs/preview/current.png)
 
-用户已选择保留这版待机 / 探头姿态及往返 GIF，后续动画沿用它作为探头视觉基线。
+## 互动方式
 
-![已保留的待机与探头姿态](docs/preview/probe-v2/comparison.png)
+- 轻点角色小幅抬头注视，缓慢抚摸身体轻蹭，快速划动疑惑歪头、头顶浮出三个问号。
+- 1.2 秒内轻点三次让它收拢；温柔抚摸后安抚展开。
+- 只有抚摸眼睛上方的头顶才累计开心：6 秒内累计 3 秒有效摸头，静止长按不计时。[触摸区域](docs/preview/head-petting-guide.png)
+- 无操作 60 秒后入睡，或从设置选择休息。呼吸与逐渐缩小的 Z 持续循环，长按左下角唤醒。
+- 暂停／恢复入口固定在左下角，设置固定在右下角。设置可切换活泼／慵懒；再次点击齿轮或面板外区域即可关闭。
 
-- [600×600 GIF](docs/preview/probe-v2/probe-v2-poses.gif) · [160×160 GIF](docs/preview/probe-v2/probe-v2-poses-160.gif)
-- [选定原图](assets/approved/probe-v2/source.png) · [素材状态与目录说明](docs/ASSET_STATUS.md)
+[独立 GIF 文件夹](assets/gifs/) · [运行与开发指南](docs/GETTING_STARTED.md) · [素材来源和状态](docs/ASSET_STATUS.md)
 
-目前是两个关键姿态，每个停留700ms，没有连续中间帧，尚未接入固件。现有固件仍使用旧的74帧技术原型，保留它仅为维持行为/显示开发和可构建性。
+## 硬件与范围
 
-## 工程目录
+目标为 XIAO ESP32-C5 CAN Console：320×240 ST7789、GT911 触摸、8 MiB Flash 和 8 MiB Quad PSRAM。板级驱动随工程提供，没有私人仓库依赖。当前仅使用触摸屏，不配置实体按键或 GPIO 急停输入，CAN 保持待机，无电机后端和编舞功能。
 
-| 目录 | 用途 |
-| --- | --- |
-| `assets/approved/` | 用户选择保留的原始素材、来源与校验清单 |
-| `assets/reference/` | 两张原始角色/互动参考图，原样保留 |
-| `assets/animation/` | 现有固件仍依赖的旧RGB565帧、清单和色条 |
-| `docs/preview/probe-v2/` | 选定版本的对齐姿态、对照图及两种尺寸GIF |
-| `main/` | 当前UI、动画播放器、帧缓存及应用入口 |
-| `components/` | 行为核心及板级驱动；旧模块保留供回归 |
-| `config/` | 当前触摸参数与旧动作配置 |
-| `tests/host/` | 行为、资源、板级输入和LVGL测试 |
-| `tools/` | [素材生成、预览与打包工具](tools/README.md) |
-| `docs/reference/` / `docs/verification/` | 原始需求正文 / 最新技术验证记录 |
-| `build/` / `managed_components/` | 本机构建缓存 / 依赖，不作为素材交付目录 |
+当前动画包含 28 张关键姿态，表情已绘制在角色图中。细腻的中间帧、连续跟眼与部分衔接仍待完善；主机测试不能代替实机视觉和连续 30 分钟体验验收。
 
-旧探头12帧试稿、临时裁切图、旧界面截图、未使用的生成角色和旧固件分发包已清理。下载目录中的原始文件未改动。
+## 开发
 
-## 开发入口
-
-- [当前素材状态](docs/ASSET_STATUS.md) · [动画视觉要求](docs/ANIMATION_FIDELITY.md)
-- [网页端制作提示词](docs/WEB_ANIMATION_ASSET_BRIEF.md) · [后续顺序](docs/ROADMAP.md)
-- [构建与操作](docs/GETTING_STARTED.md) · [测试](docs/TESTING.md) · [验收](docs/ACCEPTANCE.md)
-- [硬件](docs/HARDWARE.md) · [显示统计](docs/DISPLAY_PERFORMANCE.md)
-- [旧技术原型实现记录](docs/REFERENCE_IMPLEMENTATION.md)
-
-## 构建与预览
-
-固件基线为ESP-IDF 5.5.5、LVGL 9.5.0，板级实现随工程提供。
+环境：ESP-IDF 5.5.6、LVGL 9.5.0。公开组件版本由 `dependencies.lock` 锁定，首次构建需要下载。
 
 ```bash
-source /path/to/esp-idf-v5.5.5/export.sh
+source /path/to/esp-idf/export.sh
 idf.py -B build build
+# 需要烧录时执行，替换成实际串口：
+idf.py -B build -p /dev/ttyACM0 flash monitor
+```
+
+```bash
 cmake -S tests/host -B build-host
 cmake --build build-host -j8
 ctest --test-dir build-host --output-on-failure
 ```
 
-重新生成选定版本的GIF（需要Pillow，不修改固件资源）：
+## 工程结构
 
-```bash
-python3 tools/render_approved_probe.py
-```
+| 目录 | 内容 |
+| --- | --- |
+| `main/` | LVGL 小屋界面、动画播放器与资源缓存 |
+| `components/` | 当前触摸行为核心与独立板级驱动 |
+| `assets/animation/` | 固件 RGB565 资源和清单 |
+| `assets/gifs/` | 当前小屋版 10 个独立动作 GIF、说明与校验值 |
+| `assets/design/` | 当前素材源图、生成提示词及动作设计草案 |
+| `assets/reference/`、`assets/approved/` | 原始参考与用户选定素材 |
+| `config/` | 行为参数、头部触摸区域与动作分镜设计 |
+| `docs/` | 开发、硬件、动画设计与验收说明 |
+| `tools/`、`tests/host/` | 配置生成、资源导出、打包与测试 |
 
-旧UI诊断截图请输出到 `build/ui-preview/`，避免与已选定的动画素材混放。当前CAN保持待机，未烧录本轮整理结果。
-
-代码采用 [Apache-2.0](LICENSE)，素材来源见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。
+代码采用 [Apache-2.0](LICENSE)。图片、字体和依赖来源见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

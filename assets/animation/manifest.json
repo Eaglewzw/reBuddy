@@ -1,1123 +1,971 @@
 {
+  "question_effect": [
+    {
+      "x": 151,
+      "y": 36,
+      "size": 18,
+      "start": 120,
+      "end": 850
+    },
+    {
+      "x": 183,
+      "y": 23,
+      "size": 24,
+      "start": 230,
+      "end": 900
+    },
+    {
+      "x": 216,
+      "y": 37,
+      "size": 18,
+      "start": 340,
+      "end": 950
+    }
+  ],
   "format": "LVGL9 RGB565 binary images, 12-byte header per frame",
   "size": [
     160,
     160
   ],
-  "derivation": "Fixed-base 2D mesh prototype from the supplied idle figure; not finished 3D sequences",
-  "source": "assets/reference/character_reference.png",
-  "unique_frames": 74,
-  "bytes": 3789688,
+  "asset_version": "room-preview-v1",
+  "visual_status": "key_pose_preview_not_final_animation",
+  "room_source": "assets/design/room-v1/room.png",
+  "room_source_sha256": "ea5190931cf62fbf9850b0f086dad54320c7ddfd37c4e481aeed55c17f392772",
+  "room_bytes": 153612,
+  "room_sha256": "b933877feee03b46e4106d1c3812632d580952a96c4970e537455976e0f9fb26",
+  "face_mode": "baked",
+  "derivation": "Authored atlas cells; uniform downscale, integer ground registration and shared ground-contact rim. No mesh deformation.",
+  "source": "assets/design/screen-preview-v1/pose-atlas.png",
+  "source_sha256": "b170695ef70dc9e4b9dcfcf33cb19a511982a2bf14741e7102a97215eb69feb0",
+  "unique_frames": 28,
+  "bytes": 1433936,
+  "ground_lock_y": 148,
+  "sleep_source": "assets/design/sleep-v2/breath-atlas.png",
+  "sleep_source_sha256": "52af56f8f7a8b66cc6c0f02093c0dc96524756febd4b0586443d441d10a4c438",
+  "sleep_loop": {
+    "frames": [
+      24,
+      25,
+      26,
+      27,
+      26,
+      25,
+      24
+    ],
+    "at_ms": [
+      0,
+      500,
+      1000,
+      1600,
+      2100,
+      2800,
+      3500
+    ],
+    "period_ms": 4200,
+    "ground_lock_y": 139
+  },
+  "registration": [
+    {
+      "name": "idle",
+      "cell": 0,
+      "offset_px": [
+        7,
+        1
+      ]
+    },
+    {
+      "name": "attention",
+      "cell": 1,
+      "offset_px": [
+        7,
+        1
+      ]
+    },
+    {
+      "name": "probe_25",
+      "cell": 2,
+      "offset_px": [
+        10,
+        1
+      ]
+    },
+    {
+      "name": "probe_50",
+      "cell": 3,
+      "offset_px": [
+        13,
+        1
+      ]
+    },
+    {
+      "name": "probe_75",
+      "cell": 4,
+      "offset_px": [
+        12,
+        2
+      ]
+    },
+    {
+      "name": "probe_full",
+      "cell": 5,
+      "offset_px": [
+        14,
+        2
+      ]
+    },
+    {
+      "name": "nuzzle_left_50",
+      "cell": 6,
+      "offset_px": [
+        6,
+        2
+      ]
+    },
+    {
+      "name": "nuzzle_left",
+      "cell": 7,
+      "offset_px": [
+        7,
+        2
+      ]
+    },
+    {
+      "name": "smile_center",
+      "cell": 8,
+      "offset_px": [
+        10,
+        2
+      ]
+    },
+    {
+      "name": "nuzzle_right_50",
+      "cell": 9,
+      "offset_px": [
+        11,
+        2
+      ]
+    },
+    {
+      "name": "nuzzle_right",
+      "cell": 10,
+      "offset_px": [
+        12,
+        2
+      ]
+    },
+    {
+      "name": "tilt_left",
+      "cell": 11,
+      "offset_px": [
+        8,
+        2
+      ]
+    },
+    {
+      "name": "tilt_right",
+      "cell": 12,
+      "offset_px": [
+        6,
+        2
+      ]
+    },
+    {
+      "name": "startle",
+      "cell": 13,
+      "offset_px": [
+        3,
+        2
+      ]
+    },
+    {
+      "name": "fold_half",
+      "cell": 14,
+      "offset_px": [
+        10,
+        2
+      ]
+    },
+    {
+      "name": "folded",
+      "cell": 15,
+      "offset_px": [
+        10,
+        2
+      ]
+    },
+    {
+      "name": "drowsy",
+      "cell": 16,
+      "offset_px": [
+        9,
+        2
+      ]
+    },
+    {
+      "name": "sleep",
+      "cell": 17,
+      "offset_px": [
+        9,
+        2
+      ]
+    },
+    {
+      "name": "wake_eyes",
+      "cell": 18,
+      "offset_px": [
+        3,
+        3
+      ]
+    },
+    {
+      "name": "happy_up",
+      "cell": 19,
+      "offset_px": [
+        7,
+        3
+      ]
+    },
+    {
+      "name": "happy_open",
+      "cell": 20,
+      "offset_px": [
+        7,
+        3
+      ]
+    },
+    {
+      "name": "happy_close",
+      "cell": 21,
+      "offset_px": [
+        13,
+        3
+      ]
+    },
+    {
+      "name": "recover_half",
+      "cell": 22,
+      "offset_px": [
+        10,
+        3
+      ]
+    },
+    {
+      "name": "blink",
+      "cell": 23,
+      "offset_px": [
+        9,
+        3
+      ]
+    },
+    {
+      "name": "sleep_exhale",
+      "cell": 0,
+      "offset_px": [
+        1,
+        1
+      ],
+      "source": "assets/design/sleep-v2/breath-atlas.png"
+    },
+    {
+      "name": "sleep_inhale_1",
+      "cell": 1,
+      "offset_px": [
+        1,
+        1
+      ],
+      "source": "assets/design/sleep-v2/breath-atlas.png"
+    },
+    {
+      "name": "sleep_inhale_2",
+      "cell": 2,
+      "offset_px": [
+        1,
+        1
+      ],
+      "source": "assets/design/sleep-v2/breath-atlas.png"
+    },
+    {
+      "name": "sleep_inhale_peak",
+      "cell": 3,
+      "offset_px": [
+        1,
+        1
+      ],
+      "source": "assets/design/sleep-v2/breath-atlas.png"
+    }
+  ],
   "frames": [
     {
       "offset": 0,
-      "eyes": [
+      "head_region": [
         [
-          95,
-          46
+          77,
+          17
         ],
         [
-          122,
+          108,
+          17
+        ],
+        [
+          129,
+          38
+        ],
+        [
+          79,
           43
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "64f05e49dc37be8a8ed3e26f4e62cf00b2caac216f7fdfb1a088e80e864b9ec4"
+      "face_mode": "baked",
+      "name": "idle",
+      "sha256": "721b75718f519ed40923966147e2b132d808d74428cbeaa8132141f7bd1f4b05"
     },
     {
       "offset": 51212,
-      "eyes": [
+      "head_region": [
         [
-          97,
-          46
+          77,
+          17
         ],
         [
-          124,
+          108,
+          17
+        ],
+        [
+          129,
+          38
+        ],
+        [
+          79,
           43
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "d75950f0bc3761b0b82143c1dd07fb89a1ebaa549b17aa63aacd85e25eeb7275"
+      "face_mode": "baked",
+      "name": "attention",
+      "sha256": "9f1e193de4aa5415cdf8a5b5ce7cbe5b67d52d9c9d83d08685833d050de9df63"
     },
     {
       "offset": 102424,
-      "eyes": [
+      "head_region": [
         [
-          99,
-          45
+          78,
+          17
         ],
         [
-          126,
-          42
+          110,
+          18
+        ],
+        [
+          132,
+          40
+        ],
+        [
+          80,
+          44
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "4f5d1adf63ab778cab32e3603b1837a36aa3a6665bab4923039d8259a49a5567"
+      "face_mode": "baked",
+      "name": "probe_25",
+      "sha256": "e4f95271dd9c2bc8a3932d88fd6dcaf47e82be72d6f4310acf4403cdcb60d6e0"
     },
     {
       "offset": 153636,
-      "eyes": [
+      "head_region": [
         [
-          100,
-          45
+          79,
+          16
         ],
         [
-          127,
+          112,
+          17
+        ],
+        [
+          136,
           42
+        ],
+        [
+          81,
+          44
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "119121d172c2028166b434555ab153752d7dbe44ee65ee660d7d8098c9649bde"
+      "face_mode": "baked",
+      "name": "probe_50",
+      "sha256": "809c9c5ef3e317353b48d7f06e33bb8eacbb538a7a5c937a741fa9d4675a31a9"
     },
     {
       "offset": 204848,
-      "eyes": [
+      "head_region": [
         [
-          99,
-          45
+          79,
+          15
         ],
         [
-          126,
-          42
+          113,
+          16
+        ],
+        [
+          139,
+          41
+        ],
+        [
+          81,
+          44
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "a1e6d9ee32f01c35322b25a51e2d2d99704a9441f8b237cc14d35c82f9fe8176"
+      "face_mode": "baked",
+      "name": "probe_75",
+      "sha256": "c77eaf9051bc8478c93010545c7cc9126c623110c3a87fa10b815e5bbd76d21e"
     },
     {
       "offset": 256060,
-      "eyes": [
+      "head_region": [
         [
-          98,
-          45
+          80,
+          16
         ],
         [
-          125,
+          114,
+          17
+        ],
+        [
+          140,
           42
+        ],
+        [
+          82,
+          45
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "4e645507bec1553c517420b6d0497ab1d80fa94f6d2591f8703827d3079efb37"
+      "face_mode": "baked",
+      "name": "probe_full",
+      "sha256": "e9ea75429d16b17d5fd314da7ef5570e7262465f8ee2560bc789db5d2733e54d"
     },
     {
       "offset": 307272,
-      "eyes": [
+      "head_region": [
         [
-          96,
-          46
+          78,
+          12
         ],
         [
-          123,
+          108,
+          14
+        ],
+        [
+          129,
+          37
+        ],
+        [
+          79,
           43
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "27f40ced5f43cb4884bb357e656bb571192b007484d226c3b2fcfd52b23d8c3e"
+      "face_mode": "baked",
+      "name": "nuzzle_left_50",
+      "sha256": "960894239b2141edd77d25dfddb4c2d01f64ed6ac94c52b2632cd3a44343712e"
     },
     {
       "offset": 358484,
-      "eyes": [
+      "head_region": [
         [
-          94,
-          46
+          80,
+          13
         ],
         [
-          121,
+          110,
+          16
+        ],
+        [
+          130,
+          39
+        ],
+        [
+          81,
           43
         ]
       ],
-      "angle_tenths": -7,
-      "sha256": "4114e3bf499c6cba907c8b79c42219fb424ef4e39d42d539c1cc9ce530653dd9"
+      "face_mode": "baked",
+      "name": "nuzzle_left",
+      "sha256": "d219485f450cf3b004091c90de8518eb63d77335ab5c16539256d1c159a12039"
     },
     {
       "offset": 409696,
-      "eyes": [
+      "head_region": [
         [
-          92,
-          46
+          78,
+          12
         ],
         [
-          119,
-          43
-        ]
-      ],
-      "angle_tenths": -18,
-      "sha256": "0330c0e353efa26c5f11120a9bf7676317144fda87abec3639732d04ab055f8d"
-    },
-    {
-      "offset": 460908,
-      "eyes": [
-        [
-          92,
-          46
+          108,
+          14
         ],
         [
-          119,
-          43
-        ]
-      ],
-      "angle_tenths": -18,
-      "sha256": "0b0baa8f5f879ae2c324fa641f32f1917d7a6fa95781fb0a9996462eee884369"
-    },
-    {
-      "offset": 512120,
-      "eyes": [
-        [
-          94,
-          46
+          129,
+          35
         ],
         [
-          121,
-          43
-        ]
-      ],
-      "angle_tenths": -7,
-      "sha256": "505cef42527c9de2005aaaacec41c6ca899e348a0baf7299ce3ba754ff32b6a0"
-    },
-    {
-      "offset": 563332,
-      "eyes": [
-        [
-          96,
-          46
-        ],
-        [
-          123,
-          43
-        ]
-      ],
-      "angle_tenths": 7,
-      "sha256": "6eb92b6ab9bdaf228de25b42897c7e0fea6ae02bca9e30eb528b3246ff067a3e"
-    },
-    {
-      "offset": 614544,
-      "eyes": [
-        [
-          98,
-          46
-        ],
-        [
-          125,
-          43
-        ]
-      ],
-      "angle_tenths": 18,
-      "sha256": "7592c218d895212ad28a56952beb40daa4f3d231c4558522c8cd8692ae003e8a"
-    },
-    {
-      "offset": 665756,
-      "eyes": [
-        [
-          98,
-          46
-        ],
-        [
-          125,
-          43
-        ]
-      ],
-      "angle_tenths": 19,
-      "sha256": "2919cd7c8aa83ae5575c4b1183a8e07370e89d73f31377e5a1abc90eb5fcf15b"
-    },
-    {
-      "offset": 716968,
-      "eyes": [
-        [
-          97,
-          46
-        ],
-        [
-          124,
-          43
-        ]
-      ],
-      "angle_tenths": 12,
-      "sha256": "509fe18cc8ddfcf6240867558e27bf67fffde83cc68bb55d0761abe386ebc0e5"
-    },
-    {
-      "offset": 768180,
-      "eyes": [
-        [
-          96,
-          46
-        ],
-        [
-          123,
-          43
-        ]
-      ],
-      "angle_tenths": 4,
-      "sha256": "1d56ab8a615f391edd88bfa1007676d89be9d84b0b76ba64f271b9aaa930e4e9"
-    },
-    {
-      "offset": 819392,
-      "eyes": [
-        [
-          95,
-          46
-        ],
-        [
-          122,
-          43
-        ]
-      ],
-      "angle_tenths": 10,
-      "sha256": "815044c66afb5d8561d5c4aed8c17288bfbec93a67e3518465139f60e0b0563a"
-    },
-    {
-      "offset": 870604,
-      "eyes": [
-        [
-          96,
-          45
-        ],
-        [
-          123,
-          44
-        ]
-      ],
-      "angle_tenths": 30,
-      "sha256": "43b1a8ccc6443f81e09fd3ce41117fd857d516b0d7e44d7414a1bcd5f6f4ec73"
-    },
-    {
-      "offset": 921816,
-      "eyes": [
-        [
-          96,
-          45
-        ],
-        [
-          123,
-          44
-        ]
-      ],
-      "angle_tenths": 47,
-      "sha256": "d058306a607bb1e150dddfdea36bc491d0c1bd18dfb45081548e90a79bf9e371"
-    },
-    {
-      "offset": 973028,
-      "eyes": [
-        [
-          96,
-          45
-        ],
-        [
-          123,
-          44
-        ]
-      ],
-      "angle_tenths": 50,
-      "sha256": "5d469d377e3c6ff3fba21fece57645738fc1907b61ed799a78764cb764385334"
-    },
-    {
-      "offset": 1024240,
-      "eyes": [
-        [
-          95,
-          46
-        ],
-        [
-          122,
-          43
-        ]
-      ],
-      "angle_tenths": -1,
-      "sha256": "b6b3c1deef0b71819cc681ed6c3fa69cade9853c59515c125933b1100010d4e0"
-    },
-    {
-      "offset": 1075452,
-      "eyes": [
-        [
-          93,
-          48
-        ],
-        [
-          120,
-          45
-        ]
-      ],
-      "angle_tenths": -6,
-      "sha256": "3642643140b367700ec8a3bdbeaba2b4aa5294d886d9ea9274e792d4899fbe92"
-    },
-    {
-      "offset": 1126664,
-      "eyes": [
-        [
-          91,
-          50
-        ],
-        [
-          118,
-          47
-        ]
-      ],
-      "angle_tenths": -13,
-      "sha256": "b5f77478d7a9139c97faabae3e9b79be181c355e61810681d377307ad111ab3d"
-    },
-    {
-      "offset": 1177876,
-      "eyes": [
-        [
-          89,
-          53
-        ],
-        [
-          116,
-          49
-        ]
-      ],
-      "angle_tenths": -21,
-      "sha256": "1df055ffa9f9dd7794b98b68fda7cc615546b1c4033bc37382636f87ca8da8a7"
-    },
-    {
-      "offset": 1229088,
-      "eyes": [
-        [
-          87,
-          55
-        ],
-        [
-          114,
-          50
-        ]
-      ],
-      "angle_tenths": -27,
-      "sha256": "904aa65d4d7e37be8be3d1a9f7e8ffd641bb5fcb9dcbcfe0bd3be501983ea2c4"
-    },
-    {
-      "offset": 1280300,
-      "eyes": [
-        [
-          86,
-          56
-        ],
-        [
-          113,
-          51
-        ]
-      ],
-      "angle_tenths": -30,
-      "sha256": "d653904c9af3ad1123a4bd043feff692a3fe5be008635c4ff6b571f7dde70559"
-    },
-    {
-      "offset": 1331512,
-      "eyes": [
-        [
-          86,
-          56
-        ],
-        [
-          113,
-          51
-        ]
-      ],
-      "angle_tenths": -30,
-      "sha256": "4cf120c2fcd6d3d3c1409c223384eee20cd74dfd01c1e2a1a1048f7d0f25fc63"
-    },
-    {
-      "offset": 1382724,
-      "eyes": [
-        [
-          96,
-          46
-        ],
-        [
-          123,
-          43
-        ]
-      ],
-      "angle_tenths": 8,
-      "sha256": "0998de47e56eec87d5a51d73d7daa427257cdc78d46b97608be362ab0f2eb8c8"
-    },
-    {
-      "offset": 1433936,
-      "eyes": [
-        [
-          98,
-          46
-        ],
-        [
-          126,
-          43
-        ]
-      ],
-      "angle_tenths": 20,
-      "sha256": "50901dcb20711498ff1a37079c1f9d617138fd43fe6241c030d336753a3f84b0"
-    },
-    {
-      "offset": 1485148,
-      "eyes": [
-        [
-          97,
-          46
-        ],
-        [
-          124,
-          43
-        ]
-      ],
-      "angle_tenths": 10,
-      "sha256": "a0694525ebba4b528a218b2753bcae875750b332f0beed030b558203c9d3dc21"
-    },
-    {
-      "offset": 1536360,
-      "eyes": [
-        [
-          95,
-          44
-        ],
-        [
-          122,
+          79,
           40
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "53a358e4073fa2e1b9c81b558e28a205a1384cc7301cd01b4c616e4fef870f1b"
+      "face_mode": "baked",
+      "name": "smile_center",
+      "sha256": "7465c969d630b4970f052a0ba92bbb7e15deab0a66f90e8eee05f3109c5d5778"
     },
     {
-      "offset": 1587572,
-      "eyes": [
+      "offset": 460908,
+      "head_region": [
         [
-          95,
-          41
+          78,
+          13
         ],
         [
-          122,
-          38
+          109,
+          15
+        ],
+        [
+          130,
+          36
+        ],
+        [
+          79,
+          41
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "d721e3c2080845a230b5cc16a0fb191da9e2bb4ca455a873a22a97b97cd17194"
+      "face_mode": "baked",
+      "name": "nuzzle_right_50",
+      "sha256": "7bf6a6aad8aa5ba98f4cc2e5f383d76d38fb7c4a4fac51295be6a6e9a6618181"
     },
     {
-      "offset": 1638784,
-      "eyes": [
+      "offset": 512120,
+      "head_region": [
         [
-          92,
-          41
+          78,
+          11
         ],
         [
-          119,
-          38
+          109,
+          13
+        ],
+        [
+          131,
+          36
+        ],
+        [
+          80,
+          40
         ]
       ],
-      "angle_tenths": -15,
-      "sha256": "4ed686e4ae13f3ec25b3a653b8479fcd51ee2d900ef90e90062fccdcc42dde92"
+      "face_mode": "baked",
+      "name": "nuzzle_right",
+      "sha256": "b2cf03c7b0cf951800797099b45bec44a9921bf33f549525705f0a8fd1b17db4"
     },
     {
-      "offset": 1689996,
-      "eyes": [
+      "offset": 563332,
+      "head_region": [
         [
-          93,
-          41
+          79,
+          13
         ],
         [
-          120,
-          38
+          109,
+          15
+        ],
+        [
+          130,
+          35
+        ],
+        [
+          81,
+          40
         ]
       ],
-      "angle_tenths": -10,
-      "sha256": "66e2ea4660280a2413f5c770fac49108aacde41453858e4fc1b6dc374432f39e"
+      "face_mode": "baked",
+      "name": "tilt_left",
+      "sha256": "191e301b11559579ec75fdd9b565e0c954cba565cd0be213915379ffc57f2379"
     },
     {
-      "offset": 1741208,
-      "eyes": [
+      "offset": 614544,
+      "head_region": [
         [
-          98,
-          41
+          78,
+          10
         ],
         [
-          126,
-          38
-        ]
-      ],
-      "angle_tenths": 20,
-      "sha256": "a20fde2e5727291b01fb01004ca230a4e1763fa36b4ffbf7097a18a917da7d9a"
-    },
-    {
-      "offset": 1792420,
-      "eyes": [
-        [
-          95,
-          42
+          110,
+          14
         ],
         [
-          122,
+          129,
+          39
+        ],
+        [
+          80,
           39
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "d096544154792eb56923ab83838cc9bbb56f028865b6939e09da3c361f0ca4f2"
+      "face_mode": "baked",
+      "name": "tilt_right",
+      "sha256": "2e77d719fd35601ecf18dc2e5b667a7817bec8a632d405213d103ae54d23f2a4"
     },
     {
-      "offset": 1843632,
-      "eyes": [
+      "offset": 665756,
+      "head_region": [
         [
-          95,
+          78,
+          11
+        ],
+        [
+          109,
+          13
+        ],
+        [
+          129,
+          34
+        ],
+        [
+          80,
+          38
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "startle",
+      "sha256": "4f64ebbe3fb2c67c2709243a8235a2e3c69f75760ec7cb1d6682c107e8b9bd6b"
+    },
+    {
+      "offset": 716968,
+      "head_region": [
+        [
+          80,
+          16
+        ],
+        [
+          111,
+          18
+        ],
+        [
+          133,
+          41
+        ],
+        [
+          82,
           45
-        ],
-        [
-          122,
-          42
         ]
       ],
-      "angle_tenths": 0,
-      "sha256": "38220ae0e06f3857a6ec31d4e922f8221185c2111969fa9da9612297d86d37ec"
+      "face_mode": "baked",
+      "name": "fold_half",
+      "sha256": "e88fcc9d804a5704af3087a83a17bb4ed81dca7186427ae53ca70a8695983f89"
     },
     {
-      "offset": 1894844,
-      "eyes": [
+      "offset": 768180,
+      "head_region": [
         [
-          95,
-          46
+          62,
+          34
         ],
-        [
-          122,
-          43
-        ]
-      ],
-      "angle_tenths": 1,
-      "sha256": "6dd23b19cf476ea6b82752ff6752dfa0fa063bfea0393f03b38a2fd1b18bd132"
-    },
-    {
-      "offset": 1946056,
-      "eyes": [
-        [
-          94,
-          49
-        ],
-        [
-          121,
-          46
-        ]
-      ],
-      "angle_tenths": 10,
-      "sha256": "978582d4a165a2b67f2c0d94bec3113a1b713a65b7446acdefe399b80ea37bfd"
-    },
-    {
-      "offset": 1997268,
-      "eyes": [
         [
           93,
-          52
-        ],
-        [
-          120,
-          51
-        ]
-      ],
-      "angle_tenths": 25,
-      "sha256": "c7f259c7f73756c7523b5209b36c66126551f914fe4fabd007b957b21444d2e7"
-    },
-    {
-      "offset": 2048480,
-      "eyes": [
-        [
-          91,
-          56
-        ],
-        [
-          118,
-          55
-        ]
-      ],
-      "angle_tenths": 40,
-      "sha256": "580469f0735d40bf0e615bcce453373c1f66e6015dd054a93cf04eb45fc64629"
-    },
-    {
-      "offset": 2099692,
-      "eyes": [
-        [
-          90,
-          59
-        ],
-        [
-          117,
-          58
-        ]
-      ],
-      "angle_tenths": 49,
-      "sha256": "bcfd89a3d1dc2dce0a80c09204e10f492c7aacab6c6234d834edb39fa24259d4"
-    },
-    {
-      "offset": 2150904,
-      "eyes": [
-        [
-          90,
-          59
-        ],
-        [
-          117,
-          58
-        ]
-      ],
-      "angle_tenths": 50,
-      "sha256": "6b0b686d180c9427a772de6863d11ca7afc531fada72c704a91c09efbf978c71"
-    },
-    {
-      "offset": 2202116,
-      "eyes": [
-        [
-          86,
-          55
-        ],
-        [
-          113,
-          51
-        ]
-      ],
-      "angle_tenths": -29,
-      "sha256": "399f20645393b79cc1b8b0ec4ef9d0b1b16657b213cd898bdfd6ad7a2b1a8b1c"
-    },
-    {
-      "offset": 2253328,
-      "eyes": [
-        [
-          88,
-          54
-        ],
-        [
-          115,
-          49
-        ]
-      ],
-      "angle_tenths": -23,
-      "sha256": "75372a5f182de4ffe2b48eca56092e161f9762619aa35fa69c2a2bfc7bc93f81"
-    },
-    {
-      "offset": 2304540,
-      "eyes": [
-        [
-          91,
-          51
-        ],
-        [
-          118,
-          47
-        ]
-      ],
-      "angle_tenths": -14,
-      "sha256": "b2dff3237e93855d928d726901f81f6620dfc226b6de3aa30b7c59f6a120adc4"
-    },
-    {
-      "offset": 2355752,
-      "eyes": [
-        [
-          93,
-          48
-        ],
-        [
-          120,
-          44
-        ]
-      ],
-      "angle_tenths": -5,
-      "sha256": "b2f4f7bd6481bf226538233737ae91d3e6c85e04d615f4906537ee9789cb56e1"
-    },
-    {
-      "offset": 2406964,
-      "eyes": [
-        [
-          95,
-          46
-        ],
-        [
-          122,
-          43
-        ]
-      ],
-      "angle_tenths": 0,
-      "sha256": "0d8427780b0a09a2fa5f5b2dd17e936225148ee1b09bc7a60f9e791d151507ef"
-    },
-    {
-      "offset": 2458176,
-      "eyes": [
-        [
-          86,
-          56
-        ],
-        [
-          113,
-          51
-        ]
-      ],
-      "angle_tenths": -29,
-      "sha256": "7056d209ee319585ffcb8cb47c3e2e10955020fc0876a9d5b770cb54416f0051"
-    },
-    {
-      "offset": 2509388,
-      "eyes": [
-        [
-          87,
-          56
-        ],
-        [
-          114,
-          53
-        ]
-      ],
-      "angle_tenths": -14,
-      "sha256": "2ef6b0b32a3e51188a147427a00a0612e1238de9352c122019a4564e6eb83c2c"
-    },
-    {
-      "offset": 2560600,
-      "eyes": [
-        [
-          88,
-          57
-        ],
-        [
-          115,
-          55
-        ]
-      ],
-      "angle_tenths": 10,
-      "sha256": "6c0c008ba76709444db3342212bd5985eb080e74146bd9bec98ce91125c793a5"
-    },
-    {
-      "offset": 2611812,
-      "eyes": [
-        [
-          89,
-          58
-        ],
-        [
-          117,
-          57
-        ]
-      ],
-      "angle_tenths": 34,
-      "sha256": "de7df00c4a8ef55c91febcbe1f2196e279cf5703afbff3e99fdeaef7f5832424"
-    },
-    {
-      "offset": 2663024,
-      "eyes": [
-        [
-          90,
-          59
-        ],
-        [
-          117,
-          58
-        ]
-      ],
-      "angle_tenths": 49,
-      "sha256": "281bcf3e2435c238d5fa418001dc568ad28a765b1737531a49da652ed77bdcfe"
-    },
-    {
-      "offset": 2714236,
-      "eyes": [
-        [
-          86,
-          56
-        ],
-        [
-          113,
-          51
-        ]
-      ],
-      "angle_tenths": -30,
-      "sha256": "c26664e81f9f8df4434d1a75ec1cd41641dd5875780893b66fbb850389d15694"
-    },
-    {
-      "offset": 2765448,
-      "eyes": [
-        [
-          88,
-          54
-        ],
-        [
-          114,
-          50
-        ]
-      ],
-      "angle_tenths": -26,
-      "sha256": "21f82b71e96336efcd7099eed5dde5d1527e884da2380617dd796a7cf7b770ea"
-    },
-    {
-      "offset": 2816660,
-      "eyes": [
-        [
-          89,
-          52
+          34
         ],
         [
           116,
-          48
-        ]
-      ],
-      "angle_tenths": -19,
-      "sha256": "cf3f7fcc12248c333b2f5426b8b2e9b0c0906dfdd2a307f1b9152b24c6e8e993"
-    },
-    {
-      "offset": 2867872,
-      "eyes": [
-        [
-          92,
-          50
+          56
         ],
         [
-          119,
-          46
+          66,
+          63
         ]
       ],
-      "angle_tenths": -11,
-      "sha256": "33b015f2d1dbe8307269242f95892a4d1c5b57b9776e6c012f520d8e0f709f1e"
+      "face_mode": "baked",
+      "name": "folded",
+      "sha256": "4bbc8a14bf1af93673410811ab2f0e6730cb7ba0d58748d53a801fa3a9eb16c2"
     },
     {
-      "offset": 2919084,
-      "eyes": [
+      "offset": 819392,
+      "head_region": [
+        [
+          61,
+          33
+        ],
         [
           94,
-          48
+          35
         ],
         [
-          121,
-          44
-        ]
-      ],
-      "angle_tenths": -5,
-      "sha256": "3cb7043e34a22f3e9746a5b4b93884562fb0b49de6d56432255335e20a4bae42"
-    },
-    {
-      "offset": 2970296,
-      "eyes": [
-        [
-          95,
-          46
+          116,
+          55
         ],
         [
-          122,
-          43
+          66,
+          62
         ]
       ],
-      "angle_tenths": -1,
-      "sha256": "489cdc352da6ab63151f40d56243da2fd7ef3d609f3a399a9e7f7738303a5f9e"
+      "face_mode": "baked",
+      "name": "drowsy",
+      "sha256": "7fe999224330443a0758e8529418064681002afee6e91f1f42b623cb4c724bb8"
     },
     {
-      "offset": 3021508,
-      "eyes": [
+      "offset": 870604,
+      "head_region": [
         [
-          90,
-          59
-        ],
-        [
-          118,
-          58
-        ]
-      ],
-      "angle_tenths": 49,
-      "sha256": "ca2d108cbf2811516a5cf973af9c315501292c6bd7971d84dc20303e8395f0dc"
-    },
-    {
-      "offset": 3072720,
-      "eyes": [
-        [
-          91,
-          57
-        ],
-        [
-          118,
-          56
-        ]
-      ],
-      "angle_tenths": 43,
-      "sha256": "c100658ee5b0d13d72eb0d36177be68b6a240ab00194dddf5f9734f981f6aaa5"
-    },
-    {
-      "offset": 3123932,
-      "eyes": [
-        [
-          92,
-          54
-        ],
-        [
-          119,
-          53
-        ]
-      ],
-      "angle_tenths": 32,
-      "sha256": "b9d5e47a3af50af4536dc820a48e639d9f99052ca3a146297fd7f588ada0ef91"
-    },
-    {
-      "offset": 3175144,
-      "eyes": [
-        [
-          93,
+          65,
           51
         ],
         [
-          120,
-          49
-        ]
-      ],
-      "angle_tenths": 19,
-      "sha256": "983204a4b0480b6edad5bf1ecf8404105fc6fb343ae19516973f6402647376b2"
-    },
-    {
-      "offset": 3226356,
-      "eyes": [
-        [
-          94,
-          48
+          100,
+          50
         ],
         [
-          121,
-          45
-        ]
-      ],
-      "angle_tenths": 8,
-      "sha256": "75d36422fcdee5296c64ec2a6203da3a4988e25de8598335bc411c77afb1aacc"
-    },
-    {
-      "offset": 3277568,
-      "eyes": [
-        [
-          95,
-          46
+          128,
+          70
         ],
         [
-          122,
-          43
+          70,
+          81
         ]
       ],
-      "angle_tenths": 1,
-      "sha256": "669b160fcdf47c703580c285ea445b6d32e970c23dd732dcd9cc4f1c2555cbaf"
+      "face_mode": "baked",
+      "name": "sleep",
+      "sha256": "67d79803001f4e951ee03b15d9d19b9f8b4ebf6e04732c8350f14a77e1f25e46"
     },
     {
-      "offset": 3328780,
-      "eyes": [
+      "offset": 921816,
+      "head_region": [
         [
-          96,
-          46
-        ],
-        [
-          123,
-          43
-        ]
-      ],
-      "angle_tenths": 7,
-      "sha256": "646ec5fb328626d090d53bfa665401ad06139834bf6e32ed966636ca370555ac"
-    },
-    {
-      "offset": 3379992,
-      "eyes": [
-        [
-          98,
-          46
-        ],
-        [
-          125,
-          43
-        ]
-      ],
-      "angle_tenths": 18,
-      "sha256": "802cf5a95d81de1315413662d24a5aa7114ad930c291bbdbb69838ffef2366db"
-    },
-    {
-      "offset": 3431204,
-      "eyes": [
-        [
-          92,
-          46
-        ],
-        [
-          119,
-          43
-        ]
-      ],
-      "angle_tenths": -19,
-      "sha256": "154a0d11ae327c51373aab2c5708c5c164157802ae2476b13e94073760cc4699"
-    },
-    {
-      "offset": 3482416,
-      "eyes": [
-        [
-          93,
-          46
-        ],
-        [
-          120,
-          43
-        ]
-      ],
-      "angle_tenths": -12,
-      "sha256": "e71760c12b64ac5a14e5f58f27124a39acbb18efb1223346bb154fa6b3de30bd"
-    },
-    {
-      "offset": 3533628,
-      "eyes": [
-        [
-          94,
-          46
-        ],
-        [
-          121,
-          43
-        ]
-      ],
-      "angle_tenths": -4,
-      "sha256": "0f8dead1a62cd2c9a6c9a690c970d47282552ab275a4490c33f490e3d0cec223"
-    },
-    {
-      "offset": 3584840,
-      "eyes": [
-        [
-          95,
-          46
-        ],
-        [
-          122,
-          43
-        ]
-      ],
-      "angle_tenths": -10,
-      "sha256": "ec225f21a25bffc90fbc8a2ed405006b2bfccfa1fa76caf5e54b5e2af9863963"
-    },
-    {
-      "offset": 3636052,
-      "eyes": [
-        [
-          94,
+          68,
           47
         ],
         [
-          121,
-          42
-        ]
-      ],
-      "angle_tenths": -30,
-      "sha256": "96bc10cef6b529c5a502b1627f10cb5a909570d6003e124679f1a6ca77855ce8"
-    },
-    {
-      "offset": 3687264,
-      "eyes": [
-        [
-          94,
-          47
+          103,
+          50
         ],
         [
-          121,
-          42
-        ]
-      ],
-      "angle_tenths": -47,
-      "sha256": "746316a1b18693b2ee145e2b0325d72cd345d0a97257350789bc5220d8be21cc"
-    },
-    {
-      "offset": 3738476,
-      "eyes": [
-        [
-          94,
-          47
+          130,
+          70
         ],
         [
-          120,
+          73,
+          80
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "wake_eyes",
+      "sha256": "dd0f373f45e9a9d849596a53a297f9940ea1ea5fca522705f6c45cb97cd8efc6"
+    },
+    {
+      "offset": 973028,
+      "head_region": [
+        [
+          75,
+          9
+        ],
+        [
+          107,
+          9
+        ],
+        [
+          126,
+          29
+        ],
+        [
+          76,
+          36
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "happy_up",
+      "sha256": "79f7d3c21791822ee63e62b32b33b72fa345627ab5d14701aa2cfaf2fb653bc9"
+    },
+    {
+      "offset": 1024240,
+      "head_region": [
+        [
+          74,
+          10
+        ],
+        [
+          106,
+          10
+        ],
+        [
+          124,
+          29
+        ],
+        [
+          75,
+          36
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "happy_open",
+      "sha256": "dc91f3c6c2d727fccbfb5de3ae724267eefc3334025d8b997dec42e4e750c3c6"
+    },
+    {
+      "offset": 1075452,
+      "head_region": [
+        [
+          78,
+          12
+        ],
+        [
+          109,
+          14
+        ],
+        [
+          131,
+          36
+        ],
+        [
+          80,
           42
         ]
       ],
-      "angle_tenths": -50,
-      "sha256": "a90d2eb31daeba4d8754c9dd3a2ff25789dd46b3e4e563bf2f2a0b0453e6e465"
+      "face_mode": "baked",
+      "name": "happy_close",
+      "sha256": "d75ddea5be150bd5e4d91f55578e88f75a2e7d84a5008d2172e515c17fb18067"
+    },
+    {
+      "offset": 1126664,
+      "head_region": [
+        [
+          78,
+          12
+        ],
+        [
+          108,
+          14
+        ],
+        [
+          130,
+          35
+        ],
+        [
+          80,
+          41
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "recover_half",
+      "sha256": "6aad030a1cccc4ec32556c1572bb19d3345dc4a228a80c25e21525ceabcbb427"
+    },
+    {
+      "offset": 1177876,
+      "head_region": [
+        [
+          78,
+          13
+        ],
+        [
+          110,
+          15
+        ],
+        [
+          130,
+          37
+        ],
+        [
+          80,
+          42
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "blink",
+      "sha256": "a96c7e3aa2395c6f0b58f9c8f99fb1734e4e9541f24a80fa757e30518f9a944f"
+    },
+    {
+      "offset": 1229088,
+      "head_region": [
+        [
+          65,
+          51
+        ],
+        [
+          100,
+          50
+        ],
+        [
+          128,
+          70
+        ],
+        [
+          70,
+          81
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "sleep_exhale",
+      "sha256": "fdfc1c97ba5550315080ddc816488bb207237af48c1f99b401b31267f8bc8505"
+    },
+    {
+      "offset": 1280300,
+      "head_region": [
+        [
+          65,
+          51
+        ],
+        [
+          100,
+          50
+        ],
+        [
+          128,
+          70
+        ],
+        [
+          70,
+          81
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "sleep_inhale_1",
+      "sha256": "4dd325c88ec1e43448ecdab8a2497401959c43594e3b3acf21b20fb91c07adb0"
+    },
+    {
+      "offset": 1331512,
+      "head_region": [
+        [
+          65,
+          51
+        ],
+        [
+          100,
+          50
+        ],
+        [
+          128,
+          70
+        ],
+        [
+          70,
+          81
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "sleep_inhale_2",
+      "sha256": "9387ff3f722a6dcd259a63bb7e37e33eae2eb2c09c09e90d794c27ee065fd8c6"
+    },
+    {
+      "offset": 1382724,
+      "head_region": [
+        [
+          65,
+          51
+        ],
+        [
+          100,
+          50
+        ],
+        [
+          128,
+          70
+        ],
+        [
+          70,
+          81
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "sleep_inhale_peak",
+      "sha256": "5ae4f5d53021a9610c9cd329357b088aea8cdee01ef970741bf4f4a96318073f"
     }
   ],
   "clips": [
@@ -1130,47 +978,73 @@
       "at_permille": [
         0
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
-      "loop": false,
       "end_pose": 0
+    },
+    {
+      "origin": 1,
+      "action": 0,
+      "frames": [
+        15
+      ],
+      "at_permille": [
+        0
+      ],
+      "direction": 1,
+      "loop": false,
+      "switch_points": [
+        0,
+        1000
+      ],
+      "end_pose": 1
+    },
+    {
+      "origin": 2,
+      "action": 0,
+      "frames": [
+        24
+      ],
+      "at_permille": [
+        0
+      ],
+      "direction": 1,
+      "loop": false,
+      "switch_points": [
+        0,
+        1000
+      ],
+      "end_pose": 2
     },
     {
       "origin": 0,
       "action": 1,
       "frames": [
         0,
-        0,
         1,
         2,
-        3,
-        3,
-        3,
-        4,
-        5,
-        6,
+        2,
+        1,
         0
       ],
       "at_permille": [
         0,
         100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
+        250,
+        720,
+        850,
         1000
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
-      "loop": false,
       "end_pose": 0
     },
     {
@@ -1178,35 +1052,73 @@
       "action": 2,
       "frames": [
         0,
+        8,
+        6,
         7,
+        6,
         8,
         9,
         10,
-        11,
-        12,
-        13,
-        14,
-        15,
+        9,
+        8,
         0
       ],
       "at_permille": [
         0,
         100,
-        200,
-        300,
-        400,
+        180,
+        250,
+        360,
         500,
-        600,
-        700,
-        800,
-        900,
+        610,
+        750,
+        860,
+        940,
         1000
       ],
+      "direction": 1,
+      "loop": true,
       "switch_points": [
         0,
         1000
       ],
+      "end_pose": 0
+    },
+    {
+      "origin": 0,
+      "action": 2,
+      "frames": [
+        0,
+        8,
+        9,
+        10,
+        9,
+        8,
+        6,
+        7,
+        6,
+        8,
+        0
+      ],
+      "at_permille": [
+        0,
+        100,
+        180,
+        250,
+        360,
+        500,
+        610,
+        750,
+        860,
+        940,
+        1000
+      ],
+      "direction": -1,
       "loop": true,
+      "switch_points": [
+        0,
+        1000
+      ],
       "end_pose": 0
     },
     {
@@ -1214,35 +1126,53 @@
       "action": 3,
       "frames": [
         0,
-        0,
-        16,
-        17,
-        18,
-        19,
-        19,
-        18,
-        17,
-        16,
+        1,
+        12,
+        12,
+        1,
         0
       ],
       "at_permille": [
         0,
         100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
+        450,
+        650,
+        850,
         1000
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
+      "end_pose": 0
+    },
+    {
+      "origin": 0,
+      "action": 3,
+      "frames": [
+        0,
+        1,
+        11,
+        11,
+        1,
+        0
+      ],
+      "at_permille": [
+        0,
+        100,
+        450,
+        650,
+        850,
+        1000
+      ],
+      "direction": -1,
       "loop": false,
+      "switch_points": [
+        0,
+        1000
+      ],
       "end_pose": 0
     },
     {
@@ -1250,71 +1180,59 @@
       "action": 4,
       "frames": [
         0,
-        0,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25,
-        26,
-        26,
-        26
+        13,
+        13,
+        14,
+        15,
+        15
       ],
       "at_permille": [
         0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
+        60,
+        135,
+        360,
+        720,
         1000
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
-      "loop": false,
       "end_pose": 1
     },
     {
-      "origin": 0,
+      "origin": 1,
       "action": 5,
       "frames": [
+        15,
+        15,
+        22,
+        14,
         0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        27,
-        28,
-        29,
+        6,
+        8,
+        8,
         0
       ],
       "at_permille": [
         0,
-        100,
-        200,
+        156,
         300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
+        470,
+        625,
+        720,
+        812,
+        910,
         1000
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
-      "loop": false,
       "end_pose": 0
     },
     {
@@ -1322,15 +1240,15 @@
       "action": 6,
       "frames": [
         0,
-        0,
-        30,
-        31,
-        32,
-        33,
-        34,
-        31,
-        35,
-        36,
+        8,
+        19,
+        19,
+        20,
+        20,
+        21,
+        21,
+        19,
+        8,
         0
       ],
       "at_permille": [
@@ -1338,19 +1256,20 @@
         100,
         200,
         300,
-        400,
+        420,
         500,
-        600,
+        620,
         700,
-        800,
-        900,
+        820,
+        930,
         1000
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
-      "loop": false,
       "end_pose": 0
     },
     {
@@ -1358,368 +1277,183 @@
       "action": 7,
       "frames": [
         0,
-        0,
-        0,
-        37,
-        38,
-        39,
-        40,
-        41,
-        42,
-        42,
-        42
+        23,
+        14,
+        15,
+        16,
+        24,
+        24
       ],
       "at_permille": [
         0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
+        160,
+        267,
+        440,
+        580,
+        733,
         1000
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
-      "loop": false,
       "end_pose": 2
-    },
-    {
-      "origin": 0,
-      "action": 8,
-      "frames": [
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        0
-      ],
-      "at_permille": [
-        0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-        1000
-      ],
-      "switch_points": [
-        0,
-        1000
-      ],
-      "loop": false,
-      "end_pose": 0
-    },
-    {
-      "origin": 1,
-      "action": 0,
-      "frames": [
-        26
-      ],
-      "at_permille": [
-        0
-      ],
-      "switch_points": [
-        0,
-        1000
-      ],
-      "loop": false,
-      "end_pose": 1
-    },
-    {
-      "origin": 1,
-      "action": 5,
-      "frames": [
-        26,
-        26,
-        43,
-        44,
-        45,
-        46,
-        47,
-        27,
-        28,
-        29,
-        0
-      ],
-      "at_permille": [
-        0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-        1000
-      ],
-      "switch_points": [
-        0,
-        1000
-      ],
-      "loop": false,
-      "end_pose": 0
     },
     {
       "origin": 1,
       "action": 7,
       "frames": [
-        26,
-        26,
-        26,
-        48,
-        49,
-        50,
-        51,
-        52,
-        42,
-        42,
-        42
+        15,
+        16,
+        16,
+        24,
+        24
       ],
       "at_permille": [
         0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
+        267,
+        550,
+        733,
         1000
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
-      "loop": false,
       "end_pose": 2
+    },
+    {
+      "origin": 2,
+      "action": 8,
+      "frames": [
+        24,
+        18,
+        16,
+        15,
+        22,
+        0,
+        0
+      ],
+      "at_permille": [
+        0,
+        156,
+        300,
+        440,
+        570,
+        750,
+        1000
+      ],
+      "direction": 1,
+      "loop": false,
+      "switch_points": [
+        0,
+        1000
+      ],
+      "end_pose": 0
     },
     {
       "origin": 1,
       "action": 8,
       "frames": [
-        26,
-        26,
-        53,
-        54,
-        55,
-        56,
-        57,
-        58,
-        0,
+        15,
+        22,
+        14,
         0,
         0
       ],
       "at_permille": [
         0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
+        156,
+        440,
+        750,
         1000
       ],
+      "direction": 1,
+      "loop": false,
       "switch_points": [
         0,
         1000
       ],
-      "loop": false,
       "end_pose": 0
     },
     {
-      "origin": 2,
-      "action": 0,
-      "frames": [
-        42
-      ],
-      "at_permille": [
-        0
-      ],
-      "switch_points": [
-        0,
-        1000
-      ],
-      "loop": false,
-      "end_pose": 2
-    },
-    {
-      "origin": 2,
+      "origin": 0,
       "action": 8,
       "frames": [
-        42,
-        42,
-        59,
-        60,
-        61,
-        62,
-        63,
-        64,
         0,
+        1,
         0,
         0
       ],
       "at_permille": [
         0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
+        156,
+        750,
         1000
       ],
-      "switch_points": [
-        0,
-        1000
-      ],
+      "direction": 1,
       "loop": false,
-      "end_pose": 0
-    },
-    {
-      "origin": 0,
-      "action": 2,
-      "direction": -1,
-      "frames": [
-        0,
-        65,
-        66,
-        12,
-        11,
-        10,
-        9,
-        67,
-        68,
-        69,
-        0
-      ],
-      "at_permille": [
-        0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-        1000
-      ],
       "switch_points": [
         0,
         1000
       ],
-      "loop": true,
-      "end_pose": 0
-    },
-    {
-      "origin": 0,
-      "action": 3,
-      "direction": -1,
-      "frames": [
-        0,
-        0,
-        70,
-        71,
-        72,
-        73,
-        73,
-        72,
-        71,
-        70,
-        0
-      ],
-      "at_permille": [
-        0,
-        100,
-        200,
-        300,
-        400,
-        500,
-        600,
-        700,
-        800,
-        900,
-        1000
-      ],
-      "switch_points": [
-        0,
-        1000
-      ],
-      "loop": false,
       "end_pose": 0
     }
   ],
   "clip_map": [
     [
       0,
-      1,
-      2,
       3,
       4,
-      5,
       6,
-      7,
-      8
-    ],
-    [
-      9,
-      0,
-      0,
-      0,
+      8,
       0,
       10,
-      0,
       11,
-      12
+      15
     ],
     [
-      13,
+      1,
       0,
       0,
       0,
       0,
+      9,
       0,
-      0,
-      0,
+      12,
       14
+    ],
+    [
+      2,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      13
     ]
   ],
   "reverse_map": [
     0,
     0,
-    15,
-    16,
+    5,
+    7,
     0,
     0,
     0,
     0,
     0
+  ],
+  "limitations": [
+    "Sparse key poses, not 8–12 unique poses per action",
+    "Upper base paint and limb geometry can drift between generated cells",
+    "Baked gaze uses one attention pose; not continuous eye tracking",
+    "Interruptions use the existing reverse-to-origin behavior, not new bespoke bridges"
   ]
 }

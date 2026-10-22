@@ -9,7 +9,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser(description=__doc__)
-parser.add_argument('--output', type=Path, default=ROOT/'docs/preview/probe-v2')
+parser.add_argument('--output', type=Path, default=ROOT/'build/approved-probe-preview')
 args = parser.parse_args()
 out = args.output
 out.mkdir(parents=True, exist_ok=True)

@@ -3,7 +3,6 @@
 #include <string.h>
 
 static bool inside(int x,int y) { return x>=RB_ROLE_X && x<RB_ROLE_X+RB_ROLE_WIDTH && y>=RB_ROLE_Y && y<RB_ROLE_Y+RB_ROLE_HEIGHT; }
-static float bound(float v) { return fmaxf(-1,fminf(1,v)); }
 static unsigned priority(rb_pet_action_t a)
 {
     const unsigned values[]={0,2,2,6,8,5,4,1,9};
@@ -13,6 +12,7 @@ static void clear_happy(rb_pet_t *p)
 { p->happy_head=p->happy_count=p->happy_ms=0; }
 static void clear_contact(rb_pet_t *p)
 {
+    p->head_moving_ms=0;
     p->stroke=false; p->candidate_count=p->candidate_ms=p->moving_ms=p->fast_ms=0;
     p->position_count=0; p->path=p->max_offset=p->speed=p->candidate_path=0;
 }
@@ -24,6 +24,23 @@ void rb_pet_init(rb_pet_t *p,uint64_t now)
 }
 void rb_pet_set_sink(rb_pet_t *p,rb_pet_sink_t sink,void *context)
 { p->sink=sink; p->sink_context=context; }
+void rb_pet_set_head_region(rb_pet_t *p,const int16_t points[4][2])
+{ memcpy(p->head_region,points,sizeof(p->head_region)); }
+static bool on_head(const rb_pet_t *p,int x,int y)
+{
+    int sign=0;
+    for (unsigned i=0;i<4;++i) {
+        unsigned j=(i+1)%4;
+        int cross=(p->head_region[j][0]-p->head_region[i][0])*(y-p->head_region[i][1])-
+            (p->head_region[j][1]-p->head_region[i][1])*(x-p->head_region[i][0]);
+        if (cross) {
+            int next=cross>0?1:-1;
+            if (sign && next!=sign) return false;
+            sign=next;
+        }
+    }
+    return sign!=0;
+}
 static bool allowed(const rb_pet_t *p,rb_pet_action_t a)
 {
     if (p->state==RB_PET_STOPPED) return false;
@@ -73,7 +90,8 @@ static void run_pending(rb_pet_t *p)
     p->pending_valid=false;
     if (a==RB_ANIM_RECOVER && (p->soothe_ms<RB_CFG_SOOTHE_VALID_MS ||
         p->now-p->last_gentle>RB_CFG_SOOTHE_RESET_PAUSE_MS)) return;
-    if (a==RB_ANIM_HAPPY && (p->happy_ms<RB_CFG_HAPPY_VALID_MS || p->happy_latched)) return;
+    if (a==RB_ANIM_HAPPY && (p->happy_ms<RB_CFG_HAPPY_VALID_MS || p->happy_latched ||
+        !on_head(p,p->raw_x,p->raw_y))) return;
     if (allowed(p,a) && (a!=RB_ANIM_NUZZLE || p->stroke)) start(p,a,source,p->pending_direction);
 }
 static void finish(rb_pet_t *p)
@@ -129,7 +147,7 @@ static void down(rb_pet_t *p)
     p->positions[0].at=p->now; p->position_count=1;
     if (p->state==RB_PET_RESTING || p->action==RB_ANIM_REST || p->action==RB_ANIM_WAKE) {
         p->consumed=true; p->tap_count=p->soothe_ms=0; clear_happy(p);
-        request(p,RB_ANIM_WAKE,RB_INPUT_WAKE);
+        /* Rest is persistent. Only the explicit wake control can end it. */
     }
 }
 static void tap(rb_pet_t *p)
@@ -176,30 +194,39 @@ static void credit(rb_pet_t *p,rb_valid_interval_t v)
         }
         return;
     }
-    if (p->happy_latched || p->state!=RB_PET_NORMAL) return;
+    if (p->happy_latched || p->state!=RB_PET_NORMAL || !v.head_duration) return;
+    v.duration=v.head_duration;
     expire_happy(p);
     if (p->happy_count==512) {
         p->happy_ms-=p->happy_history[p->happy_head].duration;
         p->happy_head=(p->happy_head+1)%512; --p->happy_count;
     }
     p->happy_history[(p->happy_head+p->happy_count++)%512]=v; p->happy_ms+=v.duration;
-    if (p->happy_ms>=RB_CFG_HAPPY_VALID_MS) request(p,RB_ANIM_HAPPY,RB_INPUT_STROKE);
+    if (p->happy_ms>=RB_CFG_HAPPY_VALID_MS && on_head(p,p->raw_x,p->raw_y))
+        request(p,RB_ANIM_HAPPY,RB_INPUT_STROKE);
 }
 static void motion(rb_pet_t *p)
 {
     uint64_t elapsed=p->now-p->sampled; p->sampled=p->now;
     if (!elapsed || p->consumed || p->swiped || !p->raw_down) return;
     if (elapsed>120) elapsed=120;
-    if (p->raw_x!=p->previous_raw_x || p->raw_y!=p->previous_raw_y) p->moving_ms+=(unsigned)elapsed;
+    bool head=on_head(p,p->raw_x,p->raw_y);
+    if (!head && p->pending_valid && p->pending==RB_ANIM_HAPPY) p->pending_valid=false;
+    if (p->raw_x!=p->previous_raw_x || p->raw_y!=p->previous_raw_y) {
+        p->moving_ms+=(unsigned)elapsed;
+        if (head && on_head(p,p->previous_raw_x,p->previous_raw_y))
+            p->head_moving_ms+=(unsigned)elapsed;
+    }
     p->previous_raw_x=p->raw_x; p->previous_raw_y=p->raw_y;
     float dx=p->raw_x-p->x,dy=p->raw_y-p->y,dist=hypotf(dx,dy);
     float offset=hypotf(p->raw_x-p->start_x,p->raw_y-p->start_y);
     p->max_offset=fmaxf(p->max_offset,offset);
     bool moved=dist>RB_CFG_JITTER_PX;
-    unsigned moving=0;
+    unsigned moving=0,head_moving=0;
     if (moved) {
         p->x=p->raw_x; p->y=p->raw_y; p->path+=dist;
         moving=p->moving_ms>120?120:p->moving_ms; p->moving_ms=0; p->last_motion=p->now;
+        head_moving=p->head_moving_ms>moving?moving:p->head_moving_ms; p->head_moving_ms=0;
     }
     if (p->position_count==8) { memmove(p->positions,p->positions+1,7*sizeof(p->positions[0])); --p->position_count; }
     unsigned n=p->position_count++;
@@ -223,7 +250,7 @@ static void motion(rb_pet_t *p)
     }
     if (moved && p->speed>=RB_CFG_STROKE_SPEED_MIN && p->speed<=RB_CFG_STROKE_SPEED_MAX) {
         p->last_gentle=p->now;
-        rb_valid_interval_t v={p->now,(uint16_t)moving};
+        rb_valid_interval_t v={p->now,(uint16_t)moving,(uint16_t)head_moving};
         if (!p->stroke) {
             if (p->candidate_count<64) p->candidate[p->candidate_count++]=v;
             p->candidate_ms+=moving; p->candidate_path+=dist;
@@ -250,7 +277,7 @@ static void motion(rb_pet_t *p)
 void rb_pet_tick(rb_pet_t *p,uint64_t now)
 {
     if (now<p->now) return;
-    uint64_t elapsed=now-p->now; p->now=now;
+    p->now=now;
     if (!p->estop_released) rb_pet_stop(p,"E-STOP");
     if (p->state==RB_PET_STOPPED) return;
     expire_happy(p);
@@ -274,9 +301,6 @@ void rb_pet_tick(rb_pet_t *p,uint64_t now)
         now-p->last_interaction>=RB_CFG_SLEEP_IDLE_MS) request(p,RB_ANIM_REST,RB_INPUT_IDLE);
     if (p->stroke && p->state==RB_PET_NORMAL && p->action==RB_ANIM_IDLE && !p->consumed)
         request(p,RB_ANIM_NUZZLE,RB_INPUT_STROKE);
-    float blend=1-expf(-(float)elapsed*.007f);
-    float gx=p->contact?bound((p->raw_x-185)/65.0f):0, gy=p->contact?bound((p->raw_y-95)/80.0f):0;
-    p->gaze_x+=(gx-p->gaze_x)*blend; p->gaze_y+=(gy-p->gaze_y)*blend;
     if (now>=p->next_blink) {
         p->random=p->random*1664525u+1013904223u; p->blink_until=now+120;
         p->next_blink=now+2200+p->random%3500;
@@ -285,7 +309,12 @@ void rb_pet_tick(rb_pet_t *p,uint64_t now)
 }
 void rb_pet_stop(rb_pet_t *p,const char *reason)
 {
-    if (p->state==RB_PET_STOPPED) return;
+    if (p->state==RB_PET_STOPPED) {
+        /* Hardware stops take precedence over a reversible screen pause. */
+        if (p->stop_reason && !strcmp(p->stop_reason,"SCREEN STOP") &&
+            reason && strcmp(reason,"SCREEN STOP")) p->stop_reason=reason;
+        return;
+    }
     /* Keep action/phase/origin frozen so STOP never changes the rendered pose. */
     p->state=RB_PET_STOPPED; p->stop_reason=reason; p->pending_valid=false;
     p->nuzzle_cycles=0; p->contact=false; p->blocked=true; p->consumed=true; p->soothe_ms=p->tap_count=0;
@@ -306,9 +335,18 @@ bool rb_pet_reset(rb_pet_t *p,uint64_t now)
 }
 void rb_pet_rest(rb_pet_t *p)
 {
+    if (p->state==RB_PET_RESTING || p->action==RB_ANIM_REST ||
+        (p->pending_valid && p->pending==RB_ANIM_REST)) return;
     rb_pet_cancel(p);
-    if (p->state==RB_PET_RESTING) request(p,RB_ANIM_WAKE,RB_INPUT_SETTINGS);
-    else request(p,RB_ANIM_REST,RB_INPUT_SETTINGS);
+    request(p,RB_ANIM_REST,RB_INPUT_SETTINGS);
+}
+void rb_pet_wake(rb_pet_t *p)
+{
+    if (p->state==RB_PET_STOPPED || !p->estop_released) return;
+    if (p->state!=RB_PET_RESTING && p->action!=RB_ANIM_REST &&
+        !(p->pending_valid && p->pending==RB_ANIM_REST)) return;
+    rb_pet_cancel(p);
+    request(p,RB_ANIM_WAKE,RB_INPUT_WAKE);
 }
 const char *rb_pet_action_name(rb_pet_action_t action)
 {

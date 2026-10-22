@@ -12,6 +12,8 @@
 static rb_pet_t pet;
 extern const uint8_t frames_start[] asm("_binary_frames_bin_start");
 extern const uint8_t frames_end[] asm("_binary_frames_bin_end");
+extern const uint8_t room_start[] asm("_binary_room_bin_start");
+extern const uint8_t room_end[] asm("_binary_room_bin_end");
 uint64_t rb_platform_now_ms(void) { return (uint64_t)esp_timer_get_time()/1000; }
 static void mock_action(void *context,const rb_pet_event_t *event)
 {
@@ -23,15 +25,14 @@ static void mock_action(void *context,const rb_pet_event_t *event)
 static void update(lv_timer_t *timer)
 {
     (void)timer;
-    rb_pet_estop(&pet,rb_board_estop_released());
-    rb_board_input_t input;
-    while (rb_board_read_input(&input)) {
-        if (input.fault) rb_pet_stop(&pet,"BOARD INPUT FAULT");
-        else if (input.back) rb_pet_stop(&pet,"BACK BUTTON");
-        else if (input.dial && pet.state!=RB_PET_STOPPED) pet.lazy=input.dial<0;
-        /* ENTER no longer bypasses the sustained-stroke HAPPY rules. */
-    }
+    /* Screen-only demo. No motor backend, key poller or GPIO-stop input. */
     rb_pet_tick(&pet,rb_platform_now_ms()); rb_ui_update();
+    static bool was_stopped;
+    bool stopped=pet.state==RB_PET_STOPPED;
+    if (stopped && !was_stopped)
+        ESP_LOGW("rb_state","Screen paused: %s",pet.stop_reason?pet.stop_reason:"unspecified");
+    else if (!stopped && was_stopped) ESP_LOGI("rb_state","Screen interaction resumed");
+    was_stopped=stopped;
 }
 static void animation_log(lv_timer_t *timer)
 {
@@ -62,8 +63,10 @@ void app_main(void)
     rb_pet_init(&pet,rb_platform_now_ms()); rb_pet_set_sink(&pet,mock_action,NULL);
     if (!rb_board_display_lock(0)) return;
     bool assets_ok=rb_assets_init(frames_start,(size_t)(frames_end-frames_start),2);
+    if (!rb_assets_set_room(room_start,(size_t)(room_end-room_start)))
+        ESP_LOGW("reBuddy","Room resource invalid; plain-background fallback");
     if (!assets_ok || rb_assets_degraded()) ESP_LOGW("reBuddy","Animation resources degraded; idle/placeholder fallback");
-    rb_pet_estop(&pet,rb_board_estop_released()); rb_ui_create(&pet);
+    rb_ui_create(&pet);
     lv_timer_create(update,20,NULL); lv_timer_create(animation_log,5000,NULL);
     rb_board_display_unlock();
     ESP_LOGI("reBuddy","Reference-package screen prototype ready; arm adapter MOCK; CAN remains in standby");

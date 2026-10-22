@@ -1,4 +1,5 @@
-> **当前进度：** probe-v2的待机/探头两姿态及GIF已经被用户选择保留，见 [ASSET_STATUS.md](ASSET_STATUS.md)。下一步基于 `docs/preview/probe-v2/idle.png` 和 `probe.png` 补中间姿态，不需重新生成待机或继续使用已弃用的12帧探头图。下文保留通用制作提示词，制作时以已选姿态为优先基准。
+> **素材制作参考：** 下文保留角色与动画制作提示词。当前运行资源和待完善项见 [ASSET_STATUS.md](ASSET_STATUS.md)，当前交互以 [GETTING_STARTED.md](GETTING_STARTED.md) 为准。已选原图保留作为造型参考。
+
 
 # 网页端动画素材制作任务
 
@@ -183,7 +184,7 @@
 ## 交回工程端
 
 将生成的原始PNG保存到：
-`/home/verser/Downloads/reBot_RS_动画素材/`
+`assets/design/<动作名称>/`
 
 保留失败版本时添加后缀，不覆盖已经确认的基准图。可先只保存基准图和探头精灵图，然后通知开发助手检查。
 

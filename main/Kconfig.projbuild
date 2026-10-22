@@ -12,12 +12,4 @@ menu "reBuddy desktop companion"
         help
             Counts actual LVGL redraws and queued pixels. An unchanged scene
             intentionally has fewer redraws; this is not the LCD scanout rate.
-    config REBUDDY_DROWSY_SECONDS
-        int "Idle time before drowsiness (seconds)"
-        range 5 600
-        default 30
-    config REBUDDY_SLEEP_SECONDS
-        int "Idle time before dozing (seconds; must exceed drowsy time)"
-        range 10 1800
-        default 60
 endmenu

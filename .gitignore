@@ -2,7 +2,6 @@
 /managed_components/
 /sdkconfig
 /sdkconfig.old
-/dependencies.lock
 /dist/
 __pycache__/
 *.pyc

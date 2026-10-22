@@ -17,7 +17,7 @@
 /* Board wiring only; this component has no dependency on another application. */
 enum {
     SDA = 23, SCL = 24, LCD_CLK = 8, LCD_MOSI = 10, LCD_CS = 7, LCD_DC = 25,
-    TOUCH_INT = 0, ESTOP = 28, PCA_ADDRESS = 0x21,
+    TOUCH_INT = 0, PCA_ADDRESS = 0x21,
     LCD_RESET = 1u << 0, TOUCH_RESET = 1u << 1, BACKLIGHT = 1u << 5,
     CAN_STANDBY = (1u << 8) | (1u << 9), LEDS_OFF = 7u << 10,
     OUTPUTS = LCD_RESET | TOUCH_RESET | BACKLIGHT | CAN_STANDBY | LEDS_OFF
@@ -26,8 +26,6 @@ static const char *TAG = "rb_board";
 static i2c_master_dev_handle_t pca;
 static esp_lcd_touch_handle_t touch;
 static uint16_t output_levels;
-static portMUX_TYPE input_mux = portMUX_INITIALIZER_UNLOCKED;
-static rb_board_input_t pending;
 static bool started;
 
 #if CONFIG_REBUDDY_DISPLAY_STATS
@@ -86,35 +84,6 @@ static esp_err_t set_output(uint16_t mask, bool high)
 }
 static void delay_ms(uint32_t ms) { vTaskDelay(pdMS_TO_TICKS(ms)); }
 
-static void input_task(void *arg)
-{
-    (void)arg;
-    rb_keys_t keys = {0};
-    for (;;) {
-        uint8_t reg = 0, bytes[2] = {0};
-        esp_err_t err = i2c_master_transmit_receive(pca, &reg, 1, bytes, 2, 20);
-        uint16_t levels = (uint16_t)bytes[0] | ((uint16_t)bytes[1] << 8);
-        rb_board_input_t event = rb_keys_sample(&keys, levels, err == ESP_OK,
-                                               (uint64_t)esp_timer_get_time() / 1000);
-        portENTER_CRITICAL(&input_mux);
-        pending.back |= event.back;
-        pending.fault |= event.fault;
-        pending.enter |= event.enter;
-        if (event.dial) pending.dial = event.dial;
-        portEXIT_CRITICAL(&input_mux);
-        delay_ms(10);
-    }
-}
-bool rb_board_read_input(rb_board_input_t *event)
-{
-    if (!event) return false;
-    portENTER_CRITICAL(&input_mux);
-    *event = pending;
-    pending = (rb_board_input_t){0};
-    portEXIT_CRITICAL(&input_mux);
-    return event->back || event->enter || event->dial || event->fault;
-}
-bool rb_board_estop_released(void) { return gpio_get_level(ESTOP) != 0; }
 bool rb_board_display_lock(uint32_t timeout_ms) { return lvgl_port_lock(timeout_ms); }
 void rb_board_display_unlock(void) { lvgl_port_unlock(); }
 
@@ -160,11 +129,6 @@ esp_err_t rb_board_init(void)
 {
     if (started) return ESP_ERR_INVALID_STATE;
     started = true;
-    const gpio_config_t estop = {
-        .pin_bit_mask = 1ULL << ESTOP, .mode = GPIO_MODE_INPUT,
-        .pull_up_en = GPIO_PULLUP_ENABLE
-    };
-    ESP_RETURN_ON_ERROR(gpio_config(&estop), TAG, "E-stop GPIO");
     i2c_master_bus_handle_t bus;
     const i2c_master_bus_config_t bus_config = {
         .i2c_port = I2C_NUM_0, .sda_io_num = SDA, .scl_io_num = SCL,
@@ -267,9 +231,7 @@ esp_err_t rb_board_init(void)
     lvgl_port_unlock();
     ESP_RETURN_ON_FALSE(pointer, ESP_ERR_NO_MEM, TAG, "Touch pointer");
     ESP_RETURN_ON_ERROR(set_output(BACKLIGHT, true), TAG, "Backlight");
-    ESP_RETURN_ON_FALSE(xTaskCreate(input_task, "rb_keys", 3072, NULL, 3, NULL) == pdPASS,
-                        ESP_ERR_NO_MEM, TAG, "Input task");
-    ESP_LOGI(TAG, "Standalone board ready: 320x240, GT911, PCA9535; CAN in standby");
+    ESP_LOGI(TAG, "Touch-only board ready: 320x240, GT911, PCA9535 outputs only; no key/GPIO-stop input; CAN in standby");
     ESP_LOGI(TAG, "Display: %dMHz SPI, 2x320x40 RGB565 DMA buffers, 20ms refresh target",
              CONFIG_REBUDDY_LCD_SPI_MHZ);
     return ESP_OK;

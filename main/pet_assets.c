@@ -12,7 +12,19 @@ static struct { unsigned index; uint8_t *pixels; lv_image_dsc_t image; } slots[2
 static unsigned slot_count,next_slot;
 static bool degraded;
 static lv_image_dsc_t direct;
+static lv_image_dsc_t room_image;
 static uint16_t le16(const uint8_t *p) { return (uint16_t)p[0]|((uint16_t)p[1]<<8); }
+bool rb_assets_set_room(const uint8_t *data,size_t bytes)
+{
+    memset(&room_image,0,sizeof(room_image));
+    if (!data || bytes!=153612u || data[0]!=LV_IMAGE_HEADER_MAGIC ||
+        data[1]!=LV_COLOR_FORMAT_RGB565 || le16(data+2)!=0 || le16(data+4)!=320 ||
+        le16(data+6)!=240 || le16(data+8)!=640) return false;
+    room_image=(lv_image_dsc_t){.header={.magic=LV_IMAGE_HEADER_MAGIC,.cf=LV_COLOR_FORMAT_RGB565,
+        .w=320,.h=240,.stride=640},.data_size=153600,.data=data+12};
+    return true;
+}
+const lv_image_dsc_t *rb_assets_room(void) { return room_image.data?&room_image:NULL; }
 static const uint8_t *frame_data(unsigned index)
 {
     if (!blob || index>=RB_FRAME_COUNT) return NULL;

@@ -4,8 +4,7 @@
   "units": {
     "time": "ms",
     "distance": "px",
-    "speed": "px/s",
-    "angle": "screen_degrees_only"
+    "speed": "px/s"
   },
   "display": {
     "width": 320,
@@ -48,24 +47,14 @@
     "lazy": 1.3
   },
   "action_durations_ms": {
-    "PROBE": 1200,
+    "PROBE": 1600,
     "NUZZLE_CYCLE": 1000,
-    "TILT": 1000,
+    "TILT": 1400,
     "WITHDRAW": 900,
     "RECOVER": 1600,
     "HAPPY": 2000,
     "REST": 3000,
     "WAKE": 1600
-  },
-  "queue": {
-    "max_pending": 1,
-    "same_priority": "latest_valid",
-    "drop_on_state_change": true
-  },
-  "arm": {
-    "mode": "mock",
-    "can_tx_enabled": false,
-    "pixel_to_joint_conversion": false
   },
   "source_images": [
     {

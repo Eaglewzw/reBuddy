@@ -1,0 +1,100 @@
+{
+  "status": "current_room_action_preview",
+  "canvas": [
+    320,
+    240
+  ],
+  "role_size": [
+    160,
+    160
+  ],
+  "source_runtime_sha256": "3b3ae1fa9fcb22614774860cbb90f17c2914c665e1265f635d5b0dfeadb5796f",
+  "room_sha256": "b933877feee03b46e4106d1c3812632d580952a96c4970e537455976e0f9fb26",
+  "limitations": [
+    "Sparse authored poses; GIFs do not include touch controls.",
+    "One-way state transitions restart only for review playback.",
+    "Question mark and Z typography approximate LVGL with a desktop font."
+  ],
+  "gifs": [
+    {
+      "file": "01_待机眨眼.gif",
+      "duration_ms": 4000,
+      "encoded_frames": 80,
+      "loop": true,
+      "description": "待机与短眨眼；循环。",
+      "sha256": "b249262508dbd7e9585c905f21b652ff7c2890e3f4567db9a5dcc2dfb1e50422"
+    },
+    {
+      "file": "02_抬头看你.gif",
+      "duration_ms": 2600,
+      "encoded_frames": 33,
+      "loop": true,
+      "description": "基准动作 1600 ms；结束停留后循环。",
+      "sha256": "069f7f4f9d09dbca69d0543c37201e7523f7b7b9c3b7ca959cd5b5a2927870de"
+    },
+    {
+      "file": "03_轻蹭.gif",
+      "duration_ms": 2000,
+      "encoded_frames": 21,
+      "loop": true,
+      "description": "基准动作 1000 ms；结束停留后循环。",
+      "sha256": "b0c4344407e168c26e6035c8842ae5df87af6c5124a106db652c73f77e3a6933"
+    },
+    {
+      "file": "04_疑惑歪头.gif",
+      "duration_ms": 2400,
+      "encoded_frames": 29,
+      "loop": true,
+      "description": "基准动作 1400 ms；结束停留后循环。",
+      "sha256": "125780833957c929c68ca114f3a63a5b75e79afd10344e179c034b5dc109b8c9"
+    },
+    {
+      "file": "05_害羞缩回.gif",
+      "duration_ms": 2700,
+      "encoded_frames": 19,
+      "loop": true,
+      "description": "基准动作 900 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
+      "sha256": "f537f3414bb07cc1566030d2ec184eb45fa69a3a862ab809396c7b90e7ea9f13"
+    },
+    {
+      "file": "06_安抚展开.gif",
+      "duration_ms": 3400,
+      "encoded_frames": 33,
+      "loop": true,
+      "description": "基准动作 1600 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
+      "sha256": "c34a8287ccc623c423fa3f666b988c8941f7d9dafd01814eb42f2f4e1a8fdab2"
+    },
+    {
+      "file": "07_开心回应.gif",
+      "duration_ms": 3000,
+      "encoded_frames": 41,
+      "loop": true,
+      "description": "基准动作 2000 ms；结束停留后循环。",
+      "sha256": "96a9b06bec8da42c10230cb2f9e3494cff15fd11ddbabd3ca6c804765e1ce18e"
+    },
+    {
+      "file": "08_慢慢入睡.gif",
+      "duration_ms": 4800,
+      "encoded_frames": 61,
+      "loop": true,
+      "description": "基准动作 3000 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
+      "sha256": "31c5ef33fa30217e591e7ee9a5dd4b7ee4ffb24c9e7adae55bfbbf4f6fa44a65"
+    },
+    {
+      "file": "09_熟睡呼吸与Z.gif",
+      "duration_ms": 4200,
+      "encoded_frames": 84,
+      "loop": true,
+      "description": "4200 ms 呼吸循环；Z 出现后从大到小上浮淡出。",
+      "sha256": "b889b24468f9de4b8ea5463d399e0ef754aa9dfdb3e92c6b8ac3f44a46faf00a"
+    },
+    {
+      "file": "10_迷糊唤醒.gif",
+      "duration_ms": 3400,
+      "encoded_frames": 33,
+      "loop": true,
+      "description": "基准动作 1600 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
+      "sha256": "7d52d6209adbb9ab5ca980ab43fa9e03e29ea8e9d901d2d7ddd258ab98b0c79b"
+    }
+  ]
+}
