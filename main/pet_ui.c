@@ -195,7 +195,7 @@ void rb_ui_create(rb_pet_t *engine)
     for (unsigned i=0;i<RB_QUESTION_COUNT;++i) {
         const rb_question_meta_t *q=&rb_questions[i];
         questions[i]=text(root,q->x,q->y,"?");
-        lv_obj_set_style_text_color(questions[i],lv_color_hex(0x698538),0);
+        lv_obj_set_style_text_color(questions[i],lv_color_hex(0x46542a),0);
         lv_obj_set_style_transform_pivot_x(questions[i],0,0);
         lv_obj_set_style_transform_pivot_y(questions[i],0,0);
         lv_obj_set_style_transform_scale(questions[i],q->size*256/12,0);

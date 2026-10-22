@@ -81,7 +81,7 @@ def action_frame(action, phase, origin=0):
             if q['start'] <= phase < q['end']:
                 y = q['y'] - 4 * (phase-q['start']) // (q['end']-q['start'])
                 draw.text((q['x'], y), '?', font=fonts[q['size']],
-                          fill=(105, 133, 56), anchor='lt')
+                          fill=(70, 84, 42), anchor='lt')
     return im
 
 records = []

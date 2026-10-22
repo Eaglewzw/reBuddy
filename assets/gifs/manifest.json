@@ -11,7 +11,7 @@
     160,
     160
   ],
-  "source_runtime_sha256": "3b3ae1fa9fcb22614774860cbb90f17c2914c665e1265f635d5b0dfeadb5796f",
+  "source_runtime_sha256": "81850ed45cb52f5451f9c250215634063e20b7ec2099d1db352615c39c6cf215",
   "room_sha256": "b933877feee03b46e4106d1c3812632d580952a96c4970e537455976e0f9fb26",
   "limitations": [
     "Sparse authored poses; GIFs do not include touch controls.",
@@ -25,7 +25,7 @@
       "encoded_frames": 80,
       "loop": true,
       "description": "待机与短眨眼；循环。",
-      "sha256": "b249262508dbd7e9585c905f21b652ff7c2890e3f4567db9a5dcc2dfb1e50422"
+      "sha256": "2b2131bd505fb636a1720782003b4bd80501f0927af4839329702dc6eaac7742"
     },
     {
       "file": "02_抬头看你.gif",
@@ -33,7 +33,7 @@
       "encoded_frames": 56,
       "loop": true,
       "description": "lively 实机动作 2720 ms；结束停留后循环。",
-      "sha256": "ae77f9c65f6984c9bddd8127bbcfc060bcb8e9f49ab38f2e546c779f846d609b"
+      "sha256": "96fb437e7a7a5720f452f4577b94e4a376e9b3c0e1d82b3776f78ee8ad92f485"
     },
     {
       "file": "03_轻蹭.gif",
@@ -41,7 +41,7 @@
       "encoded_frames": 35,
       "loop": true,
       "description": "lively 实机动作 1700 ms；结束停留后循环。",
-      "sha256": "f6e5fbeb5ff2a4e6e48baaae2353f089636a2080326da51fef7d4d4198f0eec7"
+      "sha256": "94e72249cc762869047b43c028a0eb32b7a9cfcc6318671f4e194c664c23b683"
     },
     {
       "file": "04_疑惑歪头.gif",
@@ -49,7 +49,7 @@
       "encoded_frames": 49,
       "loop": true,
       "description": "lively 实机动作 2380 ms；结束停留后循环。",
-      "sha256": "a617ac6b095dd6f7ff17c35a88d43606491ec9b809b4d4d097470aae5b5448a9"
+      "sha256": "504070c40e645e47810f1757651e8107b398225f96c6f979c0cc94f2de442435"
     },
     {
       "file": "05_害羞缩回.gif",
@@ -57,7 +57,7 @@
       "encoded_frames": 32,
       "loop": true,
       "description": "lively 实机动作 1530 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
-      "sha256": "33422b85f3268e2672219adf232a08251f5105cd0124aa47c442e1dee6797455"
+      "sha256": "ae2d6e64b52eb64b5bbe3bcb69f39b94f07d1e617fbf18dca39470d17dec52d2"
     },
     {
       "file": "06_安抚展开.gif",
@@ -65,7 +65,7 @@
       "encoded_frames": 56,
       "loop": true,
       "description": "lively 实机动作 2720 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
-      "sha256": "7f4cb4b7300e487b64a32e1a2f1c7b2aad29dbaedb260ed95e1c7991abb4d578"
+      "sha256": "5d80e88179fdca59ddf3d27c734387ad608455ecb795f624fb794bc953619c48"
     },
     {
       "file": "07_开心回应.gif",
@@ -73,7 +73,7 @@
       "encoded_frames": 69,
       "loop": true,
       "description": "lively 实机动作 3400 ms；结束停留后循环。",
-      "sha256": "35485a671d0b7f160a96cdfe4863fdb68a3aef2cde18a0f164028f0c876c6ef1"
+      "sha256": "667524f9ebb36eee3b7d33ffa59dbe894da003ea2d4f002383eacf486a35b693"
     },
     {
       "file": "08_慢慢入睡.gif",
@@ -81,7 +81,7 @@
       "encoded_frames": 103,
       "loop": true,
       "description": "lively 实机动作 5100 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
-      "sha256": "3891d7fd04329a85aa25756addbe2a58a20558ce915b069777f46d4600f13c8a"
+      "sha256": "c09f6b53806c579dca565acd2289af391e64feca72265ad69546a8d33130ad91"
     },
     {
       "file": "09_熟睡呼吸与Z.gif",
@@ -97,7 +97,7 @@
       "encoded_frames": 56,
       "loop": true,
       "description": "lively 实机动作 2720 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
-      "sha256": "2c3bce688413e25bdd0f52e3afc398a599e43cfb54895c406813cf0f56ffe855"
+      "sha256": "1300566b441e11d2a82ee67821226ca06319917e62512e4bfe61bcd1618bc6f3"
     }
   ]
 }

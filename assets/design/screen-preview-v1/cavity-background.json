@@ -1,0 +1,187 @@
+{
+  "coordinate_space": "registered 160x160 poses",
+  "min_channel": 140,
+  "max_channel_spread": 40,
+  "poses": {
+    "idle": {
+      "seed": [
+        82,
+        77
+      ],
+      "bounds": [
+        75,
+        66,
+        94,
+        88
+      ]
+    },
+    "attention": {
+      "seed": [
+        88,
+        75
+      ],
+      "bounds": [
+        75,
+        67,
+        94,
+        88
+      ]
+    },
+    "probe_25": {
+      "seed": [
+        89,
+        82
+      ],
+      "bounds": [
+        70,
+        65,
+        100,
+        91
+      ]
+    },
+    "nuzzle_left_50": {
+      "seed": [
+        85,
+        80
+      ],
+      "bounds": [
+        68,
+        62,
+        90,
+        87
+      ]
+    },
+    "nuzzle_left": {
+      "seed": [
+        71,
+        73
+      ],
+      "bounds": [
+        65,
+        63,
+        89,
+        87
+      ]
+    },
+    "smile_center": {
+      "seed": [
+        87,
+        79
+      ],
+      "bounds": [
+        70,
+        65,
+        90,
+        87
+      ]
+    },
+    "nuzzle_right_50": {
+      "seed": [
+        84,
+        74
+      ],
+      "bounds": [
+        71,
+        62,
+        89,
+        86
+      ]
+    },
+    "nuzzle_right": {
+      "seed": [
+        87,
+        68
+      ],
+      "bounds": [
+        70,
+        59,
+        97,
+        89
+      ]
+    },
+    "tilt_left": {
+      "seed": [
+        79,
+        74
+      ],
+      "bounds": [
+        68,
+        60,
+        87,
+        87
+      ]
+    },
+    "tilt_right": {
+      "seed": [
+        77,
+        70
+      ],
+      "bounds": [
+        65,
+        59,
+        86,
+        87
+      ]
+    },
+    "startle": {
+      "seed": [
+        73,
+        68
+      ],
+      "bounds": [
+        63,
+        63,
+        79,
+        84
+      ]
+    },
+    "fold_half": {
+      "seed": [
+        83,
+        80
+      ],
+      "bounds": [
+        71,
+        65,
+        88,
+        84
+      ]
+    },
+    "happy_close": {
+      "seed": [
+        84,
+        66
+      ],
+      "bounds": [
+        72,
+        60,
+        96,
+        88
+      ]
+    },
+    "recover_half": {
+      "seed": [
+        83,
+        81
+      ],
+      "bounds": [
+        70,
+        67,
+        88,
+        86
+      ]
+    },
+    "blink": {
+      "seed": [
+        80,
+        74
+      ],
+      "bounds": [
+        71,
+        65,
+        91,
+        87
+      ]
+    }
+  }
+}

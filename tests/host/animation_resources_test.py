@@ -92,3 +92,23 @@ if manifest.get('asset_version')=='room-preview-v1':
             offset=frame['offset']+12+y*320+x*2
             bg=12+(y+40)*640+(x+80)*2
             assert blob[offset:offset+2]==room[bg:bg+2], 'room/pose seam'
+
+# Restored GitHub PROBE: original source cells and original timing.
+assert manifest['probe_revision']=='github-original'
+clip=manifest['clips'][manifest['clip_map'][0][1]]
+assert clip['frames']==[0,1,2,2,1,0]
+assert clip['at_permille']==[0,100,250,720,850,1000]
+assert [manifest['registration'][i]['cell'] for i in (0,1,2)]==[0,1,2]
+assert manifest['unique_frames']==28
+happy=manifest['clips'][manifest['clip_map'][0][6]]
+assert happy['frames']==[0,8,19,20,19,20,19,21,8,0]
+
+# Enclosed negative space must show the room at the SAME screen position.
+cavity_recipe=root/manifest['cavity_recipe']
+assert hashlib.sha256(cavity_recipe.read_bytes()).hexdigest()==manifest['cavity_recipe_sha256']
+for name,region in json.loads(cavity_recipe.read_text())['poses'].items():
+    frame=next(f for f in manifest['frames'] if f['name']==name)
+    x,y=region['seed']
+    pos=frame['offset']+12+y*320+x*2
+    bg=12+(y+40)*640+(x+80)*2
+    assert blob[pos:pos+2]==room[bg:bg+2], f'{name}: enclosed backdrop is opaque'

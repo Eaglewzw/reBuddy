@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
 """Slice the authored atlas, register its ground line and encode RGB565.
 
-This is an asset exporter, not an animation synthesizer: no warping, mirroring,
-interpolated images or invented in-between poses. Motion uses authored cells.
+Actions use authored atlas cells. PROBE uses the GitHub poses and timing.
 """
 import hashlib
 import json
@@ -11,6 +10,7 @@ import struct
 from collections import deque
 from PIL import Image
 from sleep_assets import load_sleep_poses
+from cavity_background import clear_cavity
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'assets/design/screen-preview-v1/pose-atlas.png'
@@ -25,10 +25,8 @@ names = ['idle', 'attention', 'probe_25', 'probe_50', 'probe_75', 'probe_full',
          'nuzzle_right', 'tilt_left', 'tilt_right', 'startle', 'fold_half',
          'folded', 'drowsy', 'sleep', 'wake_eyes', 'happy_up', 'happy_open',
          'happy_close', 'recover_half', 'blink']
-images, registration = [], []
-for n, name in enumerate(names):
-    x, y = n % 6 * 256, n // 6 * 256
-    cell = atlas.crop((x, y, x + 256, y + 256)).resize((SIZE, SIZE), getattr(Image, 'Resampling', Image).LANCZOS)
+def register_pose(cell):
+    cell = cell.resize((SIZE, SIZE), getattr(Image, 'Resampling', Image).LANCZOS)
     # Background-only normalization; no painting or deformation of the character.
     pixels = list(cell.getdata())
     queue = deque([(xx, yy) for xx in range(SIZE) for yy in (0, SIZE - 1)] +
@@ -56,8 +54,14 @@ for n, name in enumerate(names):
     # Only integer registration and one common scale, never per-pose scaling.
     canvas = Image.new('RGB', (SIZE, SIZE), BG)
     canvas.paste(cell, (dx, dy))
+    return canvas, [dx, dy]
+
+images, registration = [], []
+for n, name in enumerate(names):
+    x, y = n % 6 * 256, n // 6 * 256
+    canvas, offset = register_pose(atlas.crop((x, y, x + 256, y + 256)))
     images.append(canvas)
-    registration.append({'name': name, 'cell': n, 'offset_px': [dx, dy]})
+    registration.append({'name': name, 'cell': n, 'offset_px': offset})
 
 # Append the four approved-for-preview sleep poses without altering other actions.
 sleep_source = ROOT / 'assets/design/sleep-v2/breath-atlas.png'
@@ -67,6 +71,14 @@ names.extend(['sleep_exhale', 'sleep_inhale_1', 'sleep_inhale_2', 'sleep_inhale_
 registration.extend({'name': names[24+i], 'cell': i, 'offset_px': offset,
                      'source': str(sleep_source.relative_to(ROOT))}
                     for i, offset in enumerate(sleep_registration))
+
+# Enclosed gaps are backdrop too. Explicit per-pose seeds avoid removing white
+# eye/metal highlights; normalize before rotating so backdrop never moves.
+cavity_recipe = ROOT / 'assets/design/screen-preview-v1/cavity-background.json'
+cavity_config = json.loads(cavity_recipe.read_text())
+for name, region in cavity_config['poses'].items():
+    clear_cavity(images[names.index(name)], region,
+                 cavity_config['min_channel'], cavity_config['max_channel_spread'])
 
 # The ground-contact rim is a common static plate. Upper base areas are allowed
 # to be occluded by the folded head/claw, so they are not blindly overwritten.
@@ -112,20 +124,20 @@ def clip(origin, action, points, direction=1):
 
 for origin, frame in enumerate((0, 15, 24)):
     clip(origin, 0, [(0, frame)])
-# A small head-led acknowledgement: notice, lean slightly, hold eye contact, settle.
-# Do not play the far-reaching poses 3–5, which read as a body stretch.
+# PROBE restored from GitHub commit b4a6a88.
 clip(0, 1, [(0, 0), (100, 1), (250, 2), (720, 2), (850, 1), (1000, 0)])
-clip(0, 2, [(0, 0), (100, 8), (180, 6), (250, 7), (360, 6), (500, 8),
-            (610, 9), (750, 10), (860, 9), (940, 8), (1000, 0)])
-clip(0, 2, [(0, 0), (100, 8), (180, 9), (250, 10), (360, 9), (500, 8),
-            (610, 6), (750, 7), (860, 6), (940, 8), (1000, 0)], -1)
-clip(0, 3, [(0, 0), (100, 1), (450, 12), (650, 12), (850, 1), (1000, 0)])
-clip(0, 3, [(0, 0), (100, 1), (450, 11), (650, 11), (850, 1), (1000, 0)], -1)
+# A single directional nuzzle per cycle avoids a mechanical left-right shake.
+clip(0, 2, [(0, 0), (100, 8), (220, 9), (380, 10), (650, 9), (820, 8), (1000, 0)])
+clip(0, 2, [(0, 0), (100, 8), (220, 6), (380, 7), (650, 6), (820, 8), (1000, 0)], -1)
+clip(0, 3, [(0, 0), (100, 1), (250, 12), (650, 12), (850, 1), (1000, 0)])
+clip(0, 3, [(0, 0), (100, 1), (250, 11), (650, 11), (850, 1), (1000, 0)], -1)
 clip(0, 4, [(0, 0), (60, 13), (135, 13), (360, 14), (720, 15), (1000, 15)])
 clip(1, 5, [(0, 15), (156, 15), (300, 22), (470, 14), (625, 0),
             (720, 6), (812, 8), (910, 8), (1000, 0)])
-clip(0, 6, [(0, 0), (100, 8), (200, 19), (300, 19), (420, 20),
-            (500, 20), (620, 21), (700, 21), (820, 19), (930, 8), (1000, 0)])
+# Reuse the earlier artwork: lift → open/close twice like clapping → lower.
+# Contact returns to the raised closed-claw pose (19), not the lowered pose (21).
+clip(0, 6, [(0, 0), (80, 8), (180, 19), (300, 20), (430, 19),
+            (550, 20), (680, 19), (790, 21), (890, 8), (1000, 0)])
 clip(0, 7, [(0, 0), (160, 23), (267, 14), (440, 15), (580, 16), (733, 24), (1000, 24)])
 clip(1, 7, [(0, 15), (267, 16), (550, 16), (733, 24), (1000, 24)])
 clip(2, 8, [(0, 24), (156, 18), (300, 16), (440, 15), (570, 22), (750, 0), (1000, 0)])
@@ -137,14 +149,18 @@ mapping[0][5] = mapping[0][0]
 assert all(len(c['frames']) <= 16 for c in clips)
 OUT.mkdir(exist_ok=True)
 (OUT / 'frames.bin').write_bytes(b''.join(blobs))
-questions = [dict(x=151, y=36, size=18, start=120, end=850),
-             dict(x=183, y=23, size=24, start=230, end=900),
-             dict(x=216, y=37, size=18, start=340, end=950)]
-manifest = {'question_effect': questions, 'format': 'LVGL9 RGB565 binary images, 12-byte header per frame', 'size': [160, 160],
+questions = [dict(x=151, y=36, size=18, start=280, end=850),
+             dict(x=183, y=23, size=24, start=360, end=900),
+             dict(x=216, y=37, size=18, start=440, end=950)]
+manifest = {'interaction_revision': 'interaction-v2', 'probe_revision': 'github-original', 'probe_source_commit': 'b4a6a885cbf1fa7630145321f0afac9c74c5f2b3',
+            'cavity_recipe':str(cavity_recipe.relative_to(ROOT)),
+            'cavity_recipe_sha256':hashlib.sha256(cavity_recipe.read_bytes()).hexdigest(),
+            'happy_revision': 'original-art-two-claps',
+            'question_effect': questions, 'format': 'LVGL9 RGB565 binary images, 12-byte header per frame', 'size': [160, 160],
             'asset_version': 'room-preview-v1', 'visual_status': 'key_pose_preview_not_final_animation',
             'room_source': str(room_source.relative_to(ROOT)), 'room_source_sha256':hashlib.sha256(room_source.read_bytes()).hexdigest(),
             'room_bytes':len(room_pixels)+12,'room_sha256':hashlib.sha256((OUT/'room.bin').read_bytes()).hexdigest(),
-            'face_mode': 'baked', 'derivation': 'Authored atlas cells; uniform downscale, integer ground registration and shared ground-contact rim. No mesh deformation.',
+            'face_mode': 'baked', 'derivation': 'Authored cells with fixed registration. PROBE restores GitHub source poses and timing; enclosed backdrop is composited with the room.',
             'source': str(SOURCE.relative_to(ROOT)), 'source_sha256': hashlib.sha256(SOURCE.read_bytes()).hexdigest(),
             'unique_frames': len(frames), 'bytes': sum(map(len, blobs)), 'ground_lock_y': GROUND_STRIP,
             'sleep_source': str(sleep_source.relative_to(ROOT)), 'sleep_source_sha256': hashlib.sha256(sleep_source.read_bytes()).hexdigest(),
@@ -169,12 +185,12 @@ extern const uint8_t rb_clip_map[3][9];
 extern const uint8_t rb_clip_reverse[9];
 #define RB_FRAME_IDLE_BLINK 23u
 #define RB_FRAME_IDLE_ATTENTION 1u
-#define RB_FRAME_COUNT 28
+#define RB_FRAME_COUNT @FRAME_COUNT@
 #define RB_SLEEP_FRAME_FIRST 24u
 #define RB_SLEEP_PERIOD_MS 4200u
 #define RB_FRAME_BYTES 51212u
 '''
-(ROOT / 'main/pet_animation_table.h').write_text(header)
+(ROOT / 'main/pet_animation_table.h').write_text(header.replace('@FRAME_COUNT@', str(len(frames))))
 lines = ['/* Generated by tools/build_screen_preview.py. */', '#include "pet_animation_table.h"',
          'const rb_frame_meta_t rb_frames[]={']
 for f in frames:

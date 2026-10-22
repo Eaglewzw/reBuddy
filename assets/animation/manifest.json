@@ -1,24 +1,30 @@
 {
+  "interaction_revision": "interaction-v2",
+  "probe_revision": "github-original",
+  "probe_source_commit": "b4a6a885cbf1fa7630145321f0afac9c74c5f2b3",
+  "cavity_recipe": "assets/design/screen-preview-v1/cavity-background.json",
+  "cavity_recipe_sha256": "61ebb037e728e8bf2adbf5fa56b664b6a4037f904a0ce13dc2b9eb4675c0a9fd",
+  "happy_revision": "original-art-two-claps",
   "question_effect": [
     {
       "x": 151,
       "y": 36,
       "size": 18,
-      "start": 120,
+      "start": 280,
       "end": 850
     },
     {
       "x": 183,
       "y": 23,
       "size": 24,
-      "start": 230,
+      "start": 360,
       "end": 900
     },
     {
       "x": 216,
       "y": 37,
       "size": 18,
-      "start": 340,
+      "start": 440,
       "end": 950
     }
   ],
@@ -34,7 +40,7 @@
   "room_bytes": 153612,
   "room_sha256": "b933877feee03b46e4106d1c3812632d580952a96c4970e537455976e0f9fb26",
   "face_mode": "baked",
-  "derivation": "Authored atlas cells; uniform downscale, integer ground registration and shared ground-contact rim. No mesh deformation.",
+  "derivation": "Authored cells with fixed registration. PROBE restores GitHub source poses and timing; enclosed backdrop is composited with the room.",
   "source": "assets/design/screen-preview-v1/pose-atlas.png",
   "source_sha256": "b170695ef70dc9e4b9dcfcf33cb19a511982a2bf14741e7102a97215eb69feb0",
   "unique_frames": 28,
@@ -317,7 +323,7 @@
       ],
       "face_mode": "baked",
       "name": "idle",
-      "sha256": "721b75718f519ed40923966147e2b132d808d74428cbeaa8132141f7bd1f4b05"
+      "sha256": "2b6b71ce878bf5d00a3c0e67a20681e46869a73716abcb7d1e0029798414de9d"
     },
     {
       "offset": 51212,
@@ -341,7 +347,7 @@
       ],
       "face_mode": "baked",
       "name": "attention",
-      "sha256": "9f1e193de4aa5415cdf8a5b5ce7cbe5b67d52d9c9d83d08685833d050de9df63"
+      "sha256": "cbe7052082f6b744130a8d758debbb9b6997b124539cd49648b3809b543e8d54"
     },
     {
       "offset": 102424,
@@ -365,7 +371,7 @@
       ],
       "face_mode": "baked",
       "name": "probe_25",
-      "sha256": "e4f95271dd9c2bc8a3932d88fd6dcaf47e82be72d6f4310acf4403cdcb60d6e0"
+      "sha256": "30961fc615010bbefa9050479d101ebfa580b651a6aeaa867255772794cb9a7e"
     },
     {
       "offset": 153636,
@@ -461,7 +467,7 @@
       ],
       "face_mode": "baked",
       "name": "nuzzle_left_50",
-      "sha256": "960894239b2141edd77d25dfddb4c2d01f64ed6ac94c52b2632cd3a44343712e"
+      "sha256": "af39b6bc6d3bdcbaec3558488e93fb5bc317c630af2d415d5be357b6bc04a788"
     },
     {
       "offset": 358484,
@@ -485,7 +491,7 @@
       ],
       "face_mode": "baked",
       "name": "nuzzle_left",
-      "sha256": "d219485f450cf3b004091c90de8518eb63d77335ab5c16539256d1c159a12039"
+      "sha256": "a7a01a51248dd892b0080124cfed14a131061f6b0a56fcefa1116cd1132c1f93"
     },
     {
       "offset": 409696,
@@ -509,7 +515,7 @@
       ],
       "face_mode": "baked",
       "name": "smile_center",
-      "sha256": "7465c969d630b4970f052a0ba92bbb7e15deab0a66f90e8eee05f3109c5d5778"
+      "sha256": "00da6e1be7b05324d78a9e2528b8b9e298d83fe5094d61aa9d2fd9cfc7ca0870"
     },
     {
       "offset": 460908,
@@ -533,7 +539,7 @@
       ],
       "face_mode": "baked",
       "name": "nuzzle_right_50",
-      "sha256": "7bf6a6aad8aa5ba98f4cc2e5f383d76d38fb7c4a4fac51295be6a6e9a6618181"
+      "sha256": "e6794600690d4641d4fd0f245d50bbc1aec03acf1ccd1716d49ed018fbd29efa"
     },
     {
       "offset": 512120,
@@ -557,7 +563,7 @@
       ],
       "face_mode": "baked",
       "name": "nuzzle_right",
-      "sha256": "b2cf03c7b0cf951800797099b45bec44a9921bf33f549525705f0a8fd1b17db4"
+      "sha256": "29e332aea2ae18a5bf6c34067aec956e45350f4990482e68ffb26974d7a6f8cd"
     },
     {
       "offset": 563332,
@@ -581,7 +587,7 @@
       ],
       "face_mode": "baked",
       "name": "tilt_left",
-      "sha256": "191e301b11559579ec75fdd9b565e0c954cba565cd0be213915379ffc57f2379"
+      "sha256": "b288d10467a1350281192524179293291f76952287f9df92798261fdacbf728e"
     },
     {
       "offset": 614544,
@@ -605,7 +611,7 @@
       ],
       "face_mode": "baked",
       "name": "tilt_right",
-      "sha256": "2e77d719fd35601ecf18dc2e5b667a7817bec8a632d405213d103ae54d23f2a4"
+      "sha256": "e5fafbc6d59fa54985142e90482ba661380f2df35e0acc90ed0804149c159664"
     },
     {
       "offset": 665756,
@@ -629,7 +635,7 @@
       ],
       "face_mode": "baked",
       "name": "startle",
-      "sha256": "4f64ebbe3fb2c67c2709243a8235a2e3c69f75760ec7cb1d6682c107e8b9bd6b"
+      "sha256": "79aa8186ab90b3511409a86edebe5cf65ecef810dad191c49aeccd28bd9c43c0"
     },
     {
       "offset": 716968,
@@ -653,7 +659,7 @@
       ],
       "face_mode": "baked",
       "name": "fold_half",
-      "sha256": "e88fcc9d804a5704af3087a83a17bb4ed81dca7186427ae53ca70a8695983f89"
+      "sha256": "b5ed27816ff11cfea27edbe39a675b5d18bae4a7cdebf929a00e2ad124f3a7db"
     },
     {
       "offset": 768180,
@@ -821,7 +827,7 @@
       ],
       "face_mode": "baked",
       "name": "happy_close",
-      "sha256": "d75ddea5be150bd5e4d91f55578e88f75a2e7d84a5008d2172e515c17fb18067"
+      "sha256": "840d31905aeed448a6f796c1843a8ea5744678fff8964eaa1937f31c168fdb30"
     },
     {
       "offset": 1126664,
@@ -845,7 +851,7 @@
       ],
       "face_mode": "baked",
       "name": "recover_half",
-      "sha256": "6aad030a1cccc4ec32556c1572bb19d3345dc4a228a80c25e21525ceabcbb427"
+      "sha256": "223f7775af7dbd354ca38e41c211053d401e0dab777ace84d14ddfa90b6a5b4d"
     },
     {
       "offset": 1177876,
@@ -869,7 +875,7 @@
       ],
       "face_mode": "baked",
       "name": "blink",
-      "sha256": "a96c7e3aa2395c6f0b58f9c8f99fb1734e4e9541f24a80fa757e30518f9a944f"
+      "sha256": "2b16b6a5f72d5b820c05761736534e3423008a65e448ea5803cee1c31ab2980e"
     },
     {
       "offset": 1229088,
@@ -1053,10 +1059,6 @@
       "frames": [
         0,
         8,
-        6,
-        7,
-        6,
-        8,
         9,
         10,
         9,
@@ -1066,14 +1068,10 @@
       "at_permille": [
         0,
         100,
-        180,
-        250,
-        360,
-        500,
-        610,
-        750,
-        860,
-        940,
+        220,
+        380,
+        650,
+        820,
         1000
       ],
       "direction": 1,
@@ -1090,10 +1088,6 @@
       "frames": [
         0,
         8,
-        9,
-        10,
-        9,
-        8,
         6,
         7,
         6,
@@ -1103,14 +1097,10 @@
       "at_permille": [
         0,
         100,
-        180,
-        250,
-        360,
-        500,
-        610,
-        750,
-        860,
-        940,
+        220,
+        380,
+        650,
+        820,
         1000
       ],
       "direction": -1,
@@ -1135,7 +1125,7 @@
       "at_permille": [
         0,
         100,
-        450,
+        250,
         650,
         850,
         1000
@@ -1162,7 +1152,7 @@
       "at_permille": [
         0,
         100,
-        450,
+        250,
         650,
         850,
         1000
@@ -1242,26 +1232,24 @@
         0,
         8,
         19,
+        20,
         19,
         20,
-        20,
-        21,
-        21,
         19,
+        21,
         8,
         0
       ],
       "at_permille": [
         0,
-        100,
-        200,
+        80,
+        180,
         300,
-        420,
-        500,
-        620,
-        700,
-        820,
-        930,
+        430,
+        550,
+        680,
+        790,
+        890,
         1000
       ],
       "direction": 1,

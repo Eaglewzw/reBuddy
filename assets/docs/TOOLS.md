@@ -11,3 +11,5 @@
 | `python3 tools/package_firmware.py --build build/firmware` | 固件、配置、说明与校验 → `dist/reBuddy-esp32c5/` |
 
 图像工具依赖可用 `python3 -m pip install -r tools/requirements.txt` 安装。字体生成需要 Noto Sans CJK；GIF 默认使用 DejaVu Sans，可指定 `--font`。打包在带 esptool 的 IDF Python 环境运行。输出路径可按各工具 `--help` 调整；所有工具均不自动烧录或推送。
+
+`tools/cavity_background.py` 按逐姿态种子与边界清除内部背景，由 `build_screen_preview.py` 在房间合成之前调用。修改配置后需重建动画资源及 GIF。
