@@ -3,8 +3,8 @@
   "date": "2026-10-22",
   "target": "esp32c5",
   "sdk": "ESP-IDF v5.5.6",
-  "application_sha256": "b30d29799871652fd229a159f6850ef864c15fb78d3b6458c5fa5a4532eb1bdf",
-  "application_bytes": 2077536,
+  "application_sha256": "3b7b0bd4d0b1828255ddde23ab4930ac79346cddb9f319c1c3a242dd0d57cebd",
+  "application_bytes": 2077568,
   "host_tests": {
     "passed": 6,
     "failed": 0,
@@ -24,7 +24,8 @@
     "three staged question marks; settings/pause/end clear effect",
     "small probe amplitude and extended attention hold",
     "30 minute simulated core interaction; not a hardware soak test",
-    "current GIF hashes and source assets; local Markdown links"
+    "current GIF hashes and source assets; local Markdown links",
+    "twofold action duration and half-cycle progress; GIF style matches default firmware"
   ],
   "assets": {
     "gif_count": 10,
@@ -32,16 +33,14 @@
     "probe_base_ms": 1600,
     "tilt_base_ms": 1400,
     "runtime_pose_count": 28,
-    "existing_source_art_preserved": true
+    "existing_source_art_preserved": true,
+    "duration_scale": 2.0,
+    "gif_style": "lively",
+    "sleep_cycle_lively_ms": 8400
   },
   "hardware_tested": false,
   "flashed": false,
   "pushed": false,
-  "staged_source_verification": {
-    "exported_from_git_index": true,
-    "host_tests_passed": 6,
-    "public_lvgl_source_reused": true
-  },
   "package_checks": [
     "embedded animation and room match source",
     "SHA256SUMS verified",

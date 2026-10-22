@@ -15,7 +15,12 @@ BG = (248, 247, 239)
 parser = argparse.ArgumentParser()
 parser.add_argument('--output', type=Path, default=ROOT/'build/action-gifs')
 parser.add_argument('--font', type=Path, default=Path('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'))
+parser.add_argument('--style', choices=('lively', 'lazy'), default='lively')
 args = parser.parse_args()
+config = json.loads((ROOT/'config/behavior_defaults.json').read_text())
+playback_scale = config['animation_playback']['duration_scale']
+action_scale = playback_scale * config['style_duration_scale'][args.style]
+sleep_scale = playback_scale * (1.3 if args.style == 'lazy' else 1.0)
 if args.output.exists() and any(args.output.iterdir()):
     raise SystemExit('Output must be empty; use a new directory to preserve reviewed GIFs.')
 args.output.mkdir(parents=True, exist_ok=True)
@@ -54,6 +59,7 @@ def breathe_pose(ms):
 
 fonts = {size: ImageFont.truetype(str(args.font), size) for size in range(8, 25)}
 def sleep_frame(ms):
+    ms /= sleep_scale  # Authored sleep timeline stays in its original 4200 ms units.
     im = stage(breathe_pose(ms)).convert('RGBA')
     overlay = Image.new('RGBA', im.size)
     draw = ImageDraw.Draw(overlay)
@@ -114,27 +120,29 @@ specs = [(1, '02_抬头看你', 0, True), (2, '03_轻蹭', 0, True),
          (3, '04_疑惑歪头', 0, True), (4, '05_害羞缩回', 0, False),
          (5, '06_安抚展开', 1, False), (6, '07_开心回应', 0, True),
          (7, '08_慢慢入睡', 0, False), (8, '10_迷糊唤醒', 2, False)]
-config = json.loads((ROOT/'config/behavior_defaults.json').read_text())
 action_names = ['', 'PROBE', 'NUZZLE_CYCLE', 'TILT', 'WITHDRAW', 'RECOVER', 'HAPPY', 'REST', 'WAKE']
 for action, name, origin, loop in specs:
-    duration = config['action_durations_ms'][action_names[action]]
+    duration = round(config['action_durations_ms'][action_names[action]] * action_scale)
     frames = [action_frame(action, t * 1000 // duration, origin) for t in range(0, duration, 50)]
     # Hold the actual endpoint before replaying. For one-way state changes,
     # the return to the first frame is review playback, not an authored action.
     frames.append(action_frame(action, 1000, origin))
-    save(name, frames, [50] * (len(frames)-1) + [1000 if loop else 1800], True,
-         f'基准动作 {duration} ms；结束停留后' + ('循环。' if loop else '自动重播，跳回起始姿态仅用于预览。'))
+    save(name, frames, [min(50, duration-t) for t in range(0, duration, 50)] + [1000 if loop else 1800], True,
+         f'{args.style} 实机动作 {duration} ms；结束停留后' + ('循环。' if loop else '自动重播，跳回起始姿态仅用于预览。'))
 
-sleep_frames = [sleep_frame(t) for t in range(0, 4200, 50)]
-save('09_熟睡呼吸与Z', sleep_frames, [50] * len(sleep_frames), True,
-     '4200 ms 呼吸循环；Z 出现后从大到小上浮淡出。')
+sleep_duration = round(4200 * sleep_scale)
+sleep_frames = [sleep_frame(t) for t in range(0, sleep_duration, 50)]
+save('09_熟睡呼吸与Z', sleep_frames, [min(50, sleep_duration-t) for t in range(0, sleep_duration, 50)], True,
+     f'{sleep_duration} ms 呼吸循环；Z 出现后从大到小上浮淡出。')
 for i, t in enumerate((0, 700, 1400, 1750, 2450, 3500)):
-    sleep_frame(t).save(qa / f'sleep-phase-{i}.png')
+    sleep_frame(t*sleep_scale).save(qa / f'sleep-phase-{i}.png')
 sheet_out = Image.new('RGB', (960, 480), BG)
 for i, t in enumerate((0, 700, 1400, 1750, 2450, 3500)):
-    sheet_out.paste(sleep_frame(t), (i % 3 * 320, i // 3 * 240))
+    sheet_out.paste(sleep_frame(t*sleep_scale), (i % 3 * 320, i // 3 * 240))
 sheet_out.save(qa / 'sleep-phases.png')
-report = {'status': 'current_room_action_preview', 'canvas': [320, 240],
+report = {'style': args.style, 'duration_scale': playback_scale,
+          'behavior_config_sha256': hashlib.sha256((ROOT/'config/behavior_defaults.json').read_bytes()).hexdigest(),
+          'status': 'current_room_action_preview', 'canvas': [320, 240],
           'role_size': [160, 160], 'source_runtime_sha256': hashlib.sha256(blob).hexdigest(),
           'room_sha256': hashlib.sha256((ROOT/'assets/animation/room.bin').read_bytes()).hexdigest(),
           'limitations': ['Sparse authored poses; GIFs do not include touch controls.',

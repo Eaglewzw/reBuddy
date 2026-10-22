@@ -40,26 +40,29 @@ int main(void)
 {
     init(); input(true,130,110); tick(20); assert(!p.contact); tick(20); assert(p.contact);
     input(false,130,110); tick(20); assert(p.contact); tick(20);
-    assert(events[RB_ANIM_PROBE]==1); tick(RB_MS_PROBE); assert(p.action==RB_ANIM_IDLE);
+    assert(events[RB_ANIM_PROBE]==1); tick(p.duration); assert(p.action==RB_ANIM_IDLE);
+    init(); tap(); assert(p.duration==(unsigned)(RB_MS_PROBE*RB_STYLE_LIVELY*RB_PLAYBACK_DURATION_SCALE));
+    tick(p.duration/2); assert(p.action==RB_ANIM_PROBE && p.phase>0.45f && p.phase<0.6f);
+    tick(p.duration); assert(p.action==RB_ANIM_IDLE);
     init(); input(true,130,110); tick(40); tick(65000);
     assert(p.state==RB_PET_NORMAL && p.action==RB_ANIM_IDLE && p.happy_ms==0);
-    release(); tick(60000); assert(p.action==RB_ANIM_REST); tick(4000); assert(p.state==RB_PET_RESTING);
+    release(); tick(60000); assert(p.action==RB_ANIM_REST); tick((unsigned)(RB_MS_REST*RB_PLAYBACK_DURATION_SCALE)); assert(p.state==RB_PET_RESTING);
     input(true,130,110); tick(40); stroke(4000); release(); tap(); tap(); tap();
     rb_pet_rest(&p); tick(1800000);
     assert(p.state==RB_PET_RESTING && p.action==RB_ANIM_IDLE && events[RB_ANIM_WAKE]==0);
     rb_pet_wake(&p); assert(p.action==RB_ANIM_WAKE); stroke(4000); release();
     assert(p.state==RB_PET_NORMAL && events[RB_ANIM_PROBE]==0 && events[RB_ANIM_HAPPY]==0);
-    init(); tap(); tap(); tap(); tick(1400);
+    init(); tap(); tap(); tap(); tick((unsigned)(RB_MS_WITHDRAW*RB_PLAYBACK_DURATION_SCALE)+200);
     assert(p.state==RB_PET_FOLDED && p.pose==RB_POSE_FOLDED && events[RB_ANIM_WITHDRAW]==1);
     tap(); tap(); tick(1000); assert(events[RB_ANIM_WITHDRAW]==1);
-    input(true,130,110); tick(40); stroke(1600); tick(1800);
+    input(true,130,110); tick(40); stroke(1600); tick((unsigned)(RB_MS_RECOVER*RB_PLAYBACK_DURATION_SCALE));
     assert(events[RB_ANIM_RECOVER]==1 && p.state==RB_PET_NORMAL && events[RB_ANIM_HAPPY]==0);
     stroke(5000); assert(events[RB_ANIM_HAPPY]==0); release();
     init(); input(true,170,70); tick(40); head_stroke(4500);
     assert(events[RB_ANIM_HAPPY]==1); head_stroke(20000); assert(events[RB_ANIM_HAPPY]==1);
     release(); tick(18000); input(true,170,70); tick(40); head_stroke(4500);
     assert(events[RB_ANIM_HAPPY]==2);
-    init(); input(true,130,110); tick(40); stroke(1000); release(); tick(700);
+    init(); input(true,130,110); tick(40); stroke(1000); release(); tick((unsigned)(400*RB_PLAYBACK_DURATION_SCALE)+100);
     assert(events[RB_ANIM_NUZZLE]>=1 && events[RB_ANIM_HAPPY]==0 && p.action==RB_ANIM_IDLE);
     init(); input(true,100,110); tick(40);
     for (int x=108;x<=156;x+=8) { input(true,x,110); tick(20); }
@@ -76,10 +79,10 @@ int main(void)
     rb_pet_estop(&p,false); float phase=p.phase; tick(2000);
     assert(p.state==RB_PET_STOPPED && p.phase==phase && !p.pending_valid);
     assert(!rb_pet_reset(&p,now)); rb_pet_estop(&p,true); tick(100); assert(p.state==RB_PET_STOPPED);
-    assert(rb_pet_reset(&p,now)); release(); tick(2500); assert(p.state==RB_PET_NORMAL);
+    assert(rb_pet_reset(&p,now)); release(); tick((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE)+200); assert(p.state==RB_PET_NORMAL);
     init(); tap(); tick(120); rb_pet_stop(&p,"test"); phase=p.phase; tick(1000); assert(p.phase==phase);
     init(); tap(); now+=10000; rb_pet_tick(&p,now); assert(p.action==RB_ANIM_IDLE);
-    init(); p.lazy=true; tap(); assert(p.duration==RB_MS_PROBE*130/100); tick(p.duration); assert(p.action==RB_ANIM_IDLE);
+    init(); p.lazy=true; tap(); assert(p.duration==(unsigned)(RB_MS_PROBE*RB_STYLE_LAZY*RB_PLAYBACK_DURATION_SCALE)); tick(p.duration); assert(p.action==RB_ANIM_IDLE);
     /* Stationary grace and the neutral speed band never add gentle-motion credit. */
     init(); input(true,170,70); tick(40); head_stroke(1000);
     unsigned valid=p.happy_ms; assert(valid>0); tick(200); assert(p.happy_ms==valid);
@@ -91,13 +94,13 @@ int main(void)
     init(); input(true,20,110); tick(20); input(true,130,110); tick(100);
     assert(!p.contact); release();
     /* Recovery is reversible; a new tap restores the folded stable pose. */
-    init(); tap(); tap(); tap(); tick(1400); input(true,130,110); tick(40); stroke(1400);
-    assert(p.action==RB_ANIM_RECOVER); release(); tap(); tick(1000);
+    init(); tap(); tap(); tap(); tick((unsigned)(RB_MS_WITHDRAW*RB_PLAYBACK_DURATION_SCALE)+200); input(true,130,110); tick(40); stroke(1400);
+    assert(p.action==RB_ANIM_RECOVER); release(); tap(); tick((unsigned)(RB_MS_WITHDRAW*RB_PLAYBACK_DURATION_SCALE)+200);
     assert(p.state==RB_PET_FOLDED && p.pose==RB_POSE_FOLDED && p.action==RB_ANIM_IDLE);
     /* Wake cancels an in-progress rest from either stable origin. */
     rb_pet_rest(&p); tick(1200); assert(p.action==RB_ANIM_REST);
     input(true,130,110); tick(40); assert(p.action==RB_ANIM_REST);
-    rb_pet_wake(&p); tick(2500);
+    rb_pet_wake(&p); tick((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE)+200);
     assert(p.state==RB_PET_NORMAL && p.action==RB_ANIM_IDLE && p.consumed);
     unsigned probes=events[RB_ANIM_PROBE]; release(); assert(events[RB_ANIM_PROBE]==probes);
     /* A tap removes a celebration waiting for a NUZZLE switching point. */

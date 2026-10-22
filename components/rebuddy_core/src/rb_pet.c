@@ -56,7 +56,7 @@ static void start(rb_pet_t *p,rb_pet_action_t a,rb_pet_source_t source,int direc
         RB_MS_RECOVER,RB_MS_HAPPY,RB_MS_REST,RB_MS_WAKE};
     p->action=a; p->origin=p->pose; p->phase=0; p->started=p->now;
     p->active_direction=direction;
-    p->active_lazy=p->lazy; p->duration=(uint64_t)(ms[a]*(p->active_lazy?RB_STYLE_LAZY:RB_STYLE_LIVELY));
+    p->active_lazy=p->lazy; p->duration=(uint64_t)(ms[a]*RB_PLAYBACK_DURATION_SCALE*(p->active_lazy?RB_STYLE_LAZY:RB_STYLE_LIVELY));
     p->returning=false;
     if (a==RB_ANIM_WITHDRAW) p->state=RB_PET_FOLDED;
     if (a==RB_ANIM_HAPPY) { p->happy_latched=true; clear_happy(p); }
@@ -174,7 +174,7 @@ static void up(rb_pet_t *p)
     p->consumed=false; clear_contact(p);
     if (p->pending_valid && p->pending==RB_ANIM_NUZZLE) p->pending_valid=false;
     if (p->action==RB_ANIM_NUZZLE && !p->returning) {
-        p->returning=true; p->return_phase=p->phase; p->return_started=p->now; p->return_duration=400;
+        p->returning=true; p->return_phase=p->phase; p->return_started=p->now; p->return_duration=(unsigned)(400*RB_PLAYBACK_DURATION_SCALE);
     }
 }
 static void expire_happy(rb_pet_t *p)
@@ -270,7 +270,7 @@ static void motion(rb_pet_t *p)
         p->stroke=false; p->candidate_count=p->candidate_ms=0; p->candidate_path=0;
         if (p->pending_valid && p->pending==RB_ANIM_NUZZLE) p->pending_valid=false;
         if (p->action==RB_ANIM_NUZZLE && !p->returning) {
-            p->returning=true; p->return_started=p->now; p->return_phase=p->phase; p->return_duration=400;
+            p->returning=true; p->return_started=p->now; p->return_phase=p->phase; p->return_duration=(unsigned)(400*RB_PLAYBACK_DURATION_SCALE);
         }
     }
 }

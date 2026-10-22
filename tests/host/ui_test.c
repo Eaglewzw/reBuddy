@@ -109,7 +109,7 @@ int main(void)
     point=(lv_point_t){28,212}; pressed=true; pump(1000);
     assert(pet.state==RB_PET_STOPPED);
     pressed=false; pump(100);
-    click(28,212); pump(2500); assert(pet.state==RB_PET_NORMAL);
+    click(28,212); pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400); assert(pet.state==RB_PET_NORMAL);
     lv_obj_t *rest=find_label(lv_screen_active(),"休息"); assert(rest);
     lv_obj_t *menu=lv_obj_get_parent(lv_obj_get_parent(rest));
     /* Repeated taps, paused-state access and outside dismissal never leak
@@ -126,7 +126,7 @@ int main(void)
         click(290,212); assert(!lv_obj_has_flag(menu,LV_OBJ_FLAG_HIDDEN));
         requests=pet.requests; click(145,110);
         assert(lv_obj_has_flag(menu,LV_OBJ_FLAG_HIDDEN) && !pet.contact && pet.requests==requests);
-        pump(2500);
+        pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     }
     /* A hardware stop arriving during screen pause requires a fresh hold,
        even if a resume tap was already down when the stop arrived. */
@@ -135,7 +135,7 @@ int main(void)
     rb_pet_estop(&pet,true); pressed=false; pump(100);
     assert(pet.state==RB_PET_STOPPED && !strcmp(pet.stop_reason,"E-STOP"));
     click(28,212); assert(pet.state==RB_PET_STOPPED);
-    point=(lv_point_t){28,212}; pressed=true; pump(800); pressed=false; pump(2500);
+    point=(lv_point_t){28,212}; pressed=true; pump(800); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     assert(pet.state==RB_PET_NORMAL);
     /* Finger drift just beyond the visual edge is tolerated; a drag away
        or an input reset does not click. A long hold toggles only once. */
@@ -168,18 +168,18 @@ int main(void)
     /* Same moving contact on body cannot build happiness. */
     point=(lv_point_t){130,140}; pressed=true; pump(100);
     for (unsigned n=0;n<250;++n) { unsigned t=n%60; point.x=130+(t<=30?t:60-t)*2; pump(20); }
-    assert(pet.happy_ms==0 && !pet.happy_latched); pressed=false; pump(2500);
+    assert(pet.happy_ms==0 && !pet.happy_latched); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     /* Rubbing the face/eyes below the forehead is not head petting. */
     point=(lv_point_t){170,100}; pressed=true; pump(100);
     for (unsigned n=0;n<250;++n) { unsigned t=n%30; point.x=170+(t<=15?t:30-t)*2; pump(20); }
-    assert(pet.happy_ms==0 && !pet.happy_latched); pressed=false; pump(2500);
+    assert(pet.happy_ms==0 && !pet.happy_latched); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     /* Forehead above the eyes, in real rendered idle/nuzzle poses. */
     point=(lv_point_t){165,70}; pressed=true; pump(100);
     for (unsigned n=0;n<230;++n) { unsigned t=n%30; point.x=165+(t<=15?t:30-t)*2; pump(20); }
-    assert(pet.happy_latched); snap("happy.ppm"); pressed=false; pump(2500);
+    assert(pet.happy_latched); snap("happy.ppm"); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     click(290,212); pump(100); click(240,110); pump(100); assert(pet.lazy); snap("settings.ppm");
     click(290,212); pump(100); snap("lazy.ppm");
-    click(290,212); pump(100); click(240,156); pump(4500);
+    click(290,212); pump(100); click(240,156); pump((unsigned)(RB_MS_REST*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+500);
     assert(pet.state==RB_PET_RESTING); snap("sleep.ppm");
     lv_obj_t *sleep_hint=find_label(lv_screen_active(),"长按左下角恢复");
     assert(sleep_hint && !lv_obj_has_flag(sleep_hint,LV_OBJ_FLAG_HIDDEN));
@@ -212,16 +212,16 @@ int main(void)
     assert(head_changes>3 && z_changes>10);
     /* Scale transforms lazily populate LVGL caches. Warm a complete lazy
        cycle, then compare identical phases over four more full cycles. */
-    pump(5460); lv_mem_monitor(&sleep_before);
-    pump(4*5460); lv_mem_monitor(&sleep_after);
+    pump((unsigned)(5460*RB_PLAYBACK_DURATION_SCALE)); lv_mem_monitor(&sleep_before);
+    pump((unsigned)(4*5460*RB_PLAYBACK_DURATION_SCALE)); lv_mem_monitor(&sleep_after);
     assert(sleep_before.free_size==sleep_after.free_size);
     /* STOP during sleep freezes the particles as well as the body. */
     rb_pet_stop(&pet,"BACK BUTTON"); pump(100); assert(pet.state==RB_PET_STOPPED);
     uint32_t frozen=region_hash(0,0,320,240); pump(1000);
     assert(region_hash(0,0,320,240)==frozen);
-    point=(lv_point_t){38,212}; pressed=true; pump(800); pressed=false; pump(2500);
+    point=(lv_point_t){38,212}; pressed=true; pump(800); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     assert(pet.state==RB_PET_NORMAL);
-    click(290,212); pump(100); click(240,156); pump(4500);
+    click(290,212); pump(100); click(240,156); pump((unsigned)(RB_MS_REST*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+500);
     assert(pet.state==RB_PET_RESTING);
     click(20,120); assert(pet.state==RB_PET_RESTING);
     click(145,110); pump(100); assert(pet.state==RB_PET_RESTING && pet.action==RB_ANIM_IDLE);
@@ -234,12 +234,12 @@ int main(void)
     unsigned before_stop=rb_ui_body_updates(); click(38,212); pump(100);
     assert(pet.state==RB_PET_STOPPED); unsigned stopped_updates=rb_ui_body_updates();
     assert(stopped_updates>=before_stop); pump(2000); assert(rb_ui_body_updates()==stopped_updates); snap("stopped.ppm");
-    click(38,212); pump(2500); assert(pet.state==RB_PET_NORMAL);
+    click(38,212); pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400); assert(pet.state==RB_PET_NORMAL);
     rb_pet_stop(&pet,"BACK BUTTON"); pump(100);
     click(38,212); assert(pet.state==RB_PET_STOPPED);
     rb_pet_estop(&pet,false); point=(lv_point_t){38,212}; pressed=true; pump(800); pressed=false; pump(100);
     assert(pet.state==RB_PET_STOPPED); rb_pet_estop(&pet,true);
-    point=(lv_point_t){38,212}; pressed=true; pump(800); pressed=false; pump(2500);
+    point=(lv_point_t){38,212}; pressed=true; pump(800); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     assert(pet.state==RB_PET_NORMAL);
     point=(lv_point_t){145,110}; pressed=true; pump(100); assert(pet.contact);
     lv_indev_reset(indev,NULL); assert(!pet.contact); pressed=false; pump(500);
@@ -250,7 +250,7 @@ int main(void)
     unsigned prior_updates=rb_ui_body_updates(); pump(1500);
     assert(pet.state!=RB_PET_STOPPED && rb_ui_body_updates()>prior_updates);
     lv_mem_monitor_t before,after; lv_mem_monitor(&before);
-    for (unsigned n=0;n<80;++n) { click(145,110); pump(1300); }
+    for (unsigned n=0;n<80;++n) { click(145,110); pump((unsigned)(RB_MS_PROBE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+100); }
     pump(3000); lv_mem_monitor(&after); assert(after.free_size==before.free_size);
     /* A real fast swipe produces three overhead questions, then clears them.
        Settings and pause hide the effect without leaving stale glyphs. */
@@ -258,14 +258,14 @@ int main(void)
     assert(visible_questions(lv_screen_active())==0);
     point=(lv_point_t){100,110}; pressed=true; pump(80);
     for (int x=108;x<=220;x+=8) { point.x=x; pump(20); }
-    pressed=false; pump(420); assert(pet.action==RB_ANIM_TILT);
+    pressed=false; pump(pet.duration/2); assert(pet.action==RB_ANIM_TILT);
     assert(visible_questions(lv_screen_active())==3); snap("confused.ppm");
     click(290,212); assert(visible_questions(lv_screen_active())==0);
     click(290,212); pump(1600);
     assert(pet.action==RB_ANIM_IDLE && visible_questions(lv_screen_active())==0);
     point=(lv_point_t){100,110}; pressed=true; pump(80);
     for (int x=108;x<=220;x+=8) { point.x=x; pump(20); }
-    pressed=false; pump(420); assert(visible_questions(lv_screen_active())==3);
+    pressed=false; pump(pet.duration/2); assert(visible_questions(lv_screen_active())==3);
     click(28,212); assert(pet.state==RB_PET_STOPPED);
     assert(visible_questions(lv_screen_active())==0);
     printf("PASS reference UI, RGB565 sequence/cache fallback, anchors, gestures, STOP freeze and stable heap; cache=%zu bytes\n",rb_assets_cache_bytes());

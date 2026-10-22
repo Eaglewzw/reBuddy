@@ -62,7 +62,7 @@ static void sleep_effects(bool stopped)
         return;
     }
     if (!sleeping_last) { sleep_clock_ms=0; z_last_ms=0; }
-    else sleep_clock_ms=fmod(sleep_clock_ms+elapsed/(pet->lazy?1.30:1.0),4200.0);
+    else sleep_clock_ms=fmod(sleep_clock_ms+elapsed/(RB_PLAYBACK_DURATION_SCALE*(pet->lazy?1.30:1.0)),4200.0);
     sleeping_last=true;
     if (z_last_ms && pet->now-z_last_ms<50) return;
     z_last_ms=pet->now;

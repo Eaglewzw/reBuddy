@@ -10,6 +10,7 @@ root = Path(__file__).resolve().parents[2]
 gif_dir = root/'assets/gifs'
 manifest = json.loads((gif_dir/'manifest.json').read_text())
 assert len(manifest['gifs']) == 10
+assert manifest['behavior_config_sha256'] == hashlib.sha256((root/'config/behavior_defaults.json').read_bytes()).hexdigest()
 assert manifest['source_runtime_sha256'] == hashlib.sha256((root/'assets/animation/frames.bin').read_bytes()).hexdigest()
 assert manifest['room_sha256'] == hashlib.sha256((root/'assets/animation/room.bin').read_bytes()).hexdigest()
 assert {p.name for p in gif_dir.glob('*.gif')} == {g['file'] for g in manifest['gifs']}

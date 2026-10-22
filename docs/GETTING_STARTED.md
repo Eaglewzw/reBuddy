@@ -33,7 +33,9 @@ python3 tools/build_room_font.py
 python3 tools/export_action_gifs.py --output build/action-gifs
 ```
 
-行为参数在 `config/behavior_defaults.json`；逐姿态头部区域在 `config/design/head_touch_regions.json`。图像导出使用 24 格姿态原图和 4 张睡眠姿态，统一缩放、对齐底座，不生成形变补间。中文字体工具需要 Noto Sans CJK，GIF 工具默认使用 DejaVu Sans，也可用 `--font` 指定字体。
+行为参数在 `config/behavior_defaults.json`；`animation_playback.duration_scale=2.0` 表示身体动作、轻蹭回位和睡眠呼吸时长加倍，播放速度为原来的一半。活泼动作时长为基准 × 0.85 × 2，慵懒为基准 × 1.3 × 2；触摸识别时限与暂停响应独立。GIF 默认按活泼风格导出，`--style lazy` 可导出慵懒风格。
+
+逐姿态头部区域在 `config/design/head_touch_regions.json`。图像导出使用 24 格姿态原图和 4 张睡眠姿态，统一缩放、对齐底座，不生成形变补间。中文字体工具需要 Noto Sans CJK，GIF 工具默认使用 DejaVu Sans，也可用 `--font` 指定字体。
 
 工程已保存生成资源，普通构建不需要 Pillow、图片生成服务或本地字体文件。已选 probe-v2 可使用 `tools/render_approved_probe.py` 在 `build/approved-probe-preview/` 单独重现。
 

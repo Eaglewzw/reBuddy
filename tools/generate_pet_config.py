@@ -16,6 +16,7 @@ for name, value in cfg['action_durations_ms'].items():
     lines.append(f'#define RB_MS_{name} {value}u')
 for name, value in cfg['style_duration_scale'].items():
     lines.append(f'#define RB_STYLE_{name.upper()} {value}f')
+lines.append(f"#define RB_PLAYBACK_DURATION_SCALE {cfg['animation_playback']['duration_scale']}f")
 for name, value in cfg['display']['role_rect'].items():
     lines.append(f'#define RB_ROLE_{name.upper()} {value}')
 lines.append(f'#define RB_BODY_FPS {cfg["display"]["target_animation_fps"]}u')

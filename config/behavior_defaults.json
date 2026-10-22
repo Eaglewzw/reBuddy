@@ -65,5 +65,8 @@
       "path": "assets/interaction_storyboard.png",
       "sha256": "05d224aff1004a584e093d7e25842a05f21213aaa2006b0d7e0fffa75eab664a"
     }
-  ]
+  ],
+  "animation_playback": {
+    "duration_scale": 2.0
+  }
 }

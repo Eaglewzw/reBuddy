@@ -18,6 +18,7 @@ build = args.build.resolve()
 out = args.output.resolve()
 flash = json.loads((build/'flasher_args.json').read_text())
 description=json.loads((build/'project_description.json').read_text())
+behavior=json.loads((ROOT/'config/behavior_defaults.json').read_text())
 assets=json.loads((ROOT/'assets/animation/manifest.json').read_text())
 app=(build/flash['app']['file']).read_bytes()
 if (ROOT/'assets/animation/frames.bin').read_bytes() not in app:
@@ -62,6 +63,7 @@ for relative in ['LICENSE', 'THIRD_PARTY_NOTICES.md',
 manifest = {
     'project': 'reBuddy', 'version': description['project_version'], 'target': description['target'],
     'sdk': description['git_revision'], 'asset_version': assets['asset_version'],
+    'animation_playback': behavior['animation_playback'],
     'ui_revision': 'touch-only', 'mode': 'screen_touch_key_pose_preview', 'hardware_tested': False,
     'visual_status': assets['visual_status'], 'approved_probe_v2_integrated': False,
     'input_mode': 'touch_only', 'physical_keys': False, 'gpio_estop_input': False,
@@ -98,6 +100,7 @@ if preview.exists(): shutil.copy2(preview,out/'ui-preview.png')
 (out/'README.txt').write_text(
     f'reBuddy {description["project_version"]} / touch-only / ESP32-C5 / ESP-IDF {sdk_version}\n'
     '小屋预览：窗户、木地板、地毯与充电角；28 张姿态、睡眠呼吸和动态 Z。\n'
+    f'动画时长倍率：{behavior["animation_playback"]["duration_scale"]}；GIF 默认匹配活泼风格，触摸识别时限独立。\n'
     '直接触摸角色互动；左下暂停/继续，右下设置；没有英文状态栏。\n'
     '硬件：XIAO ESP32-C5 CAN Console，8 MiB Flash / 8 MiB Quad PSRAM。\n'
     '已通过主机测试与编译，尚未实际烧录或完成实机 30 分钟验证。\n'

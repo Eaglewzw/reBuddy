@@ -33,6 +33,7 @@
 #define RB_MS_WAKE 1600u
 #define RB_STYLE_LIVELY 0.85f
 #define RB_STYLE_LAZY 1.3f
+#define RB_PLAYBACK_DURATION_SCALE 2.0f
 #define RB_ROLE_X 80
 #define RB_ROLE_Y 40
 #define RB_ROLE_WIDTH 160
