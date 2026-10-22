@@ -1,0 +1,42 @@
+Internal ctest changing into directory: /tmp/rebuddy-life-make
+Test project /tmp/rebuddy-life-make
+      Start  1: config
+ 1/18 Test  #1: config ...........................   Passed    0.00 sec
+      Start  2: actions
+ 2/18 Test  #2: actions ..........................   Passed    0.01 sec
+      Start  3: styles
+ 3/18 Test  #3: styles ...........................   Passed    0.00 sec
+      Start  4: interrupt
+ 4/18 Test  #4: interrupt ........................   Passed    0.00 sec
+      Start  5: sleep
+ 5/18 Test  #5: sleep ............................   Passed    0.00 sec
+      Start  6: stop
+ 6/18 Test  #6: stop .............................   Passed    0.00 sec
+      Start  7: gestures
+ 7/18 Test  #7: gestures .........................   Passed    0.00 sec
+      Start  8: life
+ 8/18 Test  #8: life .............................   Passed    0.00 sec
+      Start  9: arm_timeout
+ 9/18 Test  #9: arm_timeout ......................   Passed    0.00 sec
+      Start 10: arm_limit
+10/18 Test #10: arm_limit ........................   Passed    0.00 sec
+      Start 11: arm_send
+11/18 Test #11: arm_send .........................   Passed    0.00 sec
+      Start 12: control_timeout
+12/18 Test #12: control_timeout ..................   Passed    0.00 sec
+      Start 13: soak
+13/18 Test #13: soak .............................   Passed    0.03 sec
+      Start 14: board_input
+14/18 Test #14: board_input ......................   Passed    0.00 sec
+      Start 15: action_schema
+15/18 Test #15: action_schema ....................   Passed    0.06 sec
+      Start 16: ui_rgb565
+16/18 Test #16: ui_rgb565 ........................   Passed    0.47 sec
+      Start 17: reference_behavior
+17/18 Test #17: reference_behavior ...............   Passed    0.02 sec
+      Start 18: animation_resources
+18/18 Test #18: animation_resources ..............   Passed    0.07 sec
+
+100% tests passed, 0 tests failed out of 18
+
+Total Test time (real) =   0.71 sec

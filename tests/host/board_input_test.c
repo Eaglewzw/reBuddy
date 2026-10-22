@@ -6,6 +6,16 @@
 #define HELD(bit) (uint16_t)(RELEASED ^ (1u << (bit)))
 int main(void)
 {
+    rb_primary_touch_t primary={0};
+    const uint8_t one[]={4}, two[]={8,4}, remaining[]={8};
+    assert(rb_primary_touch_select(&primary,one,1,true)==0);
+    assert(rb_primary_touch_select(&primary,two,2,true)==1);
+    assert(rb_primary_touch_select(&primary,remaining,1,true)==-2);
+    assert(rb_primary_touch_select(&primary,two,2,true)==-2);
+    assert(rb_primary_touch_select(&primary,NULL,0,true)==-1);
+    assert(rb_primary_touch_select(&primary,remaining,1,true)==0);
+    assert(rb_primary_touch_select(&primary,NULL,0,false)==-2);
+    assert(rb_primary_touch_select(&primary,remaining,1,true)==-2);
     int16_t x, y;
     assert(rb_touch_map(0, 0, &x, &y) && x == 0 && y == 239);
     assert(rb_touch_map(239, 319, &x, &y) && x == 319 && y == 0);

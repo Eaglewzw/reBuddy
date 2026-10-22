@@ -1,3 +1,13 @@
+# 当前动作事件与历史控制接口
+
+当前 `main/main.c` 使用 `rb_pet_t`，不实例化旧轨迹引擎或 `rb_arm_t`。`rb_pet_set_sink()` 接收 `rb_pet_event_t`：action_id、request_id、source、target_state、lazy风格和单调timestamp_ms。默认sink仅写日志，两路CAN保持待机；不根据每张图片生成电机命令。
+
+当前行为参数来自 `config/behavior_defaults.json`，屏幕资源由 `tools/build_pet_assets.py` 生成，稳定姿态/切换规则见 [REFERENCE_IMPLEMENTATION.md](REFERENCE_IMPLEMENTATION.md)。STOP直接冻结屏幕并清空请求，不自动发回位命令。
+
+下文为**历史关节轨迹草案和未来接入说明**。其中 `actions.json`、`rb_life.c`、旧风格系数及ENTER触发路径均不用于当前应用，保留旧测试以防回归。真实控制接入需要另行完成，不属于本阶段屏幕交付。
+
+---
+
 # 动作数据与机械臂接入
 
 六个动作对应方案书中的探头、蹭蹭、害羞、小舞蹈、歪头和打瞌睡。`config/actions.json` 为唯一数据源，生成的 `rb_actions.c` 放入 Flash。配置明确标记 `hardware_validated: false`。
@@ -5,6 +15,8 @@
 每帧包含相对标定中性姿态的七关节电机角度偏移、到达时间和表情。单位是电机角度，不是末端位移或夹爪开口毫米数。现有正负号与关节组合只是预览草案，**不能证明末端实际会前伸、缩回或避碰**，必须结合真实安装、夹爪传动、载荷与姿态重新标定。最后一帧回到中性偏移零。
 
 打瞌睡的末帧也回到中性姿态；最终实体休息姿态尚未定义。未来若引入非零睡姿，必须同时更新生成器规则、唤醒过渡与测试。
+
+屏幕交互现由 `rb_life.c` 与 `rb_gesture.c` 持续更新目光、舒适度和神态，不再把每次触摸映射为整段关键帧动作。以下规则适用于保留的关键帧引擎（休息/唤醒、实体 ENTER 和显式动作调用）；屏幕生命感不修改七轴目标。
 
 ## 调度规则
 

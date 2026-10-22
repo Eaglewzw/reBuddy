@@ -9,8 +9,8 @@ parser.add_argument('input', type=Path)
 parser.add_argument('output', type=Path)
 args = parser.parse_args()
 args.output.mkdir(parents=True, exist_ok=True)
-names = ['idle', 'curious', 'happy', 'lazy', 'sleep', 'stopped']
-sheet = Image.new('RGB', (960, 540), '#111b19')
+names = ['idle', 'curious', 'folded', 'relaxed', 'happy', 'settings', 'lazy', 'sleep', 'stopped']
+sheet = Image.new('RGB', (960, 810), '#111b19')
 draw = ImageDraw.Draw(sheet)
 for n, name in enumerate(names):
     with Image.open(args.input / f'{name}.ppm') as source:

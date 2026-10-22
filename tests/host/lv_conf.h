@@ -1,6 +1,7 @@
 #pragma once
 #define LV_CONF_H
 #define LV_COLOR_DEPTH 16
+#define LV_DEF_REFR_PERIOD 20
 #define LV_MEM_SIZE (128 * 1024U)
 #define LV_USE_OS LV_OS_NONE
 #define LV_BUILD_EXAMPLES 0

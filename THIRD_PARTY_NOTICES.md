@@ -5,7 +5,7 @@
 - Espressif `esp_lvgl_port 2.9.0`、`esp_lcd_touch 1.2.1`、`esp_lcd_touch_gt911 1.2.1`：许可证随组件分发，以各组件 `license.txt` 为准。
 - 原始需求：用户提供的《基于 ESP32-C5 的 reBot RS 机械臂桌宠方案书》，副本见 `docs/PROJECT_BRIEF.md`。
 
-角色外观以用户提供的设定图为参考，由内置 image_gen 生成透明立体素材，生成提示词和原图保存在 `assets/character/`；眼睛、眉毛、腮红与表情由 LVGL 绘制。没有复制私人控制台的品牌图片、字体资源或整套 UI 页面。
+当前角色直接来源于用户提供的《reBot RS 桌宠开发资料包》，原始 PNG 位于 `assets/reference/`，出处及校验值见 `docs/REFERENCE_IMPLEMENTATION.md`。运行帧为原图裁切、清理与二维变形的衍生原型；眼睛由 LVGL 绘制。原始图未附独立许可证，代码许可证不自动覆盖第三方原图。未使用的历史生成角色已清理。用户在网页端生成并选择保留的探头v2已原样导入 `assets/approved/probe-v2/source.png`，来源与校验值见其 `manifest.json`；原始待机基准也保留在 `assets/approved/`。
 
 板级组件 `components/rebuddy_board/` 为本项目实现，接线依据目标板卡配置；不包含或链接私人应用仓库。驱动接口与寄存器依据以下公开资料：
 

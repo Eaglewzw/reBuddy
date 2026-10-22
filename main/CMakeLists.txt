@@ -1,4 +1,5 @@
 idf_component_register(
-    SRCS "main.c" "pet_ui.c" "character_asset.c"
+    SRCS "main.c" "pet_ui.c" "pet_assets.c" "pet_animation_table.c"
     INCLUDE_DIRS "."
-    REQUIRES rebuddy_core rebuddy_board lvgl esp_timer nvs_flash)
+    EMBED_FILES "../assets/animation/frames.bin"
+    REQUIRES rebuddy_core rebuddy_board lvgl esp_timer spi_flash esp_partition)

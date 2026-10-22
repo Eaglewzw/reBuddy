@@ -10,6 +10,7 @@
 #include "esp_lcd_touch_gt911.h"
 #include "esp_lvgl_port.h"
 #include "esp_timer.h"
+#include "sdkconfig.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
@@ -28,6 +29,47 @@ static uint16_t output_levels;
 static portMUX_TYPE input_mux = portMUX_INITIALIZER_UNLOCKED;
 static rb_board_input_t pending;
 static bool started;
+
+#if CONFIG_REBUDDY_DISPLAY_STATS
+/* These callbacks and the log timer all run in the LVGL task. No ISR logging. */
+static struct {
+    int64_t since_us, render_start_us;
+    uint64_t pixels, render_us;
+    uint32_t frames;
+} display_stats;
+static void display_event(lv_event_t *event)
+{
+    switch (lv_event_get_code(event)) {
+    case LV_EVENT_RENDER_START:
+        display_stats.render_start_us=esp_timer_get_time();
+        break;
+    case LV_EVENT_RENDER_READY:
+        display_stats.render_us+=(uint64_t)(esp_timer_get_time()-display_stats.render_start_us);
+        ++display_stats.frames;
+        break;
+    case LV_EVENT_FLUSH_START: {
+        const lv_area_t *area=lv_event_get_param(event);
+        display_stats.pixels+=(uint64_t)lv_area_get_width(area)*lv_area_get_height(area);
+        break;
+    }
+    default: break;
+    }
+}
+static void display_log(lv_timer_t *timer)
+{
+    (void)timer;
+    int64_t now=esp_timer_get_time();
+    double seconds=(now-display_stats.since_us)*.000001;
+    if (seconds<=0) return;
+    ESP_LOGI("rb_display", "redraw=%.1f/s render_submit=%.2fms pixels/redraw=%lu queued=%.1fKiB/s",
+             display_stats.frames/seconds,
+             display_stats.frames?display_stats.render_us*.001/display_stats.frames:0,
+             (unsigned long)(display_stats.frames?display_stats.pixels/display_stats.frames:0),
+             display_stats.pixels*2.0/1024/seconds);
+    display_stats.frames=0; display_stats.pixels=0; display_stats.render_us=0;
+    display_stats.since_us=now;
+}
+#endif
 
 /* PCA9535 paired registers: inputs 0, outputs 2, polarity 4, direction 6. */
 static esp_err_t pca_write(uint8_t reg, uint16_t value)
@@ -79,22 +121,31 @@ void rb_board_display_unlock(void) { lvgl_port_unlock(); }
 static void read_touch(lv_indev_t *indev, lv_indev_data_t *data)
 {
     static lv_point_t last;
-    esp_lcd_touch_point_data_t point = {0};
+    static rb_primary_touch_t primary;
+    esp_lcd_touch_point_data_t points[CONFIG_ESP_LCD_TOUCH_MAX_POINTS] = {0};
+    uint8_t ids[CONFIG_ESP_LCD_TOUCH_MAX_POINTS];
     uint8_t count = 0;
     data->point = last;
     data->state = LV_INDEV_STATE_RELEASED;
     if (esp_lcd_touch_read_data(touch) != ESP_OK) {
+        rb_primary_touch_select(&primary, NULL, 0, false);
         /* INDEV_RESET cancels the gesture instead of synthesizing a tap. */
         lv_indev_reset(indev, NULL);
         return;
     }
-    if (esp_lcd_touch_get_data(touch, &point, &count, 1) != ESP_OK) {
+    if (esp_lcd_touch_get_data(touch, points, &count, CONFIG_ESP_LCD_TOUCH_MAX_POINTS) != ESP_OK) {
+        rb_primary_touch_select(&primary, NULL, 0, false);
         lv_indev_reset(indev, NULL);
         return;
     }
-    if (count) {
+    for (unsigned i=0;i<count;++i) ids[i]=points[i].track_id;
+    int selected=rb_primary_touch_select(&primary, ids, count, true);
+    if (selected==-2) { lv_indev_reset(indev, NULL); return; }
+    if (selected>=0) {
+        esp_lcd_touch_point_data_t point=points[selected];
         int16_t mapped_x, mapped_y;
         if (!rb_touch_map(point.x, point.y, &mapped_x, &mapped_y)) {
+            rb_primary_touch_select(&primary, NULL, 0, false);
             lv_indev_reset(indev, NULL);
             return;
         }
@@ -144,7 +195,8 @@ esp_err_t rb_board_init(void)
     esp_lcd_panel_io_handle_t lcd_io;
     const esp_lcd_panel_io_spi_config_t io_config = {
         .cs_gpio_num = LCD_CS, .dc_gpio_num = LCD_DC, .spi_mode = 0,
-        .pclk_hz = 20000000, .trans_queue_depth = 10, .lcd_cmd_bits = 8, .lcd_param_bits = 8
+        .pclk_hz = CONFIG_REBUDDY_LCD_SPI_MHZ * 1000000,
+        .trans_queue_depth = 10, .lcd_cmd_bits = 8, .lcd_param_bits = 8
     };
     ESP_RETURN_ON_ERROR(esp_lcd_new_panel_io_spi((esp_lcd_spi_bus_handle_t)SPI2_HOST,
                                                &io_config, &lcd_io), TAG, "LCD IO");
@@ -188,6 +240,7 @@ esp_err_t rb_board_init(void)
     ESP_RETURN_ON_ERROR(lvgl_port_init(&lvgl_config), TAG, "LVGL");
     const lvgl_port_display_cfg_t display_config = {
         .io_handle = lcd_io, .panel_handle = panel, .buffer_size = 320 * 40,
+        .double_buffer = true,
         .hres = 320, .vres = 240, .color_format = LV_COLOR_FORMAT_RGB565,
         .rotation = {.swap_xy = true, .mirror_x = true},
         .flags.buff_dma = true
@@ -195,6 +248,15 @@ esp_err_t rb_board_init(void)
     lv_display_t *display = lvgl_port_add_disp(&display_config);
     ESP_RETURN_ON_FALSE(display, ESP_ERR_NO_MEM, TAG, "LVGL display");
     ESP_RETURN_ON_FALSE(lvgl_port_lock(0), ESP_ERR_TIMEOUT, TAG, "LVGL lock");
+    /* Override older sdkconfig values too: match the 20ms behavior/input tick. */
+    lv_timer_set_period(lv_display_get_refr_timer(display), 20);
+#if CONFIG_REBUDDY_DISPLAY_STATS
+    display_stats.since_us=esp_timer_get_time();
+    lv_display_add_event_cb(display,display_event,LV_EVENT_RENDER_START,NULL);
+    lv_display_add_event_cb(display,display_event,LV_EVENT_RENDER_READY,NULL);
+    lv_display_add_event_cb(display,display_event,LV_EVENT_FLUSH_START,NULL);
+    lv_timer_create(display_log,5000,NULL);
+#endif
     lv_indev_t *pointer = lv_indev_create();
     if (pointer) {
         lv_indev_set_type(pointer, LV_INDEV_TYPE_POINTER);
@@ -208,5 +270,7 @@ esp_err_t rb_board_init(void)
     ESP_RETURN_ON_FALSE(xTaskCreate(input_task, "rb_keys", 3072, NULL, 3, NULL) == pdPASS,
                         ESP_ERR_NO_MEM, TAG, "Input task");
     ESP_LOGI(TAG, "Standalone board ready: 320x240, GT911, PCA9535; CAN in standby");
+    ESP_LOGI(TAG, "Display: %dMHz SPI, 2x320x40 RGB565 DMA buffers, 20ms refresh target",
+             CONFIG_REBUDDY_LCD_SPI_MHZ);
     return ESP_OK;
 }

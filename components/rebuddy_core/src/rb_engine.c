@@ -14,7 +14,8 @@ bool rb_engine_init(rb_engine_t *e, const rb_config_t *config, uint64_t now)
         !isfinite(config->max_speed_deg_s) || config->max_speed_deg_s <= 0 || config->max_speed_deg_s > 10 ||
         !isfinite(config->max_offset_deg) || config->max_offset_deg <= 0 || config->max_offset_deg > 10) return false;
     memset(e, 0, sizeof(*e)); e->config=*config; e->action=RB_NONE;
-    e->now_ms=e->last_input_ms=now; return true;
+    e->now_ms=e->last_input_ms=now; e->life.openness=1; e->life.random=42;
+    e->life.next_blink_ms=now+2300; e->life.next_look_ms=now+1800; return true;
 }
 static void start_action(rb_engine_t *e, rb_action_id_t action, uint64_t now)
 {
@@ -49,7 +50,7 @@ bool rb_engine_event(rb_engine_t *e, rb_event_t event, uint64_t now)
     if (ok && wake && action!=RB_DOZE) e->state=RB_WAKING;
     return ok;
 }
-void rb_engine_tick(rb_engine_t *e, uint64_t now)
+static void motion_tick(rb_engine_t *e, uint64_t now)
 {
     if (!e || now<e->now_ms) return;
     uint64_t elapsed=now-e->now_ms; e->now_ms=now;
@@ -87,14 +88,23 @@ void rb_engine_tick(rb_engine_t *e, uint64_t now)
     if (idle>=e->config.sleep_ms) { start_action(e,RB_DOZE,now); return; }
     if (idle>=e->config.drowsy_ms) { e->state=RB_DROWSY; e->face=RB_FACE_DROWSY; }
 }
+void rb_engine_tick(rb_engine_t *e, uint64_t now)
+{
+    if (!e || now<e->now_ms) return;
+    uint64_t elapsed=now-e->now_ms;
+    motion_tick(e,now);
+    rb_life_tick(e,now,elapsed);
+}
 void rb_engine_style(rb_engine_t *e, rb_style_t style)
 { if (e && style<=RB_LAZY) e->style=style; }
 void rb_engine_stop(rb_engine_t *e, const char *reason)
-{ if (e) { e->state=RB_STOPPED; e->face=RB_FACE_STOP; e->action=RB_NONE; e->stop_reason=reason?reason:"STOP"; } }
+{ if (e) { e->state=RB_STOPPED; e->face=RB_FACE_STOP; e->action=RB_NONE; e->stop_reason=reason?reason:"STOP"; e->life.contact=e->life.stroking=false; e->life.celebrate_until=0; } }
 bool rb_engine_reset(rb_engine_t *e, uint64_t now)
 {
     if (!e || e->state!=RB_STOPPED || now<e->now_ms) return false;
     e->state=RB_IDLE; e->face=RB_FACE_IDLE; e->now_ms=e->last_input_ms=now; e->stop_reason=NULL;
+    memset(&e->life,0,sizeof(e->life)); e->life.openness=1; e->life.random=42;
+    e->life.next_blink_ms=now+2300; e->life.next_look_ms=now+1800;
     return true;
 }
 const char *rb_state_name(rb_state_t state)

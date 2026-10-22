@@ -22,9 +22,12 @@ void *rb_memory_lvgl_pool(size_t bytes)
 
 void rb_memory_log(void)
 {
-    ESP_LOGI("rb_memory", "Internal free/min/largest=%u/%u/%u; PSRAM free=%u",
+    ESP_LOGI("rb_memory", "Internal free/min/largest=%u/%u/%u; PSRAM free=%u total=%u min=%u largest=%u",
         (unsigned)heap_caps_get_free_size(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT),
         (unsigned)heap_caps_get_minimum_free_size(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT),
         (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_INTERNAL | MALLOC_CAP_8BIT),
-        (unsigned)heap_caps_get_free_size(MALLOC_CAP_SPIRAM));
+        (unsigned)heap_caps_get_free_size(MALLOC_CAP_SPIRAM),
+        (unsigned)esp_psram_get_size(),
+        (unsigned)heap_caps_get_minimum_free_size(MALLOC_CAP_SPIRAM),
+        (unsigned)heap_caps_get_largest_free_block(MALLOC_CAP_SPIRAM));
 }

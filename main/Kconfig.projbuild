@@ -1,4 +1,17 @@
 menu "reBuddy desktop companion"
+    config REBUDDY_LCD_SPI_MHZ
+        int "LCD SPI clock (MHz)"
+        range 20 40
+        default 40
+        help
+            40 MHz reduces pixel transfer time. If the panel or wiring shows
+            corruption, use 20 MHz and rebuild.
+    config REBUDDY_DISPLAY_STATS
+        bool "Log display rendering and transfer statistics every 5 seconds"
+        default y
+        help
+            Counts actual LVGL redraws and queued pixels. An unchanged scene
+            intentionally has fewer redraws; this is not the LCD scanout rate.
     config REBUDDY_DROWSY_SECONDS
         int "Idle time before drowsiness (seconds)"
         range 5 600

@@ -1,77 +1,56 @@
-# 开发指南
+# 开发与体验指南
 
-## 环境与依赖
+选定素材与旧固件的区别见 [ASSET_STATUS.md](ASSET_STATUS.md)。当前可构建的旧原型实现依据 [资料包对照记录](REFERENCE_IMPLEMENTATION.md)，ESP-IDF 5.5.5 / ESP32-C5 / LVGL 9.5.0。板级支持随仓库提供；首次构建需下载公开组件。
 
-行为核心测试需要 Git、CMake、Ninja、C/C++ 编译器和 Python 3，无需开发板或 ESP-IDF。测试与界面预览的配置见 [TESTING.md](TESTING.md)。
-
-屏幕固件使用 ESP-IDF 5.5.5，目标为 `esp32c5`。组件版本在 [main/idf_component.yml](../main/idf_component.yml) 中固定；首次构建需要访问 Espressif 组件注册表。
-
-板级实现包含在 [components/rebuddy_board/](../components/rebuddy_board/) 中，只依赖公开的 ESP-IDF、LVGL、Espressif LVGL Port 和 GT911 触摸组件。无需克隆其他应用仓库，无需私人仓库权限。
-
-## 构建屏幕固件
-
-以下命令从 reBuddy 仓库根目录执行。先安装 ESP-IDF 5.5.5 及其 ESP32-C5 工具链，并将示例 SDK 路径替换为实际安装位置。
+## 构建与烧录
 
 ```bash
 source /path/to/esp-idf-v5.5.5/export.sh
-idf.py -B build-c5 build
+idf.py -B build reconfigure build
+# 需要上板测试时执行，串口按实际设备选择：
+idf.py -B build -p /dev/ttyACM0 flash monitor
 ```
 
-如果从使用外部板级依赖的旧版本升级，请使用全新构建目录和配置，避免旧缓存引用已移走的路径：
+已有 sdkconfig 不会被 defaults 自动覆盖，需通过 `idf.py -B build menuconfig` 调整。旧构建目录仍可使用，但所有命令应指定同一 `-B`。当前产物为 `build/reBuddy.bin`；本轮开发没有执行烧录。
+
+此机器采用 EIM 工具布局时，可使用已安装环境运行（路径按机器调整）：
 
 ```bash
-idf.py -B build-standalone -DSDKCONFIG=build-standalone/sdkconfig build
+export IDF_PATH=/home/verser/.espressif/v5.5.5/esp-idf
+export IDF_TOOLS_PATH=/home/verser/.espressif/tools
+export IDF_PYTHON_ENV_PATH=/home/verser/.espressif/tools/python/v5.5.5/venv
+export PATH="$IDF_PYTHON_ENV_PATH/bin:$IDF_TOOLS_PATH/ninja/1.12.1:$IDF_TOOLS_PATH/riscv32-esp-elf/esp-14.2.0_20260121/riscv32-esp-elf/bin:$PATH"
+python3 "$IDF_PATH/tools/idf.py" -B build build
 ```
 
-使用该目录时，后续 `flash`、`monitor`、`menuconfig` 均使用 `-B build-standalone`；打包使用 `python3 tools/package_firmware.py --build build-standalone`。
+## 测试操作
 
-硬件配置、接线和首次上板检查见 [HARDWARE.md](HARDWARE.md)。已有 `sdkconfig` 时，修改 `sdkconfig.defaults` 不会覆盖已有配置，需使用 `idf.py -B build-c5 menuconfig` 调整。
+1. 角色区域为 x=80～239、y=40～199；轻点并松手应探头，静止按住只跟随视线。
+2. 缓慢往返滑动 1 秒后松手，观察轻蹭回位；有效移动累计约 3 秒出现一次开心。停住不计时。
+3. 1.2 秒内轻点三次，收拢后继续点击不应再次退缩；温柔抚摸约 1.2 秒后展开，该接触不会立即开心。
+4. 快速划动触发歪头，同一接触继续滑动不应反复触发。
+5. 互动结束后无操作 60 秒入睡，首次角色接触只唤醒；空白区域不会唤醒。
+6. 设置中切换 LIVELY / LAZY、REST / WAKE。STOP、BACK 或急停应冻结身体；急停释放后需长按 RESET 恢复。
 
-## 烧录与操作
+手势阈值是资料包初始值；实际触摸需要持续略长于有效时长门槛，以覆盖去抖、速度估计和换向。风格仅改变播放节奏；ENTER 不再绕过抚摸条件触发开心。CAN 保持待机，日志中的动作事件为 Mock。
 
-确认板卡型号和串口后烧录；下面的 `/dev/ttyACM0` 为示例：
+## 修改配置和素材
+
+当前配置为 `config/behavior_defaults.json`，原图为 `assets/reference/`。安装 Pillow 后运行：
 
 ```bash
-idf.py -B build-c5 -p /dev/ttyACM0 flash monitor
+python3 tools/build_pet_assets.py
+idf.py -B build build
 ```
 
-当前固件为屏幕预览版本，CAN 收发器保持待机，不启动总线控制器、不使能电机或发送 RS 运动命令。真实机械臂接入与标定见 [MOTION.md](MOTION.md)。
+工具验证原图哈希，生成 `assets/animation/frames.bin`、清单、色条、C 帧表与 `rb_pet_config.h`。当前布局/帧率/队列容量等结构性参数有检查；改变这些结构需同步改播放器。旧角色转换工具已清理；`config/actions.json`仍用于历史回归。用户选定的probe-v2使用 `tools/render_approved_probe.py` 重现，两个工具处理不同素材。
 
-角色区域支持单击、慢抚摸、连击、快速来回划动和触摸唤醒。开发版另有以下控制入口：
+## 打包
 
-| 操作 | 功能 |
-| --- | --- |
-| `HAPPY` / 实体 ENTER | 开心小舞蹈预览 |
-| `LIVELY` / `LAZY` / 波轮上下 | 切换行为风格，参数在下一动作生效 |
-| `REST` | 进入打瞌睡与休息流程 |
-| `STOP` / 实体 BACK / GPIO28 | 锁存软件停止，清除待处理手势 |
-| 长按 `RESET` | 清除软件停止；不自动恢复动作，外部急停仍有效 |
-
-默认无操作 30 秒进入困倦，60 秒开始打瞌睡。界面目前使用英文。软件停止的控制边界见 [MOTION.md](MOTION.md)。
-
-## 修改动作与角色资源
-
-动作以 [config/actions.json](../config/actions.json) 为唯一数据源。修改后生成并检查 C 动作表：
+在带 esptool 的 IDF Python 环境中运行：
 
 ```bash
-python3 tools/generate_actions.py
-python3 tools/generate_actions.py --check
+python3 tools/package_firmware.py --build build
 ```
 
-角色原图位于 [assets/character/](../assets/character/)，来源及制作方式见 [GENERATION.md](../assets/character/GENERATION.md)。替换原图后运行：
-
-```bash
-python3 tools/pack_character.py
-```
-
-该工具生成固定尺寸的 ARGB8888 C 资源；表情仍由 LVGL 实时绘制。更新资源后需要重新编译固件。
-
-## 整理固件产物
-
-完成构建后，在已激活的 IDF Python 环境中执行：
-
-```bash
-python3 tools/package_firmware.py
-```
-
-默认输出到 `dist/reBuddy-v0.1-preview/`，包含合并固件、应用、引导与分区文件、动作配置、预览图、烧录说明和校验值。构建产物不随源码提交；需要 ZIP 文件时可自行压缩该目录。
+输出 `dist/reBuddy-reference-preview/`，含合并固件、分区/引导/应用、配置、资源清单、状态说明、需求对照及 SHA256SUMS。打包清单明确标记仍使用旧原型，尚未集成probe-v2；不附与固件不符的选定GIF。旧分发包已清理，运行该命令才重新生成。它只在本地整理文件，不烧录、不发布。

@@ -74,22 +74,73 @@ static void stop_test(void)
     assert(rb_engine_reset(&pet,now)); assert(pet.state==RB_IDLE); tick(600);
     assert(pet.action==RB_NONE); assert(pet.actions_started==0);
 }
+static void contact(rb_touch_phase_t phase,int x,int y,rb_region_t region)
+{ rb_gesture_touch_region(&g,&pet,phase,x,y,region,now); }
+static void hold_head(unsigned duration,bool move)
+{
+    for (unsigned t=0;t<duration;t+=100) {
+        contact(RB_TOUCH_MOVE,195+(move?(int)((t/100)%8)*3:0),80,RB_REGION_HEAD);
+        tick(100);
+    }
+}
 static void gestures_test(void)
 {
-    init(); tap(); tick(360); assert(pet.action==RB_LOOK);
-    init(); tap(); tick(100); tap(); tick(360); assert(pet.action==RB_SHY);
-    init(); tap(); tick(80); tap(); tick(80); tap(); assert(pet.action==RB_SHY);
-    init(); rb_gesture_touch(&g,&pet,RB_TOUCH_DOWN,100,100,now);
-    for (int n=1;n<=8;++n) { tick(100); rb_gesture_touch(&g,&pet,RB_TOUCH_MOVE,100+n*8,100,now); }
-    rb_gesture_touch(&g,&pet,RB_TOUCH_UP,164,100,now); assert(pet.action==RB_NUZZLE);
-    init(); rb_gesture_touch(&g,&pet,RB_TOUCH_DOWN,100,100,now); tick(100);
-    rb_gesture_touch(&g,&pet,RB_TOUCH_MOVE,170,100,now); tick(100);
-    rb_gesture_touch(&g,&pet,RB_TOUCH_UP,100,100,now); assert(pet.action==RB_PUZZLED);
-    init(); rb_gesture_touch(&g,&pet,RB_TOUCH_DOWN,100,100,now); tick(100);
-    rb_gesture_touch(&g,&pet,RB_TOUCH_UP,200,100,now); assert(pet.action==RB_NONE); /* Single swipe is not zigzag. */
-    init(); rb_gesture_touch(&g,&pet,RB_TOUCH_DOWN,100,100,now);
-    rb_gesture_touch(&g,&pet,RB_TOUCH_CANCEL,100,100,now); tick(600); assert(pet.action==RB_NONE);
-    tap(); rb_gesture_touch(&g,&pet,RB_TOUCH_CANCEL,-1,0,now); tick(600); assert(pet.action==RB_NONE);
+    init(); contact(RB_TOUCH_DOWN,200,80,RB_REGION_HEAD); tick(40);
+    assert(pet.life.contact && pet.life.face==RB_FACE_CURIOUS);
+    assert(pet.action==RB_NONE); /* Immediate expression, no queued action. */
+    hold_head(4000,true);
+    assert(g.down && pet.life.comfort>.6f && pet.life.face==RB_FACE_RELAXED);
+    contact(RB_TOUCH_UP,200,80,RB_REGION_HEAD); tick(100);
+    assert(!pet.life.contact && pet.life.comfort>.5f);
+    assert(pet.life.face==RB_FACE_HAPPY); /* Warm interaction earns a short celebration. */
+    tick(16000); assert(pet.life.comfort==0 && pet.life.face==RB_FACE_IDLE);
+    init(); contact(RB_TOUCH_DOWN,20,120,RB_REGION_NEAR);
+    for (unsigned n=0;n<40;++n) { contact(RB_TOUCH_MOVE,20,120,RB_REGION_NEAR); tick(100); }
+    assert(pet.life.comfort==0 && pet.life.gaze_x<-.9f);
+    init(); contact(RB_TOUCH_DOWN,200,80,RB_REGION_HEAD); hold_head(2000,false);
+    assert(pet.life.comfort>.15f && pet.life.comfort<.3f);
+    rb_gesture_cancel(&g,&pet); assert(!g.down && !pet.life.contact);
+    init(); contact(RB_TOUCH_DOWN,160,80,RB_REGION_HEAD); tick(100);
+    contact(RB_TOUCH_MOVE,240,80,RB_REGION_HEAD); tick(100);
+    contact(RB_TOUCH_MOVE,160,80,RB_REGION_HEAD); tick(20);
+    assert(g.down && pet.life.face==RB_FACE_PUZZLED);
+    assert(pet.life.comfort==0); /* Fast scratching is not a gentle stroke. */
+    init(); for (unsigned n=0;n<5;++n) { tap(); tick(100); }
+    assert(pet.life.disturbance>.55f && pet.life.face==RB_FACE_SHY);
+    tick(10000); assert(pet.life.disturbance==0);
+    init(); contact(RB_TOUCH_DOWN,200,80,RB_REGION_HEAD);
+    contact(RB_TOUCH_CANCEL,200,80,RB_REGION_HEAD); tick(600);
+    assert(!pet.life.contact && pet.action==RB_NONE);
+    contact(RB_TOUCH_DOWN,200,80,RB_REGION_HEAD); tick(1600);
+    assert(!g.down && !pet.life.contact); /* Missing input samples cancel contact. */
+    contact(RB_TOUCH_DOWN,200,80,RB_REGION_HEAD);
+    contact(RB_TOUCH_MOVE,-1,80,RB_REGION_HEAD); assert(!pet.life.contact);
+}
+static void life_test(void)
+{
+    init(); float start=pet.life.gaze_x; tick(10000);
+    assert(fabsf(pet.life.gaze_x-start)>.01f);
+    assert(pet.actions_started==0 && pet.last_input_ms==1000);
+    tick(20000); assert(pet.state==RB_DROWSY);
+    tick(40000); assert(pet.state==RB_SLEEPING && pet.life.face==RB_FACE_SLEEP);
+    contact(RB_TOUCH_DOWN,20,120,RB_REGION_NEAR); tick(100);
+    assert(pet.state==RB_SLEEPING);
+    contact(RB_TOUCH_MOVE,200,80,RB_REGION_HEAD); tick(40);
+    assert(pet.state==RB_WAKING && pet.life.openness<.3f);
+    rb_gesture_cancel(&g,&pet); tick(5200); assert(pet.state==RB_IDLE);
+    init(); contact(RB_TOUCH_DOWN,200,80,RB_REGION_HEAD); hold_head(65000,false);
+    assert(pet.state==RB_IDLE && pet.life.comfort<=1 && pet.life.comfort>.9f);
+    rb_engine_stop(&pet,"test"); tick(20);
+    assert(!pet.life.contact && !g.down && pet.life.face==RB_FACE_STOP);
+    assert(rb_engine_reset(&pet,now)); tick(20);
+    assert(pet.life.comfort==0 && !pet.life.contact && pet.action==RB_NONE);
+    /* Equal elapsed time, independent of render/tick frequency. */
+    rb_engine_t a,b; rb_config_t c=rb_config_default();
+    assert(rb_engine_init(&a,&c,0) && rb_engine_init(&b,&c,0));
+    a.life.comfort=b.life.comfort=.8f;
+    for (unsigned t=10;t<=2000;t+=10) rb_engine_tick(&a,t);
+    for (unsigned t=40;t<=2000;t+=40) rb_engine_tick(&b,t);
+    assert(fabsf(a.life.comfort-b.life.comfort)<.001f);
 }
 typedef struct { float actual[7]; uint64_t stamp; bool send_ok; unsigned sends,stops; } fake_arm_t;
 static bool feedback(void *ctx,float p[7],uint64_t *stamp)
@@ -147,6 +198,7 @@ int main(int argc,char **argv)
     else if (!strcmp(s,"sleep")) sleep_test();
     else if (!strcmp(s,"stop")) stop_test();
     else if (!strcmp(s,"gestures")) gestures_test();
+    else if (!strcmp(s,"life")) life_test();
     else if (!strncmp(s,"arm_",4)) arm_test(s);
     else if (!strcmp(s,"control_timeout")) control_timeout_test();
     else if (!strcmp(s,"soak")) soak_test();

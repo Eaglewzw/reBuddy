@@ -1,88 +1,62 @@
 # reBuddy
 
-**摸摸屏幕里的小家伙，让机械臂成为你的桌面伙伴。**
+基于 XIAO ESP32-C5 CAN Console 的 reBot RS 屏幕桌宠。当前重点是角色动画与动作表现，暂不开展机械臂控制和编舞。
 
-reBuddy 是一个基于 **ESP32-C5、触摸屏和 reBot RS 机械臂** 的开源桌宠项目。屏幕里的角色负责表情，机械臂负责身体动作：探头回应你的招呼，被抚摸时轻轻蹭蹭，困了就蜷下来打个盹。
+## 当前保留版本：探头 v2
 
-**板级适配随项目源码提供，可独立构建。** 屏幕、触摸、IO 扩展和按键支持均包含在仓库中，软件依赖全部来自公开的 ESP-IDF、LVGL 和 Espressif 组件。
+用户已选择保留这版待机 / 探头姿态及往返 GIF，后续动画沿用它作为探头视觉基线。
 
-项目以直接触摸角色为主要交互方式，希望把触摸输入、表情和实体动作串成一次自然的互动，让机械臂有一点可爱、有一点性格，也有值得反复探索的小反应。
+![已保留的待机与探头姿态](docs/preview/probe-v2/comparison.png)
 
-## 和它相处
+- [600×600 GIF](docs/preview/probe-v2/probe-v2-poses.gif) · [160×160 GIF](docs/preview/probe-v2/probe-v2-poses-160.gif)
+- [选定原图](assets/approved/probe-v2/source.png) · [素材状态与目录说明](docs/ASSET_STATUS.md)
 
-| 你的互动 | 桌宠的回应 |
+目前是两个关键姿态，每个停留700ms，没有连续中间帧，尚未接入固件。现有固件仍使用旧的74帧技术原型，保留它仅为维持行为/显示开发和可构建性。
+
+## 工程目录
+
+| 目录 | 用途 |
 | --- | --- |
-| 轻点角色 | 探头看你，回应招呼 |
-| 在角色上缓慢抚摸 | 放松表情，舒服地蹭蹭 |
-| 连续点击角色 | 害羞地缩回去 |
-| 在角色上快速来回划动 | 歪头，露出疑惑的表情 |
-| 一段时间没有互动 | 渐渐困倦，打瞌睡后进入休息 |
-| 休息时触摸角色 | 醒来，重新陪你玩 |
+| `assets/approved/` | 用户选择保留的原始素材、来源与校验清单 |
+| `assets/reference/` | 两张原始角色/互动参考图，原样保留 |
+| `assets/animation/` | 现有固件仍依赖的旧RGB565帧、清单和色条 |
+| `docs/preview/probe-v2/` | 选定版本的对齐姿态、对照图及两种尺寸GIF |
+| `main/` | 当前UI、动画播放器、帧缓存及应用入口 |
+| `components/` | 行为核心及板级驱动；旧模块保留供回归 |
+| `config/` | 当前触摸参数与旧动作配置 |
+| `tests/host/` | 行为、资源、板级输入和LVGL测试 |
+| `tools/` | [素材生成、预览与打包工具](tools/README.md) |
+| `docs/reference/` / `docs/verification/` | 原始需求正文 / 最新技术验证记录 |
+| `build/` / `managed_components/` | 本机构建缓存 / 依赖，不作为素材交付目录 |
 
-“蹭蹭”通过小幅姿态变化表达亲近，无需机械臂接触人。动作库还包含开心小舞蹈，和探头、蹭蹭、害羞、歪头、打瞌睡一起组成六种基础动作。
+旧探头12帧试稿、临时裁切图、旧界面截图、未使用的生成角色和旧固件分发包已清理。下载目录中的原始文件未改动。
 
-同一个角色有两种行为风格：**活泼**时反应轻快、表达更明显；**慵懒**时动作舒缓、幅度更小。两种风格共用动作库，让性格体现在节奏和姿态里。
+## 开发入口
 
-## 界面预览
+- [当前素材状态](docs/ASSET_STATUS.md) · [动画视觉要求](docs/ANIMATION_FIDELITY.md)
+- [网页端制作提示词](docs/WEB_ANIMATION_ASSET_BRIEF.md) · [后续顺序](docs/ROADMAP.md)
+- [构建与操作](docs/GETTING_STARTED.md) · [测试](docs/TESTING.md) · [验收](docs/ACCEPTANCE.md)
+- [硬件](docs/HARDWARE.md) · [显示统计](docs/DISPLAY_PERFORMANCE.md)
+- [旧技术原型实现记录](docs/REFERENCE_IMPLEMENTATION.md)
 
-![reBuddy 的待机、好奇、开心、慵懒、休息和停止界面](docs/preview/contact-sheet.png)
+## 构建与预览
 
-角色采用黄绿色外壳、银色关节和前置夹爪，呼应 reBot RS 的机械臂形态。眼睛、眉毛和腮红由 LVGL 实时绘制，用于表现不同情绪。
-
-上图为当前开发版界面。角色区域已支持触摸手势，右侧仍保留动作与设置按钮；开心小舞蹈目前通过 `HAPPY` 按钮或实体按键触发。后续界面将进一步突出直接触摸角色的体验。
-
-## 当前阶段
-
-项目处于**屏幕互动原型阶段**：已实现角色表情、触摸识别、两种行为风格、休息与唤醒，以及六个动作的关键帧配置和调度。
-
-**实体机械臂适配与姿态标定尚未完成。** 当前固件运行在 `PREVIEW` 模式，不使能电机、不发送 RS 运动命令。上述身体动作是项目的目标体验，当前可预览表情和动作时间轴；实机触摸与连续互动测试仍待验证。
-
-接下来将完成机械臂接入、低速动作调试和表情同步。在核心体验稳定后，再考虑屏幕动作编舞及其他机械臂适配。
-
-## 硬件与实现
-
-- **主控：** ESP32-C5，负责显示、触摸、行为状态和动作调度。
-- **屏幕：** 当前适配 320 × 240 横屏，ST7789 显示与 GT911 触摸。
-- **机械臂：** 面向 reBot RS，六轴机械臂加夹爪，预留控制适配接口。
-- **软件：** ESP-IDF 5.5.5、LVGL 9.5；独立 C 行为核心，使用关键姿态、平滑插值和表情时间轴组织互动。
-
-当前固件面向带 8 MiB Flash、8 MiB PSRAM 的 XIAO ESP32-C5 CAN Console。详细接线与板卡要求见[硬件说明](docs/HARDWARE.md)。
-
-## 快速开始
-
-**构建 ESP32-C5 屏幕固件**
-
-安装 ESP-IDF 5.5.5 及 ESP32-C5 工具链后执行以下命令。将 SDK 路径替换为实际安装位置；首次构建会自动下载公开组件，无需克隆其他应用仓库。
+固件基线为ESP-IDF 5.5.5、LVGL 9.5.0，板级实现随工程提供。
 
 ```bash
-git clone https://github.com/Eaglewzw/reBuddy.git
-cd reBuddy
 source /path/to/esp-idf-v5.5.5/export.sh
-idf.py -B build-c5 build
-```
-
-固件输出为 `build-c5/reBuddy.bin`。当前为屏幕预览版本，尚不驱动实体机械臂。接线、烧录和旧版本升级步骤见[开发指南](docs/GETTING_STARTED.md)。
-
-**在电脑上运行测试**
-
-无需开发板或 ESP-IDF。准备 CMake、Ninja、C/C++ 编译器和 Python 3，在项目根目录执行：
-
-```bash
-cmake -S tests/host -B build-host -G Ninja
-cmake --build build-host
+idf.py -B build build
+cmake -S tests/host -B build-host
+cmake --build build-host -j8
 ctest --test-dir build-host --output-on-failure
 ```
 
-界面测试与截图生成见[测试说明](docs/TESTING.md)。
+重新生成选定版本的GIF（需要Pillow，不修改固件资源）：
 
-## 参与开发
+```bash
+python3 tools/render_approved_probe.py
+```
 
-角色与交互在 [`main/pet_ui.c`](main/pet_ui.c)，行为与手势在 [`components/rebuddy_core/`](components/rebuddy_core/)，六个动作的配置在 [`config/actions.json`](config/actions.json)。欢迎围绕角色表现、触摸体验、动作设计和硬件适配提交 Issue 或 Pull Request。
+旧UI诊断截图请输出到 `build/ui-preview/`，避免与已选定的动画素材混放。当前CAN保持待机，未烧录本轮整理结果。
 
-- [动作设计与机械臂接入](docs/MOTION.md)
-- [开发路线](docs/ROADMAP.md)
-- [体验与稳定性验收](docs/ACCEPTANCE.md)
-
-## 许可证
-
-本项目代码采用 [Apache-2.0](LICENSE) 许可证。第三方组件和角色素材的来源见[第三方说明](THIRD_PARTY_NOTICES.md)。
+代码采用 [Apache-2.0](LICENSE)，素材来源见 [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)。

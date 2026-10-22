@@ -10,8 +10,8 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
-parser.add_argument('--build', type=Path, default=ROOT/'build-c5')
-parser.add_argument('--output', type=Path, default=ROOT/'dist/reBuddy-v0.1-preview')
+parser.add_argument('--build', type=Path, default=ROOT/'build')
+parser.add_argument('--output', type=Path, default=ROOT/'dist/reBuddy-reference-preview')
 args = parser.parse_args()
 build = args.build.resolve()
 out = args.output.resolve()
@@ -26,28 +26,37 @@ for address, relative in flash['flash_files'].items():
     destination.parent.mkdir(parents=True, exist_ok=True)
     shutil.copy2(source, destination)
     files.extend([address, str(destination)])
-command = [sys.executable, '-m', 'esptool', '--chip', 'esp32c5', 'merge-bin', '--output', str(out/'merged.bin')]
+command = [sys.executable, '-m', 'esptool', '--chip', 'esp32c5', 'merge_bin', '--output', str(out/'merged.bin')]
 for key in ['flash_mode', 'flash_freq', 'flash_size']:
-    command.extend(['--'+key.replace('_','-'), str(flash['flash_settings'][key])])
+    command.extend(['--'+key, str(flash['flash_settings'][key])])
 subprocess.run(command+files, check=True)
-for name in ['sdkconfig', 'project_description.json']:
-    if name == 'sdkconfig':
-        source = build/name
-        if source.exists(): shutil.copy2(source,out/name)
-shutil.copy2(ROOT/'config/actions.json',out/'actions.json')
-shutil.copy2(ROOT/'docs/preview/contact-sheet.png',out/'screen-preview.png')
+description=json.loads((build/'project_description.json').read_text())
+source=Path(description['config_file'])
+shutil.copy2(source,out/'sdkconfig')
+for relative in ['config/behavior_defaults.json', 'assets/animation/manifest.json',
+                 'assets/animation/colorbars.bin', 'docs/REFERENCE_IMPLEMENTATION.md',
+                 'docs/ASSET_STATUS.md',
+                 'docs/ACCEPTANCE.md', 'docs/TESTING.md', 'docs/GETTING_STARTED.md',
+                 'docs/verification/reference-host-tests.txt',
+                 'docs/verification/reference-build-c5.txt', 'docs/verification/reference-budget.txt',
+                 'docs/reference/development_spec.txt', 'docs/reference/package_README.txt']:
+    destination=out/relative
+    destination.parent.mkdir(parents=True,exist_ok=True)
+    shutil.copy2(ROOT/relative,destination)
 manifest = {
     'project': 'reBuddy', 'version': '0.1.0', 'target': 'esp32c5', 'sdk': '5.5.5',
-    'mode': 'preview_only_no_motor_commands', 'hardware_tested': False,
+    'mode': 'reference_package_2d_prototype_mock_only', 'hardware_tested': False,
+    'visual_status': 'legacy_prototype_not_approved', 'approved_probe_v2_integrated': False,
     'board_component': 'rebuddy_board', 'private_dependencies': False,
     'flash_files': flash['flash_files'], 'flash_settings': flash['flash_settings']}
 (out/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
 (out/'README.txt').write_text(
     'reBuddy 0.1.0 / ESP32-C5 / ESP-IDF 5.5.5\n'
-    'Screen preview only. No RS motor enable or movement commands. Not hardware-tested.\n'
+    'Reference-package 2D animation prototype. Mock only. Not hardware-tested.\n'
+    'Uses legacy animation assets. The selected probe-v2 artwork is not integrated.\n'
     'Target board: XIAO ESP32-C5 CAN Console, 8 MiB Flash, 8 MiB Quad PSRAM.\n'
     'Flash with the correct serial port using esptool:\n'
-    'python -m esptool --chip esp32c5 --port /dev/ttyACM0 write-flash 0x0 merged.bin\n'
+    'python -m esptool --chip esp32c5 --port /dev/ttyACM0 write_flash 0x0 merged.bin\n'
     'This changes the board firmware. Use only after checking the target hardware.\n')
 entries=[]
 for file in sorted(out.rglob('*')):
