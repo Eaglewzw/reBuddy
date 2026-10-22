@@ -17,23 +17,7 @@
   "interpolation": false,
   "exports": [
     {
-      "path": "docs/preview/probe-v2/idle.png",
-      "sha256": "3939c060ba7dc573beaa0d560190384fafddda821fa9ebd2066a993845e8d9cd"
-    },
-    {
-      "path": "docs/preview/probe-v2/probe.png",
-      "sha256": "6f2cccb9630bc13c467095b18e7ce850f53caca3165df6f52988826e881b6c75"
-    },
-    {
-      "path": "docs/preview/probe-v2/comparison.png",
-      "sha256": "4c334dfc6d56c2b7534abb007f2dfb00aab2c30128a43352a8be8356bbafa1c7"
-    },
-    {
-      "path": "docs/preview/probe-v2/probe-v2-poses.gif",
-      "sha256": "c9bd0e92b58ce9ac412102f3b4cfb543a72a7dc9a1c667b5efde0e86117198f6"
-    },
-    {
-      "path": "docs/preview/probe-v2/probe-v2-poses-160.gif",
+      "path": "assets/approved/probe-v2/preview-160.gif",
       "sha256": "ca74e3c89a2f8a0d0360e790f3c4a6b83f71c8e805fb43d82a661d52d9a3bef4"
     }
   ]

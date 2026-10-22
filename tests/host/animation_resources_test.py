@@ -6,13 +6,13 @@ import re
 import struct
 
 root=Path(__file__).resolve().parents[2]
-cfg=json.loads((root/'config/behavior_defaults.json').read_text())
+cfg=json.loads((root/'assets/config/behavior_defaults.json').read_text())
 manifest=json.loads((root/'assets/animation/manifest.json').read_text())
-head_regions=json.loads((root/'config/design/head_touch_regions.json').read_text())['frames']
+claw_regions=json.loads((root/'assets/config/claw_touch_regions.json').read_text())['frames']
 blob=(root/'assets/animation/frames.bin').read_bytes()
 assert len(blob)==manifest['bytes']==manifest['unique_frames']*51212
 for source in cfg['source_images']:
-    data=(root/'assets/reference'/Path(source['path']).name).read_bytes()
+    data=(root/source['path']).read_bytes()
     assert hashlib.sha256(data).hexdigest()==source['sha256']
 base=None
 ground_y=128
@@ -29,14 +29,14 @@ if manifest.get('asset_version') in ('screen-preview-v1','screen-preview-v2','ro
     assert manifest['unique_frames']==expected_count
     assert len({f['sha256'] for f in manifest['frames']})==expected_count
 for frame in manifest['frames']:
-    polygon=frame['head_region']
-    assert polygon==head_regions[frame['name']] and len(polygon)==4
+    polygon=frame['claw_region']
+    assert polygon==claw_regions[frame['name']] and len(polygon)==4
     assert all(0<=x<160 and 0<=y<160 for x,y in polygon)
     turns=[]
     for i in range(4):
         a,b,c=polygon[i],polygon[(i+1)%4],polygon[(i+2)%4]
         turns.append((b[0]-a[0])*(c[1]-b[1])-(b[1]-a[1])*(c[0]-b[0]))
-    assert all(t>0 for t in turns) or all(t<0 for t in turns), 'forehead region must be convex'
+    assert all(t>0 for t in turns) or all(t<0 for t in turns), 'claw region must be convex'
     pos=frame['offset']
     assert pos%51212==0 and 0<=pos<=len(blob)-51212
     assert struct.unpack_from('<BBHHHHH',blob,pos)==(0x19,0x12,0,160,160,320,0)

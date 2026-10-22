@@ -8,13 +8,13 @@ jobs:
       - name: Fetch public LVGL 9.5.0
         run: git clone --depth 1 --branch v9.5.0 https://github.com/lvgl/lvgl.git /tmp/lvgl
       - name: Configure
-        run: cmake -S tests/host -B build-host -G Ninja -DREBUDDY_LVGL_DIR=/tmp/lvgl
+        run: cmake -S tests/host -B build/host -G Ninja -DREBUDDY_LVGL_DIR=/tmp/lvgl
       - name: Build
-        run: cmake --build build-host -j4
+        run: cmake --build build/host -j4
       - name: Test
-        run: ctest --test-dir build-host --output-on-failure
+        run: ctest --test-dir build/host --output-on-failure
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: lvgl-rgb565-previews
-          path: build-host/*.ppm
+          path: build/host/*.ppm

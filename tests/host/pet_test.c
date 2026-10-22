@@ -13,15 +13,15 @@ static void sink(void *ctx,const rb_pet_event_t *e)
 }
 static void init(void)
 { now=1000; memset(events,0,sizeof(events)); last_request=0; rb_pet_init(&p,now);
-  const int16_t head[4][2]={{160,60},{205,60},{205,82},{160,82}};
-  rb_pet_set_head_region(&p,head); rb_pet_set_sink(&p,sink,NULL); }
+  const int16_t claw[4][2]={{170,112},{215,112},{215,148},{170,148}};
+  rb_pet_set_claw_region(&p,claw); rb_pet_set_sink(&p,sink,NULL); }
 static void tick(unsigned ms)
 { for (unsigned i=0;i<ms;i+=20) { now+=20; rb_pet_tick(&p,now); } }
 static void input(bool down,int x,int y)
 { rb_pet_input(&p,down,x,y,now); }
 static void tap(void)
 { input(true,130,110); tick(100); input(false,130,110); tick(60); }
-static void release(void) { input(false,130,110); tick(60); }
+static void release(void) { input(false,p.raw_x,p.raw_y); tick(60); }
 static void stroke(unsigned ms)
 {
     for (unsigned i=0;i<ms;i+=20) {
@@ -29,11 +29,11 @@ static void stroke(unsigned ms)
         input(true,x,110); tick(20);
     }
 }
-static void head_stroke(unsigned ms)
+static void claw_stroke(unsigned ms)
 {
     for (unsigned i=0;i<ms;i+=20) {
         unsigned n=(i/20)%30;
-        input(true,170+(int)(n<=15?n:30-n)*2,70); tick(20);
+        input(true,180+(int)(n<=15?n:30-n),130); tick(20);
     }
 }
 int main(void)
@@ -58,9 +58,9 @@ int main(void)
     input(true,130,110); tick(40); stroke(1600); tick((unsigned)(RB_MS_RECOVER*RB_PLAYBACK_DURATION_SCALE));
     assert(events[RB_ANIM_RECOVER]==1 && p.state==RB_PET_NORMAL && events[RB_ANIM_HAPPY]==0);
     stroke(5000); assert(events[RB_ANIM_HAPPY]==0); release();
-    init(); input(true,170,70); tick(40); head_stroke(4500);
-    assert(events[RB_ANIM_HAPPY]==1); head_stroke(20000); assert(events[RB_ANIM_HAPPY]==1);
-    release(); tick(18000); input(true,170,70); tick(40); head_stroke(4500);
+    init(); input(true,180,130); tick(40); claw_stroke(4500);
+    assert(events[RB_ANIM_HAPPY]==1); claw_stroke(20000); assert(events[RB_ANIM_HAPPY]==1);
+    release(); tick(18000); input(true,180,130); tick(40); claw_stroke(4500);
     assert(events[RB_ANIM_HAPPY]==2);
     init(); input(true,130,110); tick(40); stroke(1000); release(); tick((unsigned)(400*RB_PLAYBACK_DURATION_SCALE)+100);
     assert(events[RB_ANIM_NUZZLE]>=1 && events[RB_ANIM_HAPPY]==0 && p.action==RB_ANIM_IDLE);
@@ -84,7 +84,7 @@ int main(void)
     init(); tap(); now+=10000; rb_pet_tick(&p,now); assert(p.action==RB_ANIM_IDLE);
     init(); p.lazy=true; tap(); assert(p.duration==(unsigned)(RB_MS_PROBE*RB_STYLE_LAZY*RB_PLAYBACK_DURATION_SCALE)); tick(p.duration); assert(p.action==RB_ANIM_IDLE);
     /* Stationary grace and the neutral speed band never add gentle-motion credit. */
-    init(); input(true,170,70); tick(40); head_stroke(1000);
+    init(); input(true,180,130); tick(40); claw_stroke(500);
     unsigned valid=p.happy_ms; assert(valid>0); tick(200); assert(p.happy_ms==valid);
     tick(120); assert(!p.stroke && p.happy_ms==valid); release();
     init(); input(true,90,110); tick(40);
@@ -104,9 +104,9 @@ int main(void)
     assert(p.state==RB_PET_NORMAL && p.action==RB_ANIM_IDLE && p.consumed);
     unsigned probes=events[RB_ANIM_PROBE]; release(); assert(events[RB_ANIM_PROBE]==probes);
     /* A tap removes a celebration waiting for a NUZZLE switching point. */
-    init(); input(true,170,70); tick(40);
+    init(); input(true,180,130); tick(40);
     for (unsigned i=0;i<250 && !(p.pending_valid && p.pending==RB_ANIM_HAPPY);++i) {
-        unsigned n=i%30; input(true,170+(int)(n<=15?n:30-n)*2,70); tick(20);
+        unsigned n=i%30; input(true,180+(int)(n<=15?n:30-n),130); tick(20);
     }
     assert(p.pending_valid && p.pending==RB_ANIM_HAPPY);
     release(); tap(); tick(1500); assert(events[RB_ANIM_HAPPY]==0);
@@ -114,12 +114,18 @@ int main(void)
     init(); input(true,130,110); tick(40); stroke(6000);
     assert(events[RB_ANIM_NUZZLE]>0 && events[RB_ANIM_HAPPY]==0 && p.happy_ms==0);
     /* Candidate intervals on the body cannot be credited retroactively when
-       the same contact reaches the head. */
-    release(); input(true,170,110); tick(40); stroke(300); head_stroke(300);
+       the same contact reaches the claw. */
+    release(); input(true,170,110); tick(40); stroke(300); claw_stroke(300);
     assert(p.happy_ms<=300 && events[RB_ANIM_HAPPY]==0);
-    /* A finger held still on the forehead is not a stroke. */
-    init(); input(true,180,70); tick(10000);
+    /* A finger held still on the claw is not a stroke. */
+    init(); input(true,190,130); tick(10000);
     assert(p.happy_ms==0 && events[RB_ANIM_HAPPY]==0);
+    /* Forehead rubbing cannot trigger happiness; one short claw stroke can. */
+    init(); input(true,170,70); tick(40);
+    for (unsigned i=0;i<200;++i) { unsigned n=i%30; input(true,170+(int)(n<=15?n:30-n),70); tick(20); }
+    assert(events[RB_ANIM_HAPPY]==0 && p.happy_ms==0);
+    init(); input(true,180,130); tick(40); claw_stroke(900); release(); tick(1200);
+    assert(events[RB_ANIM_HAPPY]==1);
     /* Thirty simulated minutes of dense requests, stops and state changes. */
     init();
     for (unsigned t=0;t<1800000;t+=20) {

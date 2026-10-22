@@ -258,12 +258,12 @@ void rb_ui_update(void)
             const lv_image_dsc_t *image=rb_assets_frame(frame,&anchor);
             hidden(body,!image); hidden(placeholder,image!=NULL);
             if (image) { lv_image_set_src(body,image); lv_obj_invalidate(body); ++body_updates; }
-            int16_t head[4][2]={{0}};
+            int16_t claw[4][2]={{0}};
             if (image) for (unsigned i=0;i<4;++i) {
-                head[i][0]=RB_ROLE_X+anchor->head_region[i][0];
-                head[i][1]=RB_ROLE_Y+anchor->head_region[i][1];
+                claw[i][0]=RB_ROLE_X+anchor->claw_region[i][0];
+                claw[i][1]=RB_ROLE_Y+anchor->claw_region[i][1];
             }
-            rb_pet_set_head_region(pet,head);
+            rb_pet_set_claw_region(pet,claw);
             body_frame=frame;
         }
         last_body_ms+=(pet->now-last_body_ms)/((1000u+RB_BODY_FPS-1)/RB_BODY_FPS)*((1000u+RB_BODY_FPS-1)/RB_BODY_FPS);

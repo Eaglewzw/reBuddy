@@ -1,4 +1,4 @@
-/* Generated from config/behavior_defaults.json. */
+/* Generated from assets/config/behavior_defaults.json. */
 #pragma once
 #define RB_CFG_CONTACT_DEBOUNCE_MS 30u
 #define RB_CFG_SPEED_WINDOW_MS 120u
@@ -19,7 +19,7 @@
 #define RB_CFG_SOOTHE_VALID_MS 1200u
 #define RB_CFG_SOOTHE_RESET_PAUSE_MS 500u
 #define RB_CFG_HAPPY_WINDOW_MS 6000u
-#define RB_CFG_HAPPY_VALID_MS 3000u
+#define RB_CFG_HAPPY_VALID_MS 600u
 #define RB_CFG_HAPPY_RELEASE_RESET_MS 2000u
 #define RB_CFG_HAPPY_COOLDOWN_MS 15000u
 #define RB_CFG_SLEEP_IDLE_MS 60000u

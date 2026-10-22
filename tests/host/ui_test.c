@@ -166,17 +166,23 @@ int main(void)
     pump(2000); assert(pet.state==RB_PET_NORMAL); snap("relaxed.ppm");
     pressed=false; pump(100);
     /* Same moving contact on body cannot build happiness. */
-    point=(lv_point_t){130,140}; pressed=true; pump(100);
-    for (unsigned n=0;n<250;++n) { unsigned t=n%60; point.x=130+(t<=30?t:60-t)*2; pump(20); }
+    point=(lv_point_t){120,165}; pressed=true; pump(100);
+    for (unsigned n=0;n<250;++n) { unsigned t=n%30; point.x=120+(t<=15?t:30-t)*2; pump(20); }
     assert(pet.happy_ms==0 && !pet.happy_latched); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     /* Rubbing the face/eyes below the forehead is not head petting. */
     point=(lv_point_t){170,100}; pressed=true; pump(100);
     for (unsigned n=0;n<250;++n) { unsigned t=n%30; point.x=170+(t<=15?t:30-t)*2; pump(20); }
     assert(pet.happy_ms==0 && !pet.happy_latched); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
-    /* Forehead above the eyes, in real rendered idle/nuzzle poses. */
+    /* Forehead no longer triggers happiness. */
     point=(lv_point_t){165,70}; pressed=true; pump(100);
     for (unsigned n=0;n<230;++n) { unsigned t=n%30; point.x=165+(t<=15?t:30-t)*2; pump(20); }
-    assert(pet.happy_latched); snap("happy.ppm"); pressed=false; pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
+    assert(!pet.happy_latched && pet.happy_ms==0); pressed=false; pump(1200);
+    /* Short gentle claw petting, using the actual rendered pose hitboxes. */
+    point=(lv_point_t){180,130}; pressed=true; pump(100);
+    for (unsigned n=0;n<45;++n) { unsigned t=n%30; point.x=180+(t<=15?t:30-t); pump(20); }
+    pressed=false; pump(1000);
+    assert(pet.happy_latched && pet.action==RB_ANIM_HAPPY); snap("happy.ppm");
+    pump((unsigned)(RB_MS_HAPPY*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
     click(290,212); pump(100); click(240,110); pump(100); assert(pet.lazy); snap("settings.ppm");
     click(290,212); pump(100); snap("lazy.ppm");
     click(290,212); pump(100); click(240,156); pump((unsigned)(RB_MS_REST*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+500);

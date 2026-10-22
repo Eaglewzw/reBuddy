@@ -5,12 +5,13 @@ from pathlib import Path
 import re
 import struct
 from urllib.parse import unquote
+import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[2]
 gif_dir = root/'assets/gifs'
 manifest = json.loads((gif_dir/'manifest.json').read_text())
 assert len(manifest['gifs']) == 10
-assert manifest['behavior_config_sha256'] == hashlib.sha256((root/'config/behavior_defaults.json').read_bytes()).hexdigest()
+assert manifest['behavior_config_sha256'] == hashlib.sha256((root/'assets/config/behavior_defaults.json').read_bytes()).hexdigest()
 assert manifest['source_runtime_sha256'] == hashlib.sha256((root/'assets/animation/frames.bin').read_bytes()).hexdigest()
 assert manifest['room_sha256'] == hashlib.sha256((root/'assets/animation/room.bin').read_bytes()).hexdigest()
 assert {p.name for p in gif_dir.glob('*.gif')} == {g['file'] for g in manifest['gifs']}
@@ -24,9 +25,7 @@ for name in ('source', 'idle_master'):
     assert hashlib.sha256((root/approved[name]).read_bytes()).hexdigest() == approved[name+'_sha256']
 for export in approved['exports']:
     assert hashlib.sha256((root/export['path']).read_bytes()).hexdigest() == export['sha256']
-markdown = [root/'README.md', root/'THIRD_PARTY_NOTICES.md']
-for folder in ('docs', 'assets', 'tools'):
-    markdown.extend((root/folder).rglob('*.md'))
+markdown = [root/'README.md', *sorted((root/'assets').rglob('*.md'))]
 for doc in markdown:
     for link in re.findall(r'!?\[[^\]]*\]\(([^)]+)\)', doc.read_text()):
         target = link.split('#')[0].strip('<>')
@@ -34,3 +33,9 @@ for doc in markdown:
             continue
         assert (doc.parent/unquote(target)).exists(), f'{doc.relative_to(root)}: {target}'
 print('PASS ten current GIF hashes/headers, approved artwork, and local Markdown links')
+
+for svg in (root/'assets').rglob('*.svg'):
+    for element in ET.parse(svg).iter():
+        href=element.get('href') or element.get('{http://www.w3.org/1999/xlink}href')
+        if href and not href.startswith(('#','data:','http:','https:')):
+            assert (svg.parent/href).is_file(), f'{svg}: missing linked image {href}'

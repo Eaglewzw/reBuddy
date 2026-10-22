@@ -11,14 +11,14 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
-parser.add_argument('--build', type=Path, default=ROOT/'build')
+parser.add_argument('--build', type=Path, default=ROOT/'build/firmware')
 parser.add_argument('--output', type=Path, default=ROOT/'dist/reBuddy-esp32c5')
 args = parser.parse_args()
 build = args.build.resolve()
 out = args.output.resolve()
 flash = json.loads((build/'flasher_args.json').read_text())
 description=json.loads((build/'project_description.json').read_text())
-behavior=json.loads((ROOT/'config/behavior_defaults.json').read_text())
+behavior=json.loads((ROOT/'assets/config/behavior_defaults.json').read_text())
 assets=json.loads((ROOT/'assets/animation/manifest.json').read_text())
 app=(build/flash['app']['file']).read_bytes()
 if (ROOT/'assets/animation/frames.bin').read_bytes() not in app:
@@ -29,7 +29,7 @@ if (ROOT/'assets/animation/room.bin').read_bytes() not in app:
     raise SystemExit('Application does not contain the current room background; rebuild first.')
 if description['target']!='esp32c5':
     raise SystemExit('Expected an ESP32-C5 build.')
-verification=json.loads((ROOT/'docs/verification/current.json').read_text())
+verification=json.loads((ROOT/'assets/verification/current.json').read_text())
 if verification['application_sha256']!=hashlib.sha256(app).hexdigest():
     raise SystemExit('Verification summary does not match this application; update build verification before packaging.')
 if out.exists() and any(out.iterdir()):
@@ -50,13 +50,13 @@ for key in ['flash_mode', 'flash_freq', 'flash_size']:
 subprocess.run(command+files, check=True)
 source=Path(description['config_file'])
 shutil.copy2(source,out/'sdkconfig')
-for relative in ['LICENSE', 'THIRD_PARTY_NOTICES.md',
-                 'config/behavior_defaults.json', 'config/design/head_touch_regions.json',
+for relative in ['LICENSE', 'assets/docs/THIRD_PARTY_NOTICES.md',
+                 'assets/config/behavior_defaults.json', 'assets/config/claw_touch_regions.json',
                  'assets/animation/manifest.json', 'assets/fonts/OFL.txt',
-                 'docs/GETTING_STARTED.md', 'docs/HARDWARE.md',
-                 'docs/TESTING.md', 'docs/ACCEPTANCE.md', 'docs/DISPLAY_PERFORMANCE.md',
-                 'docs/preview/current.png', 'docs/preview/head-petting-guide.png',
-                 'docs/verification/current.json']:
+                 'assets/docs/GETTING_STARTED.md', 'assets/docs/HARDWARE.md',
+                 'assets/docs/TESTING.md', 'assets/docs/ACCEPTANCE.md', 'assets/docs/DISPLAY_PERFORMANCE.md',
+                 'assets/previews/current.png', 'assets/previews/claw-petting-guide.svg',
+                 'assets/verification/current.json']:
     destination=out/relative
     destination.parent.mkdir(parents=True,exist_ok=True)
     shutil.copy2(ROOT/relative,destination)
@@ -95,7 +95,7 @@ exec "$flash_python" -m esptool --chip esp32c5 --port "$1" --baud 460800 --befor
 '''.replace('vSDK','v'+sdk_version)
 (out/'flash.sh').write_text(script)
 (out/'flash.sh').chmod(0o755)
-preview=ROOT/'docs/preview/current.png'
+preview=ROOT/'assets/previews/current.png'
 if preview.exists(): shutil.copy2(preview,out/'ui-preview.png')
 (out/'README.txt').write_text(
     f'reBuddy {description["project_version"]} / touch-only / ESP32-C5 / ESP-IDF {sdk_version}\n'
@@ -108,9 +108,9 @@ if preview.exists(): shutil.copy2(preview,out/'ui-preview.png')
     '脚本先校验文件，再按 flash_args 写入引导、分区和应用，保留 NVS/PHY 区间。\n'
     'merged.bin 为可选整合镜像，从 0x0 写入会覆盖间隙内原有数据；优先用 flash.sh。\n'
     '轻点探头，慢慢抚摸轻蹭，连续三次轻点收拢，抚摸安抚，快划歪头。\n'
-    '持续有效抚摸头顶约 3 秒开心；设置→休息可快速看入睡，持续循环睡眠，长按左下角恢复。\n'
+    '轻柔来回摸爪累计约 0.6 秒有效移动可触发开心；设置→休息可快速看入睡，持续循环睡眠，长按左下角恢复。\n'
     '左下暂停图标冻结画面，再点击同一位置的播放图标继续。不读取实体按键或 GPIO 急停输入。CAN 保持待机，无电机后端。\n'
-    '房间装饰暂不响应触摸；部分动作中间帧仍待细化，详见 docs/GETTING_STARTED.md。\n')
+    '房间装饰暂不响应触摸；部分动作中间帧仍待细化，详见 assets/docs/GETTING_STARTED.md。\n')
 entries=[]
 for file in sorted(out.rglob('*')):
     if file.is_file() and file.name!='SHA256SUMS':

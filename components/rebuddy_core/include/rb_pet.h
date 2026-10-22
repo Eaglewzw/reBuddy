@@ -18,7 +18,7 @@ typedef struct {
     uint64_t timestamp_ms;
 } rb_pet_event_t;
 typedef void (*rb_pet_sink_t)(void *,const rb_pet_event_t *);
-typedef struct { uint64_t at; uint16_t duration, head_duration; } rb_valid_interval_t;
+typedef struct { uint64_t at; uint16_t duration, claw_duration; } rb_valid_interval_t;
 typedef struct {
     rb_pet_state_t state;
     rb_pet_pose_t pose, origin;
@@ -39,8 +39,8 @@ typedef struct {
     uint64_t raw_changed, down_at, sampled, last_motion, last_gentle, release_at;
     float path, max_offset, speed, candidate_path;
     unsigned fast_ms, moving_ms, candidate_ms, soothe_ms;
-    unsigned head_moving_ms;
-    int16_t head_region[4][2];
+    unsigned claw_moving_ms;
+    int16_t claw_region[4][2];
     struct { int x,y; uint64_t at; } positions[8];
     unsigned position_count;
     rb_valid_interval_t candidate[64];
@@ -59,8 +59,8 @@ typedef struct {
 void rb_pet_init(rb_pet_t *p,uint64_t now);
 void rb_pet_set_sink(rb_pet_t *p,rb_pet_sink_t sink,void *context);
 void rb_pet_input(rb_pet_t *p,bool down,int x,int y,uint64_t now);
-/* Convex forehead polygon in screen coordinates, supplied by the displayed pose. */
-void rb_pet_set_head_region(rb_pet_t *p,const int16_t points[4][2]);
+/* Convex claw polygon in screen coordinates, supplied by the displayed pose. */
+void rb_pet_set_claw_region(rb_pet_t *p,const int16_t points[4][2]);
 void rb_pet_cancel(rb_pet_t *p);
 void rb_pet_tick(rb_pet_t *p,uint64_t now);
 void rb_pet_stop(rb_pet_t *p,const char *reason);

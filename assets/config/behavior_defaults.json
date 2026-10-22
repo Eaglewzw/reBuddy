@@ -37,7 +37,7 @@
     "soothe_valid_ms": 1200,
     "soothe_reset_pause_ms": 500,
     "happy_window_ms": 6000,
-    "happy_valid_ms": 3000,
+    "happy_valid_ms": 600,
     "happy_release_reset_ms": 2000,
     "happy_cooldown_ms": 15000,
     "sleep_idle_ms": 60000
@@ -58,11 +58,11 @@
   },
   "source_images": [
     {
-      "path": "assets/character_reference.png",
+      "path": "assets/reference/character_reference.png",
       "sha256": "b42a5e1ee9da828628e7b29dae52c21bbc282a3349eebe447b3ea4dbf332fd1c"
     },
     {
-      "path": "assets/interaction_storyboard.png",
+      "path": "assets/reference/interaction_storyboard.png",
       "sha256": "05d224aff1004a584e093d7e25842a05f21213aaa2006b0d7e0fffa75eab664a"
     }
   ],

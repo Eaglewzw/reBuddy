@@ -1,4 +1,4 @@
-> **素材制作参考：** 下文保留角色与动画制作提示词。当前运行资源和待完善项见 [ASSET_STATUS.md](ASSET_STATUS.md)，当前交互以 [GETTING_STARTED.md](GETTING_STARTED.md) 为准。已选原图保留作为造型参考。
+> **素材制作参考：** 下文保留角色与动画制作提示词。当前运行资源和待完善项见 [资源索引](../README.md)，当前交互以 [GETTING_STARTED.md](GETTING_STARTED.md) 为准。已选原图保留作为造型参考。
 
 
 # 网页端动画素材制作任务

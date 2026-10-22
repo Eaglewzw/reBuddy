@@ -17,7 +17,7 @@ parser.add_argument('--output', type=Path, default=ROOT/'build/action-gifs')
 parser.add_argument('--font', type=Path, default=Path('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf'))
 parser.add_argument('--style', choices=('lively', 'lazy'), default='lively')
 args = parser.parse_args()
-config = json.loads((ROOT/'config/behavior_defaults.json').read_text())
+config = json.loads((ROOT/'assets/config/behavior_defaults.json').read_text())
 playback_scale = config['animation_playback']['duration_scale']
 action_scale = playback_scale * config['style_duration_scale'][args.style]
 sleep_scale = playback_scale * (1.3 if args.style == 'lazy' else 1.0)
@@ -141,7 +141,7 @@ for i, t in enumerate((0, 700, 1400, 1750, 2450, 3500)):
     sheet_out.paste(sleep_frame(t*sleep_scale), (i % 3 * 320, i // 3 * 240))
 sheet_out.save(qa / 'sleep-phases.png')
 report = {'style': args.style, 'duration_scale': playback_scale,
-          'behavior_config_sha256': hashlib.sha256((ROOT/'config/behavior_defaults.json').read_bytes()).hexdigest(),
+          'behavior_config_sha256': hashlib.sha256((ROOT/'assets/config/behavior_defaults.json').read_bytes()).hexdigest(),
           'status': 'current_room_action_preview', 'canvas': [320, 240],
           'role_size': [160, 160], 'source_runtime_sha256': hashlib.sha256(blob).hexdigest(),
           'room_sha256': hashlib.sha256((ROOT/'assets/animation/room.bin').read_bytes()).hexdigest(),

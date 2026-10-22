@@ -3,7 +3,7 @@
   "date": "2026-10-22",
   "target": "esp32c5",
   "sdk": "ESP-IDF v5.5.6",
-  "application_sha256": "3b7b0bd4d0b1828255ddde23ab4930ac79346cddb9f319c1c3a242dd0d57cebd",
+  "application_sha256": "0be57a9ba5648999662b618bdc06915260084af97e6e547e1c0e52eb15476de4",
   "application_bytes": 2077568,
   "host_tests": {
     "passed": 6,
@@ -20,12 +20,14 @@
   "coverage": [
     "touch-only input; no physical key or GPIO emergency-stop polling",
     "persistent sleep and deliberate wake",
-    "head-only happiness; input cancellation does not freeze",
+    "claw-only happiness; input cancellation does not freeze",
     "three staged question marks; settings/pause/end clear effect",
     "small probe amplitude and extended attention hold",
     "30 minute simulated core interaction; not a hardware soak test",
     "current GIF hashes and source assets; local Markdown links",
-    "twofold action duration and half-cycle progress; GIF style matches default firmware"
+    "twofold action duration and half-cycle progress; GIF style matches default firmware",
+    "short gentle claw petting triggers HAPPY; forehead, eyes, body and stationary hold do not",
+    "resource paths migrated; approved source hashes and runtime image bytes preserved"
   ],
   "assets": {
     "gif_count": 10,
@@ -36,7 +38,9 @@
     "existing_source_art_preserved": true,
     "duration_scale": 2.0,
     "gif_style": "lively",
-    "sleep_cycle_lively_ms": 8400
+    "sleep_cycle_lively_ms": 8400,
+    "happy_target": "claws",
+    "happy_valid_ms": 600
   },
   "hardware_tested": false,
   "flashed": false,
@@ -46,5 +50,19 @@
     "SHA256SUMS verified",
     "flash.sh syntax checked",
     "merged image generated; no serial access"
-  ]
+  ],
+  "layout": {
+    "resource_root": "assets",
+    "firmware_build": "build/firmware",
+    "host_build": "build/host",
+    "derived_preview_files_removed": 4,
+    "storyboard_json_merged_into_markdown": true,
+    "project_scope_and_roadmap_merged": true,
+    "unchanged_artwork_files_checked": 23
+  },
+  "staged_source_verification": {
+    "exported_from_git_index": true,
+    "host_tests_passed": 6,
+    "public_lvgl_source_reused": true
+  }
 }
