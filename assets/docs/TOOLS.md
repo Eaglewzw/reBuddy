@@ -3,7 +3,7 @@
 | 命令 | 输出 |
 | --- | --- |
 | `python3 tools/generate_pet_config.py` | 当前行为 JSON → `rb_pet_config.h`；`--check` 只检查 |
-| `python3 tools/build_screen_preview.py` | 当前源图 → 28 帧 RGB565、小屋背景、色条、清单与 C 帧表 |
+| `python3 tools/build_screen_preview.py` | 当前源图 → 33 帧 RGB565、小屋背景、色条、清单与 C 帧表 |
 | `python3 tools/build_room_font.py` | Noto Sans CJK → 中文菜单字形子集 |
 | `python3 tools/export_action_gifs.py` | 当前小屋版 10 个 GIF → `build/action-gifs/`，只接受空输出目录 |
 | `python3 tools/render_approved_probe.py` | 已选 probe-v2 → `build/approved-probe-preview/`，不改运行资源 |
@@ -13,3 +13,5 @@
 图像工具依赖可用 `python3 -m pip install -r tools/requirements.txt` 安装。字体生成需要 Noto Sans CJK；GIF 默认使用 DejaVu Sans，可指定 `--font`。打包在带 esptool 的 IDF Python 环境运行。输出路径可按各工具 `--help` 调整；所有工具均不自动烧录或推送。
 
 `tools/cavity_background.py` 按逐姿态种子与边界清除内部背景，由 `build_screen_preview.py` 在房间合成之前调用。修改配置后需重建动画资源及 GIF。
+
+`tools/neutral_sleep_assets.py` 从去腮红素材提取脸颊局部修补，生成独立入睡帧并修正睡眠呼吸帧；其他互动保留原素材。配置和来源见 [sleep-neutral-v1](../design/sleep-neutral-v1/README.md)。

@@ -11,6 +11,7 @@ from collections import deque
 from PIL import Image
 from sleep_assets import load_sleep_poses
 from cavity_background import clear_cavity
+from neutral_sleep_assets import neutral_sleep_poses, RECIPE as neutral_recipe
 
 ROOT = Path(__file__).resolve().parents[1]
 SOURCE = ROOT / 'assets/design/screen-preview-v1/pose-atlas.png'
@@ -80,6 +81,22 @@ for name, region in cavity_config['poses'].items():
     clear_cavity(images[names.index(name)], region,
                  cavity_config['min_channel'], cavity_config['max_channel_spread'])
 
+# Keep normal interactions rosy, with independent neutral-faced REST variants.
+neutral_images, neutral_masks, neutral_config = neutral_sleep_poses(images, registration)
+neutral_map = {}
+for source, name in zip(neutral_config['variant_sources'],
+                        ('rest_idle', 'rest_blink', 'rest_drowsy', 'rest_sleep', 'rest_folded')):
+    neutral_map[source] = len(images)
+    images.append(neutral_images[source]); names.append(name)
+    registration.append({'name':name, 'source_frame':source, 'edit':'cheeks only'})
+for source in range(24, 28):
+    images[source] = neutral_images[source]
+claw_path = ROOT / 'assets/config/claw_touch_regions.json'
+claw_config = json.loads(claw_path.read_text())
+for source, target in neutral_map.items():
+    claw_config['frames'][names[target]] = claw_config['frames'][names[source]]
+claw_path.write_text(json.dumps(claw_config, ensure_ascii=False, indent=2) + '\n')
+
 # The ground-contact rim is a common static plate. Upper base areas are allowed
 # to be occluded by the folded head/claw, so they are not blindly overwritten.
 plate = images[0].crop((0, GROUND_STRIP, SIZE, SIZE))
@@ -138,8 +155,13 @@ clip(1, 5, [(0, 15), (156, 15), (300, 22), (470, 14), (625, 0),
 # Contact returns to the raised closed-claw pose (19), not the lowered pose (21).
 clip(0, 6, [(0, 0), (80, 8), (180, 19), (300, 20), (430, 19),
             (550, 20), (680, 19), (790, 21), (890, 8), (1000, 0)])
-clip(0, 7, [(0, 0), (160, 23), (267, 14), (440, 15), (580, 16), (733, 24), (1000, 24)])
-clip(1, 7, [(0, 15), (267, 16), (550, 16), (733, 24), (1000, 24)])
+# Drowsiness precedes lowering: slow blink, briefly resist sleep, blink again,
+# droopy-eyed nod, eyes closed, then settle into the breathing-loop anchor.
+# Wide-eyed withdrawal poses 14/15 belong to shyness, not normal-origin REST.
+clip(0, 7, [(0, 28), (80, 29), (220, 28), (280, 29), (460, 30),
+            (680, 31), (840, 24), (1000, 24)])
+# Already-folded pets start from their actual pose, then become sleepy directly.
+clip(1, 7, [(0, 32), (120, 30), (520, 31), (800, 24), (1000, 24)])
 clip(2, 8, [(0, 24), (156, 18), (300, 16), (440, 15), (570, 22), (750, 0), (1000, 0)])
 # Existing engine retraces interrupted REST to its origin before WAKE.
 clip(1, 8, [(0, 15), (156, 22), (440, 14), (750, 0), (1000, 0)])
@@ -156,6 +178,10 @@ manifest = {'interaction_revision': 'interaction-v2', 'probe_revision': 'github-
             'cavity_recipe':str(cavity_recipe.relative_to(ROOT)),
             'cavity_recipe_sha256':hashlib.sha256(cavity_recipe.read_bytes()).hexdigest(),
             'happy_revision': 'original-art-two-claps',
+            'rest_revision': 'drowsy-before-sleep-v1',
+            'neutral_sleep_recipe':str(neutral_recipe.relative_to(ROOT)),
+            'neutral_sleep_recipe_sha256':hashlib.sha256(neutral_recipe.read_bytes()).hexdigest(),
+            'rest_neutral_map':neutral_map,
             'question_effect': questions, 'format': 'LVGL9 RGB565 binary images, 12-byte header per frame', 'size': [160, 160],
             'asset_version': 'room-preview-v1', 'visual_status': 'key_pose_preview_not_final_animation',
             'room_source': str(room_source.relative_to(ROOT)), 'room_source_sha256':hashlib.sha256(room_source.read_bytes()).hexdigest(),

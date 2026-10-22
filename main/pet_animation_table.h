@@ -12,7 +12,7 @@ extern const uint8_t rb_clip_map[3][9];
 extern const uint8_t rb_clip_reverse[9];
 #define RB_FRAME_IDLE_BLINK 23u
 #define RB_FRAME_IDLE_ATTENTION 1u
-#define RB_FRAME_COUNT 28
+#define RB_FRAME_COUNT 33
 #define RB_SLEEP_FRAME_FIRST 24u
 #define RB_SLEEP_PERIOD_MS 4200u
 #define RB_FRAME_BYTES 51212u

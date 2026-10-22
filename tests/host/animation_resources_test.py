@@ -10,6 +10,7 @@ cfg=json.loads((root/'assets/config/behavior_defaults.json').read_text())
 manifest=json.loads((root/'assets/animation/manifest.json').read_text())
 claw_regions=json.loads((root/'assets/config/claw_touch_regions.json').read_text())['frames']
 blob=(root/'assets/animation/frames.bin').read_bytes()
+neutral_sources={int(target):int(source) for source,target in manifest.get('rest_neutral_map',{}).items()}
 assert len(blob)==manifest['bytes']==manifest['unique_frames']*51212
 for source in cfg['source_images']:
     data=(root/source['path']).read_bytes()
@@ -25,7 +26,7 @@ if manifest.get('asset_version') in ('screen-preview-v1','screen-preview-v2','ro
     assert manifest['visual_status']=='key_pose_preview_not_final_animation'
     atlas=(root/manifest['source']).read_bytes()
     assert hashlib.sha256(atlas).hexdigest()==manifest['source_sha256']
-    expected_count=28 if manifest['asset_version'] in ('screen-preview-v2','room-preview-v1') else 24
+    expected_count=(28 if manifest['asset_version'] in ('screen-preview-v2','room-preview-v1') else 24)+len(neutral_sources)
     assert manifest['unique_frames']==expected_count
     assert len({f['sha256'] for f in manifest['frames']})==expected_count
 for frame in manifest['frames']:
@@ -53,7 +54,8 @@ for clip in manifest['clips']:
     if clip['action']: assert clip['at_permille'][-1]==1000
     if manifest.get('asset_version') in ('screen-preview-v1','screen-preview-v2','room-preview-v1'):
         assert len(clip['frames'])<=16
-        assert clip['frames'][0]==(0,15,24 if manifest['asset_version'] in ('screen-preview-v2','room-preview-v1') else 17)[clip['origin']]
+        first=neutral_sources.get(clip['frames'][0],clip['frames'][0])
+        assert first==(0,15,24 if manifest['asset_version'] in ('screen-preview-v2','room-preview-v1') else 17)[clip['origin']]
         assert clip['frames'][-1]==(0,15,24 if manifest['asset_version'] in ('screen-preview-v2','room-preview-v1') else 17)[clip['end_pose']]
 for action in (2,3):
     alternate=manifest['clips'][manifest['reverse_map'][action]]
@@ -99,9 +101,46 @@ clip=manifest['clips'][manifest['clip_map'][0][1]]
 assert clip['frames']==[0,1,2,2,1,0]
 assert clip['at_permille']==[0,100,250,720,850,1000]
 assert [manifest['registration'][i]['cell'] for i in (0,1,2)]==[0,1,2]
-assert manifest['unique_frames']==28
+assert manifest['unique_frames']==33
 happy=manifest['clips'][manifest['clip_map'][0][6]]
 assert happy['frames']==[0,8,19,20,19,20,19,21,8,0]
+
+# Sleep must convey fatigue before folding, without the wide-eyed shy poses.
+rest=manifest['clips'][manifest['clip_map'][0][7]]
+rest_sources=[neutral_sources.get(f,f) for f in rest['frames']]
+assert not {13,14,15}.intersection(rest_sources), 'REST reuses startled/shy poses'
+assert rest_sources.count(23)==2, 'REST should start with two slow blinks'
+assert rest_sources.index(23)<rest_sources.index(16)<rest_sources.index(17)
+assert rest['frames'][-1]==manifest['sleep_loop']['frames'][0]
+drowsy_start=rest_sources.index(16)
+assert set(rest_sources[drowsy_start:])<={16,17,24}, 'Sleepy pet becomes wide-eyed again'
+folded_rest=manifest['clips'][manifest['clip_map'][1][7]]
+folded_sources=[neutral_sources.get(f,f) for f in folded_rest['frames']]
+assert folded_sources[0]==15 and set(folded_sources[1:])<={16,17,24}
+
+# No rosy shared frame may slip into REST. Only cheek regions may differ from
+# original interaction poses; protect face/eye geometry and the whole body.
+recipe=root/manifest['neutral_sleep_recipe']
+assert hashlib.sha256(recipe.read_bytes()).hexdigest()==manifest['neutral_sleep_recipe_sha256']
+retouch=json.loads(recipe.read_text())
+for name,sha in retouch['edit_sha256'].items():
+    assert hashlib.sha256((recipe.parent/name).read_bytes()).hexdigest()==sha
+for clip in (rest,folded_rest):
+    assert set(clip['frames'])<=set(neutral_sources)|{24,25,26,27}
+for source_key,boxes in retouch['cheek_bounds'].items():
+    source=int(source_key)
+    target=manifest['rest_neutral_map'].get(source_key,source)
+    for y in range(160):
+        for x in range(160):
+            pos=12+y*320+x*2
+            in_cheek=any(x0-1<=x<x1+1 and y0-1<=y<y1+1 for x0,y0,x1,y1 in boxes)
+            if target!=source and not in_cheek:
+                assert blob[target*51212+pos:target*51212+pos+2]==blob[source*51212+pos:source*51212+pos+2], 'Neutral variant changes more than cheeks'
+    # The centers of both formerly luminous cheek strokes are dark screen now.
+    for x,y in retouch['cheek_samples'][source_key]:
+        pixel=struct.unpack_from('<H',blob,target*51212+12+y*320+x*2)[0]
+        r=((pixel>>11)&31)*255//31;g=((pixel>>5)&63)*255//63;b=(pixel&31)*255//31
+        assert max(r,g,b)<90, 'Sleep cheek still has luminous blush'
 
 # Enclosed negative space must show the room at the SAME screen position.
 cavity_recipe=root/manifest['cavity_recipe']

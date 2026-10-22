@@ -3,8 +3,8 @@
   "date": "2026-10-23",
   "target": "esp32c5",
   "sdk": "ESP-IDF v5.5.6",
-  "application_sha256": "69db8855523df267d754361227d66c00918f779630d626b0a96d1decdd088cf1",
-  "application_bytes": 2077568,
+  "application_sha256": "88239917d3f0d22db8f9eec94a161f00d2cab394cfc2632ee665163dbd3cc358",
+  "application_bytes": 2333728,
   "host_tests": {
     "passed": 6,
     "failed": 0,
@@ -29,17 +29,19 @@
     "short gentle claw petting triggers HAPPY; forehead, eyes, body and stationary hold do not",
     "probe eye-contact hold; directional nuzzle; question marks follow tilt",
     "HAPPY reuses original artwork only; two raised open/close cycles then lowers",
-    "all original 28 poses changed only inside reviewed cavity masks (3118 pixels); all other source pixels preserved",
     "enclosed cavities match the room at their actual screen positions; white eye/metal highlights preserved",
     "PROBE source poses and timing restored from GitHub b4a6a885cbf1fa7630145321f0afac9c74c5f2b3; cavity backdrop correction retained",
-    "other nine GIF files, all other action timelines and 28 pose bytes unchanged from before restoration"
+    "REST conveys fatigue with two slow blinks, droopy eyes, eyes-closed lowering and sleep; no shy poses on normal-origin entry",
+    "neutral sleep variants change only cheek-mask pixels; original interaction poses 0..23 and GIFs 01..07 byte-identical to pre-retouch snapshot",
+    "REST and sleeping breathing have no cheek blush; WAKE starts from actual neutral sleeping pose",
+    "sleep face retouches preserve eye/body/room pixels, action timing and breathing timing"
   ],
   "assets": {
     "gif_count": 10,
     "question_marks": 3,
     "probe_base_ms": 1600,
     "tilt_base_ms": 1400,
-    "runtime_pose_count": 28,
+    "runtime_pose_count": 33,
     "existing_source_art_preserved": true,
     "duration_scale": 2.0,
     "gif_style": "lively",
@@ -50,7 +52,9 @@
     "happy_revision": "original-art-two-claps",
     "probe_revision": "github-original",
     "cavity_background_revision": "seeded-room-composite-v1",
-    "probe_source_commit": "b4a6a885cbf1fa7630145321f0afac9c74c5f2b3"
+    "probe_source_commit": "b4a6a885cbf1fa7630145321f0afac9c74c5f2b3",
+    "rest_revision": "drowsy-before-sleep-v1",
+    "sleep_face_revision": "neutral-cheeks-v1"
   },
   "hardware_tested": false,
   "flashed": false,
@@ -63,9 +67,17 @@
   ],
   "visual_review": {
     "status": "pending_user_review",
-    "character": "GitHub original authored poses",
-    "scope": "PROBE restored; enclosed backdrop correction retained",
-    "other_nine_gifs_unchanged": true,
+    "character": "original pixels preserved outside cheek masks",
+    "scope": "neutral cheeks during REST and sleep; WAKE begins with neutral sleeping pose",
+    "unchanged_gifs": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07"
+    ],
     "remaining_issue": "Device appearance and touch comfort require review."
   }
 }

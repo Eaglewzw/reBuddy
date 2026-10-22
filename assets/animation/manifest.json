@@ -5,6 +5,16 @@
   "cavity_recipe": "assets/design/screen-preview-v1/cavity-background.json",
   "cavity_recipe_sha256": "61ebb037e728e8bf2adbf5fa56b664b6a4037f904a0ce13dc2b9eb4675c0a9fd",
   "happy_revision": "original-art-two-claps",
+  "rest_revision": "drowsy-before-sleep-v1",
+  "neutral_sleep_recipe": "assets/design/sleep-neutral-v1/retouch.json",
+  "neutral_sleep_recipe_sha256": "2e4c17fee766417da01b5b20adf4c3516f98f227141f30ab0129ed35b38c08b5",
+  "rest_neutral_map": {
+    "0": 28,
+    "23": 29,
+    "16": 30,
+    "17": 31,
+    "15": 32
+  },
   "question_effect": [
     {
       "x": 151,
@@ -43,8 +53,8 @@
   "derivation": "Authored cells with fixed registration. PROBE restores GitHub source poses and timing; enclosed backdrop is composited with the room.",
   "source": "assets/design/screen-preview-v1/pose-atlas.png",
   "source_sha256": "b170695ef70dc9e4b9dcfcf33cb19a511982a2bf14741e7102a97215eb69feb0",
-  "unique_frames": 28,
-  "bytes": 1433936,
+  "unique_frames": 33,
+  "bytes": 1689996,
   "ground_lock_y": 148,
   "sleep_source": "assets/design/sleep-v2/breath-atlas.png",
   "sleep_source_sha256": "52af56f8f7a8b66cc6c0f02093c0dc96524756febd4b0586443d441d10a4c438",
@@ -298,6 +308,31 @@
         1
       ],
       "source": "assets/design/sleep-v2/breath-atlas.png"
+    },
+    {
+      "name": "rest_idle",
+      "source_frame": 0,
+      "edit": "cheeks only"
+    },
+    {
+      "name": "rest_blink",
+      "source_frame": 23,
+      "edit": "cheeks only"
+    },
+    {
+      "name": "rest_drowsy",
+      "source_frame": 16,
+      "edit": "cheeks only"
+    },
+    {
+      "name": "rest_sleep",
+      "source_frame": 17,
+      "edit": "cheeks only"
+    },
+    {
+      "name": "rest_folded",
+      "source_frame": 15,
+      "edit": "cheeks only"
     }
   ],
   "frames": [
@@ -899,7 +934,7 @@
       ],
       "face_mode": "baked",
       "name": "sleep_exhale",
-      "sha256": "fdfc1c97ba5550315080ddc816488bb207237af48c1f99b401b31267f8bc8505"
+      "sha256": "84958d0197109c5b5240e254f59b71bf00b193fe248f848c6f69d615b602ced0"
     },
     {
       "offset": 1280300,
@@ -923,7 +958,7 @@
       ],
       "face_mode": "baked",
       "name": "sleep_inhale_1",
-      "sha256": "4dd325c88ec1e43448ecdab8a2497401959c43594e3b3acf21b20fb91c07adb0"
+      "sha256": "46ce9051e3a386655e36cd634163309c112907e252aa5250f11613a30a760bf0"
     },
     {
       "offset": 1331512,
@@ -947,7 +982,7 @@
       ],
       "face_mode": "baked",
       "name": "sleep_inhale_2",
-      "sha256": "9387ff3f722a6dcd259a63bb7e37e33eae2eb2c09c09e90d794c27ee065fd8c6"
+      "sha256": "4dcbed2853f232f9c772c729ec2f337c70252eae2861b84de876a7cbe9a0aa1d"
     },
     {
       "offset": 1382724,
@@ -971,7 +1006,127 @@
       ],
       "face_mode": "baked",
       "name": "sleep_inhale_peak",
-      "sha256": "5ae4f5d53021a9610c9cd329357b088aea8cdee01ef970741bf4f4a96318073f"
+      "sha256": "3efdcb4ea96c7fcb0ec78cbcb0bc582181e5d7f4c1650a346b0706a22353a5af"
+    },
+    {
+      "offset": 1433936,
+      "claw_region": [
+        [
+          88,
+          72
+        ],
+        [
+          136,
+          72
+        ],
+        [
+          136,
+          109
+        ],
+        [
+          88,
+          109
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "rest_idle",
+      "sha256": "88290c56d4878abe1d499950c1e8d40e77a4eb2b7042d20459d15ffb600f46f2"
+    },
+    {
+      "offset": 1485148,
+      "claw_region": [
+        [
+          88,
+          72
+        ],
+        [
+          136,
+          72
+        ],
+        [
+          136,
+          109
+        ],
+        [
+          88,
+          109
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "rest_blink",
+      "sha256": "53c2acbdbd320c86fbf5140dd47432b8f8fc394f5aecd317ea6f172476a70610"
+    },
+    {
+      "offset": 1536360,
+      "claw_region": [
+        [
+          89,
+          94
+        ],
+        [
+          136,
+          94
+        ],
+        [
+          136,
+          130
+        ],
+        [
+          89,
+          130
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "rest_drowsy",
+      "sha256": "b2f09b6d5f07726a3f190db6e34d736359f2cd63561d0486b76b6ec250d33c9c"
+    },
+    {
+      "offset": 1587572,
+      "claw_region": [
+        [
+          97,
+          104
+        ],
+        [
+          145,
+          104
+        ],
+        [
+          145,
+          143
+        ],
+        [
+          97,
+          143
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "rest_sleep",
+      "sha256": "bde3bfc149c926a02445556aa75d4af71702d37fb6a8ec223aa4ab6be0c259cb"
+    },
+    {
+      "offset": 1638784,
+      "claw_region": [
+        [
+          85,
+          93
+        ],
+        [
+          132,
+          93
+        ],
+        [
+          132,
+          130
+        ],
+        [
+          85,
+          130
+        ]
+      ],
+      "face_mode": "baked",
+      "name": "rest_folded",
+      "sha256": "418d46fd1538b127c831f27d7d609d2625a004f29c9897ac82756af35958bc35"
     }
   ],
   "clips": [
@@ -1264,21 +1419,23 @@
       "origin": 0,
       "action": 7,
       "frames": [
-        0,
-        23,
-        14,
-        15,
-        16,
+        28,
+        29,
+        28,
+        29,
+        30,
+        31,
         24,
         24
       ],
       "at_permille": [
         0,
-        160,
-        267,
-        440,
-        580,
-        733,
+        80,
+        220,
+        280,
+        460,
+        680,
+        840,
         1000
       ],
       "direction": 1,
@@ -1293,17 +1450,17 @@
       "origin": 1,
       "action": 7,
       "frames": [
-        15,
-        16,
-        16,
+        32,
+        30,
+        31,
         24,
         24
       ],
       "at_permille": [
         0,
-        267,
-        550,
-        733,
+        120,
+        520,
+        800,
         1000
       ],
       "direction": 1,

@@ -11,7 +11,7 @@
     160,
     160
   ],
-  "source_runtime_sha256": "81850ed45cb52f5451f9c250215634063e20b7ec2099d1db352615c39c6cf215",
+  "source_runtime_sha256": "121af7986856d17bc540a78bb4d2c2d27324c9b653852c0154d0cf6902ff9401",
   "room_sha256": "b933877feee03b46e4106d1c3812632d580952a96c4970e537455976e0f9fb26",
   "limitations": [
     "Sparse authored poses; GIFs do not include touch controls.",
@@ -81,7 +81,7 @@
       "encoded_frames": 103,
       "loop": true,
       "description": "lively 实机动作 5100 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
-      "sha256": "c09f6b53806c579dca565acd2289af391e64feca72265ad69546a8d33130ad91"
+      "sha256": "bcb3b50befdc2ac5273991fef037cb9977484fafa9fcbc58107b067d483b875e"
     },
     {
       "file": "09_熟睡呼吸与Z.gif",
@@ -89,7 +89,7 @@
       "encoded_frames": 168,
       "loop": true,
       "description": "8400 ms 呼吸循环；Z 出现后从大到小上浮淡出。",
-      "sha256": "d28e32006811bc6f84ee63652f89d02eec231cf023326507bdf684e06618d535"
+      "sha256": "cc85c1d98370cb842cf3a64078ffb25ff60d5002b6d970c291cb39e6fed406af"
     },
     {
       "file": "10_迷糊唤醒.gif",
@@ -97,7 +97,7 @@
       "encoded_frames": 56,
       "loop": true,
       "description": "lively 实机动作 2720 ms；结束停留后自动重播，跳回起始姿态仅用于预览。",
-      "sha256": "1300566b441e11d2a82ee67821226ca06319917e62512e4bfe61bcd1618bc6f3"
+      "sha256": "4a9e605e01083232ac150363a68f4c134110d694eef4c1515bde3f2a3f17a705"
     }
   ]
 }

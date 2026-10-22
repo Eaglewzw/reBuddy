@@ -14,3 +14,5 @@
 - [Espressif 显示与触摸组件](https://github.com/espressif/esp-bsp/tree/master/components)：LVGL Port 与 GT911 的公开接口。
 
 抬头使用 GitHub 原版 `screen-preview-v1` 姿态和时序，来源提交记录在动画清单中。开心回应同样使用原版姿态，未采用后续生成的角色图。内部背景空隙的合成修正不修改原始 PNG。
+
+睡眠无腮红版本使用 imagegen 对原图进行局部修补，原图未覆盖；仅脸颊区域接入运行帧，生成素材与说明位于 [sleep-neutral-v1](../design/sleep-neutral-v1/README.md)。
