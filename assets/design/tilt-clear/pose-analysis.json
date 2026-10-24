@@ -1,0 +1,240 @@
+{
+  "sampling": "all three sources 1254x1254; each whole image sampled once to160x160; no alignment or scale fit",
+  "selected_poses": [
+    {
+      "file": "middle.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "shoulder": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.0
+      },
+      "elbow": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.0
+      },
+      "wrist": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.0
+      },
+      "bright_components": [
+        {
+          "center": [
+            104.35,
+            23.65
+          ],
+          "area": 37
+        },
+        {
+          "center": [
+            132.67,
+            21.73
+          ],
+          "area": 15
+        },
+        {
+          "center": [
+            140.79,
+            21.82
+          ],
+          "area": 28
+        },
+        {
+          "center": [
+            135.33,
+            32.25
+          ],
+          "area": 12
+        },
+        {
+          "center": [
+            111.36,
+            34.45
+          ],
+          "area": 11
+        },
+        {
+          "center": [
+            138.3,
+            46.85
+          ],
+          "area": 117
+        },
+        {
+          "center": [
+            113.6,
+            48.15
+          ],
+          "area": 124
+        }
+      ],
+      "eye_centers": [
+        [
+          113.6,
+          48.15
+        ],
+        [
+          138.3,
+          46.85
+        ]
+      ],
+      "eye_axis_deg": -3.01
+    },
+    {
+      "file": "moderate.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "shoulder": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.001174
+      },
+      "elbow": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.000678
+      },
+      "wrist": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.00049
+      },
+      "bright_components": [
+        {
+          "center": [
+            102.27,
+            24.09
+          ],
+          "area": 33
+        },
+        {
+          "center": [
+            141.56,
+            21.61
+          ],
+          "area": 18
+        },
+        {
+          "center": [
+            136.86,
+            41.17
+          ],
+          "area": 103
+        },
+        {
+          "center": [
+            109.36,
+            35.36
+          ],
+          "area": 11
+        },
+        {
+          "center": [
+            113.45,
+            47.93
+          ],
+          "area": 122
+        }
+      ],
+      "eye_centers": [
+        [
+          113.45,
+          47.93
+        ],
+        [
+          136.86,
+          41.17
+        ]
+      ],
+      "eye_axis_deg": -16.1
+    },
+    {
+      "file": "strong-peak.png",
+      "source_size": [
+        1254,
+        1254
+      ],
+      "shoulder": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.00023
+      },
+      "elbow": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.000223
+      },
+      "wrist": {
+        "delta": [
+          0,
+          0
+        ],
+        "error": 0.000181
+      },
+      "bright_components": [
+        {
+          "center": [
+            131.91,
+            28.13
+          ],
+          "area": 102
+        },
+        {
+          "center": [
+            103.85,
+            32.46
+          ],
+          "area": 13
+        },
+        {
+          "center": [
+            112.02,
+            42.59
+          ],
+          "area": 125
+        },
+        {
+          "center": [
+            136.99,
+            54.06
+          ],
+          "area": 187
+        }
+      ],
+      "eye_centers": [
+        [
+          112.02,
+          42.59
+        ],
+        [
+          131.91,
+          28.13
+        ]
+      ],
+      "eye_axis_deg": -36.02
+    }
+  ]
+}

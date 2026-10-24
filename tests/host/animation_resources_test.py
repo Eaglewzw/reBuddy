@@ -1,153 +1,140 @@
-"""Validate shipped animation data independently of Pillow and the generator."""
+"""Independently decode shipped records and compare every tick with source GIFs."""
 import hashlib
 import json
 from pathlib import Path
 import re
 import struct
+import zlib
+from PIL import Image
 
-root=Path(__file__).resolve().parents[2]
-cfg=json.loads((root/'assets/config/behavior_defaults.json').read_text())
-manifest=json.loads((root/'assets/animation/manifest.json').read_text())
-claw_regions=json.loads((root/'assets/config/claw_touch_regions.json').read_text())['frames']
-blob=(root/'assets/animation/frames.bin').read_bytes()
-neutral_sources={int(target):int(source) for source,target in manifest.get('rest_neutral_map',{}).items()}
-assert len(blob)==manifest['bytes']==manifest['unique_frames']*51212
-for source in cfg['source_images']:
-    data=(root/source['path']).read_bytes()
-    assert hashlib.sha256(data).hexdigest()==source['sha256']
-base=None
-ground_y=128
-if manifest.get('asset_version') in ('screen-preview-v1','screen-preview-v2','room-preview-v1'):
-    # Folded claws can occlude the upper base. Only the grounded rim is a
-    # shared plate; this does not certify identical generated limb geometry.
-    assert manifest['ground_lock_y']==148
-    ground_y=148
-    assert manifest['face_mode']=='baked'
-    assert manifest['visual_status']=='key_pose_preview_not_final_animation'
-    atlas=(root/manifest['source']).read_bytes()
-    assert hashlib.sha256(atlas).hexdigest()==manifest['source_sha256']
-    expected_count=(28 if manifest['asset_version'] in ('screen-preview-v2','room-preview-v1') else 24)+len(neutral_sources)
-    assert manifest['unique_frames']==expected_count
-    assert len({f['sha256'] for f in manifest['frames']})==expected_count
+root = Path(__file__).resolve().parents[2]
+cfg = json.loads((root/'assets/config/behavior_defaults.json').read_text())
+manifest = json.loads((root/'assets/animation/manifest.json').read_text())
+previews = json.loads((root/'assets/gifs-v2/manifest.json').read_text())
+claw_regions = json.loads((root/'assets/config/claw_touch_regions.json').read_text())['frames']
+blob = (root/'assets/animation/frames.bin').read_bytes()
+assert manifest['asset_version'] == 'gif-v2-rgb565'
+assert manifest['source'] == 'assets/gifs-v2/manifest.json'
+assert hashlib.sha256((root/manifest['source']).read_bytes()).hexdigest() == manifest['source_sha256']
+assert len(blob) == manifest['bytes']
+assert len(manifest['frames']) == manifest['unique_frames']
+room = (root/'assets/animation/room.bin').read_bytes()
+assert len(room) == manifest['room_bytes'] == 153612
+assert struct.unpack_from('<BBHHHHH', room) == (0x19, 0x12, 0, 320, 240, 640, 0)
+assert hashlib.sha256(room).hexdigest() == manifest['room_sha256']
+assert hashlib.sha256((root/manifest['room_source']).read_bytes()).hexdigest() == manifest['room_source_sha256']
+
+def rgb565(image):
+    # Explicit conversion, independent of the resource builder.
+    result = bytearray()
+    for red, green, blue in image.convert('RGB').getdata():
+        result += struct.pack('<H', ((red >> 3) << 11) | ((green >> 2) << 5) | (blue >> 3))
+    return bytes(result)
+
+records = []
+end = 0
 for frame in manifest['frames']:
-    polygon=frame['claw_region']
-    assert polygon==claw_regions[frame['name']] and len(polygon)==4
-    assert all(0<=x<160 and 0<=y<160 for x,y in polygon)
-    turns=[]
+    assert frame['offset'] == end, 'overlapping, gapped or reordered records'
+    end += frame['bytes']
+    assert 16 < frame['bytes'] and end <= len(blob)
+    magic, width, height, raw_length, codec = struct.unpack_from('<4sHHII', blob, frame['offset'])
+    assert (magic, width, height, raw_length) == (b'RBG2', 320, 240, 153600)
+    assert codec in (0, 1, 2)
+    records.append((codec, blob[frame['offset']+16:end]))
+assert end == len(blob)
+assert any(codec == 2 for codec, _ in records), 'lossless delta encoding is not present'
+
+def inflate(data):
+    decoder = zlib.decompressobj()
+    pixels = decoder.decompress(data)
+    assert decoder.eof and not decoder.unused_data and not decoder.unconsumed_tail
+    assert len(pixels) == 153600
+    return pixels
+
+def independent_pixels(index):
+    codec, data = records[index]
+    assert codec in (0, 1), 'delta references another delta (chains are forbidden)'
+    pixels = data if codec == 0 else inflate(data)
+    assert len(pixels) == 153600
+    return pixels
+
+decoded = []
+for index, frame in enumerate(manifest['frames']):
+    codec, data = records[index]
+    if codec == 2:
+        assert len(data) > 4
+        base = struct.unpack_from('<I', data)[0]
+        assert 0 <= base < len(records) and base != index, 'invalid/self-referencing delta base'
+        original = independent_pixels(base)
+        delta = inflate(data[4:])
+        pixels = bytes(a ^ b for a, b in zip(original, delta))
+    else:
+        pixels = independent_pixels(index)
+    assert len(pixels) == 153600
+    assert hashlib.sha256(pixels).hexdigest() == frame['sha256']
+    if index == 0:
+        assert codec == 0, 'allocation-free fallback must be a raw record'
+    polygon = frame['claw_region']
+    assert polygon == claw_regions[frame['claw_key']], 'generated hitbox differs from reviewed source config'
+    assert len(polygon) == 4 and all(0 <= x < 160 and 0 <= y < 160 for x, y in polygon)
+    turns = []
     for i in range(4):
-        a,b,c=polygon[i],polygon[(i+1)%4],polygon[(i+2)%4]
+        a, b, c = polygon[i], polygon[(i+1)%4], polygon[(i+2)%4]
         turns.append((b[0]-a[0])*(c[1]-b[1])-(b[1]-a[1])*(c[0]-b[0]))
-    assert all(t>0 for t in turns) or all(t<0 for t in turns), 'claw region must be convex'
-    pos=frame['offset']
-    assert pos%51212==0 and 0<=pos<=len(blob)-51212
-    assert struct.unpack_from('<BBHHHHH',blob,pos)==(0x19,0x12,0,160,160,320,0)
-    pixels=blob[pos+12:pos+51212]
-    assert hashlib.sha256(pixels).hexdigest()==frame['sha256']
-    fixed=pixels[ground_y*320:]
-    if base is None: base=fixed
-    assert fixed==base, 'ground-contact plate moves between body frames'
+    assert all(t > 0 for t in turns) or all(t < 0 for t in turns), 'nonconvex claw hitbox'
+    decoded.append(pixels)
+
+source_by_id = {clip['id']: clip for clip in previews['clips']}
+assert len(manifest['clips']) == len(source_by_id) + 1
+assert len([c for c in manifest['clips'] if c.get('source_gif')]) == len(source_by_id)
+checked = 0
 for clip in manifest['clips']:
-    assert len(clip['frames'])==len(clip['at_permille'])
-    assert clip['at_permille'][0]==0
-    assert clip['at_permille']==sorted(set(clip['at_permille']))
-    assert all(0<=i<manifest['unique_frames'] for i in clip['frames'])
-    if clip['action']: assert clip['at_permille'][-1]==1000
-    if manifest.get('asset_version') in ('screen-preview-v1','screen-preview-v2','room-preview-v1'):
-        assert len(clip['frames'])<=16
-        first=neutral_sources.get(clip['frames'][0],clip['frames'][0])
-        assert first==(0,15,24 if manifest['asset_version'] in ('screen-preview-v2','room-preview-v1') else 17)[clip['origin']]
-        assert clip['frames'][-1]==(0,15,24 if manifest['asset_version'] in ('screen-preview-v2','room-preview-v1') else 17)[clip['end_pose']]
-for action in (2,3):
-    alternate=manifest['clips'][manifest['reverse_map'][action]]
-    assert alternate['direction']==-1 and alternate['action']==action
-    assert alternate['frames']!=manifest['clips'][manifest['clip_map'][0][action]]['frames']
-bar=(root/'assets/animation/colorbars.bin').read_bytes()
-assert len(bar)==51212
-for index,expected in enumerate((0xf800,0x07e0,0x001f,0xffff,0)):
-    for row in (0,159):
-        assert struct.unpack_from('<H',bar,12+row*320+index*64)==(expected,)
-header=(root/'components/rebuddy_core/include/rb_pet_config.h').read_text()
-for k,v in cfg['gesture'].items():
-    assert re.search(r'^#define RB_CFG_'+k.upper()+r' '+str(v)+r'u$',header,re.M)
-for k,v in cfg['action_durations_ms'].items():
-    assert re.search(r'^#define RB_MS_'+k+r' '+str(v)+r'u$',header,re.M)
-print(f'PASS source hashes, {manifest["unique_frames"]} frame headers/hashes/ground plate, clips/anchors, colorbar order and behavior config')
+    assert len(clip['frames']) == len(clip['at_ms']) <= 64
+    assert clip['at_ms'][0] == 0
+    assert clip['at_ms'] == sorted(set(clip['at_ms']))
+    assert clip['at_ms'][-1] < clip['duration_ms']
+    assert all(0 <= i < len(decoded) for i in clip['frames'])
+    if not clip.get('source_gif'):
+        assert len(clip['frames']) == 1  # Deliberate folded hold, no separate GIF.
+        continue
+    source = source_by_id[clip['id']]
+    path = root/'assets/gifs-v2'/source['file']
+    assert root/clip['source_gif'] == path
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == clip['source_sha256'] == source['sha256']
+    with Image.open(path) as gif:
+        assert gif.size == (320, 240) and gif.n_frames == len(clip['frames'])
+        elapsed = 0
+        for tick, frame_id in enumerate(clip['frames']):
+            gif.seek(tick)
+            assert clip['at_ms'][tick] == elapsed
+            assert gif.info['duration'] in (120, 130)
+            assert decoded[frame_id] == rgb565(gif), (clip['id'], tick, 'firmware changes source GIF pixels')
+            elapsed += gif.info['duration']
+            checked += 1
+        assert elapsed == clip['duration_ms'] == source['duration_ms']
+        assert elapsed == gif.n_frames * 125
+assert {c['id'] for c in manifest['clips']} >= set(source_by_id)
+assert checked == sum(c['ticks'] if 'ticks' in c else sum(n for _, n in c['keys']) for c in previews['clips'])
+assert {i for c in manifest['clips'] for i in c['frames']} == set(range(len(decoded))), 'obsolete unused frames remain in runtime'
+assert set(manifest['source_gifs']) == {str(Path('assets/gifs-v2')/c['file']) for c in previews['clips']}
 
-if manifest.get('asset_version') in ('screen-preview-v2','room-preview-v1'):
-    assert hashlib.sha256((root/manifest['sleep_source']).read_bytes()).hexdigest()==manifest['sleep_source_sha256']
-    loop=manifest['sleep_loop']
-    assert loop['frames'][0]==loop['frames'][-1]==24 and loop['period_ms']==4200
-    assert loop['at_ms']==sorted(set(loop['at_ms'])) and loop['at_ms'][-1]<4200
-    bases=[blob[f*51212+12+139*320:(f+1)*51212] for f in range(24,28)]
-    assert all(b==bases[0] for b in bases), 'sleeping base must remain fixed'
+mapping = manifest['clip_map']
+assert len(mapping) == 3 and all(len(row) == 9 for row in mapping)
+ids = ['IDLE', 'PROBE', 'NUZZLE', 'TILT', 'WITHDRAW', 'RECOVER', 'HAPPY', 'REST', 'WAKE']
+for row in mapping:
+    for action in range(1, 9):
+        assert manifest['clips'][row[action]]['id'] == ids[action]
+assert manifest['clips'][mapping[0][0]]['id'] == 'IDLE'
+assert manifest['clips'][mapping[2][0]]['id'] == 'SLEEP'
+folded = manifest['clips'][mapping[1][0]]
+withdraw = manifest['clips'][mapping[0][4]]
+assert set(folded['frames']) == {withdraw['frames'][-1]}, 'folded idle unexpectedly animates or unfolds'
 
-if manifest.get('asset_version')=='room-preview-v1':
-    room=(root/'assets/animation/room.bin').read_bytes()
-    assert len(room)==153612 and hashlib.sha256(room).hexdigest()==manifest['room_sha256']
-    assert struct.unpack_from('<BBHHHHH',room)==(0x19,0x12,0,320,240,640,0)
-    assert hashlib.sha256((root/manifest['room_source']).read_bytes()).hexdigest()==manifest['room_source_sha256']
-    for frame in manifest['frames']:
-        # Some authored probe silhouettes reach the right edge; verify the
-        # clear top/bottom margins and left edge, not opaque character pixels.
-        border=[(x,y) for x in range(160) for y in (0,159)]+[(0,y) for y in range(160)]
-        for x,y in border:
-            offset=frame['offset']+12+y*320+x*2
-            bg=12+(y+40)*640+(x+80)*2
-            assert blob[offset:offset+2]==room[bg:bg+2], 'room/pose seam'
-
-# Restored GitHub PROBE: original source cells and original timing.
-assert manifest['probe_revision']=='github-original'
-clip=manifest['clips'][manifest['clip_map'][0][1]]
-assert clip['frames']==[0,1,2,2,1,0]
-assert clip['at_permille']==[0,100,250,720,850,1000]
-assert [manifest['registration'][i]['cell'] for i in (0,1,2)]==[0,1,2]
-assert manifest['unique_frames']==33
-happy=manifest['clips'][manifest['clip_map'][0][6]]
-assert happy['frames']==[0,8,19,20,19,20,19,21,8,0]
-
-# Sleep must convey fatigue before folding, without the wide-eyed shy poses.
-rest=manifest['clips'][manifest['clip_map'][0][7]]
-rest_sources=[neutral_sources.get(f,f) for f in rest['frames']]
-assert not {13,14,15}.intersection(rest_sources), 'REST reuses startled/shy poses'
-assert rest_sources.count(23)==2, 'REST should start with two slow blinks'
-assert rest_sources.index(23)<rest_sources.index(16)<rest_sources.index(17)
-assert rest['frames'][-1]==manifest['sleep_loop']['frames'][0]
-drowsy_start=rest_sources.index(16)
-assert set(rest_sources[drowsy_start:])<={16,17,24}, 'Sleepy pet becomes wide-eyed again'
-folded_rest=manifest['clips'][manifest['clip_map'][1][7]]
-folded_sources=[neutral_sources.get(f,f) for f in folded_rest['frames']]
-assert folded_sources[0]==15 and set(folded_sources[1:])<={16,17,24}
-
-# No rosy shared frame may slip into REST. Only cheek regions may differ from
-# original interaction poses; protect face/eye geometry and the whole body.
-recipe=root/manifest['neutral_sleep_recipe']
-assert hashlib.sha256(recipe.read_bytes()).hexdigest()==manifest['neutral_sleep_recipe_sha256']
-retouch=json.loads(recipe.read_text())
-for name,sha in retouch['edit_sha256'].items():
-    assert hashlib.sha256((recipe.parent/name).read_bytes()).hexdigest()==sha
-for clip in (rest,folded_rest):
-    assert set(clip['frames'])<=set(neutral_sources)|{24,25,26,27}
-for source_key,boxes in retouch['cheek_bounds'].items():
-    source=int(source_key)
-    target=manifest['rest_neutral_map'].get(source_key,source)
-    for y in range(160):
-        for x in range(160):
-            pos=12+y*320+x*2
-            in_cheek=any(x0-1<=x<x1+1 and y0-1<=y<y1+1 for x0,y0,x1,y1 in boxes)
-            if target!=source and not in_cheek:
-                assert blob[target*51212+pos:target*51212+pos+2]==blob[source*51212+pos:source*51212+pos+2], 'Neutral variant changes more than cheeks'
-    # The centers of both formerly luminous cheek strokes are dark screen now.
-    for x,y in retouch['cheek_samples'][source_key]:
-        pixel=struct.unpack_from('<H',blob,target*51212+12+y*320+x*2)[0]
-        r=((pixel>>11)&31)*255//31;g=((pixel>>5)&63)*255//63;b=(pixel&31)*255//31
-        assert max(r,g,b)<90, 'Sleep cheek still has luminous blush'
-
-# Enclosed negative space must show the room at the SAME screen position.
-cavity_recipe=root/manifest['cavity_recipe']
-assert hashlib.sha256(cavity_recipe.read_bytes()).hexdigest()==manifest['cavity_recipe_sha256']
-for name,region in json.loads(cavity_recipe.read_text())['poses'].items():
-    frame=next(f for f in manifest['frames'] if f['name']==name)
-    x,y=region['seed']
-    pos=frame['offset']+12+y*320+x*2
-    bg=12+(y+40)*640+(x+80)*2
-    assert blob[pos:pos+2]==room[bg:bg+2], f'{name}: enclosed backdrop is opaque'
+header = (root/'components/rebuddy_core/include/rb_pet_config.h').read_text()
+for key, value in cfg['gesture'].items():
+    assert re.search(r'^#define RB_CFG_'+key.upper()+r' '+str(value)+r'u$', header, re.M)
+for key, value in cfg['action_durations_ms'].items():
+    assert re.search(r'^#define RB_MS_'+key+r' '+str(value)+r'u$', header, re.M)
+    source_id = 'NUZZLE' if key == 'NUZZLE_CYCLE' else key
+    assert value == source_by_id[source_id]['duration_ms']
+print(f'PASS {len(decoded)} independently decoded RGB565 records (raw/zlib/XOR-delta), {checked} exact GIF frame/timing comparisons, clip maps, hitboxes and behavior durations')

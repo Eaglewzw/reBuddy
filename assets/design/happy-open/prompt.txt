@@ -1,0 +1,16 @@
+Use case: identity-preserve articulated robot animation edit.
+Input 1 defines the exact robot identity and relaxed idle geometry. Input 2 is its interaction storyboard; panel05 is the emotional reference (happy with raised paws), but do NOT copy the two-joint simplification there. This output MUST visibly have THREE silver joints throughout.
+Create a square 4 columns x4 rows atlas with 16 equal square cells, row-major, no text, labels, frames, margins, symbols, shadows or decorative motion lines. Each cell has flat ivory #F8F7EF background and the complete robot visible. Fixed three-quarter orthographic camera with silver caps visible on image-left. No flipped views.
+Character: the SAME lime green reBot RS with black structural links, glossy black display, TWO mint eye shapes, small blush, three silver circular joint caps (shoulder above base, middle elbow, wrist beside head), two black claw fingers, broad low round black/lime base. Fixed physical head size, cap diameter, link lengths and base size across all frames; no scaling/zoom.
+Action: JOYFUL FULL-BODY OPENING. The old happy version was too hunched and only moved the claws. Correct this clearly. The shoulder rotates and the elbow UNFOLDS to a visibly open/upright stance; the head rises and looks up proudly, and the paws reach forward and upward at chest/face level. The rigid lower and upper links genuinely change angle so the robot looks open, confident and welcoming, not bowing or curling inward. Three silver caps remain separate and visible. Head remains attached to upper wrist joint. No telescoping links or rubber stretching. The base does not lift, tilt, slide or bounce.
+Use normalized256px cell layout: same fixed base centered x105, bottom y240,width118. Leave enough headroom for the open pose without making the head smaller. Idle shoulder near(96,182),elbow near(62,126),wrist near(122,76). At open peak the elbow moves UP and toward the base center and wrist moves UP and slightly right through joint rotation, making a more open less folded chain. Cap centers must respect constant connecting link lengths. Keep robot within cell. Head size unchanged and independent of pose.
+Frames0-1 relaxed reference idle; eyes notice affection.
+Frames2-5 gradually rotate shoulder and unfold elbow, raise head, lift claws forward/up; eyes change into delighted upside-down-U smiles.
+Frames6-7 fully open upright pose with raised closed claws; head held high and all three joints readable.
+Frame8 same open body, claw fingers gently open apart.
+Frame9 same open body, fingers close for first clap.
+Frame10 same open body, fingers open for second clap.
+Frame11 same open body, fingers close for second clap.
+Frames12-14 gradually lower claws and return shoulder/elbow toward relaxed idle.
+Frame15 exactly matches frame0 idle.
+Each cell is a coherent pose in one continuous action. No extra arms, no missing joints, no duplicated facial features, no two-joint simplification, no bend at arbitrary black body section. Preserve character style closely. Empty spaces between robot links are background. Main priority is the clearly UNFOLDED shoulder/elbow posture at happy peak, not only a smiling face.

@@ -15,9 +15,10 @@ python3 tools/render_previews.py build/host build/ui-preview
 | ui_rgb565 | 真实 LVGL 指针事件、左右下角入口、菜单开合、手爪／身体／眼睛区别、睡眠呼吸和 Z、唤醒、输入取消、边界和稳定堆内存 |
 | board_input | 全屏触摸映射、主触点 ID、丢失和故障取消 |
 | behavior_config | 当前 JSON 与生成参数头一致 |
-| animation_resources | 原图和帧校验、RGB565 格式、房间边缘、手爪多边形、动作时序、GitHub 原版抬头姿态与时间轴、内部空隙墙面合成、原版开心姿态的两次张合、单向轻蹭、入睡先困倦且不复用害羞姿态、睡眠腮红去除与脸颊外像素保留、睡眠底座及色条 |
-| project_assets | 10 个当前 GIF 校验、已选原图与预览未变、文档链接完整 |
+| animation_resources | 当前 GIF 解码到 RGB565 的逐帧对应、帧去重与校验、原始 120/130 ms 时间轴、动作映射、手爪触摸区域及房间资源 |
+| project_assets | 当前 10 个动作 GIF 与三个独立表情 GIF 校验、必要源素材与文档链接完整 |
+| gif_visual_regressions | 待机闭眼无残留、身体稳定、连杆空隙正确透出背景、GIF 总时长和帧延迟 |
 
-带 LVGL 时共 6 项，不再运行不属于当前应用的旧电机和关节引擎测试。UI 测试输出实际 PPM 截图，转换后的 `build/ui-preview/contact-sheet.png` 用于布局检查。图片生成和模拟测试不能代替实屏动画效果、触摸手感或硬件连续运行验收。
+带 LVGL 时共 7 项，不再运行不属于当前应用的旧电机和关节引擎测试。UI 测试输出实际 PPM 截图，转换后的 `build/ui-preview/contact-sheet.png` 用于布局检查。图片生成和模拟测试不能代替实屏动画效果、触摸手感或硬件连续运行验收。
 
 最新整理验证见 [current.json](../verification/current.json)，实机记录使用 [ACCEPTANCE.md](ACCEPTANCE.md)。代码仓库只保留当前验证摘要，构建和测试日志输出到被忽略的 `build/`。

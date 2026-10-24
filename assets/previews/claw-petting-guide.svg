@@ -2,8 +2,8 @@
 <title>摸爪开心触摸区域</title>
 <rect width="320" height="280" fill="#fffaf0"/>
 <image href="current.png" width="320" height="240"/>
-<rect x="168" y="112" width="48" height="37" rx="9" fill="#dbf542" fill-opacity=".18" stroke="#657b14" stroke-width="2" stroke-dasharray="4 3"/>
-<path d="M178 132H205m-6-5 6 5-6 5m-15-10-6 5 6 5" fill="none" stroke="#fff" stroke-width="2"/>
+<rect x="178" y="114" width="49" height="34" rx="9" fill="#dbf542" fill-opacity=".18" stroke="#657b14" stroke-width="2" stroke-dasharray="4 3"/>
+<path d="M188 132H215m-6-5 6 5-6 5m-15-10-6 5 6 5" fill="none" stroke="#fff" stroke-width="2"/>
 <text x="160" y="257" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#394322">在手爪轻柔来回抚摸 → 开心</text>
 <text x="160" y="274" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#65705a">约 0.6 秒有效滑动；区域随爪子姿态移动</text>
 </svg>

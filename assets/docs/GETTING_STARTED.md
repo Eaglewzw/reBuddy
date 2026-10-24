@@ -28,14 +28,14 @@ idf.py -B build/firmware -p /dev/ttyACM0 flash monitor
 
 ```bash
 python3 tools/generate_pet_config.py
+python3 tools/export_gifs_v2.py
 python3 tools/build_screen_preview.py
 python3 tools/build_room_font.py
-python3 tools/export_action_gifs.py --output build/action-gifs
 ```
 
-行为参数在 `assets/config/behavior_defaults.json`；`animation_playback.duration_scale=2.0` 表示身体动作、轻蹭回位和睡眠呼吸时长加倍，播放速度为原来的一半。活泼动作时长为基准 × 0.85 × 2，慵懒为基准 × 1.3 × 2；触摸识别时限与暂停响应独立。GIF 默认按活泼风格导出，`--style lazy` 可导出慵懒风格。
+行为参数在 `assets/config/behavior_defaults.json`。当前全局时长倍率与两种风格倍率均为 `1.0`，保留新版 GIF 的平均 8 FPS 与动作总时长；活泼和慵懒暂时不改变动画速度。开心回应为 8 秒，其他时长见 [当前 GIF](../gifs-v2/README.md)。触摸识别时限与暂停响应独立。
 
-逐姿态手爪区域在 `assets/config/claw_touch_regions.json`。图像导出使用 24 格姿态原图和 4 张睡眠姿态，统一缩放、对齐底座，不生成形变补间。中文字体工具需要 Noto Sans CJK，GIF 工具默认使用 DejaVu Sans，也可用 `--font` 指定字体。
+新版原画导出工具生成 `assets/gifs-v2/` 的 10 个动作 GIF。`build_screen_preview.py` 解码这些 GIF，保留 320×240 完整画面与 120/130 ms 帧时间，转换 RGB565、去重压缩并生成固件帧表；不重新缩放或绘制问号、Z。手爪触摸区域随生成的帧表使用，清单中记录来源和坐标。三个独立表情 GIF 保留用于评估，暂不接入触摸动作。中文字体工具需要 Noto Sans CJK。
 
 工程已保存生成资源，普通构建不需要 Pillow、图片生成服务或本地字体文件。已选 probe-v2 可使用 `tools/render_approved_probe.py` 在 `build/approved-probe-preview/` 单独重现。
 

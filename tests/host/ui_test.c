@@ -45,14 +45,6 @@ static lv_obj_t *find_label(lv_obj_t *parent,const char *value)
     }
     return NULL;
 }
-static unsigned visible_questions(lv_obj_t *o)
-{
-    if (!lv_obj_is_visible(o)) return 0;
-    unsigned count=lv_obj_check_type(o,&lv_label_class) && !strcmp(lv_label_get_text(o),"?");
-    for (unsigned i=0;i<lv_obj_get_child_count(o);++i)
-        count+=visible_questions(lv_obj_get_child(o,i));
-    return count;
-}
 static void bounds(lv_obj_t *o)
 {
     if (lv_obj_has_flag(o,LV_OBJ_FLAG_HIDDEN)) return;
@@ -80,6 +72,27 @@ static uint32_t region_hash(int x0,int y0,int x1,int y1)
         hash=(hash^pixels[y*320+x])*16777619u;
     return hash;
 }
+/* Compare the rendered character and baked effects with the decoder output,
+   independently of LVGL object internals. Controls live below this region. */
+static void assert_action_frame(void)
+{
+    assert(pet.action!=RB_ANIM_IDLE && pet.state!=RB_PET_STOPPED && !pet.contact);
+    const rb_clip_meta_t *clip=&rb_clips[rb_clip_map[pet.origin][pet.action]];
+    unsigned phase=(unsigned)(pet.phase*clip->duration_ms), n=0;
+    while (n+1<clip->count && clip->at[n+1]<=phase) ++n;
+    const rb_frame_meta_t *meta;
+    const lv_image_dsc_t *image=rb_assets_frame(clip->frames[n],&meta);
+    assert(image && image->header.w==320 && image->header.h==240);
+    lv_refr_now(NULL);
+    for (unsigned y=0;y<190;++y) for (unsigned x=0;x<320;++x) {
+        unsigned pos=y*image->header.stride+x*2;
+        assert(pixels[y*320+x]==(uint16_t)(image->data[pos]|(image->data[pos+1]<<8)));
+    }
+}
+static uint32_t read_u32(const uint8_t *p)
+{ return (uint32_t)p[0]|((uint32_t)p[1]<<8)|((uint32_t)p[2]<<16)|((uint32_t)p[3]<<24); }
+static void write_u32(uint8_t *p,uint32_t value)
+{ for (unsigned i=0;i<4;++i) p[i]=(uint8_t)(value>>(8*i)); }
 int main(void)
 {
     lv_init();
@@ -91,11 +104,73 @@ int main(void)
     assert(rb_assets_set_room(room,153612));
     const rb_frame_meta_t *meta=NULL;
     assert(!rb_assets_init(blob,10,2)); assert(rb_assets_frame(0,&meta)==NULL);
+    uint8_t first_magic=blob[0]; blob[0]^=0xff;
+    assert(!rb_assets_init(blob,(size_t)bytes,2)); assert(rb_assets_frame(0,&meta)==NULL);
+    blob[0]=first_magic;
+    assert(!rb_assets_init(blob,(size_t)bytes-1,2)); assert(rb_assets_frame(0,&meta)==NULL);
     assert(rb_assets_init(blob,(size_t)bytes,0)); assert(rb_assets_degraded());
     assert(rb_assets_frame(3,&meta) && meta==&rb_frames[0]);
     assert(rb_assets_init(blob,(size_t)bytes,2)); assert(!rb_assets_degraded());
     assert(rb_assets_frame(RB_FRAME_COUNT+1,&meta) && meta==&rb_frames[0]);
     assert(rb_assets_init(blob,(size_t)bytes,2));
+    /* Exercise the device-facing C decoder for every unique resource, not
+       only poses encountered by the interaction scenarios below. */
+    for (unsigned i=0;i<RB_FRAME_COUNT;++i) {
+        const lv_image_dsc_t *frame=rb_assets_frame(i,&meta);
+        assert(frame && meta==&rb_frames[i]);
+        assert(frame->header.w==320 && frame->header.h==240);
+        assert(frame->header.stride==640 && frame->data_size==153600);
+    }
+    assert(rb_assets_cache_bytes()==460800); /* Two frames plus one independent base. */
+    unsigned independent=RB_FRAME_COUNT,delta=RB_FRAME_COUNT,other_delta=RB_FRAME_COUNT;
+    for (unsigned i=1;i<RB_FRAME_COUNT;++i) {
+        uint32_t codec=read_u32(blob+rb_frames[i].offset+12);
+        if (codec==1 && independent==RB_FRAME_COUNT) independent=i;
+        if (codec==2) {
+            if (delta==RB_FRAME_COUNT) delta=i;
+            else if (other_delta==RB_FRAME_COUNT) other_delta=i;
+        }
+    }
+    assert(independent<RB_FRAME_COUNT && delta<RB_FRAME_COUNT && other_delta<RB_FRAME_COUNT);
+    /* Damaged independent/delta zlib payloads both fall back to raw idle. */
+    const unsigned damaged_frames[]={independent,delta};
+    for (unsigned n=0;n<2;++n) {
+        unsigned frame=damaged_frames[n];
+        unsigned payload=rb_frames[frame].offset+16+(n==1?4:0);
+        uint8_t saved=blob[payload]; blob[payload]^=0xff;
+        assert(rb_assets_init(blob,(size_t)bytes,2));
+        assert(rb_assets_frame(frame,&meta) && meta==&rb_frames[0]);
+        assert(rb_assets_degraded()); blob[payload]=saved;
+    }
+    /* A valid delta must also fall back when its independent base is damaged. */
+    unsigned dependent=RB_FRAME_COUNT,base_frame=RB_FRAME_COUNT;
+    for (unsigned i=1;i<RB_FRAME_COUNT;++i) {
+        if (read_u32(blob+rb_frames[i].offset+12)!=2) continue;
+        unsigned candidate=read_u32(blob+rb_frames[i].offset+16);
+        assert(candidate<RB_FRAME_COUNT);
+        if (read_u32(blob+rb_frames[candidate].offset+12)==1) {
+            dependent=i; base_frame=candidate; break;
+        }
+    }
+    assert(dependent<RB_FRAME_COUNT && base_frame<RB_FRAME_COUNT);
+    unsigned base_payload=rb_frames[base_frame].offset+16;
+    uint8_t saved_payload=blob[base_payload]; blob[base_payload]^=0xff;
+    assert(rb_assets_init(blob,(size_t)bytes,2));
+    assert(rb_assets_frame(dependent,&meta) && meta==&rb_frames[0]);
+    assert(rb_assets_degraded()); blob[base_payload]=saved_payload;
+    /* Reject invalid bases, self references and chains during initialization;
+       no malformed dependency may recurse into the decoder or expose pixels. */
+    unsigned base_at=rb_frames[delta].offset+16;
+    uint32_t saved_base=read_u32(blob+base_at);
+    const unsigned bad_bases[]={RB_FRAME_COUNT,delta,other_delta};
+    for (unsigned n=0;n<3;++n) {
+        write_u32(blob+base_at,bad_bases[n]);
+        assert(!rb_assets_init(blob,(size_t)bytes,2));
+        assert(rb_assets_frame(delta,&meta)==NULL);
+        assert(rb_assets_degraded());
+    }
+    write_u32(blob+base_at,saved_base);
+    assert(rb_assets_init(blob,(size_t)bytes,2)); assert(!rb_assets_degraded());
     lv_display_t *d=lv_display_create(320,240); assert(d);
     lv_display_set_color_format(d,LV_COLOR_FORMAT_RGB565);
     lv_display_set_buffers(d,buffer,buffer2,sizeof(buffer),LV_DISPLAY_RENDER_MODE_PARTIAL); lv_display_set_flush_cb(d,flush);
@@ -159,11 +234,11 @@ int main(void)
     assert(pet.contact && pet.action==RB_ANIM_IDLE && pet.happy_ms==0);
     pressed=false; pump(100); click(145,110); pump(300);
     assert(pet.action==RB_ANIM_PROBE); snap("curious.ppm"); pump(1200);
-    click(145,110); click(145,110); click(145,110); pump(1600);
+    click(145,110); click(145,110); click(145,110); pump(RB_MS_PROBE+RB_MS_WITHDRAW+400);
     assert(pet.state==RB_PET_FOLDED); snap("folded.ppm");
     point=(lv_point_t){130,110}; pressed=true; pump(100);
     for (unsigned n=0;n<100;++n) { unsigned t=n%60; point.x=130+(t<=30?t:60-t)*2; pump(20); }
-    pump(2000); assert(pet.state==RB_PET_NORMAL); snap("relaxed.ppm");
+    pump(RB_MS_RECOVER+400); assert(pet.state==RB_PET_NORMAL); snap("relaxed.ppm");
     pressed=false; pump(100);
     /* Same moving contact on body cannot build happiness. */
     point=(lv_point_t){120,165}; pressed=true; pump(100);
@@ -176,10 +251,13 @@ int main(void)
     /* Forehead no longer triggers happiness. */
     point=(lv_point_t){165,70}; pressed=true; pump(100);
     for (unsigned n=0;n<230;++n) { unsigned t=n%30; point.x=165+(t<=15?t:30-t)*2; pump(20); }
-    assert(!pet.happy_latched && pet.happy_ms==0); pressed=false; pump(1200);
+    assert(!pet.happy_latched && pet.happy_ms==0); pressed=false; pump(RB_MS_NUZZLE_CYCLE+400);
     /* Short gentle claw petting, using the actual rendered pose hitboxes. */
-    point=(lv_point_t){180,130}; pressed=true; pump(100);
-    for (unsigned n=0;n<45;++n) { unsigned t=n%30; point.x=180+(t<=15?t:30-t); pump(20); }
+    int claw_x=0,claw_y=0;
+    for (unsigned i=0;i<4;++i) { claw_x+=pet.claw_region[i][0]; claw_y+=pet.claw_region[i][1]; }
+    claw_x/=4; claw_y/=4;
+    point=(lv_point_t){claw_x-4,claw_y}; pressed=true; pump(100);
+    for (unsigned n=0;n<45;++n) { unsigned t=n%16; point.x=claw_x-4+(int)(t<=8?t:16-t); pump(20); }
     pressed=false; pump(1000);
     assert(pet.happy_latched && pet.action==RB_ANIM_HAPPY); snap("happy.ppm");
     pump((unsigned)(RB_MS_HAPPY*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400);
@@ -204,22 +282,23 @@ int main(void)
     pump(120000);
     assert(pet.state==RB_PET_RESTING && pet.action==RB_ANIM_IDLE && pet.requests==sleep_requests);
     assert(lv_obj_has_flag(menu,LV_OBJ_FLAG_HIDDEN));
-    uint32_t base_hash=region_hash(80,179,240,200);
+    uint32_t backdrop_hash=region_hash(0,0,70,190);
     uint32_t head_hash=region_hash(80,40,225,179), z_hash=region_hash(225,40,280,145);
     unsigned head_changes=0,z_changes=0;
     lv_mem_monitor_t sleep_before,sleep_after;
     for (unsigned n=0;n<16;++n) {
         pump(400); bounds(lv_screen_active());
-        assert(region_hash(80,179,240,200)==base_hash);
+        assert(region_hash(0,0,70,190)==backdrop_hash);
         if (region_hash(80,40,225,179)!=head_hash) ++head_changes;
         if (region_hash(225,40,280,145)!=z_hash) ++z_changes;
         char name[32]; snprintf(name,sizeof(name),"sleep-detail-%02u.ppm",n); snap(name);
     }
     assert(head_changes>3 && z_changes>10);
-    /* Scale transforms lazily populate LVGL caches. Warm a complete lazy
-       cycle, then compare identical phases over four more full cycles. */
-    pump((unsigned)(5460*RB_PLAYBACK_DURATION_SCALE)); lv_mem_monitor(&sleep_before);
-    pump((unsigned)(4*5460*RB_PLAYBACK_DURATION_SCALE)); lv_mem_monitor(&sleep_after);
+    /* Warm a complete authored sleep cycle, then check stable allocations. */
+    unsigned sleep_period=rb_clips[rb_clip_map[RB_POSE_REST][RB_ANIM_IDLE]].duration_ms;
+    assert(sleep_period==6000);
+    pump(sleep_period); lv_mem_monitor(&sleep_before);
+    pump(4*sleep_period); lv_mem_monitor(&sleep_after);
     assert(sleep_before.free_size==sleep_after.free_size);
     /* STOP during sleep freezes the particles as well as the body. */
     rb_pet_stop(&pet,"BACK BUTTON"); pump(100); assert(pet.state==RB_PET_STOPPED);
@@ -234,13 +313,12 @@ int main(void)
     point=(lv_point_t){28,212}; pressed=true; pump(800); pressed=false; pump(100);
     assert(pet.action==RB_ANIM_WAKE);
     assert(lv_obj_has_flag(sleep_hint,LV_OBJ_FLAG_HIDDEN));
-    lv_refr_now(NULL);
-    for (int y=45;y<135;++y) for (int x=242;x<278;++x)
-        assert(pixels[y*320+x]==(uint16_t)(room[12+(y*320+x)*2]|(room[13+(y*320+x)*2]<<8))); /* Room is restored after Zs disappear. */
+    assert_action_frame(); /* Wake uses its own baked background, with no stale Z overlay. */
     unsigned before_stop=rb_ui_body_updates(); click(38,212); pump(100);
     assert(pet.state==RB_PET_STOPPED); unsigned stopped_updates=rb_ui_body_updates();
     assert(stopped_updates>=before_stop); pump(2000); assert(rb_ui_body_updates()==stopped_updates); snap("stopped.ppm");
     click(38,212); pump((unsigned)(RB_MS_WAKE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+400); assert(pet.state==RB_PET_NORMAL);
+    pump(RB_MS_WAKE); assert(pet.action==RB_ANIM_IDLE);
     rb_pet_stop(&pet,"BACK BUTTON"); pump(100);
     click(38,212); assert(pet.state==RB_PET_STOPPED);
     rb_pet_estop(&pet,false); point=(lv_point_t){38,212}; pressed=true; pump(800); pressed=false; pump(100);
@@ -258,22 +336,22 @@ int main(void)
     lv_mem_monitor_t before,after; lv_mem_monitor(&before);
     for (unsigned n=0;n<80;++n) { click(145,110); pump((unsigned)(RB_MS_PROBE*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+100); }
     pump(3000); lv_mem_monitor(&after); assert(after.free_size==before.free_size);
-    /* A real fast swipe produces three overhead questions, then clears them.
-       Settings and pause hide the effect without leaving stale glyphs. */
+    /* A fast swipe renders the authored question animation with no duplicate
+       UI glyphs; closing settings restores the exact selected GIF frame. */
     rb_pet_init(&pet,now); rb_ui_create(&pet); pump(100);
-    assert(visible_questions(lv_screen_active())==0);
+    assert(find_label(lv_screen_active(),"?")==NULL);
     point=(lv_point_t){100,110}; pressed=true; pump(80);
     for (int x=108;x<=220;x+=8) { point.x=x; pump(20); }
     pressed=false; pump(pet.duration/2); assert(pet.action==RB_ANIM_TILT);
-    assert(visible_questions(lv_screen_active())==3); snap("confused.ppm");
-    click(290,212); assert(visible_questions(lv_screen_active())==0);
-    click(290,212); pump(1600);
-    assert(pet.action==RB_ANIM_IDLE && visible_questions(lv_screen_active())==0);
+    assert_action_frame(); snap("confused.ppm");
+    click(290,212); assert(find_label(lv_screen_active(),"?")==NULL);
+    click(290,212); assert_action_frame(); pump(RB_MS_TILT);
+    assert(pet.action==RB_ANIM_IDLE && find_label(lv_screen_active(),"?")==NULL);
     point=(lv_point_t){100,110}; pressed=true; pump(80);
     for (int x=108;x<=220;x+=8) { point.x=x; pump(20); }
-    pressed=false; pump(pet.duration/2); assert(visible_questions(lv_screen_active())==3);
+    pressed=false; pump(pet.duration/2); assert_action_frame();
     click(28,212); assert(pet.state==RB_PET_STOPPED);
-    assert(visible_questions(lv_screen_active())==0);
+    assert(find_label(lv_screen_active(),"?")==NULL);
     printf("PASS reference UI, RGB565 sequence/cache fallback, anchors, gestures, STOP freeze and stable heap; cache=%zu bytes\n",rb_assets_cache_bytes());
     rb_assets_close(); lv_deinit(); free(blob); free(room); return 0;
 }

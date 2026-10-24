@@ -66,6 +66,14 @@ static void start(rb_pet_t *p,rb_pet_action_t a,rb_pet_source_t source,int direc
     if (p->sink) p->sink(p->sink_context,&p->last_event);
     if (a==RB_ANIM_WITHDRAW && p->pose==RB_POSE_FOLDED) p->action=RB_ANIM_IDLE;
 }
+/* Retrace authored poses at their original speed. Compressing a multi-second
+   GIF into the old 180ms recovery would turn the new motions into a flash. */
+static void begin_return(rb_pet_t *p)
+{
+    p->returning=true; p->return_started=p->now; p->return_phase=p->phase;
+    p->return_duration=(uint64_t)(p->return_phase*p->duration);
+    if (p->return_duration<120) p->return_duration=120;
+}
 static void request(rb_pet_t *p,rb_pet_action_t a,rb_pet_source_t source)
 {
     if (!allowed(p,a)) return;
@@ -79,7 +87,7 @@ static void request(rb_pet_t *p,rb_pet_action_t a,rb_pet_source_t source)
     }
     /* Urgent changes first retrace this clip to its known origin, never jump poses. */
     if (!p->returning && priority(a)>priority(p->action) && priority(a)>=6) {
-        p->returning=true; p->return_started=p->now; p->return_phase=p->phase; p->return_duration=180;
+        begin_return(p);
         if (p->action==RB_ANIM_HAPPY) p->happy_cooldown_until=p->now+RB_CFG_HAPPY_COOLDOWN_MS;
     }
 }
@@ -108,7 +116,8 @@ static void finish(rb_pet_t *p)
     if (old==RB_ANIM_HAPPY) p->happy_cooldown_until=p->now+RB_CFG_HAPPY_COOLDOWN_MS;
     if (old==RB_ANIM_NUZZLE) {
         if (++p->nuzzle_cycles>=2) { p->nuzzle_hold=p->now+500; p->nuzzle_cycles=0; }
-        else if (p->stroke && !p->pending_valid) request(p,RB_ANIM_NUZZLE,RB_INPUT_STROKE);
+        else if (p->stroke && !p->pending_valid && !on_claw(p,p->raw_x,p->raw_y))
+            request(p,RB_ANIM_NUZZLE,RB_INPUT_STROKE);
     }
     run_pending(p);
 }
@@ -173,9 +182,8 @@ static void up(rb_pet_t *p)
     p->contact=false; p->release_at=p->last_interaction=p->now;
     p->consumed=false; clear_contact(p);
     if (p->pending_valid && p->pending==RB_ANIM_NUZZLE) p->pending_valid=false;
-    if (p->action==RB_ANIM_NUZZLE && !p->returning) {
-        p->returning=true; p->return_phase=p->phase; p->return_started=p->now; p->return_duration=(unsigned)(400*RB_PLAYBACK_DURATION_SCALE);
-    }
+    /* The authored nuzzle already returns to idle. Releasing the screen
+       prevents another cycle, but lets this one finish at its GIF cadence. */
 }
 static void expire_happy(rb_pet_t *p)
 {
@@ -261,7 +269,7 @@ static void motion(rb_pet_t *p)
                 p->candidate_count=0;
             }
         } else credit(p,v);
-        if (p->stroke && p->state==RB_PET_NORMAL && p->action!=RB_ANIM_HAPPY)
+        if (p->stroke && !claw && p->state==RB_PET_NORMAL && p->action!=RB_ANIM_HAPPY)
             request(p,RB_ANIM_NUZZLE,RB_INPUT_STROKE);
     } else if (moved && p->speed>RB_CFG_STROKE_SPEED_MAX) {
         p->candidate_count=p->candidate_ms=0; p->candidate_path=0;
@@ -269,9 +277,6 @@ static void motion(rb_pet_t *p)
     if (p->now-p->last_gentle>RB_CFG_STROKE_PAUSE_GRACE_MS) {
         p->stroke=false; p->candidate_count=p->candidate_ms=0; p->candidate_path=0;
         if (p->pending_valid && p->pending==RB_ANIM_NUZZLE) p->pending_valid=false;
-        if (p->action==RB_ANIM_NUZZLE && !p->returning) {
-            p->returning=true; p->return_started=p->now; p->return_phase=p->phase; p->return_duration=(unsigned)(400*RB_PLAYBACK_DURATION_SCALE);
-        }
     }
 }
 void rb_pet_tick(rb_pet_t *p,uint64_t now)
@@ -299,7 +304,8 @@ void rb_pet_tick(rb_pet_t *p,uint64_t now)
     }
     if (p->action==RB_ANIM_IDLE && p->state!=RB_PET_RESTING && !p->contact && !p->raw_down &&
         now-p->last_interaction>=RB_CFG_SLEEP_IDLE_MS) request(p,RB_ANIM_REST,RB_INPUT_IDLE);
-    if (p->stroke && p->state==RB_PET_NORMAL && p->action==RB_ANIM_IDLE && !p->consumed)
+    if (p->stroke && !on_claw(p,p->raw_x,p->raw_y) && p->state==RB_PET_NORMAL &&
+        p->action==RB_ANIM_IDLE && !p->consumed)
         request(p,RB_ANIM_NUZZLE,RB_INPUT_STROKE);
     if (now>=p->next_blink) {
         p->random=p->random*1664525u+1013904223u; p->blink_until=now+120;
@@ -329,7 +335,7 @@ bool rb_pet_reset(rb_pet_t *p,uint64_t now)
     p->state=p->pose==RB_POSE_FOLDED?RB_PET_FOLDED:RB_PET_NORMAL;
     p->happy_latched=false; p->happy_cooldown_until=0;
     p->pending=RB_ANIM_WAKE; p->pending_source=RB_INPUT_RESET; p->pending_valid=true;
-    if (p->action!=RB_ANIM_IDLE) { p->returning=true; p->return_phase=p->phase; p->return_started=now; p->return_duration=180; }
+    if (p->action!=RB_ANIM_IDLE) begin_return(p);
     else run_pending(p);
     return true;
 }

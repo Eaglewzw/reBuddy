@@ -6,6 +6,6 @@
 - [原始房间图](room.png) · [完整提示词](prompt.txt)。
 - 场景：暖色墙面、木地板、小窗、绿植、圆地毯和充电角；图中不含角色或文字。
 - 工程使用统一缩小至 320×240 的图作为背景。角色仍在 (80,40) 的 160×160 区域，原底色由同位置房间区域替换。
-- 哈希和输出大小记录在 `assets/animation/manifest.json`。当前接入 room-preview-v1，尚未进行实机视觉验收。
+- 哈希和输出大小记录在 `assets/animation/manifest.json`。当前接入 gif-v2-rgb565；本版实机视觉验收以验证摘要为准。
 
 菜单中文字体由本机 Noto Sans CJK 简体中文字形导出少量子集，许可证保存在 `assets/fonts/OFL.txt`。主画面只保留角落的暂停/恢复和设置图标。

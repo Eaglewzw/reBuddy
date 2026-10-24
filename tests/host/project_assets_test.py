@@ -8,23 +8,20 @@ from urllib.parse import unquote
 import xml.etree.ElementTree as ET
 
 root = Path(__file__).resolve().parents[2]
-gif_dir = root/'assets/gifs'
+gif_dir = root/'assets/gifs-v2'
 manifest = json.loads((gif_dir/'manifest.json').read_text())
-assert len(manifest['gifs']) == 10
-assert manifest['behavior_config_sha256'] == hashlib.sha256((root/'assets/config/behavior_defaults.json').read_bytes()).hexdigest()
-assert manifest['source_runtime_sha256'] == hashlib.sha256((root/'assets/animation/frames.bin').read_bytes()).hexdigest()
-assert manifest['room_sha256'] == hashlib.sha256((root/'assets/animation/room.bin').read_bytes()).hexdigest()
-assert {p.name for p in gif_dir.glob('*.gif')} == {g['file'] for g in manifest['gifs']}
-for item in manifest['gifs']:
-    data = (gif_dir/item['file']).read_bytes()
-    assert hashlib.sha256(data).hexdigest() == item['sha256'], item['file']
-    assert data[:6] in (b'GIF87a', b'GIF89a')
-    assert struct.unpack_from('<HH', data, 6) == (320, 240)
-approved = json.loads((root/'assets/approved/probe-v2/manifest.json').read_text())
-for name in ('source', 'idle_master'):
-    assert hashlib.sha256((root/approved[name]).read_bytes()).hexdigest() == approved[name+'_sha256']
-for export in approved['exports']:
-    assert hashlib.sha256((root/export['path']).read_bytes()).hexdigest() == export['sha256']
+assert len(manifest['clips']) == 10
+assert not (root/'assets/gifs').exists(), 'obsolete GIF directory is still shipped'
+assert {p.name for p in gif_dir.glob('*.gif')} == {g['file'] for g in manifest['clips']}
+for folder, report in ((gif_dir, manifest), (gif_dir/'expressions-preview',
+        json.loads((gif_dir/'expressions-preview/manifest.json').read_text()))):
+    for item in report['clips']:
+        data = (folder/item['file']).read_bytes()
+        assert hashlib.sha256(data).hexdigest() == item['sha256'], item['file']
+        assert data[:6] in (b'GIF87a', b'GIF89a')
+        assert struct.unpack_from('<HH', data, 6) == (320, 240)
+for source in manifest['sources'].values():
+    assert hashlib.sha256((root/source['path']).read_bytes()).hexdigest() == source['sha256']
 markdown = [root/'README.md', *sorted((root/'assets').rglob('*.md'))]
 for doc in markdown:
     for link in re.findall(r'!?\[[^\]]*\]\(([^)]+)\)', doc.read_text()):
@@ -32,7 +29,7 @@ for doc in markdown:
         if not target or re.match(r'[a-z]+:', target):
             continue
         assert (doc.parent/unquote(target)).exists(), f'{doc.relative_to(root)}: {target}'
-print('PASS ten current GIF hashes/headers, approved artwork, and local Markdown links')
+print('PASS ten current GIFs, three expression GIFs, current source artwork and local asset links')
 
 for svg in (root/'assets').rglob('*.svg'):
     for element in ET.parse(svg).iter():

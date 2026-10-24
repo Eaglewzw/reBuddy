@@ -1,0 +1,16 @@
+Use case: identity-preserve animation sprite sheet.
+Input 1: exact three-joint reBot character identity and idle proportions. Input 2: interaction storyboard; use panel 02 titled 抚摸·蹭蹭 as the TARGET GESTURE, not other panels. Keep the character of input1 with THREE visible silver circular joints: lower shoulder at base, middle elbow, upper head/wrist hinge. The gesture should read like the smiling robot affectionately tilts its head sideways to rub its temple into an imaginary gentle petting hand. No actual hand or person.
+Create one square PNG, strict 4 columns by 4 rows of 16 equal square animation cells, row-major; no labels, text, borders, gutters, symbols or motion lines. Uniform ivory #F8F7EF background with no shadows. Complete character in every cell. Fixed same three-quarter view, all silver joints visible on image-left side of the robot, head facing image-right. No mirror or alternate viewpoint.
+Match the target panel02: the body stays relatively upright, the head is noticeably CANTED SIDEWAYS, cheek lowered toward image-right, upper-left temple offered to petting; both eyes are delighted crescent smile arcs. Keep the two dark claw fingers held softly in front of the chest under the head. Do not confuse this with bowing forward, looking down, crouching or falling asleep. The cheerful closed-eye smile and pink cheek marks persist through the cheek-rub.
+Rig constraints: broad oval base stays exactly fixed in every cell, same width and height. On normalized256 cell: base centered x110, bottom y240, width118; shoulder lower cap around x100,y180, elbow cap around x65,y125; the upper hinge moves only as connected links articulate. Head shell and face screen constant physical dimensions, cap diameters identical, rigid links same length. No stretching, no enlarged face, no smaller body. No camera zoom, scale, spring bounce or disconnected neck.
+Frame0 idle matching input1, open eyes.
+Frame1 eyes become gentle smiling arcs, body stays idle.
+Frames2–6 progressively roll/cant head toward image-right at the head joint, about 5,10,15,20,25 degrees relative to idle. Upper temple leans toward imagined petting, like panel02. Keep torso upright and all three caps distinct.
+Frame7 peak cheek-rub posture, warm crescent smiles.
+Frame8 slight return by 5 degrees, still same cheek offered.
+Frame9 return another 5 degrees, smile unchanged.
+Frame10 tilt back to peak for a second short affectionate rub.
+Frame11 pause smiling at peak.
+Frames12–14 gently retrace same connected articulation to upright idle, keeping smile until nearly upright.
+Frame15 exact original idle posture, open eyes again.
+Keep action coherent, charming and clearly readable. Head shift modest, roughly8 pixels right and3 down per256cell; the pronounced SIDEWAYS CANT and expression are the main effect, not vertical sinking. Avoid front bow, yawning, sleeping eyes, raised arms, hopping, duplicated or missing joints, chopped eyes, white patches in arm gaps, changed shell design.

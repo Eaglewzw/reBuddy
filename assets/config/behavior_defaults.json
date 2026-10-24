@@ -15,7 +15,7 @@
       "width": 160,
       "height": 160
     },
-    "target_animation_fps": 15
+    "target_animation_fps": 8
   },
   "gesture": {
     "contact_debounce_ms": 30,
@@ -43,18 +43,18 @@
     "sleep_idle_ms": 60000
   },
   "style_duration_scale": {
-    "lively": 0.85,
-    "lazy": 1.3
+    "lively": 1.0,
+    "lazy": 1.0
   },
   "action_durations_ms": {
-    "PROBE": 1600,
-    "NUZZLE_CYCLE": 1000,
-    "TILT": 1400,
-    "WITHDRAW": 900,
-    "RECOVER": 1600,
-    "HAPPY": 2000,
-    "REST": 3000,
-    "WAKE": 1600
+    "PROBE": 5000,
+    "NUZZLE_CYCLE": 6000,
+    "TILT": 5000,
+    "WITHDRAW": 3000,
+    "RECOVER": 5000,
+    "HAPPY": 8000,
+    "REST": 7000,
+    "WAKE": 5500
   },
   "source_images": [
     {
@@ -67,6 +67,6 @@
     }
   ],
   "animation_playback": {
-    "duration_scale": 2.0
+    "duration_scale": 1.0
   }
 }

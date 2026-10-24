@@ -5,6 +5,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Install resource-test dependencies
+        run: sudo apt-get update && sudo apt-get install -y python3-pil zlib1g-dev
       - name: Fetch public LVGL 9.5.0
         run: git clone --depth 1 --branch v9.5.0 https://github.com/lvgl/lvgl.git /tmp/lvgl
       - name: Configure

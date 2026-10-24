@@ -1,0 +1,11 @@
+Use case: identity-preserve character animation key poses.
+Create a TWO BY TWO square sheet, exactly FOUR full-body robots on four equal squares, same size and fixed body. NO4x4 grid. Each square plain ivory #F8F7EF background, no shadow or text.
+Reference1 defines exact robot, three visible silver hinge discs, closed claw, same proportions/colors. Reference2's small 好奇 robot shows the desired final HEAD SIDEWAYS CANT ONLY; keep reference1's THREE hinges.
+All four robots share EXACTLY same base, lower shoulder cap, middle elbow cap and both arm links. They are locked stationary. No taller body, no squashing/stretching, no zoom, no whole-body lean. Same three-quarter camera, all three silver caps on left visible. ONE closed connected two-finger gripper under face, never two hands.
+The head SIDE-ROLLS COUNTERCLOCKWISE as seen on the page, like a curious dog tilting its head. Black screen remains facing viewer. Face outline and lime skull outline rotate with eyes as a rigid unit; not just moving eyes. Top wrist remains connected. Keep head diameter fixed. The RIGHT side of the face goes UP and LEFT side goes DOWN. This is lateral roll, NOT pitching chin to sky or moving entire head upward.
+FOUR clearly distinct poses in reading order:
+TOP LEFT: reference neutral with crescent open eyes, their center line a little downhill right.
+TOP RIGHT: 1/3 of the sideways tilt: head tipped enough that the two eye centers are exactly LEVEL horizontally, though body unchanged.
+BOTTOM LEFT: 2/3 sideways tilt: the RIGHT eye's center is HALF an eye-height ABOVE the LEFT eye's center. Skull and screen outline clearly angled to match.
+BOTTOM RIGHT: full curious head-side-cant like small 好奇 sketch: RIGHT eye's center ONE eye-height ABOVE LEFT center. Head silhouette plainly tilted, face still toward viewer, torso stationary. Natural raised asymmetric eyebrows and both eyes looking up, attentive and puzzled.
+Do not put neutral heads in all four squares. Left-to-right eye-height relation MUST change progressively with head orientation. Total actual roll about25degrees from first to final; preserve original face features and proportions. Keep generous space above head. All three silver discs visible and same diameter throughout, shoulder/elbow must not rotate or move. Solid pale background in link gaps. No questions or symbols; these are added in software.

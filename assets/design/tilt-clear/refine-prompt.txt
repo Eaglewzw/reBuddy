@@ -1,0 +1,12 @@
+Correct the attached sprite sheet: the curious sideways head-roll in cell3 is recognizable, but cells1 and2 did NOT provide any intermediate tilt. Make four truly different, equally spaced head angles. Preserve the exact three-joint character identity, one closed gripper, same body size/camera. All lower body pixels (base, shoulder cap, elbow cap, rigid links) remain locked and identical in every cell.
+Use cell0 as neutral A and cell3 as reference of the tilt DIRECTION only. Reduce the extreme tilt somewhat and fill the missing in-between angles. Rotate the ENTIRE skull shell and face in the picture plane counterclockwise, NOT only moving pupils; the head shape, its lime outer outline and eye line must visibly turn together. Face stays towards the viewer, not pitched skyward. The existing upper wrist silver cap is still connected.
+PoseA eye-center line slopes DOWN toward image-right about20 degrees, as cell0.
+PoseB eye-center line slopes DOWN toward right only7 degrees: a visible first counterclockwise tilt.
+PoseC eye-center line slopes UP toward right6 degrees: an obvious intermediate tilt.
+PoseD eye-center line slopes UP toward right19 degrees: curious head cant, less extreme than originalcell3. Both curious open crescent eyes look up. Head physical size and eyes physical size identical. No zoom or stretch, no enlarged head or forward push.
+Write exactly:
+row1 A B C D.
+row2 D C B A.
+row3 A B C D.
+row4 D C B A.
+This time B and C must really be intermediate rotations of the same head; DO NOT repeat A as B and C. All cells share same three visible silver joints and same fixed shoulder/elbow posture. One connected closed two-finger gripper, no extra hands or independent fingers; keep it tucked under head at its normal position. Do not shift or rotate whole robot. No missing joints, floating connections, extra objects, motion lines, question marks, shadows, borders, labels, text. Flat ivory #F8F7EF background everywhere including arm gaps.

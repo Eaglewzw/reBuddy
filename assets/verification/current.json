@@ -1,12 +1,12 @@
 {
   "status": "passed",
-  "date": "2026-10-23",
+  "date": "2026-10-24",
   "target": "esp32c5",
   "sdk": "ESP-IDF v5.5.6",
-  "application_sha256": "88239917d3f0d22db8f9eec94a161f00d2cab394cfc2632ee665163dbd3cc358",
-  "application_bytes": 2333728,
+  "application_sha256": "6d878608d0da087e25985a060c1a5d9c80ac3bad2f634060b132d649d831a209",
+  "application_bytes": 3173008,
   "host_tests": {
-    "passed": 6,
+    "passed": 7,
     "failed": 0,
     "names": [
       "board_input",
@@ -14,70 +14,51 @@
       "project_assets",
       "ui_rgb565",
       "reference_behavior",
-      "animation_resources"
+      "animation_resources",
+      "gif_visual_regressions"
     ]
   },
   "coverage": [
-    "touch-only input; no physical key or GPIO emergency-stop polling",
-    "persistent sleep and deliberate wake",
-    "claw-only happiness; input cancellation does not freeze",
-    "three staged question marks; settings/pause/end clear effect",
-    "small probe amplitude and extended attention hold",
+    "134 unique records independently decoded; 452 GIF frames match RGB565 pixels and exact timing",
+    "484 decoded arm-gap checks preserve room background",
+    "C decoder full-frame cache, raw fallback and malformed/truncated/corrupt asset handling",
+    "claw-only happiness, source-speed action completion and interrupted return",
+    "persistent sleeping loop; deliberate wake; pause freeze; menus and touch cancellation",
     "30 minute simulated core interaction; not a hardware soak test",
-    "current GIF hashes and source assets; local Markdown links",
-    "twofold action duration and half-cycle progress; GIF style matches default firmware",
-    "short gentle claw petting triggers HAPPY; forehead, eyes, body and stationary hold do not",
-    "probe eye-contact hold; directional nuzzle; question marks follow tilt",
-    "HAPPY reuses original artwork only; two raised open/close cycles then lowers",
-    "enclosed cavities match the room at their actual screen positions; white eye/metal highlights preserved",
-    "PROBE source poses and timing restored from GitHub b4a6a885cbf1fa7630145321f0afac9c74c5f2b3; cavity backdrop correction retained",
-    "REST conveys fatigue with two slow blinks, droopy eyes, eyes-closed lowering and sleep; no shy poses on normal-origin entry",
-    "neutral sleep variants change only cheek-mask pixels; original interaction poses 0..23 and GIFs 01..07 byte-identical to pre-retouch snapshot",
-    "REST and sleeping breathing have no cheek blush; WAKE starts from actual neutral sleeping pose",
-    "sleep face retouches preserve eye/body/room pixels, action timing and breathing timing"
+    "old assets/gifs removed; current main10 and supplemental3 source hashes and local links verified",
+    "Lossless XOR delta codec with independent anchors; corrupted base/delta safely fall back; cycles and invalid base references rejected",
+    "Happy entry/exit base size and anchor match idle decoded bounds within2px; fixed1.125 layout for all happy poses; updated claw hitboxes",
+    "Sleep Z enlarged14to28px bold with stronger contrast and visible hold; only SLEEP GIF changed; all7 host tests passed"
   ],
   "assets": {
+    "asset_version": "gif-v2-rgb565",
     "gif_count": 10,
-    "question_marks": 3,
-    "probe_base_ms": 1600,
-    "tilt_base_ms": 1400,
-    "runtime_pose_count": 33,
-    "existing_source_art_preserved": true,
-    "duration_scale": 2.0,
-    "gif_style": "lively",
-    "sleep_cycle_lively_ms": 8400,
-    "happy_target": "claws",
-    "happy_valid_ms": 600,
-    "interaction_revision": "interaction-v2",
-    "happy_revision": "original-art-two-claps",
-    "probe_revision": "github-original",
-    "cavity_background_revision": "seeded-room-composite-v1",
-    "probe_source_commit": "b4a6a885cbf1fa7630145321f0afac9c74c5f2b3",
-    "rest_revision": "drowsy-before-sleep-v1",
-    "sleep_face_revision": "neutral-cheeks-v1"
+    "supplemental_expression_gif_count": 3,
+    "runtime_frame_count": 134,
+    "runtime_bytes": 2529735,
+    "nominal_fps": 8,
+    "happy_ms": 8000,
+    "duration_scale": 1.0,
+    "claw_target": "current_pose_polygon",
+    "rgb565_frame_cache_bytes": 460800,
+    "compression": {
+      "scheme": "independent-anchor-xor-zlib",
+      "full_frame_zlib_bytes": 5924974,
+      "delta_frames": 124,
+      "extra_psram_bytes": 153600
+    },
+    "happy_presentation_scale": 1.125,
+    "sleep_z_font_px": 28,
+    "sleep_z_bold": true
   },
   "hardware_tested": false,
   "flashed": false,
   "pushed": false,
-  "package_checks": [
-    "embedded animation and room match source",
-    "SHA256SUMS verified",
-    "flash.sh syntax checked",
-    "merged image generated; no serial access"
-  ],
   "visual_review": {
-    "status": "pending_user_review",
-    "character": "original pixels preserved outside cheek masks",
-    "scope": "neutral cheeks during REST and sleep; WAKE begins with neutral sleeping pose",
-    "unchanged_gifs": [
-      "01",
-      "02",
-      "03",
-      "04",
-      "05",
-      "06",
-      "07"
-    ],
-    "remaining_issue": "Device appearance and touch comfort require review."
-  }
+    "status": "pending_user_device_review",
+    "scope": "HAPPY fixed layout retained; larger bold sleep Z inspected before/after; codec preserves exact current GIF RGB565 pixels and timings.",
+    "remaining_issue": "Generated claw/palm details still vary slightly; actual display performance requires device review."
+  },
+  "build_log": "build/sleep-z-large/firmware-build.log",
+  "test_log": "build/sleep-z-large/host-tests.log"
 }

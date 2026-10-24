@@ -23,8 +23,8 @@ assets=json.loads((ROOT/'assets/animation/manifest.json').read_text())
 app=(build/flash['app']['file']).read_bytes()
 if (ROOT/'assets/animation/frames.bin').read_bytes() not in app:
     raise SystemExit('Application does not contain current animation assets; rebuild before packaging.')
-if assets.get('asset_version')!='room-preview-v1':
-    raise SystemExit('Generate and build room-preview-v1 before packaging.')
+if assets.get('asset_version')!='gif-v2-rgb565':
+    raise SystemExit('Generate and build gif-v2-rgb565 before packaging.')
 if (ROOT/'assets/animation/room.bin').read_bytes() not in app:
     raise SystemExit('Application does not contain the current room background; rebuild first.')
 if description['target']!='esp32c5':
@@ -65,8 +65,12 @@ manifest = {
     'sdk': description['git_revision'], 'asset_version': assets['asset_version'],
     'interaction_revision': assets.get('interaction_revision'),
     'animation_playback': behavior['animation_playback'],
-    'ui_revision': 'touch-only', 'mode': 'screen_touch_key_pose_preview', 'hardware_tested': False,
-    'visual_status': assets['visual_status'], 'approved_probe_v2_integrated': False,
+    'animation_compression': assets.get('compression'),
+    'ui_revision': 'touch-only', 'mode': 'screen_touch_gif_v2', 'hardware_tested': False,
+    'visual_status': assets['visual_status'],
+    'animation_source': 'assets/gifs-v2', 'animation_fps': 8,
+    'animation_unique_frames': assets['unique_frames'],
+    'animation_bytes': assets['bytes'], 'room_sha256': assets['room_sha256'],
     'input_mode': 'touch_only', 'physical_keys': False, 'gpio_estop_input': False,
     'board_component': 'rebuddy_board', 'private_dependencies': False,
     'flash_files': flash['flash_files'], 'flash_settings': flash['flash_settings']}
@@ -100,8 +104,8 @@ preview=ROOT/'assets/previews/current.png'
 if preview.exists(): shutil.copy2(preview,out/'ui-preview.png')
 (out/'README.txt').write_text(
     f'reBuddy {description["project_version"]} / touch-only / ESP32-C5 / ESP-IDF {sdk_version}\n'
-    f'小屋预览：窗户、木地板、地毯与充电角；{assets["unique_frames"]} 张姿态、睡眠呼吸和动态 Z。\n'
-    f'动画时长倍率：{behavior["animation_playback"]["duration_scale"]}；GIF 默认匹配活泼风格，触摸识别时限独立。\n'
+    f'当前新版 GIF 动画：{assets["unique_frames"]} 张去重帧，表情、问号和睡眠 Z 均来自当前 GIF。\n'
+    f'平均 8 FPS，开心回应 8 秒；全局时长倍率 {behavior["animation_playback"]["duration_scale"]}，活泼与慵懒暂时均为 1.0 倍，触摸识别时限独立。\n'
     '直接触摸角色互动；左下暂停/继续，右下设置；没有英文状态栏。\n'
     '硬件：XIAO ESP32-C5 CAN Console，8 MiB Flash / 8 MiB Quad PSRAM。\n'
     '已通过主机测试与编译，尚未实际烧录或完成实机 30 分钟验证。\n'

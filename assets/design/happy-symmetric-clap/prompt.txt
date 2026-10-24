@@ -1,0 +1,16 @@
+Use case: precise-object-edit, animation topology correction.
+Reference: supplied reBot atlas. Use the HAPPY UPRIGHT POSE at row2 column3 (zero-based cell6) as the fixed pose for ALL output cells. Preserve its three silver joints, lime green body, black rigid links, smiling face, broad base, same camera and scale. Only the SINGLE GRIPPER is animated. Head, shoulder, elbow, wrist and base are perfectly steady in all output cells.
+Output a 4x4 atlas of 16 equal square cells, row-major, flat matte ivory #F8F7EF background, no text, labels, borders, margins, shadows or motion symbols. One complete robot per cell. Fixed base bottom near y240, width118, centeredx105 in normalized256px cell; head remains inside frame. All THREE silver caps clearly visible.
+CRITICAL GRIPPER MECHANISM: ONE single lime-green U-shaped PALM / shared mounting housing is connected to the arm by ONE centered short black wrist stem. TWO and only TWO black rigid fingertip jaws attach to the TWO ends of this SAME U-shaped green palm. A visible green crossbar connects their roots; do not draw disconnected two palm pieces. Each black fingertip is ONE solid tapered paddle, never a V, never two prongs. They are opposing jaws of ONE gripper, NOT two hands, NOT two grippers, NOT separate wrists. Hold housing and wrist perfectly still; move BOTH black jaws simultaneously with equal and opposite rotation, relative to their shared centerline. Left jaw opens left by same angle right jaw opens right. On closing BOTH approach center together and tips meet. Keep each jaw the same size and shape; foreshortening from the fixed three-quarter view stays constant. No one-sided V opening.
+Motion states:
+cells0,1: CLOSED, two fingertips touching centrally, single recognizable compact gripper.
+cell2: HALF OPEN, both jaws move 10 degrees outward symmetrically.
+cells3,4: OPEN, both jaws move 20 degrees outward symmetrically, visible modest gap between two solid tips.
+cell5: HALF OPEN, both move inward to 10 degrees.
+cells6,7: CLOSED, tips meet at same center. First gentle clap complete.
+cell8: HALF OPEN, both jaws move out by 10 degrees again.
+cells9,10: OPEN, both move out by20 degrees, same geometry as cells3,4.
+cell11: HALF OPEN, both move toward center.
+cells12,13,14,15: CLOSED, both tips meet, same as0. Second gentle clap complete.
+The ONLY movement in this sheet is symmetric opening and closing of the single two-jaw gripper. No body movement, no gripper translation, no wrist rotation, no pulling back the arm, no head bobbing. The robot remains happily upright and comfortably unfolded. Smile eyes unchanged.
+Do not accidentally give each black jaw its own green wrist/hand or split a jaw into two fingers. Exactly TWO black solid jaws total and ONE shared green U-shaped palm, ONE black wrist connector, THREE silver arm joints. Need consistent connected mechanical topology in all16 frames. This replaces a flawed animation that moved only one half or made two hands; fix that decisively.

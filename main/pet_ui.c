@@ -12,15 +12,14 @@ static lv_obj_t *status_label,*contact_mark;
 static lv_obj_t *settings_label,*wake_label;
 static bool wake_armed;
 extern const lv_font_t rb_room_font;
-static lv_obj_t *sleep_z[3], *questions[RB_QUESTION_COUNT];
-static uint64_t effects_last_ms, z_last_ms;
-static double sleep_clock_ms;
-static bool sleeping_last;
-static unsigned wake_start_frame;
+/* Idle and sleep use the same authored GIF timelines as other actions. */
+static uint64_t animation_last_ms, idle_clock_ms;
+static unsigned previous_clip;
+static rb_pet_action_t previous_action;
 static bool settings_open;
 /* Decide on touch-down, so holding Pause cannot also restore that pause. */
 static enum { RESTORE_NONE, RESTORE_CLICK, RESTORE_HOLD } restore_gesture;
-static uint64_t last_body_ms,feedback_ms,raw_down_at;
+static uint64_t feedback_ms,raw_down_at;
 static bool feedback_pending;
 static unsigned body_frame,body_updates;
 static const rb_frame_meta_t *anchor;
@@ -48,35 +47,6 @@ static bool resting(void)
     return pet->state!=RB_PET_STOPPED && pet->action!=RB_ANIM_WAKE &&
         ((pet->state==RB_PET_RESTING) || pet->action==RB_ANIM_REST ||
          (pet->pending_valid && pet->pending==RB_ANIM_REST));
-}
-static void sleep_effects(bool stopped)
-{
-    uint64_t elapsed=pet->now>=effects_last_ms?pet->now-effects_last_ms:0;
-    effects_last_ms=pet->now;
-    if (stopped) return; /* Freeze both the body and the currently visible Zs. */
-    bool sleeping=pet->state==RB_PET_RESTING && pet->action==RB_ANIM_IDLE;
-    if (!sleeping) {
-        if (sleeping_last && pet->action==RB_ANIM_WAKE) wake_start_frame=body_frame;
-        sleeping_last=false; sleep_clock_ms=0;
-        for (unsigned i=0;i<3;++i) hidden(sleep_z[i],true);
-        return;
-    }
-    if (!sleeping_last) { sleep_clock_ms=0; z_last_ms=0; }
-    else sleep_clock_ms=fmod(sleep_clock_ms+elapsed/(RB_PLAYBACK_DURATION_SCALE*(pet->lazy?1.30:1.0)),4200.0);
-    sleeping_last=true;
-    if (z_last_ms && pet->now-z_last_ms<50) return;
-    z_last_ms=pet->now;
-    for (unsigned i=0;i<3;++i) {
-        unsigned age=((unsigned)sleep_clock_ms+4200-i*1400)%4200;
-        bool visible=age<2800 && !settings_open;
-        hidden(sleep_z[i],!visible);
-        if (!visible) continue;
-        float p=age/2800.0f;
-        int scale=(int)lroundf((24-16*p)*256/12);
-        lv_obj_set_style_transform_scale(sleep_z[i],scale,0);
-        lv_obj_set_pos(sleep_z[i],226+(int)lroundf(33*p),110-(int)lroundf(59*p));
-        lv_obj_set_style_text_opa(sleep_z[i],(lv_opa_t)lroundf(230*fminf(1,age/120.0f)*powf(1-p,.8f)),0);
-    }
 }
 static void touch(lv_event_t *event)
 {
@@ -167,9 +137,9 @@ void rb_ui_create(rb_pet_t *engine)
 {
     pet=engine; settings_open=false; restore_gesture=RESTORE_NONE; body_frame=UINT32_MAX; body_updates=0;
     wake_armed=false;
-    last_body_ms=feedback_ms=0; feedback_pending=false; anchor=&rb_frames[0];
-    effects_last_ms=pet->now; z_last_ms=0; sleep_clock_ms=0; sleeping_last=false;
-    wake_start_frame=UINT32_MAX;
+    feedback_ms=0; feedback_pending=false; anchor=&rb_frames[0];
+    animation_last_ms=pet->now; idle_clock_ms=0; previous_clip=UINT32_MAX;
+    previous_action=RB_ANIM_COUNT;
     lv_obj_t *root=lv_screen_active(); lv_obj_clean(root); lv_obj_remove_style_all(root);
     lv_obj_set_style_bg_color(root,lv_color_hex(0xf8f7ef),0); lv_obj_set_style_bg_opa(root,LV_OPA_COVER,0);
     lv_obj_remove_flag(root,LV_OBJ_FLAG_SCROLLABLE);
@@ -190,24 +160,9 @@ void rb_ui_create(rb_pet_t *engine)
     hidden(status_label,true);
     contact_mark=box(root,0,0,8,8,0xcbe83c,LV_RADIUS_CIRCLE);
     hidden(contact_mark,true);
-    body=lv_image_create(root); lv_obj_set_pos(body,80,40); lv_obj_remove_flag(body,LV_OBJ_FLAG_CLICKABLE);
+    body=lv_image_create(root); lv_obj_set_pos(body,RB_FRAME_X,RB_FRAME_Y); lv_obj_remove_flag(body,LV_OBJ_FLAG_CLICKABLE);
     placeholder=text(root,146,109,"...");
-    for (unsigned i=0;i<RB_QUESTION_COUNT;++i) {
-        const rb_question_meta_t *q=&rb_questions[i];
-        questions[i]=text(root,q->x,q->y,"?");
-        lv_obj_set_style_text_color(questions[i],lv_color_hex(0x46542a),0);
-        lv_obj_set_style_transform_pivot_x(questions[i],0,0);
-        lv_obj_set_style_transform_pivot_y(questions[i],0,0);
-        lv_obj_set_style_transform_scale(questions[i],q->size*256/12,0);
-        hidden(questions[i],true);
-    }
-    for (unsigned i=0;i<3;++i) {
-        sleep_z[i]=text(root,226,110,"Z");
-        lv_obj_set_style_text_color(sleep_z[i],lv_color_hex(0x698538),0);
-        lv_obj_set_style_transform_pivot_x(sleep_z[i],0,0);
-        lv_obj_set_style_transform_pivot_y(sleep_z[i],0,0);
-        hidden(sleep_z[i],true);
-    }
+    lv_obj_move_foreground(status_label);
     lv_obj_move_foreground(contact_mark);
     lv_obj_t *hit=box(root,0,0,320,240,0,0); lv_obj_set_style_bg_opa(hit,LV_OPA_TRANSP,0);
     lv_obj_add_flag(hit,LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_PRESS_LOCK); lv_obj_add_event_cb(hit,touch,LV_EVENT_ALL,NULL);
@@ -227,33 +182,26 @@ void rb_ui_update(void)
     bool stopped=pet->state==RB_PET_STOPPED;
     bool rest=resting();
     if (rest) feedback_pending=false;
-    sleep_effects(stopped);
-    if (body_frame==UINT32_MAX || (!stopped && pet->now-last_body_ms>=(1000u+RB_BODY_FPS-1)/RB_BODY_FPS)) {
+    uint64_t elapsed=pet->now>=animation_last_ms?pet->now-animation_last_ms:0;
+    animation_last_ms=pet->now;
+    /* Inspect the GIF clock at UI-timer cadence. A separate 125ms throttle
+       would skip authored 120/130ms GIF boundaries and alter their pacing. */
+    if (body_frame==UINT32_MAX || !stopped) {
         unsigned origin=pet->action==RB_ANIM_IDLE?pet->pose:pet->origin;
         unsigned clip_index=rb_clip_map[origin][pet->action];
-        if (origin==RB_POSE_IDLE && pet->active_direction<0 && rb_clip_reverse[pet->action])
-            clip_index=rb_clip_reverse[pet->action];
         const rb_clip_meta_t *clip=&rb_clips[clip_index];
-        unsigned n=0,phase=(unsigned)(fmaxf(0,fminf(1,pet->phase))*1000);
-        while (n+1<clip->count && clip->at[n+1]<=phase) ++n;
+        if (clip_index!=previous_clip || pet->action!=previous_action) idle_clock_ms=0;
+        else if (!stopped && pet->action==RB_ANIM_IDLE) idle_clock_ms+=elapsed;
+        previous_clip=clip_index; previous_action=pet->action;
+        unsigned phase_ms;
+        if (pet->action==RB_ANIM_IDLE) {
+            phase_ms=clip->duration_ms?(unsigned)(idle_clock_ms%clip->duration_ms):0;
+        } else {
+            phase_ms=(unsigned)(fmaxf(0,fminf(1,pet->phase))*clip->duration_ms);
+        }
+        unsigned n=0;
+        while (n+1<clip->count && clip->at[n+1]<=phase_ms) ++n;
         unsigned frame=clip->frames[n];
-#ifdef RB_SLEEP_FRAME_FIRST
-        if (sleeping_last) {
-            static const unsigned at[]={0,500,1000,1600,2100,2800,3500};
-            static const unsigned key[]={0,1,2,3,2,1,0};
-            unsigned k=0;
-            while (k+1<7 && at[k+1]<=(unsigned)sleep_clock_ms) ++k;
-            frame=RB_SLEEP_FRAME_FIRST+key[k];
-        } else if (pet->action==RB_ANIM_WAKE && pet->origin==RB_POSE_REST &&
-                   phase<156 && wake_start_frame<RB_FRAME_COUNT) {
-            frame=wake_start_frame;
-        }
-#endif
-        /* Idle blink/attention use authored facial poses. */
-        if (pet->action==RB_ANIM_IDLE && pet->pose==RB_POSE_IDLE) {
-            if (pet->blink) frame=RB_FRAME_IDLE_BLINK;
-            else if (pet->contact) frame=RB_FRAME_IDLE_ATTENTION;
-        }
         if (frame!=body_frame) {
             const lv_image_dsc_t *image=rb_assets_frame(frame,&anchor);
             hidden(body,!image); hidden(placeholder,image!=NULL);
@@ -266,7 +214,6 @@ void rb_ui_update(void)
             rb_pet_set_claw_region(pet,claw);
             body_frame=frame;
         }
-        last_body_ms+=(pet->now-last_body_ms)/((1000u+RB_BODY_FPS-1)/RB_BODY_FPS)*((1000u+RB_BODY_FPS-1)/RB_BODY_FPS);
     }
     label_text(style_label,pet->lazy?"慵懒":"活泼");
     label_text(rest_label,"休息");
@@ -290,15 +237,6 @@ void rb_ui_update(void)
     hidden(contact_mark,!pet->contact || stopped || settings_open || rest);
     if (pet->contact && !stopped && !settings_open)
         lv_obj_set_pos(contact_mark,pet->raw_x-4,pet->raw_y-4);
-    unsigned question_phase=(unsigned)(fmaxf(0,fminf(1,pet->phase))*1000);
-    for (unsigned i=0;i<RB_QUESTION_COUNT;++i) {
-        const rb_question_meta_t *q=&rb_questions[i];
-        bool visible=!stopped && !settings_open && pet->action==RB_ANIM_TILT &&
-                     question_phase>=q->start && question_phase<q->end;
-        hidden(questions[i],!visible);
-        if (visible) lv_obj_set_pos(questions[i],q->x,
-            q->y-(int)(4*(question_phase-q->start)/(q->end-q->start)));
-    }
     if (feedback_pending && pet->contact) { feedback_ms=pet->now-raw_down_at; feedback_pending=false; }
 }
 unsigned rb_ui_body_updates(void) { return body_updates; }

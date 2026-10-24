@@ -1,0 +1,22 @@
+Use case: identity-preserve animated character sprite atlas.
+Input 1 is the character sheet defining THREE FACIAL EXPRESSIONS ONLY: standby with two bright vertical oval eyes, happy with two upward curved smiling eyes, curious with eyes glancing up and a cocked head. Do NOT copy the small two-joint robots' simplified body.
+Input 2 is the EXACT three-joint robot BODY IDENTITY. Keep THREE separate visible silver circular caps at all times: shoulder above the base, elbow halfway up the rear link, wrist beside the head. All three caps visible and separated in every pose. Same lime shell, dark rigid links, black glossy face, two black claw fingers. No extra joints.
+Create one square atlas, exactly 4 columns x4 rows, 16 equal square cells, no separators or margins, no text, symbols or shadows. Plain ivory #F8F7EF in every cell. Entire robot fits every cell. Fixed orthographic 3/4 side camera facing right, identical scale throughout, base in same position and same size every cell. At normalized cell size256: base bottom240, base width118, center x110. Physical head dimensions and silver cap diameters remain constant. Articulated movement only. No zoom, body stretching, pulsing size, viewpoint mirroring.
+Three charming expressions in a connected sequence:
+0 standby relaxed original three-joint posture, two vertical glowing oval eyes matching reference standby.
+1 gently half blink.
+2 return standby oval eyes.
+3 eyes begin to smile, shoulder/elbow start opening.
+4 happy smile eyes, head up and arm modestly more open, claws lifted in front.
+5 happy peak, open confident comfortable posture (not bent/hunched), two upward smile arcs and blush as reference happy, three joints distinct.
+6 ease out of happy posture.
+7 standby original posture with oval eyes.
+8 curious preparation, eyes glance diagonally upward right.
+9 head begins gentle side tilt, eyes look up.
+10 clear curious cocked head, thoughtful upward gaze matching reference curious, all three joints still visible.
+11 hold curious, slight brow asymmetry.
+12 head returns halfway.
+13 original standby oval eyes.
+14 brief half blink.
+15 exact same standby pose and expression as cell0.
+Keep face and head shell intact, no crop seams, no cut eyes. The expression difference must be readable at 160px robot size: standby OVAL EYES, happy CHEERFUL UPWARD ARCS, curious UPWARD LOOKING CRESCENTS plus tilted head. Empty arm gaps are ivory background. No sleepy expression, no added mouth, no new body style.
