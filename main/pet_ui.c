@@ -1,5 +1,6 @@
 #include "pet_ui.h"
 #include "pet_assets.h"
+#include "choreo_ui.h"
 #include "lvgl.h"
 #include <math.h>
 #include <stdint.h>
@@ -17,6 +18,7 @@ static uint64_t animation_last_ms, idle_clock_ms;
 static unsigned previous_clip;
 static rb_pet_action_t previous_action;
 static bool settings_open;
+static bool choreography_requested;
 /* Decide on touch-down, so holding Pause cannot also restore that pause. */
 static enum { RESTORE_NONE, RESTORE_CLICK, RESTORE_HOLD } restore_gesture;
 static uint64_t feedback_ms,raw_down_at;
@@ -50,6 +52,7 @@ static bool resting(void)
 }
 static void touch(lv_event_t *event)
 {
+    if (rb_choreo_ui_active() || choreography_requested) return;
     lv_event_code_t code=lv_event_get_code(event);
     if (code==LV_EVENT_PRESS_LOST || code==LV_EVENT_INDEV_RESET) {
         rb_pet_input(pet,false,0,0,rb_platform_now_ms()); rb_pet_cancel(pet); feedback_pending=false; return;
@@ -72,6 +75,7 @@ static void touch(lv_event_t *event)
 }
 static void button_event(lv_event_t *event)
 {
+    if (rb_choreo_ui_active() || choreography_requested) return;
     intptr_t id=(intptr_t)lv_event_get_user_data(event);
     lv_event_code_t code=lv_event_get_code(event);
     if (code==LV_EVENT_PRESS_LOST || code==LV_EVENT_INDEV_RESET) {
@@ -115,6 +119,10 @@ static void button_event(lv_event_t *event)
     } else if (code==LV_EVENT_CLICKED) {
         rb_pet_cancel(pet); feedback_pending=false;
         if (id==0) settings_open=!settings_open;
+        else if (id==6) {
+            choreography_requested=true;
+            if (indev) lv_indev_wait_release(indev);
+        }
         else if (pet->state!=RB_PET_STOPPED) {
             if (id==1) pet->lazy=!pet->lazy;
             if (id==2) { rb_pet_rest(pet); settings_open=false; }
@@ -122,6 +130,16 @@ static void button_event(lv_event_t *event)
     }
     /* STOP has immediate overlay feedback, but never loads a different pose. */
     rb_ui_update();
+}
+static void choreography_closed(void *context)
+{
+    (void)context;
+    uint64_t now=rb_platform_now_ms();
+    rb_pet_resume(pet,now);
+    rb_pet_input(pet,false,0,0,now);
+    animation_last_ms=now;body_frame=UINT32_MAX;
+    settings_open=false;feedback_pending=false;
+    restore_gesture=RESTORE_NONE;wake_armed=false;
 }
 static lv_obj_t *button(lv_obj_t *parent,int x,int y,int w,int h,const char *label,intptr_t id,uint32_t color)
 {
@@ -137,6 +155,7 @@ void rb_ui_create(rb_pet_t *engine)
 {
     pet=engine; settings_open=false; restore_gesture=RESTORE_NONE; body_frame=UINT32_MAX; body_updates=0;
     wake_armed=false;
+    choreography_requested=false;
     feedback_ms=0; feedback_pending=false; anchor=&rb_frames[0];
     animation_last_ms=pet->now; idle_clock_ms=0; previous_clip=UINT32_MAX;
     previous_action=RB_ANIM_COUNT;
@@ -166,9 +185,11 @@ void rb_ui_create(rb_pet_t *engine)
     lv_obj_move_foreground(contact_mark);
     lv_obj_t *hit=box(root,0,0,320,240,0,0); lv_obj_set_style_bg_opa(hit,LV_OPA_TRANSP,0);
     lv_obj_add_flag(hit,LV_OBJ_FLAG_CLICKABLE|LV_OBJ_FLAG_PRESS_LOCK); lv_obj_add_event_cb(hit,touch,LV_EVENT_ALL,NULL);
-    settings=box(root,169,82,143,102,0xfffef7,14); lv_obj_add_flag(settings,LV_OBJ_FLAG_CLICKABLE);
-    style_label=button(settings,8,8,127,40,"活泼",1,0xe8edda);
-    rest_label=button(settings,8,54,127,40,"休息",2,0xeeeee3);
+    settings=box(root,169,36,143,148,0xfffef7,14); lv_obj_add_flag(settings,LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_t *choreo=button(settings,8,8,127,40,"编排",6,0xd8ef79);
+    lv_obj_set_style_text_font(choreo,&rb_room_font,0);
+    style_label=button(settings,8,54,127,40,"活泼",1,0xe8edda);
+    rest_label=button(settings,8,100,127,40,"休息",2,0xeeeee3);
     lv_obj_set_style_text_font(style_label,&rb_room_font,0);
     lv_obj_set_style_text_font(rest_label,&rb_room_font,0);
     stop_label=button(root,8,192,44,40,LV_SYMBOL_PAUSE,3,0xeee7dd);
@@ -179,6 +200,18 @@ void rb_ui_create(rb_pet_t *engine)
 void rb_ui_update(void)
 {
     if (!pet) return;
+    if (choreography_requested) {
+        choreography_requested=false;settings_open=false;feedback_pending=false;
+        rb_pet_suspend(pet,rb_platform_now_ms());
+        hidden(settings,true);hidden(contact_mark,true);
+        rb_choreo_ui_open(lv_screen_active(),choreography_closed,NULL,pet->now);
+    }
+    if (rb_choreo_ui_active()) {
+        if (pet->state==RB_PET_STOPPED && (!pet->stop_reason || strcmp(pet->stop_reason,"SCREEN STOP")))
+            rb_choreo_ui_fault();
+        rb_choreo_ui_update(rb_platform_now_ms());
+        if (rb_choreo_ui_active()) return;
+    }
     bool stopped=pet->state==RB_PET_STOPPED;
     bool rest=resting();
     if (rest) feedback_pending=false;

@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / 'tools'))
 from export_gifs_v2 import RESAMPLE, compose_idle, prepare
 
-directory = ROOT / 'assets/gifs-v2'
+directory = ROOT / 'assets/gifs/daily'
 manifest = json.loads((directory / 'manifest.json').read_text())
 for clip in manifest['clips']:
     path = directory / clip['file']
@@ -41,7 +41,7 @@ with Image.open(directory / idle['file']) as gif:
     assert checked >= 2
 
 # Compositing must not animate the shell/body or crop through the eye again.
-sheet = Image.open(ROOT / 'assets/design/interaction-v3-8fps/idle-atlas.png').convert('RGB')
+sheet = Image.open(ROOT / 'assets/images/source/daily/base/idle-atlas.png').convert('RGB')
 sheet = sheet.resize((640, 640), RESAMPLE.LANCZOS)
 poses = [prepare(sheet.crop((i%4*160, i//4*160, i%4*160+160, i//4*160+160)), True)[0]
          for i in range(16)]
@@ -53,11 +53,11 @@ for frame in rendered:
 
 # Reviewed arm-gap locations must reveal the actual room after GIF decoding,
 # including gaps that become enclosed during a gesture. Allow palette error.
-room = Image.open(ROOT / 'assets/design/room-v1/room.png').convert('RGB').resize((320, 240), RESAMPLE.LANCZOS)
+room = Image.open(ROOT / 'assets/images/source/room/room.png').convert('RGB').resize((320, 240), RESAMPLE.LANCZOS)
 seeds = json.loads((ROOT / 'assets/config/preview_cavity_seeds.json').read_text())['atlases']
 checks = 0
 reports = [(directory, manifest)]
-expression_dir = directory / 'expressions-preview'
+expression_dir = ROOT / 'assets/gifs/expressions'
 reports.append((expression_dir, json.loads((expression_dir / 'manifest.json').read_text())))
 for folder, report in reports:
     for clip in report['clips']:

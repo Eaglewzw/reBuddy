@@ -1,0 +1,24 @@
+{
+  "status": "user_selected_keep",
+  "body_source": "assets/images/source/cat-v6/turntable.png",
+  "jaw_source": "assets/images/source/shared/gripper/jaws.png",
+  "body_cell_px": 724,
+  "body_render_px": 170,
+  "base_anchor": [160, 190],
+  "socket_centers": [[[502, 377], [551, 388]], [[449, 377], [512, 388]], [[424, 377], [482, 390]]],
+  "baked_jaws": [0],
+  "jaw_crops": [[290, 195, 750, 747], [1027, 194, 1488, 745]],
+  "jaw_pivots": [[501, 242], [1275, 241]],
+  "jaw_setup_scale": 0.17,
+  "jaw_motion": [
+    {"kind": "fixed", "rest_deg": 160},
+    {"kind": "sine", "rest_deg": 150, "amplitude_deg": 45, "period_ms": 500, "phase_rad": -1.5707963267948966}
+  ],
+  "view_indices": [1,0,0,1,1,2,2,1,1,0,0,1,1,2,2,1],
+  "review_frames": [0,1,2,3,5,6],
+  "fps": 8,
+  "duration_ms": 2000,
+  "output_file": "01_左夹指捂鼻_右夹指快挥.gif",
+  "motion_description": "viewer-left original jaw tip fixed across nose; viewer-right original jaw tip fans upward beside face every 500ms to disperse smell; base yaw loop 1000ms",
+  "note": "Independent preview, original two jaw tips only. Fixed scales. Three discrete yaw samples; not a calibrated motor trajectory."
+}

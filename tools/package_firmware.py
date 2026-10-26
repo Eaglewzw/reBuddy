@@ -55,7 +55,8 @@ for relative in ['LICENSE', 'assets/docs/THIRD_PARTY_NOTICES.md',
                  'assets/animation/manifest.json', 'assets/fonts/OFL.txt',
                  'assets/docs/GETTING_STARTED.md', 'assets/docs/HARDWARE.md',
                  'assets/docs/TESTING.md', 'assets/docs/ACCEPTANCE.md', 'assets/docs/DISPLAY_PERFORMANCE.md',
-                 'assets/previews/current.png', 'assets/previews/claw-petting-guide.svg',
+                 'assets/docs/CHOREOGRAPHY.md', 'assets/images/previews/choreography.png',
+                 'assets/images/previews/current.png', 'assets/images/previews/claw-petting-guide.svg',
                  'assets/verification/current.json']:
     destination=out/relative
     destination.parent.mkdir(parents=True,exist_ok=True)
@@ -66,9 +67,12 @@ manifest = {
     'interaction_revision': assets.get('interaction_revision'),
     'animation_playback': behavior['animation_playback'],
     'animation_compression': assets.get('compression'),
-    'ui_revision': 'touch-only', 'mode': 'screen_touch_gif_v2', 'hardware_tested': False,
+    'ui_revision': 'choreography-v1', 'mode': 'screen_touch_and_choreography_preview', 'hardware_tested': False,
+    'choreography': {'slots': 10, 'max_steps': 8, 'schema_version': 1,
+                    'available_actions': verification['choreography']['available_actions'],
+                    'wait_block': True, 'motor_playback': False, 'cat_demo_ms': 12000},
     'visual_status': assets['visual_status'],
-    'animation_source': 'assets/gifs-v2', 'animation_fps': 8,
+    'animation_source': 'assets/gifs', 'animation_fps': 8,
     'animation_unique_frames': assets['unique_frames'],
     'animation_bytes': assets['bytes'], 'room_sha256': assets['room_sha256'],
     'input_mode': 'touch_only', 'physical_keys': False, 'gpio_estop_input': False,
@@ -100,13 +104,16 @@ exec "$flash_python" -m esptool --chip esp32c5 --port "$1" --baud 460800 --befor
 '''.replace('vSDK','v'+sdk_version)
 (out/'flash.sh').write_text(script)
 (out/'flash.sh').chmod(0o755)
-preview=ROOT/'assets/previews/current.png'
+preview=ROOT/'assets/images/previews/current.png'
 if preview.exists(): shutil.copy2(preview,out/'ui-preview.png')
 (out/'README.txt').write_text(
     f'reBuddy {description["project_version"]} / touch-only / ESP32-C5 / ESP-IDF {sdk_version}\n'
     f'当前新版 GIF 动画：{assets["unique_frames"]} 张去重帧，表情、问号和睡眠 Z 均来自当前 GIF。\n'
     f'平均 8 FPS，开心回应 8 秒；全局时长倍率 {behavior["animation_playback"]["duration_scale"]}，活泼与慵懒暂时均为 1.0 倍，触摸识别时限独立。\n'
     '直接触摸角色互动；左下暂停/继续，右下设置；没有英文状态栏。\n'
+    '设置→编排：编辑、预览并保存作品，每段最多 8 步，保存 10 段；十二类动作及等待均可用。\n'
+    '活力律动为 20 秒可编辑舞蹈；猫步律动为 12 秒独立 reBot 展示，不占保存名额。\n'
+    '编排仅使用当前屏幕动画；保存后断电保留，加载不自动播放。详见 assets/docs/CHOREOGRAPHY.md。\n'
     '硬件：XIAO ESP32-C5 CAN Console，8 MiB Flash / 8 MiB Quad PSRAM。\n'
     '已通过主机测试与编译，尚未实际烧录或完成实机 30 分钟验证。\n'
     '在本目录执行：./flash.sh /dev/ttyACM0（将串口替换成实际设备）。\n'

@@ -7,7 +7,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 ROOT=Path(__file__).resolve().parents[1]
-DESIGN=ROOT/'assets/design/interaction-v3-8fps'
+DESIGN=ROOT/'assets/images/source/daily/base'
 BG=(248,247,239)
 RESAMPLE=getattr(Image,'Resampling',Image)
 
@@ -122,13 +122,14 @@ def check_cavity_source(name,path):
         if expected:assert sha(path)==expected, f'Review arm-gap seeds after changing {name}'
 
 def main():
-    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=ROOT/'assets/gifs-v2');args=parser.parse_args()
-    out=args.output.resolve();old=ROOT/'assets/gifs'
-    if out==old or old in out.parents: raise SystemExit('Refusing to overwrite current GIFs')
+    parser=argparse.ArgumentParser();parser.add_argument('--output',type=Path,default=ROOT/'assets/gifs/daily');args=parser.parse_args()
+    out=args.output.resolve();gif_root=ROOT/'assets/gifs'
+    if (out==gif_root or gif_root in out.parents) and out!=gif_root/'daily':
+        raise SystemExit('Daily exports belong in assets/gifs/daily; refusing to overwrite other GIF categories')
     protected=[ROOT/'assets/animation/frames.bin',ROOT/'assets/animation/manifest.json',ROOT/'main/pet_animation_table.c',ROOT/'main/pet_animation_table.h']
     before={str(p.relative_to(ROOT)):sha(p) for p in protected if p.is_file()}
     cfg=json.loads((DESIGN/'timing.json').read_text());out.mkdir(parents=True,exist_ok=True)
-    room=Image.open(ROOT/'assets/design/room-v1/room.png').convert('RGB').resize((320,240),RESAMPLE.LANCZOS)
+    room=Image.open(ROOT/'assets/images/source/room/room.png').convert('RGB').resize((320,240),RESAMPLE.LANCZOS)
     crop=room.crop((80,40,240,200));atlases={};metadata={};sources={}
     qa=ROOT/'build/gifs-v2-qa';qa.mkdir(parents=True,exist_ok=True)
     for name in sorted({c['atlas'] for c in cfg['clips']}):
@@ -142,7 +143,7 @@ def main():
         assert grid in (2,4)
         sheet=source.resize((grid*160,grid*160),RESAMPLE.LANCZOS);poses=[];meta=[]
         for i in range(grid*grid):
-            clear=name in ('probe','probe-look-up','nuzzle','nuzzle-clearer','nuzzle-storyboard','nuzzle-cheek','tilt','tilt-clear','happy','happy-open','happy-pose','happy-symmetric-clap','happy-rise-clap','idle') or (name=='withdraw' and i<7) or (name=='recover' and i>6) or (name=='rest' and i<8)
+            clear=name in ('probe-look-up','nuzzle-cheek','tilt-clear','happy-rise-clap','idle') or (name=='withdraw' and i<7) or (name=='recover' and i>6) or (name=='rest' and i<8)
             im,record=prepare(sheet.crop((i%grid*160,i//grid*160,i%grid*160+160,i//grid*160+160)),clear,cavity_seeds_for(name,i))
             poses.append(im);meta.append(record)
         if name=='idle':

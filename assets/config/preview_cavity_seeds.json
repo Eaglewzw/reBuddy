@@ -127,56 +127,6 @@
         ]
       ]
     },
-    "tilt": {
-      "0": [
-        [
-          74,
-          80
-        ]
-      ],
-      "1": [
-        [
-          75,
-          80
-        ]
-      ],
-      "2": [
-        [
-          75,
-          80
-        ]
-      ],
-      "3": [
-        [
-          75,
-          80
-        ]
-      ],
-      "4": [
-        [
-          74,
-          80
-        ]
-      ],
-      "5": [
-        [
-          74,
-          80
-        ]
-      ],
-      "6": [
-        [
-          74,
-          80
-        ]
-      ],
-      "7": [
-        [
-          74,
-          80
-        ]
-      ]
-    },
     "withdraw": {
       "0": [
         [
@@ -287,38 +237,6 @@
       "15": [
         [
           81,
-          75
-        ]
-      ]
-    },
-    "happy-pose": {
-      "0": [
-        [
-          80,
-          77
-        ]
-      ],
-      "2": [
-        [
-          89,
-          81
-        ]
-      ],
-      "4": [
-        [
-          95,
-          75
-        ]
-      ],
-      "5": [
-        [
-          93,
-          75
-        ]
-      ],
-      "6": [
-        [
-          95,
           75
         ]
       ]
@@ -443,32 +361,6 @@
         ]
       ]
     },
-    "happy-symmetric-clap": {
-      "0": [
-        [
-          85,
-          60
-        ]
-      ],
-      "1": [
-        [
-          85,
-          60
-        ]
-      ],
-      "2": [
-        [
-          85,
-          60
-        ]
-      ],
-      "3": [
-        [
-          85,
-          60
-        ]
-      ]
-    },
     "tilt-clear": {
       "0": [
         [
@@ -572,14 +464,11 @@
     "idle": "198b3e9070bf08a1035e0304fce6e3c6a582ed2f44f354429fdcd63ed0bc47c5",
     "probe-look-up": "85b73e416d35d8bb511b569e3753c8059554a94e2e155d147a3cef0dad931c36",
     "nuzzle-cheek": "984ca86497f474bc20168c7a804a34bcbbe7457c68d6a75ab28a6f768a25b0ae",
-    "tilt": "c420945deab99707440c2d48bd56647bae4b492d729234e73b14bbc568344f7d",
     "withdraw": "0caa0acf5145b0c0694dc208b293644b522cc580e1e0be8a1a2c44105d3e6450",
     "recover": "792cee7dad8575a30c881439696497f4142de6199cd1b34179ddd4b3c9138115",
-    "happy-pose": "d897be7bd438e2c24bd87482e22154ad7173b46dd61a3e3ef4f27969d0c96deb",
     "rest": "261384b6ecc0beb4552fefaecfd6b6361b949820719daa584f3c584d182c489e",
     "breath": "2e3dcfa52a7e126c9f757e18edcc2d9c1e390ec88a521efd73a1e631879684c5",
     "three-joint-expressions": "29e1229dfcfc61cd4fdd75f240aa299af46f0eb14d88e8dba7defd0fb8f69a37",
-    "happy-symmetric-clap": "cbe3bf3d159afa8290bb792af1d2b985b520d711994faa49d00c9440707ac54e",
     "tilt-clear": "f4288d201284530b2b562794f865f4f4bb4394f1c4c4ab0edd0cb91e352f507e",
     "happy-rise-clap": "d8867e85fe9016585025f6419c650355b847552c60141c4c26eaf4aa5a4fa0ee"
   }

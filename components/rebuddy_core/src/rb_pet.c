@@ -43,7 +43,7 @@ static bool on_claw(const rb_pet_t *p,int x,int y)
 }
 static bool allowed(const rb_pet_t *p,rb_pet_action_t a)
 {
-    if (p->state==RB_PET_STOPPED) return false;
+    if (p->suspended || p->state==RB_PET_STOPPED) return false;
     if (a==RB_ANIM_WAKE) return true;
     if (p->state==RB_PET_RESTING) return false;
     if (a==RB_ANIM_WITHDRAW || a==RB_ANIM_REST) return true;
@@ -135,14 +135,62 @@ static void animate(rb_pet_t *p)
 }
 void rb_pet_cancel(rb_pet_t *p)
 {
+    if (p->suspended) return;
     p->contact=false; p->blocked=p->raw_down; p->consumed=false;
     clear_contact(p); clear_happy(p); p->soothe_ms=0; p->tap_count=0;
     p->last_interaction=p->release_at=p->now;
     if (p->pending_valid && priority(p->pending)<=4) p->pending_valid=false;
 }
+void rb_pet_suspend(rb_pet_t *p,uint64_t now)
+{
+    if (p->suspended || now<p->now) return;
+    /* Freeze the last displayed phase, rather than consuming queued gestures
+       or advancing an action while the user is entering the editor. */
+    p->suspended_at=p->now; p->suspended=true; p->now=now;
+    p->pending=RB_ANIM_IDLE; p->pending_source=RB_INPUT_TAP; p->pending_valid=false;
+    p->pending_direction=p->direction=1;
+    p->raw_down=p->contact=p->blocked=p->consumed=p->swiped=false;
+    p->resume_wait_release=false;
+    p->raw_x=p->raw_y=p->x=p->y=p->start_x=p->start_y=0;
+    p->previous_raw_x=p->previous_raw_y=0;
+    p->raw_changed=p->down_at=p->sampled=p->last_motion=p->last_gentle=p->release_at=0;
+    p->soothe_ms=p->tap_count=p->nuzzle_cycles=0;
+    clear_contact(p); clear_happy(p);
+    memset(p->positions,0,sizeof(p->positions));
+    memset(p->candidate,0,sizeof(p->candidate));
+    memset(p->happy_history,0,sizeof(p->happy_history));
+    memset(p->taps,0,sizeof(p->taps));
+    /* Cooldown and the active HAPPY latch are timing constraints, not
+       gesture credits. Keep them to avoid replaying HAPPY immediately. */
+    if (p->action!=RB_ANIM_HAPPY && p->now>=p->happy_cooldown_until) p->happy_latched=false;
+    if (!p->estop_released) rb_pet_stop(p,"E-STOP");
+}
+void rb_pet_resume(rb_pet_t *p,uint64_t now)
+{
+    if (!p->suspended || now<p->now) return;
+    uint64_t pause=now-p->suspended_at;
+    if (p->action!=RB_ANIM_IDLE) p->started+=pause;
+    if (p->returning) p->return_started+=pause;
+    p->last_interaction+=pause;
+    if (p->nuzzle_hold) p->nuzzle_hold+=pause;
+    if (p->happy_cooldown_until) p->happy_cooldown_until+=pause;
+    p->next_blink+=pause;
+    if (p->blink_until) p->blink_until+=pause;
+    p->now=now; p->suspended=false; p->suspended_at=0;
+    p->raw_changed=p->release_at=now;
+    p->resume_wait_release=true; p->blocked=true;
+    if (!p->estop_released) rb_pet_stop(p,"E-STOP");
+}
 void rb_pet_input(rb_pet_t *p,bool down,int x,int y,uint64_t now)
 {
-    if (now<p->now) return;
+    if (now<p->now || p->suspended) return;
+    if (p->resume_wait_release) {
+        if (!down) {
+            p->resume_wait_release=false; p->blocked=false;
+            p->raw_changed=p->release_at=now;
+        }
+        return;
+    }
     if (down!=p->raw_down) { p->raw_changed=now; p->raw_down=down; if (down && !inside(x,y)) p->blocked=true; }
     p->raw_x=x; p->raw_y=y;
     if (p->contact && down && !inside(x,y)) rb_pet_cancel(p);
@@ -284,7 +332,7 @@ void rb_pet_tick(rb_pet_t *p,uint64_t now)
     if (now<p->now) return;
     p->now=now;
     if (!p->estop_released) rb_pet_stop(p,"E-STOP");
-    if (p->state==RB_PET_STOPPED) return;
+    if (p->state==RB_PET_STOPPED || p->suspended) return;
     expire_happy(p);
     animate(p);
     if (now-p->last_gentle>RB_CFG_SOOTHE_RESET_PAUSE_MS) p->soothe_ms=0;
@@ -330,7 +378,7 @@ void rb_pet_estop(rb_pet_t *p,bool released)
 { p->estop_released=released; if (!released) rb_pet_stop(p,"E-STOP"); }
 bool rb_pet_reset(rb_pet_t *p,uint64_t now)
 {
-    if (p->state!=RB_PET_STOPPED || !p->estop_released || now<p->now) return false;
+    if (p->suspended || p->state!=RB_PET_STOPPED || !p->estop_released || now<p->now) return false;
     p->now=p->last_interaction=now; p->stop_reason=NULL;
     p->state=p->pose==RB_POSE_FOLDED?RB_PET_FOLDED:RB_PET_NORMAL;
     p->happy_latched=false; p->happy_cooldown_until=0;
@@ -341,6 +389,7 @@ bool rb_pet_reset(rb_pet_t *p,uint64_t now)
 }
 void rb_pet_rest(rb_pet_t *p)
 {
+    if (p->suspended) return;
     if (p->state==RB_PET_RESTING || p->action==RB_ANIM_REST ||
         (p->pending_valid && p->pending==RB_ANIM_REST)) return;
     rb_pet_cancel(p);
@@ -348,7 +397,7 @@ void rb_pet_rest(rb_pet_t *p)
 }
 void rb_pet_wake(rb_pet_t *p)
 {
-    if (p->state==RB_PET_STOPPED || !p->estop_released) return;
+    if (p->suspended || p->state==RB_PET_STOPPED || !p->estop_released) return;
     if (p->state!=RB_PET_RESTING && p->action!=RB_ANIM_REST &&
         !(p->pending_valid && p->pending==RB_ANIM_REST)) return;
     rb_pet_cancel(p);

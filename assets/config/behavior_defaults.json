@@ -58,11 +58,11 @@
   },
   "source_images": [
     {
-      "path": "assets/reference/character_reference.png",
+      "path": "assets/images/reference/character_reference.png",
       "sha256": "b42a5e1ee9da828628e7b29dae52c21bbc282a3349eebe447b3ea4dbf332fd1c"
     },
     {
-      "path": "assets/reference/interaction_storyboard.png",
+      "path": "assets/images/reference/interaction_storyboard.png",
       "sha256": "05d224aff1004a584e093d7e25842a05f21213aaa2006b0d7e0fffa75eab664a"
     }
   ],

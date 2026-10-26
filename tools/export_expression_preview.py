@@ -4,8 +4,8 @@ import json
 from PIL import Image, ImageDraw, ImageFont
 from export_gifs_v2 import BG, ROOT, RESAMPLE, prepare, sha, cavity_seeds_for, check_cavity_source
 
-DESIGN = ROOT / 'assets/design/three-joint-expressions'
-OUTPUT = ROOT / 'assets/gifs-v2/expressions-preview'
+DESIGN = ROOT / 'assets/images/source/expressions'
+OUTPUT = ROOT / 'assets/gifs/expressions'
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
         pose, record = prepare(cell, True, cavity_seeds_for('three-joint-expressions', i))
         poses.append(pose)
         registration.append(record)
-    room = Image.open(ROOT / 'assets/design/room-v1/room.png').convert('RGB').resize((320, 240), RESAMPLE.LANCZOS)
+    room = Image.open(ROOT / 'assets/images/source/room/room.png').convert('RGB').resize((320, 240), RESAMPLE.LANCZOS)
     font = ImageFont.truetype('/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf', 18)
     OUTPUT.mkdir(parents=True, exist_ok=True)
     legacy = OUTPUT / '三关节_待机_开心_好奇.gif'

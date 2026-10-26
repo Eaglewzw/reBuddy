@@ -5,7 +5,7 @@
 | `python3 tools/generate_pet_config.py` | 当前行为 JSON → `rb_pet_config.h`；`--check` 只检查 |
 | `python3 tools/build_screen_preview.py` | 当前 10 个 GIF → 去重压缩的 RGB565 帧、小屋背景、清单与 C 帧表 |
 | `python3 tools/build_room_font.py` | Noto Sans CJK → 中文菜单字形子集 |
-| `python3 tools/export_gifs_v2.py` | 新版源图和时间轴 → `assets/gifs-v2/` 的 10 个动作 GIF |
+| `python3 tools/export_gifs_v2.py` | 新版源图和时间轴 → `assets/gifs/daily/` 的 10 个动作 GIF |
 | `python3 tools/export_expression_preview.py` | 三关节待机、开心、好奇 → 三个独立表情 GIF，不替换触摸动作 |
 | `python3 tools/render_approved_probe.py` | 已选 probe-v2 → `build/approved-probe-preview/`，不改运行资源 |
 | `python3 tools/render_previews.py build/host build/ui-preview` | 实际 LVGL 测试截图 → PNG |

@@ -1,0 +1,39 @@
+{
+  "source": "assets/images/source/dance/basic/cat-hand-v3/layers.png",
+  "layout": "two square cells: fixed robot with nose-covering finger; isolated moving finger",
+  "robot_pivot_px": [
+    666,
+    453
+  ],
+  "finger_pivot_px": [
+    275,
+    453
+  ],
+  "finger_rest_scale": 0.65,
+  "angles_deg": [
+    5,
+    25,
+    50,
+    70,
+    35,
+    -15
+  ],
+  "fixed_nose_box_px": [
+    510,
+    344,
+    616,
+    436
+  ],
+  "base_anchor_px": [
+    133,
+    189
+  ],
+  "base_panel_width_px": 36,
+  "motion": "one finger stays covering the central lower face for the entire loop; only the opposite finger rotates about its own hinge",
+  "finger_crop_px": [
+    220,
+    380,
+    520,
+    530
+  ]
+}

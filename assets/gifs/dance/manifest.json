@@ -1,0 +1,1151 @@
+{
+  "fps": 8,
+  "bpm": 120,
+  "canvas": [
+    320,
+    240
+  ],
+  "status": "screen_dance_pending_device_review",
+  "sources": {
+    "nod-pose": {
+      "path": "assets/images/source/dance/basic/nod-pose-atlas.png",
+      "sha256": "a5ab1efca1b231bfcabebea3e2e0f0061671cc9a24f08287d0c3e26cc5214415",
+      "grid": [
+        4,
+        4
+      ],
+      "constant_sampling_scale": 0.5814696485623003,
+      "cell_size_px": 182
+    },
+    "sway": {
+      "path": "assets/images/source/dance/basic/sway-atlas.png",
+      "sha256": "beb3fc0f05bedc1f3cd12fd77dedcd713d779d715cc7d236c24ac6ea72bf7ec3",
+      "grid": [
+        2,
+        2
+      ],
+      "constant_sampling_scale": 0.2647527910685805,
+      "cell_size_px": 166
+    },
+    "claw": {
+      "path": "assets/images/source/dance/basic/claw-atlas.png",
+      "sha256": "cd0063659ffa27143a2c189127c499450889fdde8f43957485c1bac04a13e45d",
+      "grid": [
+        2,
+        2
+      ],
+      "constant_sampling_scale": 0.26156299840510366,
+      "cell_size_px": 164
+    },
+    "extra": {
+      "path": "assets/images/source/dance/basic/extra-atlas.png",
+      "sha256": "a5ccbe68214bdea75e6959a3375deeeb65c037f79e39eddbaa31c35706333b00",
+      "grid": [
+        3,
+        2
+      ],
+      "constant_sampling_scale": 0.3046875,
+      "cell_size_px": 156
+    },
+    "cat": {
+      "path": "assets/images/source/dance/basic/cat-hand-v3/layers.png",
+      "sha256": "916036654e18517bb58b331b9e1bbf9067c9217dd298c66e2e8faebd34e4c80c",
+      "grid": [
+        2,
+        1
+      ],
+      "constant_sampling_scale": 0.161217587373168,
+      "cell_size_px": 143,
+      "rig": "assets/images/source/dance/basic/cat-hand-v3/rig.json",
+      "rig_sha256": "ac522fc65e5af2de4a7d7755d4d0345670dc63ee33b839f94e0d6752cec23413"
+    },
+    "body-dance-v2": {
+      "path": "assets/images/source/dance/extended/body-atlas.png",
+      "sha256": "67dc229340fdea26932399dbf25d821739fb55f278db5c2cc09b09d2a7ca5e5e",
+      "rig": "assets/images/source/dance/extended/rig.json",
+      "rig_sha256": "b5c9d8a7a8ffb20729ef256d18d844b5ecaab25428f07e0d19b0e6b0ef3f84c9"
+    },
+    "yaw-dance-v2": {
+      "path": "assets/images/source/shared/gripper/turntable.png",
+      "sha256": "bda867e062e22f1157194d36a84cddb9b2864e32fc03fbed689adbd1fba66471",
+      "rig": "assets/images/source/shared/gripper/rig.json",
+      "rig_sha256": "0c50b58f313a211d0b2e289376347ca09402d4b4b1bb046e9af490c5a34e421f"
+    },
+    "jaw-dance-v2": {
+      "path": "assets/images/source/shared/gripper/jaws.png",
+      "sha256": "695c5849462ce9c81eb2f6cbf7c0eeacbd24e9a5a6ed53d7b18aecb7d71661ac",
+      "rig": "assets/images/source/dance/extended/rig.json",
+      "rig_sha256": "b5c9d8a7a8ffb20729ef256d18d844b5ecaab25428f07e0d19b0e6b0ef3f84c9"
+    }
+  },
+  "registration": {
+    "nod-pose": {
+      "0": {
+        "origin": [
+          75,
+          21
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "1": {
+        "origin": [
+          74,
+          21
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "2": {
+        "origin": [
+          74,
+          20
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "3": {
+        "origin": [
+          75,
+          21
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "12": {
+        "origin": [
+          70,
+          30
+        ],
+        "base_panel_width": 37,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "14": {
+        "origin": [
+          64,
+          30
+        ],
+        "base_panel_width": 38,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      }
+    },
+    "sway": {
+      "0": {
+        "origin": [
+          74,
+          32
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "1": {
+        "origin": [
+          85,
+          32
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "2": {
+        "origin": [
+          73,
+          40
+        ],
+        "base_panel_width": 37,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      }
+    },
+    "claw": {
+      "0": {
+        "origin": [
+          85,
+          43
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "1": {
+        "origin": [
+          92,
+          43
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "2": {
+        "origin": [
+          86,
+          44
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      }
+    },
+    "extra": {
+      "0": {
+        "origin": [
+          86,
+          42
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "1": {
+        "origin": [
+          88,
+          42
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "2": {
+        "origin": [
+          89,
+          42
+        ],
+        "base_panel_width": 35,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "3": {
+        "origin": [
+          86,
+          45
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "4": {
+        "origin": [
+          88,
+          45
+        ],
+        "base_panel_width": 35,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "5": {
+        "origin": [
+          89,
+          45
+        ],
+        "base_panel_width": 35,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      }
+    },
+    "cat": {
+      "0": {
+        "origin": [
+          88,
+          50
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "1": {
+        "origin": [
+          88,
+          50
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "2": {
+        "origin": [
+          88,
+          50
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "3": {
+        "origin": [
+          88,
+          50
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "4": {
+        "origin": [
+          88,
+          50
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      },
+      "5": {
+        "origin": [
+          88,
+          50
+        ],
+        "base_panel_width": 36,
+        "base_panel_anchor": [
+          133,
+          189
+        ]
+      }
+    },
+    "body-dance-v2": {
+      "0": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 98.12,
+        "origin": [
+          71,
+          28
+        ]
+      },
+      "1": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 97.68,
+        "origin": [
+          73,
+          28
+        ]
+      },
+      "2": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 100.32000000000001,
+        "origin": [
+          76,
+          28
+        ]
+      },
+      "3": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 99.0,
+        "origin": [
+          70,
+          12
+        ]
+      },
+      "4": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 101.64,
+        "origin": [
+          66,
+          11
+        ]
+      },
+      "5": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 99.88,
+        "origin": [
+          69,
+          12
+        ]
+      },
+      "6": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 105.6,
+        "origin": [
+          64,
+          10
+        ]
+      },
+      "7": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 103.4,
+        "origin": [
+          63,
+          10
+        ]
+      },
+      "8": {
+        "fixed_scale": 0.44,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 104.72,
+        "origin": [
+          71,
+          10
+        ]
+      }
+    },
+    "yaw-dance-v2": {
+      "0": {
+        "fixed_scale": 0.23480662983425415,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 99.79281767955801,
+        "origin": [
+          75,
+          28
+        ]
+      },
+      "1": {
+        "fixed_scale": 0.23480662983425415,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 98.14917127071824,
+        "origin": [
+          83,
+          28
+        ]
+      },
+      "2": {
+        "fixed_scale": 0.23480662983425415,
+        "floor_center": 160,
+        "floor_y": 190,
+        "floor_width": 99.08839779005525,
+        "origin": [
+          93,
+          28
+        ]
+      }
+    }
+  },
+  "clips": [
+    {
+      "id": "NOD",
+      "file": "01_节拍点头.gif",
+      "atlas": "nod-pose",
+      "grid": 4,
+      "duration_ms": 2000,
+      "keys": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "ticks": 16,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "604e7d7023f430ba83a82fb1f17d5bcf1b5cebbfaf87fda8e26caf38d5bd3c07"
+    },
+    {
+      "id": "SWAY",
+      "file": "02_活泼摇摆.gif",
+      "atlas": "sway",
+      "grid": 2,
+      "duration_ms": 4000,
+      "keys": [
+        [
+          1,
+          4
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          1,
+          4
+        ]
+      ],
+      "ticks": 32,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "fb3326354f3000770b7d11492065b772e9f5ca583d9093e0b70a7472c81f0a02"
+    },
+    {
+      "id": "CLAW_BEAT",
+      "file": "03_夹爪打拍.gif",
+      "atlas": "claw",
+      "grid": 2,
+      "duration_ms": 2000,
+      "keys": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "ticks": 16,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "3b4ba1fcb59fda858d8714d8e21ae2754d82325a7e1b70e33e1b90c6d136b444"
+    },
+    {
+      "id": "POSE",
+      "file": "04_舒展亮相.gif",
+      "atlas": "nod-pose",
+      "grid": 4,
+      "duration_ms": 4000,
+      "keys": [
+        [
+          0,
+          4
+        ],
+        [
+          12,
+          4
+        ],
+        [
+          14,
+          16
+        ],
+        [
+          12,
+          4
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "ticks": 32,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "6b8730ea67b77438872d3c165bbd9494f2a3d6eeafe66bbed0868623ad565a2c"
+    },
+    {
+      "id": "SHAKE",
+      "file": "05_俏皮摇头.gif",
+      "atlas": "extra",
+      "grid": [
+        3,
+        2
+      ],
+      "duration_ms": 2000,
+      "keys": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          0,
+          4
+        ]
+      ],
+      "ticks": 16,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "378be560a295edb55abf0a5176c2497e45400dc01aa4a5ca52b7c3adc941d477"
+    },
+    {
+      "id": "BOW",
+      "file": "06_礼貌鞠躬.gif",
+      "atlas": "extra",
+      "grid": [
+        3,
+        2
+      ],
+      "duration_ms": 4000,
+      "keys": [
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          5,
+          10
+        ],
+        [
+          4,
+          6
+        ],
+        [
+          3,
+          6
+        ]
+      ],
+      "ticks": 32,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "157dcbd6cb6663260ec09b61689bd1ac3b7782cac05a6cea778a96eeca0ad6b7"
+    },
+    {
+      "id": "CAT_DEMO",
+      "file": "cat-demo/01_猫步律动.gif",
+      "atlas": "cat",
+      "grid": [
+        2,
+        1
+      ],
+      "duration_ms": 2000,
+      "keys": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "ticks": 16,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "0b1f05c94bc36b1cdc1057c9d50741ddd95060f99b70e593a2e4695ff27337b1"
+    },
+    {
+      "id": "BASE_TURN",
+      "file": "07_底盘转拍.gif",
+      "atlas": "yaw-dance-v2",
+      "duration_ms": 2000,
+      "keys": [
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          2
+        ]
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "ticks": 16,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "152903291da29b0d879ac3020e7821b9b6901d1b2187f60e447833fac38e30e3"
+    },
+    {
+      "id": "SIDE_BEAT",
+      "file": "08_侧摆重拍.gif",
+      "atlas": "body-dance-v2",
+      "duration_ms": 2000,
+      "keys": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "ticks": 16,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "68f6261574da6d590795938eda2c83bb3177e13a031995b313eb20baf70008b1"
+    },
+    {
+      "id": "BOUNCE",
+      "file": "09_上下律动.gif",
+      "atlas": "body-dance-v2",
+      "duration_ms": 2000,
+      "keys": [
+        [
+          0,
+          2
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          0,
+          1
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "ticks": 16,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "aa45a0ab1aaea70f7eaede257c59a9411744b4c3398d557204b3469666723553"
+    },
+    {
+      "id": "ALTERNATE",
+      "file": "10_左右交替.gif",
+      "atlas": "alternating-v2",
+      "duration_ms": 2000,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ]
+      ],
+      "grid": [
+        3,
+        1
+      ],
+      "ticks": 16,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "0546fc383eb321a229d3d83c34b417069db2424b12366a4db288dc8336fdaed5"
+    },
+    {
+      "id": "WAVE",
+      "file": "11_连环波浪.gif",
+      "atlas": "body-dance-v2",
+      "duration_ms": 4000,
+      "keys": [
+        [
+          0,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          3,
+          3
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          6,
+          3
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "ticks": 32,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "85ccdb7eb127e52fa44fc7295377cecf4513dd9a1c3d0d233aa659a0c78f19e4"
+    },
+    {
+      "id": "FINALE",
+      "file": "12_舒展收拍.gif",
+      "atlas": "body-dance-v2",
+      "duration_ms": 4000,
+      "keys": [
+        [
+          0,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          7,
+          10
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          0,
+          5
+        ]
+      ],
+      "grid": [
+        3,
+        3
+      ],
+      "ticks": 32,
+      "loop": true,
+      "claw_key": "idle:0",
+      "sha256": "6dac467a9046dcba48829d7c273739da078830ae3636ab011884fb8f1a5fc615"
+    }
+  ],
+  "demo": {
+    "file": "00_活力律动_24秒.gif",
+    "duration_ms": 24000,
+    "sha256": "f9bb431495e568350eb59692e7beb8a6364a973a1418c99a790e05fc4dcfe97a"
+  },
+  "cat_hand_revision": 3,
+  "cat_fixed_base_box": [
+    0,
+    158,
+    320,
+    240
+  ],
+  "cat_fixed_nose_box": [
+    170,
+    105,
+    187,
+    120
+  ],
+  "geometry_policy": "Constant source scale; no animated scaling, warping or camera movement. Cat base, body and nose-covering finger share one fixed layer; only the opposite finger rotates about its hinge.",
+  "touch_policy": "Dance clips are preview-only; daily touch is suspended. Idle hitbox metadata is unused during preview."
+}

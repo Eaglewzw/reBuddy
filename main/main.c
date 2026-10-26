@@ -1,5 +1,6 @@
 #include "pet_ui.h"
 #include "pet_assets.h"
+#include "choreo_store.h"
 #include "rb_board.h"
 #include "rb_memory.h"
 #include "esp_log.h"
@@ -61,6 +62,8 @@ void app_main(void)
     ESP_LOGI("reBuddy","OTA slots=%u; animation blob=%u bytes",ota_slots,(unsigned)(frames_end-frames_start));
     rb_memory_log();
     rb_pet_init(&pet,rb_platform_now_ms()); rb_pet_set_sink(&pet,mock_action,NULL);
+    if (rb_choreo_store_init()!=RB_CHOREO_STORE_OK)
+        ESP_LOGW("reBuddy","Choreography storage unavailable; existing NVS data preserved");
     if (!rb_board_display_lock(0)) return;
     bool assets_ok=rb_assets_init(frames_start,(size_t)(frames_end-frames_start),2);
     if (!rb_assets_set_room(room_start,(size_t)(room_end-room_start)))

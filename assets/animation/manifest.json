@@ -8,27 +8,67 @@
     240
   ],
   "nominal_fps": 8,
-  "unique_frames": 134,
-  "bytes": 2529735,
+  "unique_frames": 177,
+  "bytes": 3393196,
   "face_mode": "baked",
   "effects_mode": "baked",
-  "source": "assets/gifs-v2/manifest.json",
-  "source_sha256": "ecd496f6e000fe12b1f68912d2630bc0fab78631a716dc6067e789800ecef4ca",
-  "room_source": "assets/design/room-v1/room.png",
+  "source": "assets/gifs/daily/manifest.json",
+  "source_sha256": "9d0c0d151c7edcc885171aa339e269bf2747a762d75eb35615aae57041da172c",
+  "dance_source": "assets/gifs/dance/manifest.json",
+  "dance_source_sha256": "6e16558d8c84a041a4e62ad4fd754b4d0f99d156b25e1e9d9ffb2ff3bc1e224b",
+  "choreography_clip_map": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    9,
+    10,
+    14,
+    11,
+    15,
+    12,
+    13,
+    255,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22
+  ],
+  "room_source": "assets/images/source/room/room.png",
   "room_source_sha256": "ea5190931cf62fbf9850b0f086dad54320c7ddfd37c4e481aeed55c17f392772",
   "room_bytes": 153612,
   "room_sha256": "b933877feee03b46e4106d1c3812632d580952a96c4970e537455976e0f9fb26",
   "source_gifs": [
-    "assets/gifs-v2/01_待机眨眼.gif",
-    "assets/gifs-v2/02_抬头看你.gif",
-    "assets/gifs-v2/03_轻蹭.gif",
-    "assets/gifs-v2/04_疑惑歪头.gif",
-    "assets/gifs-v2/05_害羞缩回.gif",
-    "assets/gifs-v2/06_安抚展开.gif",
-    "assets/gifs-v2/07_开心回应.gif",
-    "assets/gifs-v2/08_慢慢入睡.gif",
-    "assets/gifs-v2/09_熟睡呼吸与Z.gif",
-    "assets/gifs-v2/10_迷糊唤醒.gif"
+    "assets/gifs/daily/01_待机眨眼.gif",
+    "assets/gifs/daily/02_抬头看你.gif",
+    "assets/gifs/daily/03_轻蹭.gif",
+    "assets/gifs/daily/04_疑惑歪头.gif",
+    "assets/gifs/daily/05_害羞缩回.gif",
+    "assets/gifs/daily/06_安抚展开.gif",
+    "assets/gifs/daily/07_开心回应.gif",
+    "assets/gifs/daily/08_慢慢入睡.gif",
+    "assets/gifs/daily/09_熟睡呼吸与Z.gif",
+    "assets/gifs/daily/10_迷糊唤醒.gif",
+    "assets/gifs/dance/01_节拍点头.gif",
+    "assets/gifs/dance/02_活泼摇摆.gif",
+    "assets/gifs/dance/03_夹爪打拍.gif",
+    "assets/gifs/dance/04_舒展亮相.gif",
+    "assets/gifs/dance/05_俏皮摇头.gif",
+    "assets/gifs/dance/06_礼貌鞠躬.gif",
+    "assets/gifs/dance/cat-demo/01_猫步律动.gif",
+    "assets/gifs/dance/07_底盘转拍.gif",
+    "assets/gifs/dance/08_侧摆重拍.gif",
+    "assets/gifs/dance/09_上下律动.gif",
+    "assets/gifs/dance/10_左右交替.gif",
+    "assets/gifs/dance/11_连环波浪.gif",
+    "assets/gifs/dance/12_舒展收拍.gif"
   ],
   "frames": [
     {
@@ -3380,12 +3420,1087 @@
           112
         ]
       ]
+    },
+    {
+      "name": "NOD_000",
+      "offset": 2529735,
+      "bytes": 44630,
+      "sha256": "4164260468af54f1c52c6aa9c17cd2879b1082cc83cfca9b4d9d5dcc440473a1",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "NOD_002",
+      "offset": 2574365,
+      "bytes": 22273,
+      "sha256": "fd6ee9cde6bf9a5527ee7084fe900d6bceef6a29bc295b943f96d775922538b1",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "NOD_004",
+      "offset": 2596638,
+      "bytes": 23099,
+      "sha256": "9c122b7f297cf19ae36f60e27d6e2b575206ab28c4359fae93c66633b243c60d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "NOD_012",
+      "offset": 2619737,
+      "bytes": 21869,
+      "sha256": "41429cec8c5954372100e30f37f79804d721e8c1d14369e790952b205dfe51ac",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SWAY_000",
+      "offset": 2641606,
+      "bytes": 44539,
+      "sha256": "032faf36c624464448d239c2a02409a02afe32177f0880cae5d6287159e6dd84",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SWAY_004",
+      "offset": 2686145,
+      "bytes": 18586,
+      "sha256": "234a96d978982f3b3d6dc4b9cfc9f87087ebecac3ae3172457d4872841c739bf",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SWAY_010",
+      "offset": 2704731,
+      "bytes": 22199,
+      "sha256": "fb8f08a0f46df9c8012419c3373ec816f5034a7c76fc2b15e25053525e4833dc",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CLAW_BEAT_000",
+      "offset": 2726930,
+      "bytes": 44568,
+      "sha256": "a4a77e36114723bc90e3fa704a0bfe1227bdb63e4c1eb079f08daecd8e33c839",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CLAW_BEAT_002",
+      "offset": 2771498,
+      "bytes": 13046,
+      "sha256": "afcdd8221e7412ec40786f0fc52dc45b64379bfc235d153802960d9361626c86",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CLAW_BEAT_003",
+      "offset": 2784544,
+      "bytes": 15549,
+      "sha256": "4604aa045a0f0e098471925f0d9c06adbb2409c7484b637400d21a1c199aff3d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "POSE_004",
+      "offset": 2800093,
+      "bytes": 23395,
+      "sha256": "910e0f68aff4bfdc42cac70e7918889dea342e2f272289f53843acf474138c45",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "POSE_008",
+      "offset": 2823488,
+      "bytes": 23959,
+      "sha256": "64fcfa5411f8163698b304ef9113caf92377a547f7936a5916f02a05eb74be34",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SHAKE_000",
+      "offset": 2847447,
+      "bytes": 44472,
+      "sha256": "bce299f4ae08f77bbcb616d0a2eaa2aeb40e4c13cc6cc509658a13bf588f35af",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SHAKE_002",
+      "offset": 2891919,
+      "bytes": 18784,
+      "sha256": "824f523ab82d20b601f0c85d67dccd9d140432b28ffbf8a948f3f635c1d97f54",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SHAKE_008",
+      "offset": 2910703,
+      "bytes": 18011,
+      "sha256": "8bc15c226f930fc4479b0e3bc8cd1be8e4d4deeefbf0c0ac09b0d1a58b2c25bd",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "BOW_000",
+      "offset": 2928714,
+      "bytes": 44544,
+      "sha256": "121c2f77f848a6a23f60529a3ddcb9df243cd84d83ff3594bb2681f6a4b2cf2b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "BOW_004",
+      "offset": 2973258,
+      "bytes": 19905,
+      "sha256": "a8f0866e9a38e3da44992a9d41813c8def0feb5509fff28669aedc06a113f826",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "BOW_010",
+      "offset": 2993163,
+      "bytes": 20530,
+      "sha256": "496104e7ff0f401c65cc396416f9199389db6888ec1baa272ae1aca003226867",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CAT_DEMO_000",
+      "offset": 3013693,
+      "bytes": 44003,
+      "sha256": "88629f63f8d3b640b85adff8e099de9f7e8641bc81c45129cbb0ec4bc097754f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CAT_DEMO_002",
+      "offset": 3057696,
+      "bytes": 1290,
+      "sha256": "1125a871df4dce385299c6930e0caedeadfdc3a068ed4f62919c4641317b41d2",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CAT_DEMO_004",
+      "offset": 3058986,
+      "bytes": 1510,
+      "sha256": "0f490f06d37dbbc1b0763879ed9d115b9d6e9a12a413ec34e70650033b8ba219",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CAT_DEMO_006",
+      "offset": 3060496,
+      "bytes": 1580,
+      "sha256": "6d247fe62e3947a23979d18ac2ce59d44f5e8acf94cee40b86402073c957ddb2",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CAT_DEMO_009",
+      "offset": 3062076,
+      "bytes": 1418,
+      "sha256": "088b58baabf22721b6dc50920b65f82ab0715a0b1d660f62f6af826d9704fc02",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "CAT_DEMO_011",
+      "offset": 3063494,
+      "bytes": 1279,
+      "sha256": "3b20abf1332c50c79d26da5f2ec4a3c0f0ec1d6358a446be88b642db6122dc41",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "BASE_TURN_000",
+      "offset": 3064773,
+      "bytes": 44878,
+      "sha256": "101d92ed2d6fa1e5f56f707b1b3bec27fa7131c26e2fe3cd4c8ff497485aa981",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "BASE_TURN_002",
+      "offset": 3109651,
+      "bytes": 23463,
+      "sha256": "9e4c562c86d125979e826f47aa3d5e18ce3f587031e042a3a2f2ca22c460a6de",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "BASE_TURN_006",
+      "offset": 3133114,
+      "bytes": 20496,
+      "sha256": "d5ce0f9a26306e3c6d1c7cb7d2aa31903b87ea58cf8ec4e6e1692444442d7af8",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SIDE_BEAT_000",
+      "offset": 3153610,
+      "bytes": 44653,
+      "sha256": "d4b55025606f249d002b275d8f5f738931b978153d12b3e1deb20e321e5bbe24",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SIDE_BEAT_002",
+      "offset": 3198263,
+      "bytes": 21100,
+      "sha256": "60865304344b3b9df3244cbabd21afa7ee605597542dbdfe27682e7b7da0afca",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SIDE_BEAT_005",
+      "offset": 3219363,
+      "bytes": 22641,
+      "sha256": "e032cb30574a54312e0176bacfab6818ba15ab4d4242ed2c7908e6a2d1059a9d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "SIDE_BEAT_006",
+      "offset": 3242004,
+      "bytes": 20123,
+      "sha256": "6b427c7b982244d0ad85bf5bcdc9ad3c0810070469d0f6bbf587591b6c1b5896",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "BOUNCE_002",
+      "offset": 3262127,
+      "bytes": 22725,
+      "sha256": "30699360c1c0176a1b3b50b200066c109df3be5367bbde72b617ccacc0f8a868",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "BOUNCE_005",
+      "offset": 3284852,
+      "bytes": 24052,
+      "sha256": "f6039f8781eef40e43797ecfaf06202790036f990fc1fa6ffea621d5b3436c8f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "ALTERNATE_001",
+      "offset": 3308904,
+      "bytes": 1091,
+      "sha256": "a2fe3e766f25b4cd22ab10571b8a955fb9fd16d398304f5b501711034afc0e90",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "ALTERNATE_003",
+      "offset": 3309995,
+      "bytes": 1751,
+      "sha256": "c4a8601ac4655c4435c713ba7d5904313ba5e9e6935aee4092ae94c406c461ab",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "ALTERNATE_005",
+      "offset": 3311746,
+      "bytes": 1627,
+      "sha256": "bd357b4f059cc9e3f8d144678946e426fed7985de0e39fa333b36d59009a0657",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "ALTERNATE_007",
+      "offset": 3313373,
+      "bytes": 2132,
+      "sha256": "1f2ce878de6a77e3b19cf51ff122e7ad1df669069eafa5675226348f91138a92",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "ALTERNATE_009",
+      "offset": 3315505,
+      "bytes": 1649,
+      "sha256": "20f251103f23e9d4de2e6da1514e2cb5b131e9f50ad4910a148fec6a1ace9613",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "ALTERNATE_011",
+      "offset": 3317154,
+      "bytes": 1914,
+      "sha256": "b07268faa41d5ca6f02a1ed81f13581925d96a4bd98d3562a224b0312e356c2d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "ALTERNATE_013",
+      "offset": 3319068,
+      "bytes": 1427,
+      "sha256": "668c4c7d5034f63df8a89dc46afbd792b202cf3416acb77c91a46c696e9011ca",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "WAVE_008",
+      "offset": 3320495,
+      "bytes": 23291,
+      "sha256": "af7fc9f9eea9e985be97b9b4e9e5284a786fe329bfc145fbce8b2f8c48094c25",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "WAVE_014",
+      "offset": 3343786,
+      "bytes": 25889,
+      "sha256": "6cf38b95cc1736df89fb35bffae32a7c6e6e40257aa059bca0e8dbbe752313e5",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "WAVE_024",
+      "offset": 3369675,
+      "bytes": 23521,
+      "sha256": "43e6e38c5fb8854257907a559711252e66e0f90dd018816490996cb4d1f02bda",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
     }
   ],
   "clips": [
     {
       "id": "IDLE",
-      "source_gif": "assets/gifs-v2/01_待机眨眼.gif",
+      "source_gif": "assets/gifs/daily/01_待机眨眼.gif",
       "source_sha256": "683794423745d9e89729d449d0ab043c9770ae63ff8a1258ace69033904c3c82",
       "frames": [
         0,
@@ -3492,7 +4607,7 @@
     },
     {
       "id": "PROBE",
-      "source_gif": "assets/gifs-v2/02_抬头看你.gif",
+      "source_gif": "assets/gifs/daily/02_抬头看你.gif",
       "source_sha256": "36f10f6624531f9239d979263e8e6e81547c916388baa95c88eb2f99058c4077",
       "frames": [
         10,
@@ -3583,7 +4698,7 @@
     },
     {
       "id": "NUZZLE",
-      "source_gif": "assets/gifs-v2/03_轻蹭.gif",
+      "source_gif": "assets/gifs/daily/03_轻蹭.gif",
       "source_sha256": "d981470523426d5ecdc68eface44d0eecc2d4e429a6b0d87040d4cd4f72d21bf",
       "frames": [
         16,
@@ -3690,7 +4805,7 @@
     },
     {
       "id": "TILT",
-      "source_gif": "assets/gifs-v2/04_疑惑歪头.gif",
+      "source_gif": "assets/gifs/daily/04_疑惑歪头.gif",
       "source_sha256": "73a5555bf1c186794a29de9853f68cee64975f90758b4560c38f8013ec78da09",
       "frames": [
         20,
@@ -3781,7 +4896,7 @@
     },
     {
       "id": "WITHDRAW",
-      "source_gif": "assets/gifs-v2/05_害羞缩回.gif",
+      "source_gif": "assets/gifs/daily/05_害羞缩回.gif",
       "source_sha256": "40235c5098c874e8a94bd1ffc9e32d841ba4dfd57d87267b9a3130ffe20c1223",
       "frames": [
         27,
@@ -3840,7 +4955,7 @@
     },
     {
       "id": "RECOVER",
-      "source_gif": "assets/gifs-v2/06_安抚展开.gif",
+      "source_gif": "assets/gifs/daily/06_安抚展开.gif",
       "source_sha256": "469130ca668b92d10e5c5620398ef5df8bbddb4a6b86114363bcf4ce1b7a670c",
       "frames": [
         39,
@@ -3931,7 +5046,7 @@
     },
     {
       "id": "HAPPY",
-      "source_gif": "assets/gifs-v2/07_开心回应.gif",
+      "source_gif": "assets/gifs/daily/07_开心回应.gif",
       "source_sha256": "c1ac445e084d65aab2ec078193ab15dd24581d7a69f0463bc0678d97ba40c78d",
       "frames": [
         52,
@@ -4070,7 +5185,7 @@
     },
     {
       "id": "REST",
-      "source_gif": "assets/gifs-v2/08_慢慢入睡.gif",
+      "source_gif": "assets/gifs/daily/08_慢慢入睡.gif",
       "source_sha256": "bb564b8201a70c388852240c74ba883dcfb4e7e30fc9851c68be380aff96ab40",
       "frames": [
         61,
@@ -4193,7 +5308,7 @@
     },
     {
       "id": "SLEEP",
-      "source_gif": "assets/gifs-v2/09_熟睡呼吸与Z.gif",
+      "source_gif": "assets/gifs/daily/09_熟睡呼吸与Z.gif",
       "source_sha256": "10e726f9364c48790f1b2ef3b27faa7fd8e955a667c0cc1ead56494d4e38cc5b",
       "frames": [
         76,
@@ -4300,7 +5415,7 @@
     },
     {
       "id": "WAKE",
-      "source_gif": "assets/gifs-v2/10_迷糊唤醒.gif",
+      "source_gif": "assets/gifs/daily/10_迷糊唤醒.gif",
       "source_sha256": "24077ea623ae9b0d76b0c3001957755cf524a8fbb5e76b9f209aca116ce9f8a9",
       "frames": [
         120,
@@ -4398,6 +5513,725 @@
       "loop": false
     },
     {
+      "id": "NOD",
+      "source_gif": "assets/gifs/dance/01_节拍点头.gif",
+      "source_sha256": "604e7d7023f430ba83a82fb1f17d5bcf1b5cebbfaf87fda8e26caf38d5bd3c07",
+      "frames": [
+        134,
+        134,
+        135,
+        135,
+        136,
+        136,
+        136,
+        136,
+        135,
+        135,
+        134,
+        134,
+        137,
+        137,
+        134,
+        134
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870
+      ],
+      "duration_ms": 2000,
+      "loop": true
+    },
+    {
+      "id": "SWAY",
+      "source_gif": "assets/gifs/dance/02_活泼摇摆.gif",
+      "source_sha256": "fb3326354f3000770b7d11492065b772e9f5ca583d9093e0b70a7472c81f0a02",
+      "frames": [
+        138,
+        138,
+        138,
+        138,
+        139,
+        139,
+        139,
+        139,
+        138,
+        138,
+        140,
+        140,
+        140,
+        140,
+        138,
+        138,
+        138,
+        138,
+        139,
+        139,
+        139,
+        139,
+        138,
+        138,
+        140,
+        140,
+        140,
+        140,
+        138,
+        138,
+        138,
+        138
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870,
+        2000,
+        2120,
+        2250,
+        2370,
+        2500,
+        2620,
+        2750,
+        2870,
+        3000,
+        3120,
+        3250,
+        3370,
+        3500,
+        3620,
+        3750,
+        3870
+      ],
+      "duration_ms": 4000,
+      "loop": true
+    },
+    {
+      "id": "CLAW_BEAT",
+      "source_gif": "assets/gifs/dance/03_夹爪打拍.gif",
+      "source_sha256": "3b4ba1fcb59fda858d8714d8e21ae2754d82325a7e1b70e33e1b90c6d136b444",
+      "frames": [
+        141,
+        141,
+        142,
+        143,
+        143,
+        142,
+        141,
+        141,
+        141,
+        141,
+        142,
+        143,
+        143,
+        142,
+        141,
+        141
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870
+      ],
+      "duration_ms": 2000,
+      "loop": true
+    },
+    {
+      "id": "POSE",
+      "source_gif": "assets/gifs/dance/04_舒展亮相.gif",
+      "source_sha256": "6b8730ea67b77438872d3c165bbd9494f2a3d6eeafe66bbed0868623ad565a2c",
+      "frames": [
+        134,
+        134,
+        134,
+        134,
+        144,
+        144,
+        144,
+        144,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        145,
+        144,
+        144,
+        144,
+        144,
+        134,
+        134,
+        134,
+        134
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870,
+        2000,
+        2120,
+        2250,
+        2370,
+        2500,
+        2620,
+        2750,
+        2870,
+        3000,
+        3120,
+        3250,
+        3370,
+        3500,
+        3620,
+        3750,
+        3870
+      ],
+      "duration_ms": 4000,
+      "loop": true
+    },
+    {
+      "id": "SHAKE",
+      "source_gif": "assets/gifs/dance/05_俏皮摇头.gif",
+      "source_sha256": "378be560a295edb55abf0a5176c2497e45400dc01aa4a5ca52b7c3adc941d477",
+      "frames": [
+        146,
+        146,
+        147,
+        147,
+        147,
+        147,
+        146,
+        146,
+        148,
+        148,
+        148,
+        148,
+        146,
+        146,
+        146,
+        146
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870
+      ],
+      "duration_ms": 2000,
+      "loop": true
+    },
+    {
+      "id": "BOW",
+      "source_gif": "assets/gifs/dance/06_礼貌鞠躬.gif",
+      "source_sha256": "157dcbd6cb6663260ec09b61689bd1ac3b7782cac05a6cea778a96eeca0ad6b7",
+      "frames": [
+        149,
+        149,
+        149,
+        149,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        151,
+        151,
+        151,
+        151,
+        151,
+        151,
+        151,
+        151,
+        151,
+        151,
+        150,
+        150,
+        150,
+        150,
+        150,
+        150,
+        149,
+        149,
+        149,
+        149,
+        149,
+        149
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870,
+        2000,
+        2120,
+        2250,
+        2370,
+        2500,
+        2620,
+        2750,
+        2870,
+        3000,
+        3120,
+        3250,
+        3370,
+        3500,
+        3620,
+        3750,
+        3870
+      ],
+      "duration_ms": 4000,
+      "loop": true
+    },
+    {
+      "id": "CAT_DEMO",
+      "source_gif": "assets/gifs/dance/cat-demo/01_猫步律动.gif",
+      "source_sha256": "0b1f05c94bc36b1cdc1057c9d50741ddd95060f99b70e593a2e4695ff27337b1",
+      "frames": [
+        152,
+        152,
+        153,
+        153,
+        154,
+        154,
+        155,
+        155,
+        155,
+        156,
+        156,
+        157,
+        157,
+        157,
+        152,
+        152
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870
+      ],
+      "duration_ms": 2000,
+      "loop": true
+    },
+    {
+      "id": "BASE_TURN",
+      "source_gif": "assets/gifs/dance/07_底盘转拍.gif",
+      "source_sha256": "152903291da29b0d879ac3020e7821b9b6901d1b2187f60e447833fac38e30e3",
+      "frames": [
+        158,
+        158,
+        159,
+        159,
+        158,
+        158,
+        160,
+        160,
+        158,
+        158,
+        159,
+        158,
+        160,
+        160,
+        158,
+        158
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870
+      ],
+      "duration_ms": 2000,
+      "loop": true
+    },
+    {
+      "id": "SIDE_BEAT",
+      "source_gif": "assets/gifs/dance/08_侧摆重拍.gif",
+      "source_sha256": "68f6261574da6d590795938eda2c83bb3177e13a031995b313eb20baf70008b1",
+      "frames": [
+        161,
+        161,
+        162,
+        162,
+        161,
+        163,
+        164,
+        164,
+        161,
+        161,
+        162,
+        163,
+        164,
+        164,
+        161,
+        161
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870
+      ],
+      "duration_ms": 2000,
+      "loop": true
+    },
+    {
+      "id": "BOUNCE",
+      "source_gif": "assets/gifs/dance/09_上下律动.gif",
+      "source_sha256": "aa45a0ab1aaea70f7eaede257c59a9411744b4c3398d557204b3469666723553",
+      "frames": [
+        161,
+        161,
+        165,
+        163,
+        161,
+        166,
+        166,
+        161,
+        165,
+        163,
+        161,
+        166,
+        166,
+        161,
+        161,
+        161
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870
+      ],
+      "duration_ms": 2000,
+      "loop": true
+    },
+    {
+      "id": "ALTERNATE",
+      "source_gif": "assets/gifs/dance/10_左右交替.gif",
+      "source_sha256": "0546fc383eb321a229d3d83c34b417069db2424b12366a4db288dc8336fdaed5",
+      "frames": [
+        158,
+        167,
+        158,
+        168,
+        158,
+        169,
+        158,
+        170,
+        158,
+        171,
+        158,
+        172,
+        158,
+        173,
+        158,
+        158
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870
+      ],
+      "duration_ms": 2000,
+      "loop": true
+    },
+    {
+      "id": "WAVE",
+      "source_gif": "assets/gifs/dance/11_连环波浪.gif",
+      "source_sha256": "85ccdb7eb127e52fa44fc7295377cecf4513dd9a1c3d0d233aa659a0c78f19e4",
+      "frames": [
+        161,
+        161,
+        165,
+        165,
+        165,
+        163,
+        163,
+        163,
+        174,
+        174,
+        174,
+        166,
+        166,
+        166,
+        175,
+        175,
+        175,
+        175,
+        166,
+        166,
+        166,
+        174,
+        174,
+        174,
+        176,
+        176,
+        176,
+        161,
+        161,
+        161,
+        161,
+        161
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870,
+        2000,
+        2120,
+        2250,
+        2370,
+        2500,
+        2620,
+        2750,
+        2870,
+        3000,
+        3120,
+        3250,
+        3370,
+        3500,
+        3620,
+        3750,
+        3870
+      ],
+      "duration_ms": 4000,
+      "loop": true
+    },
+    {
+      "id": "FINALE",
+      "source_gif": "assets/gifs/dance/12_舒展收拍.gif",
+      "source_sha256": "6dac467a9046dcba48829d7c273739da078830ae3636ab011884fb8f1a5fc615",
+      "frames": [
+        161,
+        161,
+        164,
+        164,
+        162,
+        162,
+        176,
+        176,
+        166,
+        166,
+        166,
+        175,
+        175,
+        175,
+        175,
+        175,
+        175,
+        175,
+        175,
+        175,
+        175,
+        166,
+        166,
+        166,
+        176,
+        176,
+        176,
+        161,
+        161,
+        161,
+        161,
+        161
+      ],
+      "at_ms": [
+        0,
+        120,
+        250,
+        370,
+        500,
+        620,
+        750,
+        870,
+        1000,
+        1120,
+        1250,
+        1370,
+        1500,
+        1620,
+        1750,
+        1870,
+        2000,
+        2120,
+        2250,
+        2370,
+        2500,
+        2620,
+        2750,
+        2870,
+        3000,
+        3120,
+        3250,
+        3370,
+        3500,
+        3620,
+        3750,
+        3870
+      ],
+      "duration_ms": 4000,
+      "loop": true
+    },
+    {
       "id": "FOLDED_HOLD",
       "frames": [
         38
@@ -4422,7 +6256,7 @@
       9
     ],
     [
-      10,
+      23,
       1,
       2,
       3,
@@ -4446,8 +6280,8 @@
   ],
   "compression": {
     "scheme": "independent-anchor-xor-zlib",
-    "full_frame_zlib_bytes": 5924974,
-    "delta_frames": 124,
+    "full_frame_zlib_bytes": 7835727,
+    "delta_frames": 159,
     "extra_psram_bytes": 153600
   },
   "limitations": [

@@ -13,7 +13,7 @@ parser.add_argument('--output', type=Path, default=ROOT/'build/approved-probe-pr
 args = parser.parse_args()
 out = args.output
 out.mkdir(parents=True, exist_ok=True)
-manifest = json.loads((ROOT/'assets/approved/probe-v2/manifest.json').read_text())
+manifest = json.loads((ROOT/'assets/images/reference/approved/probe-v2/manifest.json').read_text())
 source = ROOT/manifest['source']
 if hashlib.sha256(source.read_bytes()).hexdigest() != manifest['source_sha256']:
     raise SystemExit('Selected source changed; update the approved baseline explicitly before rendering.')

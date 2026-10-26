@@ -10,11 +10,16 @@ from PIL import Image
 root = Path(__file__).resolve().parents[2]
 cfg = json.loads((root/'assets/config/behavior_defaults.json').read_text())
 manifest = json.loads((root/'assets/animation/manifest.json').read_text())
-previews = json.loads((root/'assets/gifs-v2/manifest.json').read_text())
+previews = json.loads((root/'assets/gifs/daily/manifest.json').read_text())
+dance = json.loads((root/'assets/gifs/dance/manifest.json').read_text())
+assert hashlib.sha256((root/manifest['dance_source']).read_bytes()).hexdigest() == manifest['dance_source_sha256']
+all_sources = previews['clips'] + dance['clips']
+source_paths = {c['id']: root/'assets/gifs/daily'/c['file'] for c in previews['clips']}
+source_paths.update({c['id']: root/'assets/gifs/dance'/c['file'] for c in dance['clips']})
 claw_regions = json.loads((root/'assets/config/claw_touch_regions.json').read_text())['frames']
 blob = (root/'assets/animation/frames.bin').read_bytes()
 assert manifest['asset_version'] == 'gif-v2-rgb565'
-assert manifest['source'] == 'assets/gifs-v2/manifest.json'
+assert manifest['source'] == 'assets/gifs/daily/manifest.json'
 assert hashlib.sha256((root/manifest['source']).read_bytes()).hexdigest() == manifest['source_sha256']
 assert len(blob) == manifest['bytes']
 assert len(manifest['frames']) == manifest['unique_frames']
@@ -84,7 +89,7 @@ for index, frame in enumerate(manifest['frames']):
     assert all(t > 0 for t in turns) or all(t < 0 for t in turns), 'nonconvex claw hitbox'
     decoded.append(pixels)
 
-source_by_id = {clip['id']: clip for clip in previews['clips']}
+source_by_id = {clip['id']: clip for clip in all_sources}
 assert len(manifest['clips']) == len(source_by_id) + 1
 assert len([c for c in manifest['clips'] if c.get('source_gif')]) == len(source_by_id)
 checked = 0
@@ -98,7 +103,7 @@ for clip in manifest['clips']:
         assert len(clip['frames']) == 1  # Deliberate folded hold, no separate GIF.
         continue
     source = source_by_id[clip['id']]
-    path = root/'assets/gifs-v2'/source['file']
+    path = source_paths[clip['id']]
     assert root/clip['source_gif'] == path
     assert hashlib.sha256(path.read_bytes()).hexdigest() == clip['source_sha256'] == source['sha256']
     with Image.open(path) as gif:
@@ -114,10 +119,14 @@ for clip in manifest['clips']:
         assert elapsed == clip['duration_ms'] == source['duration_ms']
         assert elapsed == gif.n_frames * 125
 assert {c['id'] for c in manifest['clips']} >= set(source_by_id)
-assert checked == sum(c['ticks'] if 'ticks' in c else sum(n for _, n in c['keys']) for c in previews['clips'])
+assert checked == sum(c['ticks'] if 'ticks' in c else sum(n for _, n in c['keys']) for c in all_sources)
 assert {i for c in manifest['clips'] for i in c['frames']} == set(range(len(decoded))), 'obsolete unused frames remain in runtime'
-assert set(manifest['source_gifs']) == {str(Path('assets/gifs-v2')/c['file']) for c in previews['clips']}
+assert set(manifest['source_gifs']) == {str(p.relative_to(root)) for p in source_paths.values()}
 
+choreo = manifest['choreography_clip_map']
+assert len(choreo) == 23 and choreo[15] == 255
+for action, name in {9:'NOD',10:'SHAKE',11:'SWAY',12:'BOW',13:'CLAW_BEAT',14:'POSE',16:'CAT_DEMO',17:'BASE_TURN',18:'SIDE_BEAT',19:'BOUNCE',20:'ALTERNATE',21:'WAVE',22:'FINALE'}.items():
+    assert manifest['clips'][choreo[action]]['id'] == name
 mapping = manifest['clip_map']
 assert len(mapping) == 3 and all(len(row) == 9 for row in mapping)
 ids = ['IDLE', 'PROBE', 'NUZZLE', 'TILT', 'WITHDRAW', 'RECOVER', 'HAPPY', 'REST', 'WAKE']

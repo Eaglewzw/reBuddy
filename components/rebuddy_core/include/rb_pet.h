@@ -25,6 +25,8 @@ typedef struct {
     rb_pet_action_t action, pending;
     rb_pet_source_t pending_source;
     bool lazy, active_lazy, pending_valid, returning, estop_released;
+    bool suspended, resume_wait_release;
+    uint64_t suspended_at;
     int direction, active_direction, pending_direction;
     uint64_t now, started, duration, return_started, return_duration, last_interaction, nuzzle_hold;
     float phase, return_phase;
@@ -62,6 +64,11 @@ void rb_pet_input(rb_pet_t *p,bool down,int x,int y,uint64_t now);
 /* Convex claw polygon in screen coordinates, supplied by the displayed pose. */
 void rb_pet_set_claw_region(rb_pet_t *p,const int16_t points[4][2]);
 void rb_pet_cancel(rb_pet_t *p);
+/* Editor ownership freezes daily behavior without changing its pose/state.
+ * Resume rebases clocks; a release sample is required before new pet gestures.
+ * Emergency stops remain effective while daily behavior is suspended. */
+void rb_pet_suspend(rb_pet_t *p,uint64_t now);
+void rb_pet_resume(rb_pet_t *p,uint64_t now);
 void rb_pet_tick(rb_pet_t *p,uint64_t now);
 void rb_pet_stop(rb_pet_t *p,const char *reason);
 bool rb_pet_reset(rb_pet_t *p,uint64_t now);
