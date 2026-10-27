@@ -17,4 +17,4 @@
 
 当前睡眠使用日常素材目录中的无腮红 `rest-atlas.png` 和 `breath-atlas.png`；已删除不再使用的旧版睡眠修补脚本与源图。
 
-编舞表演素材使用内置 ImageGen 制作，保留用户提供的 reBot 形象；初版及新增六种舞蹈的源图、提示词与绑定参数见 [dance-v1](../images/source/dance/basic/README.md) 和 [dance-v2](../images/source/dance/extended/README.md)。独立 V6 捂鼻扇动预览的来源见 [claw-sway-v6](../images/source/cat-v6/README.md)。月薪猫仅作为用户提供的动作参考，运行素材仍采用 reBot 角色。
+编舞表演素材使用内置 ImageGen 制作，保留用户提供的 reBot 形象；当前十个基本舞蹈的完整角色源图、提示词与姿态筛选时间轴见 [基本舞蹈源文件](../images/source/dance/individual/README.md)，动作概念及机械臂资料参考见 [编舞设计依据](CHOREOGRAPHY.md#动作设计依据)。独立 V6 捂鼻扇动预览的来源见 [claw-sway-v6](../images/source/cat-v6/README.md)。月薪猫仅作为用户提供的动作参考，运行素材仍采用 reBot 角色。

@@ -1,0 +1,152 @@
+{
+  "source": "assets/images/source/shared/gripper/body-flush.png",
+  "jaw_source": "assets/images/source/shared/gripper/jaws-solid.png",
+  "cell_px": 724,
+  "render_px": 156,
+  "canvas": [
+    320,
+    240
+  ],
+  "base_anchor": [
+    155,
+    190
+  ],
+  "root": [
+    140,
+    147
+  ],
+  "view_axes": [
+    [
+      [
+        291,
+        477
+      ],
+      [
+        191,
+        320
+      ],
+      [
+        301,
+        153
+      ]
+    ],
+    [
+      [
+        235,
+        477
+      ],
+      [
+        139,
+        320
+      ],
+      [
+        228,
+        153
+      ]
+    ],
+    [
+      [
+        208,
+        477
+      ],
+      [
+        111,
+        320
+      ],
+      [
+        186,
+        153
+      ]
+    ]
+  ],
+  "views_yaw_deg": [
+    -22,
+    0,
+    22
+  ],
+  "jaw_crops": [
+    [
+      270,
+      210,
+      735,
+      665
+    ],
+    [
+      1040,
+      210,
+      1505,
+      665
+    ]
+  ],
+  "jaw_pivots": [
+    [
+      395,
+      280
+    ],
+    [
+      1379,
+      280
+    ]
+  ],
+  "jaw_screen_scale": 0.073,
+  "jaw_rest_deg": [
+    -13,
+    66
+  ],
+  "jaw_outward_sign": [
+    -1,
+    1
+  ],
+  "jaw_mounts_px": [
+    [
+      40,
+      29
+    ],
+    [
+      53,
+      28
+    ]
+  ],
+  "draw_order": [
+    1,
+    0
+  ],
+  "size_reference": {
+    "gif": "assets/gifs/daily/01_待机眨眼.gif",
+    "sha256": "683794423745d9e89729d449d0ab043c9770ae63ff8a1258ace69033904c3c82",
+    "joint_diameters_px": [
+      34,
+      31,
+      39
+    ],
+    "jaw_size_px": [
+      32,
+      32
+    ],
+    "floor": [
+      155,
+      190
+    ]
+  },
+  "policy": "Reuse daily-style thick-body turntable artwork and complete calibrated jaws. Fixed source scale; two coupled gripper sides; source-view yaw changes, never image mirroring or stretching.",
+  "physical_validation": "Screen illustration: three sampled turntable views, not continuous 3D FK or validated motor trajectories.",
+  "neutral_wrist_offset_px": [
+    10,
+    -64
+  ],
+  "view_link_lengths_px": [
+    [
+      40.108034945654666,
+      43.0879968301408
+    ],
+    [
+      39.65167812689712,
+      40.77445760856285
+    ],
+    [
+      39.764507026329866,
+      39.44565435052913
+    ]
+  ],
+  "yaw_note": "Three illustrated yaw poses; degree labels are timing parameters, not measured robot joint angles."
+}

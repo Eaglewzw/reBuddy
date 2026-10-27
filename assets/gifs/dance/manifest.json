@@ -1,949 +1,191 @@
 {
   "fps": 8,
-  "bpm": 120,
+  "bpm": 80,
   "canvas": [
     320,
     240
   ],
-  "status": "screen_dance_pending_device_review",
+  "status": "individual_whole_character_revision_pending_visual_review",
   "sources": {
-    "nod-pose": {
-      "path": "assets/images/source/dance/basic/nod-pose-atlas.png",
-      "sha256": "a5ab1efca1b231bfcabebea3e2e0f0061671cc9a24f08287d0c3e26cc5214415",
-      "grid": [
-        4,
-        4
-      ],
-      "constant_sampling_scale": 0.5814696485623003,
-      "cell_size_px": 182
+    "assets/images/source/dance/individual/01-atlas.png": {
+      "path": "assets/images/source/dance/individual/01-atlas.png",
+      "sha256": "cec0609fd2aff7639889ba4da0616d759897008701be1e6c6b803b5dd3dc0057"
     },
-    "sway": {
-      "path": "assets/images/source/dance/basic/sway-atlas.png",
-      "sha256": "beb3fc0f05bedc1f3cd12fd77dedcd713d779d715cc7d236c24ac6ea72bf7ec3",
-      "grid": [
-        2,
-        2
-      ],
-      "constant_sampling_scale": 0.2647527910685805,
-      "cell_size_px": 166
+    "assets/images/source/dance/individual/01-prompt.txt": {
+      "path": "assets/images/source/dance/individual/01-prompt.txt",
+      "sha256": "d8b857a6fd4b0c119c993441842878b95a50c3efbca419da600b86e4ea1b16ec"
     },
-    "claw": {
-      "path": "assets/images/source/dance/basic/claw-atlas.png",
-      "sha256": "cd0063659ffa27143a2c189127c499450889fdde8f43957485c1bac04a13e45d",
-      "grid": [
-        2,
-        2
-      ],
-      "constant_sampling_scale": 0.26156299840510366,
-      "cell_size_px": 164
+    "assets/images/source/dance/individual/02-atlas.png": {
+      "path": "assets/images/source/dance/individual/02-atlas.png",
+      "sha256": "3c22bfe345f091c61fddb3d851f86a1db42aa6e473a8cab0a371f950317cd08e"
     },
-    "extra": {
-      "path": "assets/images/source/dance/basic/extra-atlas.png",
-      "sha256": "a5ccbe68214bdea75e6959a3375deeeb65c037f79e39eddbaa31c35706333b00",
-      "grid": [
-        3,
-        2
-      ],
-      "constant_sampling_scale": 0.3046875,
-      "cell_size_px": 156
+    "assets/images/source/dance/individual/02-prompt.txt": {
+      "path": "assets/images/source/dance/individual/02-prompt.txt",
+      "sha256": "b0191e56aea56ede6b70544369ca6594d0cf7e88f2a248ccc08a319a6d0be508"
     },
-    "cat": {
-      "path": "assets/images/source/dance/basic/cat-hand-v3/layers.png",
-      "sha256": "916036654e18517bb58b331b9e1bbf9067c9217dd298c66e2e8faebd34e4c80c",
-      "grid": [
-        2,
-        1
-      ],
-      "constant_sampling_scale": 0.161217587373168,
-      "cell_size_px": 143,
-      "rig": "assets/images/source/dance/basic/cat-hand-v3/rig.json",
-      "rig_sha256": "ac522fc65e5af2de4a7d7755d4d0345670dc63ee33b839f94e0d6752cec23413"
+    "assets/images/source/dance/individual/02-repair-prompt.txt": {
+      "path": "assets/images/source/dance/individual/02-repair-prompt.txt",
+      "sha256": "387ce2f59e733d1bb2fd0dc1c9b354826384ed4c24eba34e5c8fa9729bca2d02"
     },
-    "body-dance-v2": {
-      "path": "assets/images/source/dance/extended/body-atlas.png",
-      "sha256": "67dc229340fdea26932399dbf25d821739fb55f278db5c2cc09b09d2a7ca5e5e",
-      "rig": "assets/images/source/dance/extended/rig.json",
-      "rig_sha256": "b5c9d8a7a8ffb20729ef256d18d844b5ecaab25428f07e0d19b0e6b0ef3f84c9"
+    "assets/images/source/dance/individual/03-atlas.png": {
+      "path": "assets/images/source/dance/individual/03-atlas.png",
+      "sha256": "5e2bd59f65712c11cef46f753a0ef6b9b753275f8f67da9c3476755f67fd8b58"
     },
-    "yaw-dance-v2": {
-      "path": "assets/images/source/shared/gripper/turntable.png",
-      "sha256": "bda867e062e22f1157194d36a84cddb9b2864e32fc03fbed689adbd1fba66471",
-      "rig": "assets/images/source/shared/gripper/rig.json",
-      "rig_sha256": "0c50b58f313a211d0b2e289376347ca09402d4b4b1bb046e9af490c5a34e421f"
+    "assets/images/source/dance/individual/03-prompt.txt": {
+      "path": "assets/images/source/dance/individual/03-prompt.txt",
+      "sha256": "fc884be009eeb55de580d12bcb6c58aee69b86543488832fa63a1969dd542d7a"
     },
-    "jaw-dance-v2": {
-      "path": "assets/images/source/shared/gripper/jaws.png",
-      "sha256": "695c5849462ce9c81eb2f6cbf7c0eeacbd24e9a5a6ed53d7b18aecb7d71661ac",
-      "rig": "assets/images/source/dance/extended/rig.json",
-      "rig_sha256": "b5c9d8a7a8ffb20729ef256d18d844b5ecaab25428f07e0d19b0e6b0ef3f84c9"
-    }
-  },
-  "registration": {
-    "nod-pose": {
-      "0": {
-        "origin": [
-          75,
-          21
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "1": {
-        "origin": [
-          74,
-          21
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "2": {
-        "origin": [
-          74,
-          20
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "3": {
-        "origin": [
-          75,
-          21
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "12": {
-        "origin": [
-          70,
-          30
-        ],
-        "base_panel_width": 37,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "14": {
-        "origin": [
-          64,
-          30
-        ],
-        "base_panel_width": 38,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      }
+    "assets/images/source/dance/individual/03-repair-prompt.txt": {
+      "path": "assets/images/source/dance/individual/03-repair-prompt.txt",
+      "sha256": "bf365e93e015ad529ee28aa914ac113bb47f1ae921718d0b8cd15bd40cc21a25"
     },
-    "sway": {
-      "0": {
-        "origin": [
-          74,
-          32
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "1": {
-        "origin": [
-          85,
-          32
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "2": {
-        "origin": [
-          73,
-          40
-        ],
-        "base_panel_width": 37,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      }
+    "assets/images/source/dance/individual/04-atlas.png": {
+      "path": "assets/images/source/dance/individual/04-atlas.png",
+      "sha256": "7d8cbc490b8d6c5992d5371592ccbcdb1169fc5a3293309d804e074327b9daae"
     },
-    "claw": {
-      "0": {
-        "origin": [
-          85,
-          43
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "1": {
-        "origin": [
-          92,
-          43
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "2": {
-        "origin": [
-          86,
-          44
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      }
+    "assets/images/source/dance/individual/04-prompt.txt": {
+      "path": "assets/images/source/dance/individual/04-prompt.txt",
+      "sha256": "51679305891c805b20def830943a56dbea256fa84c2f8745bf02f3fe5ed726d5"
     },
-    "extra": {
-      "0": {
-        "origin": [
-          86,
-          42
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "1": {
-        "origin": [
-          88,
-          42
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "2": {
-        "origin": [
-          89,
-          42
-        ],
-        "base_panel_width": 35,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "3": {
-        "origin": [
-          86,
-          45
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "4": {
-        "origin": [
-          88,
-          45
-        ],
-        "base_panel_width": 35,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "5": {
-        "origin": [
-          89,
-          45
-        ],
-        "base_panel_width": 35,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      }
+    "assets/images/source/dance/individual/05-atlas.png": {
+      "path": "assets/images/source/dance/individual/05-atlas.png",
+      "sha256": "6fdfbe03d97f421a307ed917b2578684002f73489e1c023a1987904b730e19cd"
     },
-    "cat": {
-      "0": {
-        "origin": [
-          88,
-          50
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "1": {
-        "origin": [
-          88,
-          50
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "2": {
-        "origin": [
-          88,
-          50
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "3": {
-        "origin": [
-          88,
-          50
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "4": {
-        "origin": [
-          88,
-          50
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      },
-      "5": {
-        "origin": [
-          88,
-          50
-        ],
-        "base_panel_width": 36,
-        "base_panel_anchor": [
-          133,
-          189
-        ]
-      }
+    "assets/images/source/dance/individual/05-prompt.txt": {
+      "path": "assets/images/source/dance/individual/05-prompt.txt",
+      "sha256": "9aa2e8163f42a4fc2e0860cd538214fdbbc7d81c9536d9b6024ebc7641c11505"
     },
-    "body-dance-v2": {
-      "0": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 98.12,
-        "origin": [
-          71,
-          28
-        ]
-      },
-      "1": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 97.68,
-        "origin": [
-          73,
-          28
-        ]
-      },
-      "2": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 100.32000000000001,
-        "origin": [
-          76,
-          28
-        ]
-      },
-      "3": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 99.0,
-        "origin": [
-          70,
-          12
-        ]
-      },
-      "4": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 101.64,
-        "origin": [
-          66,
-          11
-        ]
-      },
-      "5": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 99.88,
-        "origin": [
-          69,
-          12
-        ]
-      },
-      "6": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 105.6,
-        "origin": [
-          64,
-          10
-        ]
-      },
-      "7": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 103.4,
-        "origin": [
-          63,
-          10
-        ]
-      },
-      "8": {
-        "fixed_scale": 0.44,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 104.72,
-        "origin": [
-          71,
-          10
-        ]
-      }
+    "assets/images/source/dance/individual/05-repair-prompt.txt": {
+      "path": "assets/images/source/dance/individual/05-repair-prompt.txt",
+      "sha256": "3f33575f3dd7a9216119037f0612c97bd1576b99c22b35fe5d245efc3dc735da"
     },
-    "yaw-dance-v2": {
-      "0": {
-        "fixed_scale": 0.23480662983425415,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 99.79281767955801,
-        "origin": [
-          75,
-          28
-        ]
-      },
-      "1": {
-        "fixed_scale": 0.23480662983425415,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 98.14917127071824,
-        "origin": [
-          83,
-          28
-        ]
-      },
-      "2": {
-        "fixed_scale": 0.23480662983425415,
-        "floor_center": 160,
-        "floor_y": 190,
-        "floor_width": 99.08839779005525,
-        "origin": [
-          93,
-          28
-        ]
-      }
+    "assets/images/source/dance/individual/06-atlas.png": {
+      "path": "assets/images/source/dance/individual/06-atlas.png",
+      "sha256": "4b90f18f4c88db5c03de4475e72f9c4b474b3526b5b6b01eeccaf095ae06df5d"
+    },
+    "assets/images/source/dance/individual/06-prompt.txt": {
+      "path": "assets/images/source/dance/individual/06-prompt.txt",
+      "sha256": "1663c86d6594ef0fb6c52977073cad2c60b29ecad37ee344c065dceb1426dfac"
+    },
+    "assets/images/source/dance/individual/06-repair-prompt.txt": {
+      "path": "assets/images/source/dance/individual/06-repair-prompt.txt",
+      "sha256": "a3028a6b87b73e4cc70bdb161161b59a9a1d696a6699f817bfd3e33a5f15a54f"
+    },
+    "assets/images/source/dance/individual/07-atlas.png": {
+      "path": "assets/images/source/dance/individual/07-atlas.png",
+      "sha256": "db8a6fb76a0dea591f51bbca809b3c19fe9f33b8c8fe447a2b2f4c3eedf50051"
+    },
+    "assets/images/source/dance/individual/07-prompt.txt": {
+      "path": "assets/images/source/dance/individual/07-prompt.txt",
+      "sha256": "8b57b71179400307b08ab813bbb5af3d37b1ddee70fd30ab0dda03b58b44baee"
+    },
+    "assets/images/source/dance/individual/08-atlas.png": {
+      "path": "assets/images/source/dance/individual/08-atlas.png",
+      "sha256": "2e90ab871ea4595c7a68288903ef7d27ba1f93eaad32865a8b1a69745bc50cb2"
+    },
+    "assets/images/source/dance/individual/08-prompt.txt": {
+      "path": "assets/images/source/dance/individual/08-prompt.txt",
+      "sha256": "04ce837b4846a015851235290a14d7452d4c90cfd6d12d3ab728c492cf11c36e"
+    },
+    "assets/images/source/dance/individual/08-repair-prompt.txt": {
+      "path": "assets/images/source/dance/individual/08-repair-prompt.txt",
+      "sha256": "41de84aa859873697d5dabfed2458400b31be6d937739acf128e19a0c2ce31e4"
+    },
+    "assets/images/source/dance/individual/09-atlas.png": {
+      "path": "assets/images/source/dance/individual/09-atlas.png",
+      "sha256": "e87177c9fbe1d6964d2bf859b5e0f17430f2e4bd6d8028fcbdb223b5b7716e99"
+    },
+    "assets/images/source/dance/individual/09-prompt.txt": {
+      "path": "assets/images/source/dance/individual/09-prompt.txt",
+      "sha256": "026768711e5be0c2661540cd9cb62a9cfc1843bb6d431dd7e593b41b9ffdc23f"
+    },
+    "assets/images/source/dance/individual/10-atlas.png": {
+      "path": "assets/images/source/dance/individual/10-atlas.png",
+      "sha256": "9d47250842812377e406a1c9df74964180bfdd3af8beefbec3b2b337f2243743"
+    },
+    "assets/images/source/dance/individual/10-prompt.txt": {
+      "path": "assets/images/source/dance/individual/10-prompt.txt",
+      "sha256": "5665ada53aa6d2db7e53df70b00b7c8e6c96817063d8183b26a577a5d46bf298"
+    },
+    "assets/images/source/dance/individual/10-repair-prompt.txt": {
+      "path": "assets/images/source/dance/individual/10-repair-prompt.txt",
+      "sha256": "6e6582287469872646ce162b0e5a779d96504b04866707eaba0665375a743e62"
+    },
+    "assets/images/source/dance/individual/timing.json": {
+      "path": "assets/images/source/dance/individual/timing.json",
+      "sha256": "90ae6e676dd79d0e644b9447a3ec310d889dc5b9df5fdd14167323fbc37e0828"
     }
   },
   "clips": [
     {
-      "id": "NOD",
-      "file": "01_节拍点头.gif",
-      "atlas": "nod-pose",
-      "grid": 4,
-      "duration_ms": 2000,
-      "keys": [
+      "id": "GROOVE_BOUNCE",
+      "action_id": 23,
+      "name": "上下弹动",
+      "file": "01_上下弹动.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 1,
+      "timeline": [
         [
           0,
-          2
+          1
         ],
         [
           1,
-          2
+          1
         ],
         [
           2,
-          4
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          0,
-          2
+          3
         ],
         [
           3,
           2
-        ],
-        [
-          0,
-          2
-        ]
-      ],
-      "ticks": 16,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "604e7d7023f430ba83a82fb1f17d5bcf1b5cebbfaf87fda8e26caf38d5bd3c07"
-    },
-    {
-      "id": "SWAY",
-      "file": "02_活泼摇摆.gif",
-      "atlas": "sway",
-      "grid": 2,
-      "duration_ms": 4000,
-      "keys": [
-        [
-          1,
-          4
-        ],
-        [
-          0,
-          4
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          2,
-          4
-        ],
-        [
-          1,
-          4
-        ],
-        [
-          0,
-          4
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          2,
-          4
-        ],
-        [
-          1,
-          4
-        ]
-      ],
-      "ticks": 32,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "fb3326354f3000770b7d11492065b772e9f5ca583d9093e0b70a7472c81f0a02"
-    },
-    {
-      "id": "CLAW_BEAT",
-      "file": "03_夹爪打拍.gif",
-      "atlas": "claw",
-      "grid": 2,
-      "duration_ms": 2000,
-      "keys": [
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          1
-        ],
-        [
-          2,
-          2
-        ],
-        [
-          1,
-          1
-        ],
-        [
-          0,
-          2
-        ],
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          1
-        ],
-        [
-          2,
-          2
-        ],
-        [
-          1,
-          1
-        ],
-        [
-          0,
-          2
-        ]
-      ],
-      "ticks": 16,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "3b4ba1fcb59fda858d8714d8e21ae2754d82325a7e1b70e33e1b90c6d136b444"
-    },
-    {
-      "id": "POSE",
-      "file": "04_舒展亮相.gif",
-      "atlas": "nod-pose",
-      "grid": 4,
-      "duration_ms": 4000,
-      "keys": [
-        [
-          0,
-          4
-        ],
-        [
-          12,
-          4
-        ],
-        [
-          14,
-          16
-        ],
-        [
-          12,
-          4
-        ],
-        [
-          0,
-          4
-        ]
-      ],
-      "ticks": 32,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "6b8730ea67b77438872d3c165bbd9494f2a3d6eeafe66bbed0868623ad565a2c"
-    },
-    {
-      "id": "SHAKE",
-      "file": "05_俏皮摇头.gif",
-      "atlas": "extra",
-      "grid": [
-        3,
-        2
-      ],
-      "duration_ms": 2000,
-      "keys": [
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          4
-        ],
-        [
-          0,
-          2
-        ],
-        [
-          2,
-          4
-        ],
-        [
-          0,
-          4
-        ]
-      ],
-      "ticks": 16,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "378be560a295edb55abf0a5176c2497e45400dc01aa4a5ca52b7c3adc941d477"
-    },
-    {
-      "id": "BOW",
-      "file": "06_礼貌鞠躬.gif",
-      "atlas": "extra",
-      "grid": [
-        3,
-        2
-      ],
-      "duration_ms": 4000,
-      "keys": [
-        [
-          3,
-          4
         ],
         [
           4,
-          6
+          3
         ],
         [
           5,
-          10
+          2
         ],
         [
-          4,
-          6
+          6,
+          1
         ],
         [
-          3,
-          6
+          7,
+          1
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          3
+        ],
+        [
+          0,
+          2
         ]
       ],
-      "ticks": 32,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "157dcbd6cb6663260ec09b61689bd1ac3b7782cac05a6cea778a96eeca0ad6b7"
-    },
-    {
-      "id": "CAT_DEMO",
-      "file": "cat-demo/01_猫步律动.gif",
-      "atlas": "cat",
-      "grid": [
+      "review_poses": [
+        0,
         2,
-        1
+        4,
+        8
       ],
-      "duration_ms": 2000,
-      "keys": [
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          2,
-          2
-        ],
-        [
-          3,
-          3
-        ],
-        [
-          4,
-          2
-        ],
-        [
-          5,
-          3
-        ],
-        [
-          0,
-          2
-        ]
-      ],
-      "ticks": 16,
-      "loop": true,
+      "atlas": "individual",
       "claw_key": "idle:0",
-      "sha256": "0b1f05c94bc36b1cdc1057c9d50741ddd95060f99b70e593a2e4695ff27337b1"
-    },
-    {
-      "id": "BASE_TURN",
-      "file": "07_底盘转拍.gif",
-      "atlas": "yaw-dance-v2",
-      "duration_ms": 2000,
-      "keys": [
-        [
-          1,
-          2
-        ],
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          2,
-          2
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          0,
-          1
-        ],
-        [
-          1,
-          1
-        ],
-        [
-          2,
-          2
-        ],
-        [
-          1,
-          2
-        ]
-      ],
-      "grid": [
-        3,
-        1
-      ],
-      "ticks": 16,
+      "ticks": 24,
       "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "152903291da29b0d879ac3020e7821b9b6901d1b2187f60e447833fac38e30e3"
-    },
-    {
-      "id": "SIDE_BEAT",
-      "file": "08_侧摆重拍.gif",
-      "atlas": "body-dance-v2",
-      "duration_ms": 2000,
-      "keys": [
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          2
-        ],
-        [
-          0,
-          1
-        ],
-        [
-          3,
-          1
-        ],
-        [
-          2,
-          2
-        ],
-        [
-          0,
-          2
-        ],
-        [
-          1,
-          1
-        ],
-        [
-          3,
-          1
-        ],
-        [
-          2,
-          2
-        ],
-        [
-          0,
-          2
-        ]
-      ],
-      "grid": [
-        3,
-        3
-      ],
-      "ticks": 16,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "68f6261574da6d590795938eda2c83bb3177e13a031995b313eb20baf70008b1"
-    },
-    {
-      "id": "BOUNCE",
-      "file": "09_上下律动.gif",
-      "atlas": "body-dance-v2",
-      "duration_ms": 2000,
-      "keys": [
-        [
-          0,
-          2
-        ],
-        [
-          5,
-          1
-        ],
-        [
-          3,
-          1
-        ],
-        [
-          0,
-          1
-        ],
-        [
-          4,
-          2
-        ],
-        [
-          0,
-          1
-        ],
-        [
-          5,
-          1
-        ],
-        [
-          3,
-          1
-        ],
-        [
-          0,
-          1
-        ],
-        [
-          4,
-          2
-        ],
-        [
-          0,
-          3
-        ]
-      ],
-      "grid": [
-        3,
-        3
-      ],
-      "ticks": 16,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "aa45a0ab1aaea70f7eaede257c59a9411744b4c3398d557204b3469666723553"
-    },
-    {
-      "id": "ALTERNATE",
-      "file": "10_左右交替.gif",
-      "atlas": "alternating-v2",
-      "duration_ms": 2000,
       "keys": [
         [
           0,
@@ -1008,85 +250,54 @@
         [
           15,
           1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
         ]
       ],
-      "grid": [
-        3,
-        1
-      ],
-      "ticks": 16,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "0546fc383eb321a229d3d83c34b417069db2424b12366a4db288dc8336fdaed5"
+      "sha256": "cdafc238bdaf086242e16585cf96494ee957368f43301be765426b16705267c3"
     },
     {
-      "id": "WAVE",
-      "file": "11_连环波浪.gif",
-      "atlas": "body-dance-v2",
-      "duration_ms": 4000,
-      "keys": [
+      "id": "GROOVE_ROCK",
+      "action_id": 24,
+      "name": "前后摇摆",
+      "file": "02_前后摇摆.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 2,
+      "timeline": [
         [
           0,
-          2
-        ],
-        [
-          5,
-          3
-        ],
-        [
-          3,
-          3
-        ],
-        [
-          6,
-          3
-        ],
-        [
-          4,
-          3
-        ],
-        [
-          7,
-          4
-        ],
-        [
-          4,
-          3
-        ],
-        [
-          6,
-          3
-        ],
-        [
-          8,
-          3
-        ],
-        [
-          0,
-          5
-        ]
-      ],
-      "grid": [
-        3,
-        3
-      ],
-      "ticks": 32,
-      "loop": true,
-      "claw_key": "idle:0",
-      "sha256": "85ccdb7eb127e52fa44fc7295377cecf4513dd9a1c3d0d233aa659a0c78f19e4"
-    },
-    {
-      "id": "FINALE",
-      "file": "12_舒展收拍.gif",
-      "atlas": "body-dance-v2",
-      "duration_ms": 4000,
-      "keys": [
-        [
-          0,
-          2
-        ],
-        [
-          2,
           2
         ],
         [
@@ -1094,58 +305,4334 @@
           2
         ],
         [
-          8,
+          2,
+          2
+        ],
+        [
+          3,
           2
         ],
         [
           4,
-          3
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
         ],
         [
           7,
-          10
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ],
+      "atlas": "individual",
+      "claw_key": "idle:0",
+      "ticks": 24,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ]
+      ],
+      "sha256": "0f4954c0417548a1fe392fcf77efd7ea835d7fea135121bd6ba00fdfac9ec2d4"
+    },
+    {
+      "id": "GROOVE_SIDE",
+      "action_id": 25,
+      "name": "左右律动",
+      "file": "03_左右律动.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 3,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        6,
+        8
+      ],
+      "pose_remap": {
+        "4": 6,
+        "7": 8
+      },
+      "excluded_source_poses": [
+        4,
+        7
+      ],
+      "selection_note": "Opposite-side generated redraws excluded; complete same-side poses selected instead. No mirroring or body-part editing.",
+      "atlas": "individual",
+      "claw_key": "idle:0",
+      "ticks": 24,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ]
+      ],
+      "sha256": "b6188bf4bb9788abb6b28268166378dcf68912975b98ad207e0f9b2a38878df6"
+    },
+    {
+      "id": "DANCE_POINT",
+      "action_id": 26,
+      "name": "斜向指拍",
+      "file": "04_斜向指拍.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 4,
+      "timeline": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ],
+      "atlas": "individual",
+      "claw_key": "idle:0",
+      "ticks": 48,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          25,
+          1
+        ],
+        [
+          26,
+          1
+        ],
+        [
+          27,
+          1
+        ],
+        [
+          28,
+          1
+        ],
+        [
+          29,
+          1
+        ],
+        [
+          30,
+          1
+        ],
+        [
+          31,
+          1
+        ],
+        [
+          32,
+          1
+        ],
+        [
+          33,
+          1
+        ],
+        [
+          34,
+          1
+        ],
+        [
+          35,
+          1
+        ],
+        [
+          36,
+          1
+        ],
+        [
+          37,
+          1
+        ],
+        [
+          38,
+          1
+        ],
+        [
+          39,
+          1
+        ],
+        [
+          40,
+          1
+        ],
+        [
+          41,
+          1
+        ],
+        [
+          42,
+          1
+        ],
+        [
+          43,
+          1
+        ],
+        [
+          44,
+          1
+        ],
+        [
+          45,
+          1
+        ],
+        [
+          46,
+          1
+        ],
+        [
+          47,
+          1
+        ]
+      ],
+      "sha256": "274cfcef3db0ecbd57b667d82878eac818746a8d71028aa33c9d988baaf7bf62"
+    },
+    {
+      "id": "ARM_WAVE",
+      "action_id": 27,
+      "name": "关节波浪",
+      "file": "05_关节波浪.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 5,
+      "timeline": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ],
+      "excluded_source_poses": [
+        7
+      ],
+      "selection_note": " Source-image-edge clipped poses excluded as well.",
+      "atlas": "individual",
+      "claw_key": "idle:0",
+      "ticks": 48,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          25,
+          1
+        ],
+        [
+          26,
+          1
+        ],
+        [
+          27,
+          1
+        ],
+        [
+          28,
+          1
+        ],
+        [
+          29,
+          1
+        ],
+        [
+          30,
+          1
+        ],
+        [
+          31,
+          1
+        ],
+        [
+          32,
+          1
+        ],
+        [
+          33,
+          1
+        ],
+        [
+          34,
+          1
+        ],
+        [
+          35,
+          1
+        ],
+        [
+          36,
+          1
+        ],
+        [
+          37,
+          1
+        ],
+        [
+          38,
+          1
+        ],
+        [
+          39,
+          1
+        ],
+        [
+          40,
+          1
+        ],
+        [
+          41,
+          1
+        ],
+        [
+          42,
+          1
+        ],
+        [
+          43,
+          1
+        ],
+        [
+          44,
+          1
+        ],
+        [
+          45,
+          1
+        ],
+        [
+          46,
+          1
+        ],
+        [
+          47,
+          1
+        ]
+      ],
+      "sha256": "76b59cb12214f1cf4b99c93800f941af4f18eade7b5d07651481144dee815b24"
+    },
+    {
+      "id": "DANCE_ROLL",
+      "action_id": 28,
+      "name": "环绕滚动",
+      "file": "06_环绕滚动.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 6,
+      "timeline": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "pose_remap": {
+        "8": 6,
+        "9": 5
+      },
+      "excluded_source_poses": [
+        3,
+        8,
+        9
+      ],
+      "selection_note": "Opposite-side generated redraws excluded; complete same-side poses selected instead. No mirroring or body-part editing. Source-image-edge clipped poses excluded as well.",
+      "atlas": "individual",
+      "claw_key": "idle:0",
+      "ticks": 48,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          25,
+          1
+        ],
+        [
+          26,
+          1
+        ],
+        [
+          27,
+          1
+        ],
+        [
+          28,
+          1
+        ],
+        [
+          29,
+          1
+        ],
+        [
+          30,
+          1
+        ],
+        [
+          31,
+          1
+        ],
+        [
+          32,
+          1
+        ],
+        [
+          33,
+          1
+        ],
+        [
+          34,
+          1
+        ],
+        [
+          35,
+          1
+        ],
+        [
+          36,
+          1
+        ],
+        [
+          37,
+          1
+        ],
+        [
+          38,
+          1
+        ],
+        [
+          39,
+          1
+        ],
+        [
+          40,
+          1
+        ],
+        [
+          41,
+          1
+        ],
+        [
+          42,
+          1
+        ],
+        [
+          43,
+          1
+        ],
+        [
+          44,
+          1
+        ],
+        [
+          45,
+          1
+        ],
+        [
+          46,
+          1
+        ],
+        [
+          47,
+          1
+        ]
+      ],
+      "sha256": "d916516f77821b57060885d12fd27ace7502461dda3e33a8b119b311e4a439d0"
+    },
+    {
+      "id": "WRIST_ISOLATION",
+      "action_id": 29,
+      "name": "腕部隔离",
+      "file": "07_腕部隔离.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 7,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ],
+      "atlas": "individual",
+      "claw_key": "idle:0",
+      "ticks": 24,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ]
+      ],
+      "sha256": "b0557faa941b78e4ad6394d68faeccc51e6c66116a5bdd1138d74f68bff82007"
+    },
+    {
+      "id": "DANCE_TUT",
+      "action_id": 30,
+      "name": "几何折线",
+      "file": "08_几何折线.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 8,
+      "timeline": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        5
+      ],
+      "pose_remap": {
+        "7": 6,
+        "8": 5
+      },
+      "excluded_source_poses": [
+        7,
+        8
+      ],
+      "selection_note": "Opposite-side generated redraws excluded; complete same-side poses selected instead. No mirroring or body-part editing.",
+      "atlas": "individual",
+      "claw_key": "idle:0",
+      "ticks": 48,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          25,
+          1
+        ],
+        [
+          26,
+          1
+        ],
+        [
+          27,
+          1
+        ],
+        [
+          28,
+          1
+        ],
+        [
+          29,
+          1
+        ],
+        [
+          30,
+          1
+        ],
+        [
+          31,
+          1
+        ],
+        [
+          32,
+          1
+        ],
+        [
+          33,
+          1
+        ],
+        [
+          34,
+          1
+        ],
+        [
+          35,
+          1
+        ],
+        [
+          36,
+          1
+        ],
+        [
+          37,
+          1
+        ],
+        [
+          38,
+          1
+        ],
+        [
+          39,
+          1
+        ],
+        [
+          40,
+          1
+        ],
+        [
+          41,
+          1
+        ],
+        [
+          42,
+          1
+        ],
+        [
+          43,
+          1
+        ],
+        [
+          44,
+          1
+        ],
+        [
+          45,
+          1
+        ],
+        [
+          46,
+          1
+        ],
+        [
+          47,
+          1
+        ]
+      ],
+      "sha256": "0c043b4c8af3fb2723b025eea4a50b5ed5ba3829b9e94f5b80cc426314a10b75"
+    },
+    {
+      "id": "DANCE_HIT",
+      "action_id": 31,
+      "name": "重拍弹点",
+      "file": "09_重拍弹点.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 9,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ],
+      "atlas": "individual",
+      "claw_key": "idle:0",
+      "ticks": 24,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ]
+      ],
+      "sha256": "9b062cb1ea4da7b0eae66131bfe743ed760702ba6fd32d6eec05ed7138b88132"
+    },
+    {
+      "id": "DIME_STOP",
+      "action_id": 32,
+      "name": "移动定格",
+      "file": "10_移动定格.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 10,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          1
         ],
         [
           4,
           3
         ],
         [
-          8,
+          5,
+          7
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
           3
         ],
         [
-          0,
+          10,
+          7
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          10,
           5
+        ],
+        [
+          0,
+          8
         ]
       ],
-      "grid": [
-        3,
-        3
+      "review_poses": [
+        0,
+        2,
+        4,
+        10
       ],
-      "ticks": 32,
-      "loop": true,
+      "pose_remap": {
+        "8": 10,
+        "9": 10
+      },
+      "excluded_source_poses": [
+        8,
+        9
+      ],
+      "selection_note": "Opposite-side generated redraws excluded; complete same-side poses selected instead. No mirroring or body-part editing.",
+      "atlas": "individual",
       "claw_key": "idle:0",
-      "sha256": "6dac467a9046dcba48829d7c273739da078830ae3636ab011884fb8f1a5fc615"
+      "ticks": 48,
+      "loop": true,
+      "keys": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          1
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          1
+        ],
+        [
+          5,
+          1
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          1
+        ],
+        [
+          9,
+          1
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          11,
+          1
+        ],
+        [
+          12,
+          1
+        ],
+        [
+          13,
+          1
+        ],
+        [
+          14,
+          1
+        ],
+        [
+          15,
+          1
+        ],
+        [
+          16,
+          1
+        ],
+        [
+          17,
+          1
+        ],
+        [
+          18,
+          1
+        ],
+        [
+          19,
+          1
+        ],
+        [
+          20,
+          1
+        ],
+        [
+          21,
+          1
+        ],
+        [
+          22,
+          1
+        ],
+        [
+          23,
+          1
+        ],
+        [
+          24,
+          1
+        ],
+        [
+          25,
+          1
+        ],
+        [
+          26,
+          1
+        ],
+        [
+          27,
+          1
+        ],
+        [
+          28,
+          1
+        ],
+        [
+          29,
+          1
+        ],
+        [
+          30,
+          1
+        ],
+        [
+          31,
+          1
+        ],
+        [
+          32,
+          1
+        ],
+        [
+          33,
+          1
+        ],
+        [
+          34,
+          1
+        ],
+        [
+          35,
+          1
+        ],
+        [
+          36,
+          1
+        ],
+        [
+          37,
+          1
+        ],
+        [
+          38,
+          1
+        ],
+        [
+          39,
+          1
+        ],
+        [
+          40,
+          1
+        ],
+        [
+          41,
+          1
+        ],
+        [
+          42,
+          1
+        ],
+        [
+          43,
+          1
+        ],
+        [
+          44,
+          1
+        ],
+        [
+          45,
+          1
+        ],
+        [
+          46,
+          1
+        ],
+        [
+          47,
+          1
+        ]
+      ],
+      "sha256": "ffb9e9dc0ced07fb72c9b5590894ce348075dd297db0f87d8be0bf5116ea1491"
     }
   ],
-  "demo": {
-    "file": "00_活力律动_24秒.gif",
-    "duration_ms": 24000,
-    "sha256": "f9bb431495e568350eb59692e7beb8a6364a973a1418c99a790e05fc4dcfe97a"
+  "registration": {
+    "GROOVE_BOUNCE": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          43
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          63
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          111,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          108,
+          89
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          100,
+          57
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          203,
+          191
+        ],
+        "origin": [
+          108,
+          31
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          104,
+          47
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          44
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          111,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          106,
+          70
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          111,
+          180,
+          200,
+          191
+        ],
+        "origin": [
+          107,
+          89
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          100,
+          59
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          180,
+          203,
+          191
+        ],
+        "origin": [
+          106,
+          35
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          203,
+          191
+        ],
+        "origin": [
+          106,
+          46
+        ],
+        "atlas_scale": 0.4732824427480916,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "GROOVE_ROCK": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          108,
+          53
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          104,
+          53
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          100,
+          59
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          98,
+          55
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          180,
+          203,
+          191
+        ],
+        "origin": [
+          101,
+          55
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          98,
+          54
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          100,
+          54
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          102,
+          54
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          102,
+          54
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          102,
+          56
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          102,
+          55
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          203,
+          191
+        ],
+        "origin": [
+          106,
+          53
+        ],
+        "atlas_scale": 0.45588235294117646,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "GROOVE_SIDE": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          203,
+          191
+        ],
+        "origin": [
+          108,
+          44
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          105,
+          43
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          100,
+          48
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          203,
+          191
+        ],
+        "origin": [
+          104,
+          47
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          92,
+          45
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          102,
+          45
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          102,
+          44
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          201,
+          191
+        ],
+        "origin": [
+          84,
+          54
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          106,
+          180,
+          204,
+          191
+        ],
+        "origin": [
+          102,
+          44
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          102,
+          44
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          202,
+          191
+        ],
+        "origin": [
+          101,
+          45
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          180,
+          203,
+          191
+        ],
+        "origin": [
+          100,
+          45
+        ],
+        "atlas_scale": 0.46616541353383456,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "DANCE_POINT": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          101,
+          42
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          100,
+          43
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          24
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          18
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          107,
+          179,
+          205,
+          191
+        ],
+        "origin": [
+          106,
+          31
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          101,
+          43
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          104,
+          52
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          104,
+          70
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          105,
+          70
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          107,
+          179,
+          205,
+          191
+        ],
+        "origin": [
+          106,
+          42
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          106,
+          179,
+          206,
+          191
+        ],
+        "origin": [
+          102,
+          36
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          101,
+          43
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "ARM_WAVE": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          108,
+          51
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          107,
+          34
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          25
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          100,
+          45
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          35
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          35
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          107,
+          36
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          40
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": true
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          37
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          204,
+          191
+        ],
+        "origin": [
+          106,
+          36
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          106,
+          179,
+          205,
+          191
+        ],
+        "origin": [
+          105,
+          43
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          107,
+          54
+        ],
+        "atlas_scale": 0.49076517150395776,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "DANCE_ROLL": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          108,
+          44
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          31
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          107,
+          23
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          107,
+          44
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": true
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          108,
+          48
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          111,
+          179,
+          200,
+          191
+        ],
+        "origin": [
+          107,
+          59
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          112,
+          179,
+          199,
+          191
+        ],
+        "origin": [
+          109,
+          64
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          112,
+          179,
+          199,
+          191
+        ],
+        "origin": [
+          107,
+          63
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          68,
+          39
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          68,
+          25
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          42
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          107,
+          42
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "WRIST_ISOLATION": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          107,
+          47
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          108,
+          40
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          107,
+          36
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          108,
+          31
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          39
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          47
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          46
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          48
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          49
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          40
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          48
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          108,
+          48
+        ],
+        "atlas_scale": 0.484375,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "DANCE_TUT": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          98,
+          51
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          99,
+          30
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          98,
+          26
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          96,
+          31
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          96,
+          30
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          108,
+          48
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          107,
+          66
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          94,
+          56
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          100,
+          53
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          107,
+          179,
+          204,
+          191
+        ],
+        "origin": [
+          94,
+          25
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          100,
+          51
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          97,
+          50
+        ],
+        "atlas_scale": 0.5054347826086957,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "DANCE_HIT": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          106,
+          51
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          104,
+          50
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          98,
+          28
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          100,
+          28
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          98,
+          31
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          105,
+          49
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          105,
+          49
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          103,
+          49
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          98,
+          27
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          100,
+          27
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          98,
+          31
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          105,
+          50
+        ],
+        "atlas_scale": 0.5027027027027027,
+        "source_image_edge_clipped": false
+      }
+    ],
+    "DIME_STOP": [
+      {
+        "source_index": 0,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          102,
+          33
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 1,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          97,
+          36
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 2,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          202,
+          191
+        ],
+        "origin": [
+          91,
+          57
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 3,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          110,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          94,
+          66
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 4,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          107,
+          179,
+          205,
+          191
+        ],
+        "origin": [
+          96,
+          27
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 5,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          204,
+          191
+        ],
+        "origin": [
+          92,
+          20
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 6,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          93,
+          20
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 7,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          92,
+          34
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 8,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          111,
+          179,
+          200,
+          191
+        ],
+        "origin": [
+          84,
+          58
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 9,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          84,
+          56
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 10,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          108,
+          179,
+          203,
+          191
+        ],
+        "origin": [
+          98,
+          31
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      },
+      {
+        "source_index": 11,
+        "floor": [
+          155,
+          190
+        ],
+        "base_bbox": [
+          109,
+          179,
+          201,
+          191
+        ],
+        "origin": [
+          98,
+          29
+        ],
+        "atlas_scale": 0.496,
+        "source_image_edge_clipped": false
+      }
+    ]
   },
-  "cat_hand_revision": 3,
-  "cat_fixed_base_box": [
-    0,
-    158,
-    320,
-    240
-  ],
-  "cat_fixed_nose_box": [
-    170,
-    105,
-    187,
-    120
-  ],
-  "geometry_policy": "Constant source scale; no animated scaling, warping or camera movement. Cat base, body and nose-covering finger share one fixed layer; only the opposite finger rotates about its hinge.",
-  "touch_policy": "Dance clips are preview-only; daily touch is suspended. Idle hitbox metadata is unused during preview."
+  "geometry_policy": "Complete authored character poses; one constant atlas sampling scale, floor translation only. No body-part compositing, crossfade, deformation, or animated scale. Local redraw dimensions still require visual review.",
+  "physical_validation": "Illustrated dance concepts, not measured B601-RS trajectories; real joint ranges/speeds/collision validation remain pending.",
+  "timing_note": "8 FPS playback clock, with complete key poses held for multiple ticks; not 24/48 unique drawings.",
+  "touch_policy": "Dance playback suspends daily touch; idle metadata unused."
 }

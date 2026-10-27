@@ -23,7 +23,7 @@ sheet.save(args.output / 'contact-sheet.png')
 print(args.output / 'contact-sheet.png')
 choreography = [('library', '作品列表'), ('editor', '动作编排'), ('params', '步骤参数'),
                 ('performance', '动作库'), ('tempo', '屏幕节奏'), ('preview', '屏幕预览'),
-                ('dance_demo', '活力律动'), ('cat_preview', '猫步律动'), ('slot10', '第十个作品')]
+                ('dance_demo', '基础律动'), ('slot10', '第十个作品')]
 if all((args.input / f'choreo_{name}.ppm').exists() for name, _ in choreography):
     sheet = Image.new('RGB', (960, 840), '#efeee2')
     draw = ImageDraw.Draw(sheet)

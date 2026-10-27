@@ -1,0 +1,707 @@
+{
+  "fps": 8,
+  "bpm": 80,
+  "clips": [
+    {
+      "id": "GROOVE_BOUNCE",
+      "action_id": 23,
+      "name": "上下弹动",
+      "file": "01_上下弹动.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 1,
+      "timeline": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          3
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          3
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          3
+        ],
+        [
+          0,
+          2
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ]
+    },
+    {
+      "id": "GROOVE_ROCK",
+      "action_id": 24,
+      "name": "前后摇摆",
+      "file": "02_前后摇摆.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 2,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ]
+    },
+    {
+      "id": "GROOVE_SIDE",
+      "action_id": 25,
+      "name": "左右律动",
+      "file": "03_左右律动.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 3,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        6,
+        8
+      ],
+      "pose_remap": {
+        "4": 6,
+        "7": 8
+      },
+      "excluded_source_poses": [
+        4,
+        7
+      ],
+      "selection_note": "Opposite-side generated redraws excluded; complete same-side poses selected instead. No mirroring or body-part editing."
+    },
+    {
+      "id": "DANCE_POINT",
+      "action_id": 26,
+      "name": "斜向指拍",
+      "file": "04_斜向指拍.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 4,
+      "timeline": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ]
+    },
+    {
+      "id": "ARM_WAVE",
+      "action_id": 27,
+      "name": "关节波浪",
+      "file": "05_关节波浪.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 5,
+      "timeline": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          8,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ],
+      "excluded_source_poses": [
+        7
+      ],
+      "selection_note": " Source-image-edge clipped poses excluded as well."
+    },
+    {
+      "id": "DANCE_ROLL",
+      "action_id": 28,
+      "name": "环绕滚动",
+      "file": "06_环绕滚动.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 6,
+      "timeline": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          7,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        6
+      ],
+      "pose_remap": {
+        "8": 6,
+        "9": 5
+      },
+      "excluded_source_poses": [
+        3,
+        8,
+        9
+      ],
+      "selection_note": "Opposite-side generated redraws excluded; complete same-side poses selected instead. No mirroring or body-part editing. Source-image-edge clipped poses excluded as well."
+    },
+    {
+      "id": "WRIST_ISOLATION",
+      "action_id": 29,
+      "name": "腕部隔离",
+      "file": "07_腕部隔离.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 7,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          2
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          2
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          2
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          11,
+          2
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ]
+    },
+    {
+      "id": "DANCE_TUT",
+      "action_id": 30,
+      "name": "几何折线",
+      "file": "08_几何折线.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 8,
+      "timeline": [
+        [
+          0,
+          4
+        ],
+        [
+          1,
+          4
+        ],
+        [
+          2,
+          4
+        ],
+        [
+          3,
+          4
+        ],
+        [
+          4,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          6,
+          4
+        ],
+        [
+          5,
+          4
+        ],
+        [
+          9,
+          4
+        ],
+        [
+          10,
+          4
+        ],
+        [
+          11,
+          4
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        5
+      ],
+      "pose_remap": {
+        "7": 6,
+        "8": 5
+      },
+      "excluded_source_poses": [
+        7,
+        8
+      ],
+      "selection_note": "Opposite-side generated redraws excluded; complete same-side poses selected instead. No mirroring or body-part editing."
+    },
+    {
+      "id": "DANCE_HIT",
+      "action_id": 31,
+      "name": "重拍弹点",
+      "file": "09_重拍弹点.gif",
+      "duration_ms": 3000,
+      "beats": 4,
+      "repeat_max": 3,
+      "number": 9,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          1
+        ],
+        [
+          2,
+          2
+        ],
+        [
+          3,
+          2
+        ],
+        [
+          4,
+          2
+        ],
+        [
+          5,
+          3
+        ],
+        [
+          6,
+          2
+        ],
+        [
+          7,
+          1
+        ],
+        [
+          8,
+          2
+        ],
+        [
+          9,
+          2
+        ],
+        [
+          10,
+          2
+        ],
+        [
+          0,
+          3
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        8
+      ]
+    },
+    {
+      "id": "DIME_STOP",
+      "action_id": 32,
+      "name": "移动定格",
+      "file": "10_移动定格.gif",
+      "duration_ms": 6000,
+      "beats": 8,
+      "repeat_max": 3,
+      "number": 10,
+      "timeline": [
+        [
+          0,
+          2
+        ],
+        [
+          1,
+          3
+        ],
+        [
+          2,
+          7
+        ],
+        [
+          3,
+          1
+        ],
+        [
+          4,
+          3
+        ],
+        [
+          5,
+          7
+        ],
+        [
+          6,
+          1
+        ],
+        [
+          7,
+          3
+        ],
+        [
+          10,
+          7
+        ],
+        [
+          10,
+          1
+        ],
+        [
+          10,
+          5
+        ],
+        [
+          0,
+          8
+        ]
+      ],
+      "review_poses": [
+        0,
+        2,
+        4,
+        10
+      ],
+      "pose_remap": {
+        "8": 10,
+        "9": 10
+      },
+      "excluded_source_poses": [
+        8,
+        9
+      ],
+      "selection_note": "Opposite-side generated redraws excluded; complete same-side poses selected instead. No mirroring or body-part editing."
+    }
+  ]
+}

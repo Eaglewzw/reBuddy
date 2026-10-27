@@ -9,7 +9,7 @@ extern const lv_font_t rb_choreo_font,rb_choreo_small_font;
 enum page { LIBRARY,EDITOR,ADD,PARAMS,TEMPO,UNSAVED,REPLACE,PLAY_CHOICE,PREVIEW,ERROR_PAGE };
 enum command { NONE,BACK,OPEN,REBUILD,SAMPLE,CONFIRM_REPLACE,SAVE,SAVE_EXIT,DISCARD,
     CONTINUE,ADD_PAGE,GROUP,ADD_ACTION,SELECT_STEP,MOVE_UP,MOVE_DOWN,DELETE_STEP,
-    HOLD_LESS,HOLD_MORE,REPEAT_LESS,REPEAT_MORE,TEMPO_PAGE,SET_TEMPO,PLAY_PAGE,PLAY,STOP,CAT_PLAY };
+    HOLD_LESS,HOLD_MORE,REPEAT_LESS,REPEAT_MORE,TEMPO_PAGE,SET_TEMPO,PLAY_PAGE,PLAY,STOP };
 static struct {
     lv_obj_t *root,*image,*progress,*stop,*bar;
     void (*on_exit)(void *); void *context;
@@ -17,7 +17,7 @@ static struct {
     enum command command;
     int arg,selected,slot,group;
     uint64_t now;
-    bool dirty,faulted,standalone;
+    bool dirty,faulted;
     rb_choreo_work_t work;
     rb_choreo_plan_t plan;
     rb_choreo_player_t player;
@@ -105,7 +105,7 @@ static void back(void)
     case LIBRARY:close_page();break;
     case EDITOR:ui.page=ui.dirty?UNSAVED:LIBRARY;break;
     case ADD:case PARAMS:case TEMPO:case PLAY_CHOICE:ui.page=EDITOR;break;
-    case PREVIEW:rb_choreo_player_stop(&ui.player,ui.now);ui.page=ui.standalone?LIBRARY:EDITOR;break;
+    case PREVIEW:rb_choreo_player_stop(&ui.player,ui.now);ui.page=EDITOR;break;
     case UNSAVED:ui.page=EDITOR;break;
     case REPLACE:ui.page=LIBRARY;break;
     case ERROR_PAGE:ui.page=ui.error_return;break;
@@ -185,7 +185,6 @@ static void handle(enum command command,int arg)
     case SET_TEMPO:if (arg<RB_CHOREO_TEMPO_COUNT) { ui.dirty|=ui.work.tempo!=arg;ui.work.tempo=arg;ui.page=EDITOR; }break;
     case PLAY_PAGE:ui.page=PLAY_CHOICE;break;
     case PLAY: {
-        ui.standalone=false;
         uint8_t bad=RB_CHOREO_NO_STEP;
         rb_choreo_status_t result=rb_choreo_compile(&ui.work,&ui.plan,&bad);
         if (result!=RB_CHOREO_OK) {
@@ -198,16 +197,6 @@ static void handle(enum command command,int arg)
         (void)rb_choreo_player_start(&ui.player,&ui.plan,ui.now);
         ui.frame=UINT32_MAX;ui.page=PREVIEW;break;
     }
-    case CAT_PLAY:
-        if (ui.faulted) { error_page("当前已停止，请退出编排后恢复。",LIBRARY);break; }
-        /* Separate screen showcase: not a saved work or a public action ID.
-         * Six complete 2-second cycles, then hold; no automatic restart. */
-        memset(&ui.plan,0,sizeof(ui.plan));
-        ui.plan.count=6;ui.plan.total_ms=ui.plan.base_ms=12000;
-        for (unsigned i=0;i<6;++i) ui.plan.events[i]=(rb_choreo_event_t){
-            .action_id=16,.step_index=i,.start_ms=i*2000,.duration_ms=2000,.source_duration_ms=2000};
-        ui.standalone=true;ui.frame=UINT32_MAX;ui.page=PREVIEW;
-        (void)rb_choreo_player_start(&ui.player,&ui.plan,ui.now);break;
     case STOP:rb_choreo_player_stop(&ui.player,ui.now);break;
     default:break;
     }
@@ -234,8 +223,7 @@ static void draw_library(void)
         button(items,0,(int)i*48,rebuild?224:296,40,value,OPEN,(int)i,true,0xffffff);
         if (rebuild) button(items,232,(int)i*48,64,40,"重建",REBUILD,(int)i,true,0xe8e8da);
     }
-    button(ui.root,8,197,148,35,"活力律动",SAMPLE,0,true,0xe4edbf);
-    button(ui.root,164,197,148,35,"猫步律动",CAT_PLAY,0,!ui.faulted,0xd8ef79);
+    button(ui.root,8,197,148,35,"基础律动",SAMPLE,0,true,0xe4edbf);
 }
 static void draw_editor(void)
 {
@@ -346,8 +334,8 @@ static void draw(void)
         panel(ui.root,0,192,320,48,0xf7f5e9,0);
         if (ui.player.running) ui.stop=button(ui.root,8,199,104,34,"停止预览",STOP,0,true,0xf1c6ad);
         else {
-            button(ui.root,8,199,104,34,ui.standalone?"返回列表":"返回编辑",BACK,0,true,0xe8e8da);
-            button(ui.root,120,199,72,34,"重播",ui.standalone?CAT_PLAY:PLAY,0,!ui.faulted,0xd8ef79);
+            button(ui.root,8,199,104,34,"返回编辑",BACK,0,true,0xe8e8da);
+            button(ui.root,120,199,72,34,"重播",PLAY,0,!ui.faulted,0xd8ef79);
         }
         label(ui.root,ui.player.running?125:204,207,ui.player.running?190:108,"仅屏幕预览",true);
         ui.bar=panel(ui.root,0,188,1,4,0x96b833,0);
@@ -391,7 +379,7 @@ void rb_choreo_ui_update(uint64_t now)
         sample->action_id<sizeof(rb_choreo_clip_map)/sizeof(rb_choreo_clip_map[0])?rb_choreo_clip_map[sample->action_id]:UINT8_MAX;
     if (clip_index==UINT8_MAX) {
         rb_choreo_player_stop(&ui.player,now);
-        error_page("当前动作缺少动画，预览已停止。",ui.standalone?LIBRARY:EDITOR);draw();return;
+        error_page("当前动作缺少动画，预览已停止。",EDITOR);draw();return;
     }
     const rb_clip_meta_t *clip=&rb_clips[clip_index];
     unsigned n=0;
@@ -402,17 +390,17 @@ void rb_choreo_ui_update(uint64_t now)
         const lv_image_dsc_t *image=rb_assets_frame(frame,&meta);
         if (!image || meta!=&rb_frames[frame]) {
             rb_choreo_player_stop(&ui.player,now);
-            error_page("动画资源读取失败，预览已停止。",ui.standalone?LIBRARY:EDITOR);draw();return;
+            error_page("动画资源读取失败，预览已停止。",EDITOR);draw();return;
         }
         lv_image_set_src(ui.image,image);lv_obj_invalidate(ui.image);ui.frame=frame;
     }
     char value[128];
     const rb_choreo_action_t *action=rb_choreo_action(sample->action_id);
     const char *state=ui.faulted?"故障停止":!ui.player.running?(sample->done?"已结束":"已停止"):sample->transition?"过渡":sample->holding?"停留":"预览";
-    unsigned steps=ui.standalone?6:ui.work.count;
+    unsigned steps=ui.work.count;
     snprintf(value,sizeof(value),"%s · %u/%u · %s  %.1f/%.1fs",state,
         sample->step_index==RB_CHOREO_NO_STEP?steps:(unsigned)sample->step_index+1u,steps,
-        ui.standalone?"猫步律动":action?action->name:"待机",ui.player.elapsed_ms/1000.0,ui.plan.total_ms/1000.0);
+        action?action->name:"待机",ui.player.elapsed_ms/1000.0,ui.plan.total_ms/1000.0);
     if (strcmp(lv_label_get_text(ui.progress),value)) lv_label_set_text(ui.progress,value);
     uint32_t elapsed=ui.player.elapsed_ms>ui.plan.total_ms?ui.plan.total_ms:ui.player.elapsed_ms;
     unsigned width=ui.plan.total_ms?(unsigned)(UINT64_C(320)*elapsed/ui.plan.total_ms):0;

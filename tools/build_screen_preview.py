@@ -80,6 +80,29 @@ def main():
     for clip in clips:
         for i in clip['frames']:
             candidates[i].add(clip['frames'][0])
+    # Turning the pedestal changes the whole projected body. Keep one
+    # independently decodable anchor per sampled yaw view, so those poses do
+    # not XOR against a different view. Never introduce delta chains.
+    yaw_anchors = {}
+    for clip in clips:
+        trace = dance.get('trace', {}).get(clip['id'])
+        if not trace:
+            continue
+        for tick, state in enumerate(trace):
+            view = state.get('view')
+            if view is None:
+                continue
+            score = sum(abs(v) for v in state['angles_deg']) + abs(state['wrist_roll_deg']) + state['gripper_open_deg']
+            candidate = (score, clip['frames'][tick])
+            if view not in yaw_anchors or candidate < yaw_anchors[view]:
+                yaw_anchors[view] = candidate
+    anchors.update(frame for _, frame in yaw_anchors.values())
+    for clip in clips:
+        trace = dance.get('trace', {}).get(clip['id'])
+        if trace:
+            for tick, state in enumerate(trace):
+                if state.get('view') in yaw_anchors:
+                    candidates[clip['frames'][tick]].add(yaw_anchors[state['view']][1])
     original_bytes = offset
     offset, blobs, delta_count = 0, [], 0
     for i, (frame, pixels) in enumerate(zip(frames, decoded)):
@@ -98,9 +121,9 @@ def main():
         blobs.append(blob)
         offset += len(blob)
     by_id = {clip['id']: i for i, clip in enumerate(clips)}
-    dance_ids = {9:'NOD', 10:'SHAKE', 11:'SWAY', 12:'BOW', 13:'CLAW_BEAT', 14:'POSE', 16:'CAT_DEMO',
-                 17:'BASE_TURN', 18:'SIDE_BEAT', 19:'BOUNCE', 20:'ALTERNATE', 21:'WAVE', 22:'FINALE'}
-    choreography_mapping = [by_id[ACTIONS[i]] if i < 9 else by_id[dance_ids[i]] if i in dance_ids else 255 for i in range(23)]
+    dance_ids = {c['action_id']: c['id'] for c in dance['clips']}
+    assert set(dance_ids) == set(range(23,33))
+    choreography_mapping = [by_id[ACTIONS[i]] if i < 9 else by_id[dance_ids[i]] if i in dance_ids else 255 for i in range(33)]
     folded_index = len(clips)
     clips.append(dict(id='FOLDED_HOLD', frames=[clips[by_id['WITHDRAW']]['frames'][-1]],
                       at_ms=[0], duration_ms=1000, loop=True))
@@ -140,7 +163,7 @@ typedef struct { unsigned count; uint16_t duration_ms; uint16_t frames[64], at[6
 extern const rb_frame_meta_t rb_frames[];
 extern const rb_clip_meta_t rb_clips[];
 extern const uint8_t rb_clip_map[3][9];
-extern const uint8_t rb_choreo_clip_map[23];
+extern const uint8_t rb_choreo_clip_map[33];
 #define RB_FRAME_WIDTH 320u
 #define RB_FRAME_HEIGHT 240u
 #define RB_FRAME_X 0
@@ -160,7 +183,7 @@ extern const uint8_t rb_choreo_clip_map[23];
                      ','.join(map(str, clip['frames'])), ','.join(map(str, clip['at_ms']))))
     lines += ['};', 'const uint8_t rb_clip_map[3][9]={']
     lines += ['{' + ','.join(map(str, row)) + '},' for row in mapping]
-    lines += ['};', 'const uint8_t rb_choreo_clip_map[23]={'+','.join(map(str,choreography_mapping))+'};']
+    lines += ['};', 'const uint8_t rb_choreo_clip_map[33]={'+','.join(map(str,choreography_mapping))+'};']
     (ROOT / 'main/pet_animation_table.c').write_text('\n'.join(lines) + '\n')
     print(f'Encoded {len(records)} current GIFs, {len(frames)} unique frames, {offset} bytes; original pixels/timings preserved through RGB565 conversion')
 

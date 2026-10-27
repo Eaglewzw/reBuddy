@@ -1,19 +1,150 @@
 {
-  "body_source": "assets/images/source/shared/gripper/turntable.png",
-  "jaw_source": "assets/images/source/shared/gripper/jaws.png",
+  "body_source": "assets/images/source/shared/gripper/body-flush.png",
+  "jaw_source": "assets/images/source/shared/gripper/jaws-solid.png",
   "body_cell_px": 724,
   "body_render_px": 170,
-  "base_anchor": [160, 190],
-  "socket_centers": [[[502, 377], [577, 390]], [[449, 377], [519, 390]], [[424, 377], [482, 390]]],
-  "jaw_crops": [[290, 195, 750, 747], [1027, 194, 1488, 745]],
-  "jaw_pivots": [[501, 242], [1275, 241]],
-  "jaw_setup_scale": 0.17,
-  "jaw_rest_deg": [-8, 8],
+  "base_anchor": [
+    160,
+    190
+  ],
+  "socket_centers": [
+    [
+      [
+        480,
+        310
+      ],
+      [
+        540,
+        302
+      ]
+    ],
+    [
+      [
+        410,
+        310
+      ],
+      [
+        470,
+        302
+      ]
+    ],
+    [
+      [
+        370,
+        310
+      ],
+      [
+        430,
+        302
+      ]
+    ]
+  ],
+  "jaw_crops": [
+    [
+      270,
+      210,
+      735,
+      665
+    ],
+    [
+      1040,
+      210,
+      1505,
+      665
+    ]
+  ],
+  "jaw_pivots": [
+    [
+      395,
+      280
+    ],
+    [
+      1379,
+      280
+    ]
+  ],
+  "jaw_setup_scale": 0.31,
+  "jaw_rest_deg": [
+    -13,
+    66
+  ],
   "jaw_sway_deg": 18,
   "jaw_period_ms": 2000,
   "right_phase_rad": 0.3,
-  "view_indices": [1,1,1,1,0,0,0,0,0,0,0,0,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,1,1,1,1],
+  "view_indices": [
+    1,
+    1,
+    1,
+    1,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    1,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    2,
+    1,
+    1,
+    1,
+    1
+  ],
   "fps": 8,
   "duration_ms": 4000,
-  "note": "Preview only: original two gripper sides oscillate about their own pivots. Three turntable views show left/center/right base yaw. No extra arms, cat paws or nose-covering. View labels are visual design targets, not calibrated motor angles."
+  "note": "Preview only: original two gripper sides oscillate about their own pivots. Three turntable views show left/center/right base yaw. No extra arms, cat paws or nose-covering. View labels are visual design targets, not calibrated motor angles.",
+  "jaw_structure": "two whole rigid sides; each yellow shell and black pad share one transform; no sub-fingers",
+  "outward_sign": [
+    -1,
+    1
+  ],
+  "size_reference": {
+    "gif": "assets/gifs/daily/01_待机眨眼.gif",
+    "sha256": "683794423745d9e89729d449d0ab043c9770ae63ff8a1258ace69033904c3c82",
+    "frame": 0,
+    "screen_canvas_px": [
+      320,
+      240
+    ],
+    "review_crop_px": [
+      170,
+      100,
+      230,
+      150
+    ],
+    "target_rest_size_px": [
+      32,
+      32
+    ],
+    "tolerance_px": 2,
+    "note": "Daily idle is the size reference, not another dance clip. A single fixed setup scale calibrates each whole jaw; the far jaw sits behind the near jaw with 60 source-pixel hinge separation. The isolated unrotated 32px bound is a calibration guard, not a pixel-identical silhouette claim. Rotation, perspective and occlusion change visible bounds; never fit size per frame."
+  },
+  "draw_order": [
+    1,
+    0
+  ],
+  "layout_reference": "assets/images/reference/gripper-layout-reference.png",
+  "layout_note": "Viewer-left near jaw drawn last; viewer-right jaw slightly behind and higher. Fixed mounting separation calibrated against daily idle; both remain complete rigid units, no animated scaling.",
+  "mount_policy": "No exposed common wrist collar. Complete jaws attach directly under the green face edge; a foreground chin layer hides their root tabs. View-specific fixed mounts, unchanged jaw size, separation and beat motion.",
+  "chin_foreground_box": [
+    340,
+    240,
+    665,
+    342
+  ]
 }

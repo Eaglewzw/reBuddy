@@ -208,6 +208,12 @@ int main(void)
     /* Valid checksum cannot bypass semantic validation. Only one record exists. */
     memory=two_good; memory.lengths[0]=0; memory.records[1][57]=254; reseal(&memory,1); restart(&memory);
     assert(rb_choreo_store_load(0,&loaded)==RB_CHOREO_STORE_CORRUPT);
+    for (unsigned id=9;id<=22;++id) {
+        if (id==RB_CHOREO_WAIT) continue;
+        memory=two_good; memory.lengths[0]=0; memory.records[1][57]=(uint8_t)id;
+        reseal(&memory,1); restart(&memory);
+        assert(rb_choreo_store_load(0,&loaded)==RB_CHOREO_STORE_CORRUPT);
+    }
     memory=two_good; memory.lengths[0]=0; memset(memory.records[1]+23,'x',32); reseal(&memory,1); restart(&memory);
     assert(rb_choreo_store_load(0,&loaded)==RB_CHOREO_STORE_CORRUPT);
     memory=two_good; memory.lengths[0]=0; memory.records[1][56]=9; reseal(&memory,1); restart(&memory);
@@ -276,10 +282,24 @@ int main(void)
     restart(&memory); load_equal(8,&dance); load_equal(0,&maximum);
     rb_choreo_plan_t plan;
     assert(rb_choreo_store_load(8,&loaded)==RB_CHOREO_STORE_OK);
-    assert(rb_choreo_compile(&loaded,&plan,NULL)==RB_CHOREO_OK && plan.total_ms==24000);
-    for (unsigned i=0;i<dance.count;++i) assert(loaded.steps[i].action_id==17+i);
-    dance.steps[0].action_id=16; writes=memory.writes;
-    assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_INVALID && memory.writes==writes);
+    assert(rb_choreo_compile(&loaded,&plan,NULL)==RB_CHOREO_OK && plan.total_ms==30000);
+    for (unsigned i=0;i<dance.count;++i) assert(loaded.steps[i].action_id==dance.steps[i].action_id);
+    /* Each of the ten new stable IDs survives persistence independently. */
+    for (unsigned id=RB_CHOREO_GROOVE_BOUNCE;id<=RB_CHOREO_DIME_STOP;++id) {
+        rb_choreo_work_init(&dance,8);
+        dance.count=1;
+        dance.steps[0]=(rb_choreo_step_t){(uint8_t)id,3,500,0};
+        assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_OK);
+        restart(&memory); load_equal(8,&dance);
+        assert(rb_choreo_store_load(8,&loaded)==RB_CHOREO_STORE_OK);
+        assert(rb_choreo_compile(&loaded,&plan,NULL)==RB_CHOREO_OK);
+        assert(plan.total_ms==rb_choreo_action(id)->duration_ms*3u+500u);
+    }
+    for (unsigned id=9;id<=22;++id) {
+        if (id==RB_CHOREO_WAIT) continue;
+        dance.steps[0].action_id=(uint8_t)id; writes=memory.writes;
+        assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_INVALID && memory.writes==writes);
+    }
     rb_choreo_store_backend_t incomplete={0};
     assert(rb_choreo_store_set_backend(&incomplete)==RB_CHOREO_STORE_INVALID);
     assert(rb_choreo_store_set_backend(NULL)==RB_CHOREO_STORE_OK);

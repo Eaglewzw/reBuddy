@@ -1,76 +1,100 @@
-"""Check delivered dance timing, montage, stationary room and source provenance."""
+"""Check ten independent whole-character dance GIFs and gross size drift.
+
+These delivery checks do not establish mechanical accuracy or identical local
+head/gripper geometry. Complete redraws still need visual and device review.
+"""
 import hashlib
 import json
 from pathlib import Path
 from PIL import Image
+
 root = Path(__file__).resolve().parents[2]
 folder = root/'assets/gifs/dance'
 manifest = json.loads((folder/'manifest.json').read_text())
-assert manifest['fps'] == 8
-clips = {}
-for item in manifest['clips']:
-    frames = []
-    with Image.open(folder/item['file']) as gif:
-        elapsed = 0
-        for i in range(gif.n_frames):
-            gif.seek(i)
-            assert gif.size == (320, 240) and gif.info['duration'] in (120, 130)
-            elapsed += gif.info['duration']
-            frames.append(gif.convert('RGB').copy())
-        assert elapsed == item['duration_ms'] == len(frames)*125
-    assert len({f.tobytes() for f in frames}) >= 3, item['id']
-    clips[item['id']] = frames
-assert len(clips) == 13
-# New dance phrases return to their entry pose, including the final held pose.
-for action in ('BASE_TURN', 'SIDE_BEAT', 'BOUNCE', 'ALTERNATE', 'WAVE', 'FINALE'):
-    assert clips[action][0].tobytes() == clips[action][-1].tobytes(), action + ' does not return to center'
-alternate = clips['ALTERNATE']
-assert len({frame.crop((0,158,320,240)).tobytes() for frame in alternate}) == 1, 'alternating jaws move the base'
-# One hand covers the nose continuously; only the opposite finger may move.
-cat = clips['CAT_DEMO']
-assert manifest['cat_hand_revision'] == 3
-base_box = tuple(manifest['cat_fixed_base_box'])
-assert base_box == (0,158,320,240)
-assert len({frame.crop(base_box).tobytes() for frame in cat}) == 1
-assert cat[0].tobytes() == cat[-1].tobytes(), 'cat loop jumps at restart'
-nose_box=(170,105,187,120)
-assert tuple(manifest['cat_fixed_nose_box']) == nose_box
-assert len({frame.crop(nose_box).tobytes() for frame in cat}) == 1, 'covering hand moves'
-hand_box = (187,97,224,140)
-assert len({cat[t].crop(hand_box).tobytes() for t in (0,2,4,6,9,11)}) == 6
-for frame in cat:
-    for box in [(0,0,187,240),(224,0,320,240),(0,0,320,97),(0,140,320,240)]:
-        assert frame.crop(box).tobytes() == cat[0].crop(box).tobytes(), 'motion escaped the single moving finger'
-# Screen edges/floor are fixed across every pose and clip; no camera movement.
-reference = clips['NOD'][0]
-for frames in clips.values():
-    for frame in frames:
-        for box in [(0,0,60,240),(270,0,320,240),(0,210,320,240)]:
-            assert frame.crop(box).tobytes() == reference.crop(box).tobytes()
-expected = []
-for name, count in [('BASE_TURN',2),('SIDE_BEAT',2),('BOUNCE',2),('ALTERNATE',2),('WAVE',1),('FINALE',1)]:
-    expected.extend(clips[name]*count)
-path = folder/manifest['demo']['file']
-assert hashlib.sha256(path.read_bytes()).hexdigest() == manifest['demo']['sha256']
-with Image.open(path) as gif:
-    assert gif.n_frames == len(expected) == 192
-    for i, frame in enumerate(expected):
-        gif.seek(i)
-        assert gif.convert('RGB').tobytes() == frame.tobytes(), i
+expected = [
+    ('GROOVE_BOUNCE', 3000), ('GROOVE_ROCK', 3000), ('GROOVE_SIDE', 3000),
+    ('DANCE_POINT', 6000), ('ARM_WAVE', 6000), ('DANCE_ROLL', 6000),
+    ('WRIST_ISOLATION', 3000), ('DANCE_TUT', 6000), ('DANCE_HIT', 3000),
+    ('DIME_STOP', 6000),
+]
+assert manifest['fps'] == 8 and manifest['bpm'] == 80
+assert manifest['canvas'] == [320, 240]
+assert len(manifest['clips']) == 10
+assert [(c['id'], c['duration_ms']) for c in manifest['clips']] == expected
+assert [c['action_id'] for c in manifest['clips']] == list(range(23, 33))
+assert 'demo' not in manifest and 'trace' not in manifest
+assert manifest.get('geometry_policy'), 'document the complete-character rendering policy'
+assert {p.name for p in folder.glob('*.gif')} == {c['file'] for c in manifest['clips']}
+assert not (folder/'cat-demo').exists()
+assert not (folder/'10_左右交替.gif').exists()
+assert not (folder/'00_基本舞蹈_45秒.gif').exists()
+assert manifest['sources']
 for source in manifest['sources'].values():
     path = root/source['path']
-    assert hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256']
-    if 'rig' in source:
-        assert hashlib.sha256((root/source['rig']).read_bytes()).hexdigest() == source['rig_sha256']
-    with Image.open(path) as artwork:
-        alpha = artwork.getchannel('A')
-        assert alpha.getextrema()[0] == 0, 'opaque atlas background'
-for poses in manifest['registration'].values():
-    if all('fixed_scale' in p for p in poses.values()):
-        assert len({p['fixed_scale'] for p in poses.values()}) == 1, 'per-pose scaling'
-        assert all(p['fixed_scale'] > 0 and p['floor_center'] == 160 and p['floor_y'] == 190 for p in poses.values())
-        continue
-    widths = [p['base_panel_width'] for p in poses.values()]
-    assert max(widths)-min(widths) <= 2
-    assert all(p['base_panel_anchor'] == [133,189] for p in poses.values())
-print('PASS thirteen dance/demo clips; cat nose-covering hand/body/base fixed, only opposite finger moves; 8 FPS, exact 24-second montage and source hashes')
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == source['sha256'], path
+
+resampling = getattr(Image, 'Resampling', Image)
+room = Image.open(root/'assets/images/source/room/room.png').convert('RGB').resize((320, 240), resampling.LANCZOS)
+
+
+def pedestal_width(frame):
+    """Measure the fixed floor-level silhouette, not the moving body bounds.
+
+Require foreground in five rows of a narrow pedestal band to suppress palette
+noise and isolated edges. This is a coarse zoom alarm, not a rigid-body proof.
+    """
+    xs = []
+    for x in range(65, 270):
+        count = sum(max(abs(a-b) for a, b in zip(frame.getpixel((x, y)), room.getpixel((x, y)))) > 40
+                    for y in range(177, 189))
+        if count >= 5:
+            xs.append(x)
+    assert xs, 'no pedestal detected at the registered floor'
+    return max(xs)-min(xs)+1
+
+
+with Image.open(root/'assets/gifs/daily/01_待机眨眼.gif') as daily:
+    daily_width = pedestal_width(daily.convert('RGB'))
+
+clips = {}
+width_report = {}
+for item in manifest['clips']:
+    path = folder/item['file']
+    assert hashlib.sha256(path.read_bytes()).hexdigest() == item['sha256'], path
+    assert item['atlas'] == 'individual' and item['claw_key'] == 'idle:0'
+    assert item['loop'] is True
+    assert item['ticks'] == item['duration_ms']//125
+    assert len(item['keys']) == item['ticks']
+    assert all(len(key) == 2 and key[1] == 1 for key in item['keys'])
+    registration = manifest['registration'][item['id']]
+    assert len(registration) == 12, (item['id'], 'missing complete source poses')
+    assert all({'floor', 'base_bbox', 'source_index'} <= set(pose) for pose in registration)
+    assert not any(registration[index]['source_image_edge_clipped'] for index, count in item['timeline']), (item['id'], 'source-edge-clipped pose used')
+    frames = []
+    with Image.open(path) as gif:
+        assert gif.n_frames == item['ticks'] in (24, 48)
+        elapsed = 0
+        for tick in range(gif.n_frames):
+            gif.seek(tick)
+            assert gif.size == (320, 240)
+            assert gif.info['duration'] == (120 if tick % 2 == 0 else 130)
+            elapsed += gif.info['duration']
+            frames.append(gif.convert('RGB').copy())
+    assert elapsed == item['duration_ms'] == len(frames)*125
+    assert len({frame.tobytes() for frame in frames}) >= 4, (item['id'], 'too few distinct poses')
+    reference = frames[0]
+    assert reference.tobytes() == frames[-1].tobytes(), (item['id'], 'loop jumps')
+    for frame in frames:
+        for box in [(0, 0, 60, 240), (270, 0, 320, 240), (0, 195, 320, 240)]:
+            assert frame.crop(box).tobytes() == reference.crop(box).tobytes(), (item['id'], 'room moves')
+    widths = [pedestal_width(frame) for frame in frames]
+    assert min(widths) >= daily_width*.8 and max(widths) <= daily_width*1.2, (item['id'], 'pedestal differs substantially from daily', widths, daily_width)
+    assert max(widths)/min(widths) <= 1.15, (item['id'], 'gross scale drift in pedestal silhouette', widths)
+    width_report[item['id']] = [min(widths), max(widths)]
+    clips[item['id']] = frames
+
+assert len({hashlib.sha256(b''.join(frame.tobytes() for frame in frames)).hexdigest()
+            for frames in clips.values()}) == 10, 'duplicate action sequences'
+print('PASS ten independent whole-character GIFs; 8 FPS; fixed room; loop continuity; source hashes; no combined demo')
+print(f'Coarse pedestal-size check against daily {daily_width}px: {width_report}')
+print('Visual review still required: this check does not prove identical local geometry or physical joint accuracy.')

@@ -20,6 +20,8 @@ def main():
     parser.parse_args()
     config=DESIGN/'rig.json';rig=json.loads(config.read_text())
     assert rig['fps']==8
+    assert len(rig['jaw_crops']) == len(rig['jaw_pivots']) == 2
+    assert all(len(sockets) == 2 for sockets in rig['socket_centers'])
     frame_count=len(rig['view_indices'])
     assert frame_count%2==0 and frame_count*125==rig['duration_ms']
     sheet=Image.open(ROOT/rig['body_source']).convert('RGBA')
@@ -37,6 +39,8 @@ def main():
     assert max(b['width_px'] for b in bases)-min(b['width_px'] for b in bases)<=2
     jaws=[];radius=128
     for box,pivot in zip(rig['jaw_crops'],rig['jaw_pivots']):
+        # Each crop contains the entire green shell AND black pad. Rotate the
+        # complete side once; never articulate the black tip inside its shell.
         part=jaw_source.crop(box)
         part=part.resize(tuple(round(v*rig['jaw_setup_scale']) for v in part.size),R.LANCZOS)
         px,py=[round((pivot[j]-box[j])*rig['jaw_setup_scale']) for j in (0,1)]
@@ -105,6 +109,7 @@ def main():
             'body_scale_constant':scale,'jaw_scale_constant':rig['jaw_setup_scale'],'base_registration':bases,
             'camera':'fixed','base_motion':'three sampled yaw views, fixed floor-contact center',
             'jaw_motion':rig.get('motion_description','two rigid original jaw tips rotating about their own attachment points'),
+            'jaw_structure':rig['jaw_structure'],
             'sources':{p:digest(ROOT/p) for p in [rig['body_source'],rig['jaw_source'],str(config.relative_to(ROOT))]},
             'file':output.name,'sha256':digest(output),'timeline':timeline}
     (OUT/'manifest.json').write_text(json.dumps(report,ensure_ascii=False,indent=2)+'\n')

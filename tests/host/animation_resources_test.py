@@ -124,9 +124,20 @@ assert {i for c in manifest['clips'] for i in c['frames']} == set(range(len(deco
 assert set(manifest['source_gifs']) == {str(p.relative_to(root)) for p in source_paths.values()}
 
 choreo = manifest['choreography_clip_map']
-assert len(choreo) == 23 and choreo[15] == 255
-for action, name in {9:'NOD',10:'SHAKE',11:'SWAY',12:'BOW',13:'CLAW_BEAT',14:'POSE',16:'CAT_DEMO',17:'BASE_TURN',18:'SIDE_BEAT',19:'BOUNCE',20:'ALTERNATE',21:'WAVE',22:'FINALE'}.items():
-    assert manifest['clips'][choreo[action]]['id'] == name
+assert len(choreo) == 33 and choreo[15] == 255
+retired_ids = set(range(9, 15)) | set(range(16, 23))
+assert all(choreo[action] == 255 for action in retired_ids), 'retired work IDs alias new animation'
+expected_dance = {
+    23: 'GROOVE_BOUNCE', 24: 'GROOVE_ROCK', 25: 'GROOVE_SIDE', 26: 'DANCE_POINT',
+    27: 'ARM_WAVE', 28: 'DANCE_ROLL', 29: 'WRIST_ISOLATION', 30: 'DANCE_TUT',
+    31: 'DANCE_HIT', 32: 'DIME_STOP',
+}
+assert len(dance['clips']) == 10
+assert {clip['action_id']: clip['id'] for clip in dance['clips']} == expected_dance
+for action, name in expected_dance.items():
+    assert choreo[action] != 255 and manifest['clips'][choreo[action]]['id'] == name
+for action, name in enumerate(('IDLE', 'PROBE', 'NUZZLE', 'TILT', 'WITHDRAW', 'RECOVER', 'HAPPY')):
+    assert manifest['clips'][choreo[action]]['id'] == name, 'daily mapping changed'
 mapping = manifest['clip_map']
 assert len(mapping) == 3 and all(len(row) == 9 for row in mapping)
 ids = ['IDLE', 'PROBE', 'NUZZLE', 'TILT', 'WITHDRAW', 'RECOVER', 'HAPPY', 'REST', 'WAKE']

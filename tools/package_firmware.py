@@ -70,7 +70,7 @@ manifest = {
     'ui_revision': 'choreography-v1', 'mode': 'screen_touch_and_choreography_preview', 'hardware_tested': False,
     'choreography': {'slots': 10, 'max_steps': 8, 'schema_version': 1,
                     'available_actions': verification['choreography']['available_actions'],
-                    'wait_block': True, 'motor_playback': False, 'cat_demo_ms': 12000},
+                    'wait_block': True, 'motor_playback': False},
     'visual_status': assets['visual_status'],
     'animation_source': 'assets/gifs', 'animation_fps': 8,
     'animation_unique_frames': assets['unique_frames'],
@@ -111,8 +111,8 @@ if preview.exists(): shutil.copy2(preview,out/'ui-preview.png')
     f'当前新版 GIF 动画：{assets["unique_frames"]} 张去重帧，表情、问号和睡眠 Z 均来自当前 GIF。\n'
     f'平均 8 FPS，开心回应 8 秒；全局时长倍率 {behavior["animation_playback"]["duration_scale"]}，活泼与慵懒暂时均为 1.0 倍，触摸识别时限独立。\n'
     '直接触摸角色互动；左下暂停/继续，右下设置；没有英文状态栏。\n'
-    '设置→编排：编辑、预览并保存作品，每段最多 8 步，保存 10 段；十二类动作及等待均可用。\n'
-    '活力律动为 20 秒可编辑舞蹈；猫步律动为 12 秒独立 reBot 展示，不占保存名额。\n'
+    '设置→编排：编辑、预览并保存作品，每段最多 8 步，保存 10 段；十六类动作及等待均可用。\n'
+    '基础律动为 30 秒可编辑舞蹈，动作库包含 10 种基本舞蹈动作。\n'
     '编排仅使用当前屏幕动画；保存后断电保留，加载不自动播放。详见 assets/docs/CHOREOGRAPHY.md。\n'
     '硬件：XIAO ESP32-C5 CAN Console，8 MiB Flash / 8 MiB Quad PSRAM。\n'
     '已通过主机测试与编译，尚未实际烧录或完成实机 30 分钟验证。\n'

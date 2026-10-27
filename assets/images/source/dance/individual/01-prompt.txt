@@ -1,0 +1,18 @@
+Use case: stylized-concept. Create a clean full-character animation sprite atlas for the exact lime-green reBot desktop robot in the reference, preserving its chunky mechanical-arm body, three big silver circular joint covers, black oval face with mint eyes, and ONE compact two-sided gripper below the face. Each gripper side is ONE solid rounded black jaw with lime cuff, never subdivided into fingers, no separate hands or arms.
+Output a transparent PNG atlas, exactly 4 columns by 3 rows, 12 equal square cells, row-major temporal order. No labels, no grid lines, no shadow, no text. Each cell has a complete coherent freshly drawn robot, never detached or pasted pieces.
+CRITICAL consistency: fixed orthographic camera, same exact physical rigid part sizes throughout. Base diameter exactly 44% of a cell, height 16%, base center at (50%,88%) bottom at96% in EVERY cell. Head housing width 42% cell, wrist silver cap diameter18%, elbow cap16%, shoulder cap17%; fat links same length/thickness. Keep head/gripper size identical across poses. NO zoom or camera movement, NO perspective scale pulsation, NO stretchy links, NO squashing the body to simulate motion. Base contact is anchored. Change only rotations at actual joints. Free space inside arm is TRANSPARENT, not white. Leave enough margins even at tallest/side poses. Face friendly attentive, no added emotion marks. Daily reference is the identity and materials authority.
+Action 01: BOUNCE / 上下弹动. Must show LARGE, CLEAR shoulder and elbow flexion, NOT a subtle head nod or a scaled robot. Body folds down and unfolds up, head remains nearly level, pedestal stays fixed. Head travels vertically about 18% cell (roughly one joint-cover diameter), but head itself NEVER changes size. Elbow internal bend angle changes about 45 degrees, visibly folding and unfolding the zigzag arm. Use two distinct rhythmic dips.
+12 poses in row-major order:
+1 neutral mid height, the reference pose;
+2 elbow bends, head halfway DOWN, arm folds;
+3 deepest folded down pose, head 14% cell lower than neutral, elbow sharply bent, no collision with pedestal;
+4 rising halfway from dip;
+5 highest open-body pose, shoulder raised, elbow more extended, head 6% cell above neutral;
+6 returning to neutral;
+7 neutral again;
+8 second half-down;
+9 second full down, same geometry as pose3;
+10 half-rise;
+11 same upper open pose as pose5;
+12 exact neutral pose1.
+Draw consistent smooth mechanical connections and keep the same projected rigid part dimensions. Show the articulated changes unmistakably.

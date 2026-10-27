@@ -1,10 +1,10 @@
 {
-  "status": "passed",
-  "date": "2026-10-26",
+  "status": "individual_dance_visual_review_pending",
+  "date": "2026-10-28",
   "target": "esp32c5",
-  "sdk": "ESP-IDF v5.5.6",
-  "application_sha256": "13564479f2384d06bbb3acb4fd3f41aecfcc8409aa76adf13025da229054b165",
-  "application_bytes": 4206480,
+  "application_sha256": null,
+  "application_bytes": null,
+  "application_note": "No firmware application or distribution package built for this GIF revision. Older build/dist artifacts do not contain this revision.",
   "host_tests": {
     "passed": 12,
     "failed": 0,
@@ -24,71 +24,43 @@
     ]
   },
   "coverage": [
-    "484 decoded arm-gap checks preserve room background",
-    "C decoder full-frame cache, raw fallback and malformed/truncated/corrupt asset handling",
-    "claw-only happiness, source-speed action completion and interrupted return",
-    "persistent sleeping loop; deliberate wake; pause freeze; menus and touch cancellation",
-    "30 minute simulated core interaction; not a hardware soak test",
-    "Lossless XOR delta codec with independent anchors; corrupted base/delta safely fall back; cycles and invalid base references rejected",
-    "Happy entry/exit base size and anchor match idle decoded bounds within2px; fixed1.125 layout for all happy poses; updated claw hitboxes",
-    "Independent 320x240 choreography library/editor/action catalog/parameters/tempo/preview pages inspected using actual LVGL host screenshots",
-    "Daily suspension preserves animation phase, persistent sleep and stop state; clears stale gestures and requests; release barrier and rebased clocks",
-    "Ten-slot dual-record storage; existing schema and first three slots preserved; slot10 roundtrip/corruption covered",
-    "Standalone reBot cat-inspired demo: six cycles / 12 seconds, stop freeze, replay and return; no NVS writes",
-    "177 independently decoded RGB565 records; all 740 source GIF ticks match firmware pixels and timing",
-    "Twelve performance clips and eighteen actions plus WAIT; new IDs17-22 retain prior IDs/storage schema; private demo ID16 cannot be saved",
-    "Thirteen dance/demo GIFs: 8 FPS, exact 24-second montage, fixed room edges, source hashes and constant sampling scales",
-    "Six new dance phrases return to entry frame; alternating gripper leaves base pixels fixed; all twelve performance entries are selectable and animate in host UI",
-    "Standalone V6 upward-fanning GIF remains outside runtime; fixed nose-covering side, moving opposite jaw, 500ms jaw cycle and 1000ms sampled base-yaw cycle",
-    "Asset layout: all GIFs under assets/gifs and PNG/SVG under assets/images; 72 media/generated animation files byte-identical after relocation and export; selected V6 source hashes and all Markdown/SVG links verified"
+    "Ten independent complete-character dance GIFs; exact 3/6-second timing, 8 FPS clock with held key poses, fixed room and loop closure.",
+    "Complete connected character extraction avoids grid-cell clipping; source-image-edge clipped poses excluded.",
+    "All 10 daily GIFs byte-identical to HEAD.",
+    "20 source GIFs match runtime RGB565 frame pixels and timing.",
+    "Coarse pedestal-size regression check only; not a proof of identical head/gripper geometry or rigid-body physics.",
+    "Existing host behavior, UI, storage and animation tests pass; no motor or display hardware test."
   ],
   "assets": {
-    "asset_version": "gif-v2-rgb565",
-    "gif_count": 23,
-    "supplemental_expression_gif_count": 3,
-    "runtime_frame_count": 177,
-    "runtime_bytes": 3393196,
-    "nominal_fps": 8,
-    "happy_ms": 8000,
-    "duration_scale": 1.0,
-    "claw_target": "current_pose_polygon",
-    "rgb565_frame_cache_bytes": 460800,
-    "compression": {
-      "scheme": "independent-anchor-xor-zlib",
-      "full_frame_zlib_bytes": 7835727,
-      "delta_frames": 159,
-      "extra_psram_bytes": 153600
-    },
-    "happy_presentation_scale": 1.125,
-    "sleep_z_font_px": 28,
-    "sleep_z_bold": true,
+    "gif_count": 20,
     "daily_gif_count": 10,
-    "dance_gif_count": 12,
-    "standalone_demo_gif_count": 1,
-    "cat_hand_revision": 3
+    "dance_gif_count": 10,
+    "runtime_frame_count": 241,
+    "runtime_bytes": 5040050,
+    "nominal_fps": 8,
+    "combined_dance_gif_count": 0
   },
   "hardware_tested": false,
   "flashed": false,
   "pushed": false,
   "visual_review": {
-    "status": "pending_user_device_review",
-    "scope": "Six new dance clips and actual LVGL choreography pages inspected. V6 independent preview inspected for fixed nose coverage and upward fanning beside face. Daily GIFs retained. Awaiting user device review.",
-    "remaining_issue": "Key-pose changes and three-view base yaw are discrete; generated body contours have small hand-drawn differences. Not a continuous 3D rig or motor-validated choreography."
+    "status": "pending_user_review",
+    "scope": "Ten independent whole-character dance revisions replace the rejected layered GIFs. No combined choreography created.",
+    "remaining_issue": "Local redraw contours and timing feel need user review; no claim of exact rigid geometry or validated B601-RS motion."
   },
-  "build_log": "build/cat-reference/asset-layout-firmware.log",
-  "test_log": "build/cat-reference/asset-layout-tests.log",
+  "build_log": "build/dance-individual-review/host-build.log",
+  "test_log": "build/dance-individual-review/tests.log",
   "choreography": {
     "schema_version": 1,
     "max_steps": 8,
     "slots": 10,
     "screen_only": true,
-    "available_actions": 18,
+    "available_actions": 16,
     "unavailable_actions": 0,
     "wait_block": true,
     "persistence": "NVS dual-record CRC",
     "motor_playback": false,
     "snapshot": "assets/images/previews/choreography.png",
-    "dance_demo_ms": 24000,
-    "cat_demo_ms": 12000
+    "dance_demo_ms": 30000
   }
 }

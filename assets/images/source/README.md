@@ -6,10 +6,10 @@
 | [daily/nuzzle](daily/nuzzle/README.md) | 固定肩肘的轻蹭原画 |
 | [daily/tilt](daily/tilt/README.md) | 疑惑歪头原画与独立关键姿态 |
 | [daily/happy](daily/happy/README.md) | 起身、舒展、夹指开合的开心回应 |
-| [dance/basic](dance/basic/README.md) | 基础六种舞蹈与当前运行时猫步图层 |
-| [dance/extended](dance/extended/README.md) | 新增六种舞蹈、关键姿态与时间轴 |
+| [dance/individual](dance/individual/README.md) | 当前十个独立基本舞蹈：完整角色图集、提示词与筛选时间轴 |
+| [dance/primitives](dance/primitives/README.md) | 已弃用分层方案的制作参考，不再用于当前 GIF 导出 |
 | [cat-v6](cat-v6/README.md) | 已选 V6 捂鼻、向上扇动的源图和绑定参数 |
-| [shared/gripper](shared/gripper/README.md) | 舞蹈与 V6 共用的底盘视角、左右夹指和安装参数 |
+| [shared/gripper](shared/gripper/README.md) | 保留的夹爪外观与安装参考，非当前十动作导出入口 |
 | [expressions](expressions/README.md) | 三个独立表情的图集和时间轴 |
 | [room](room/README.md) | 桌宠小屋背景 |
 

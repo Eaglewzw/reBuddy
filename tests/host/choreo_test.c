@@ -41,7 +41,7 @@ int main(void)
                 assert(rb_clips[rb_clip_map[origin][action->action_id]].duration_ms==action->duration_ms);
         }
     }
-    assert(available==19); /* Eighteen authored actions and WAIT. */
+    assert(available==17); /* Sixteen authored actions and WAIT. */
     uint8_t bad=0;
     init(); assert(work.work_id==1 && work.tempo==RB_CHOREO_STANDARD);
     assert(rb_choreo_validate(&work,&bad)==RB_CHOREO_OK && bad==RB_CHOREO_NO_STEP);
@@ -67,25 +67,20 @@ int main(void)
     init(); add(RB_CHOREO_PROBE,0,0);
     work.steps[0].action_id=RB_ANIM_REST; assert(rb_choreo_validate(&work,&bad)==RB_CHOREO_UNKNOWN_ACTION && bad==0);
     work.steps[0].action_id=RB_ANIM_WAKE; assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_UNKNOWN_ACTION);
-    /* The cat viewer has a private visual clip, never a serializable action. */
-    work.steps[0].action_id=16; assert(rb_choreo_validate(&work,&bad)==RB_CHOREO_UNKNOWN_ACTION && bad==0);
-    assert(!rb_choreo_action(16));
-    assert(rb_choreo_compile(&work,&plan,NULL)==RB_CHOREO_UNKNOWN_ACTION && plan.count==0);
-    const unsigned repeatable[]={RB_CHOREO_NOD,RB_CHOREO_SHAKE,RB_CHOREO_SWAY,RB_CHOREO_CLAW_BEAT,
-        RB_CHOREO_BASE_TURN,RB_CHOREO_SIDE_BEAT,RB_CHOREO_BOUNCE,RB_CHOREO_ALTERNATE,RB_CHOREO_WAVE};
-    for (unsigned i=0;i<sizeof(repeatable)/sizeof(repeatable[0]);++i) {
-        work.steps[0]=(rb_choreo_step_t){(uint8_t)repeatable[i],3,0,0};
+    /* Retired saved IDs never alias the replacement dance library. */
+    for (unsigned id=9;id<=22;++id) {
+        if (id==RB_CHOREO_WAIT) continue;
+        work.steps[0].action_id=(uint8_t)id;
+        assert(!rb_choreo_action(id) && rb_choreo_clip_map[id]==UINT8_MAX);
+        assert(rb_choreo_validate(&work,&bad)==RB_CHOREO_UNKNOWN_ACTION && bad==0);
+        assert(rb_choreo_compile(&work,&plan,NULL)==RB_CHOREO_UNKNOWN_ACTION && plan.count==0);
+    }
+    for (unsigned id=RB_CHOREO_GROOVE_BOUNCE;id<=RB_CHOREO_DIME_STOP;++id) {
+        work.steps[0]=(rb_choreo_step_t){(uint8_t)id,3,0,0};
         assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_OK);
         work.steps[0].repeat=4; assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_REPEAT);
     }
-    work.steps[0]=(rb_choreo_step_t){RB_CHOREO_POSE,2,0,0};
-    assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_REPEAT);
-    work.steps[0]=(rb_choreo_step_t){RB_CHOREO_BOW,2,0,0};
-    assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_REPEAT);
-    work.steps[0]=(rb_choreo_step_t){RB_CHOREO_FINALE,2,0,0};
-    assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_REPEAT);
-    assert(rb_choreo_action(RB_CHOREO_NOD)->repeat_max==3 && rb_choreo_action(RB_CHOREO_BOW)->repeat_max==1);
-    assert(rb_choreo_action_count==19 && !rb_choreo_action(99));
+    assert(rb_choreo_action_count==17 && !rb_choreo_action(99));
     init(); add(RB_CHOREO_PROBE,0,0); work.steps[0].repeat=2;
     assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_REPEAT);
     work.steps[0].repeat=0; assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_REPEAT);
@@ -150,56 +145,53 @@ int main(void)
     assert(plan.count==24 && plan.count<=RB_CHOREO_MAX_EVENTS && plan.total_ms==88000 && plan.base_ms==64000);
     work.tempo=255; assert(rb_choreo_compile(&work,&plan,NULL)==RB_CHOREO_BAD_TEMPO && plan.count==0);
 
-    /* All new IDs survive editing/compilation and sample through completion.
-       Adding IDs leaves old schema/IDs intact; 16 remains private. */
-    _Static_assert(RB_CHOREO_WAIT==15 && RB_CHOREO_BASE_TURN==17 && RB_CHOREO_FINALE==22,"wire IDs");
-    for (unsigned id=RB_CHOREO_BASE_TURN;id<=RB_CHOREO_FINALE;++id) {
+    /* Stable new wire IDs, independently selectable and repeatable. */
+    _Static_assert(RB_CHOREO_WAIT==15 && RB_CHOREO_GROOVE_BOUNCE==23 && RB_CHOREO_DIME_STOP==32,"wire IDs");
+    _Static_assert(sizeof(rb_choreo_clip_map)/sizeof(rb_choreo_clip_map[0])==33,"sparse mapping preserves retired IDs");
+    for (unsigned id=RB_CHOREO_GROOVE_BOUNCE;id<=RB_CHOREO_DIME_STOP;++id) {
         init(); add(id,500,0); compile();
         const rb_choreo_action_t *action=rb_choreo_action(id);
         assert(action->entry_pose==RB_CHOREO_POSE_IDLE && action->exit_pose==RB_CHOREO_POSE_IDLE);
+        assert(action->repeat_max==3 && action->group==RB_CHOREO_PERFORMANCE);
         assert(plan.count==2 && plan.total_ms==action->duration_ms+500u);
         assert(at(0).action_id==id && at(action->duration_ms-1).clip_time_ms==action->duration_ms-1);
         assert(at(plan.total_ms).done && at(plan.total_ms).holding);
     }
-    /* Six dedicated dance steps expand into ten executions / 48 half-second
-       beats. Every section lasts four seconds at standard tempo. */
+    /* Six basic dance steps / forty beats at 80 BPM. */
     for (unsigned slot=0;slot<RB_CHOREO_SLOTS;++slot) {
         rb_choreo_work_demo(&work,slot); compile();
-        assert(work.work_id==slot+1 && !strcmp(work.name,"活力律动") && work.count==6);
-        assert(plan.count==10 && plan.base_ms==24000 && plan.total_ms==24000);
-        const unsigned ids[]={RB_CHOREO_BASE_TURN,RB_CHOREO_BASE_TURN,RB_CHOREO_SIDE_BEAT,RB_CHOREO_SIDE_BEAT,
-            RB_CHOREO_BOUNCE,RB_CHOREO_BOUNCE,RB_CHOREO_ALTERNATE,RB_CHOREO_ALTERNATE,RB_CHOREO_WAVE,RB_CHOREO_FINALE};
-        const unsigned starts[]={0,2000,4000,6000,8000,10000,12000,14000,16000,20000};
-        for (unsigned event=0;event<10;++event) {
+        assert(work.work_id==slot+1 && !strcmp(work.name,"基础律动") && work.count==6);
+        assert(plan.count==6 && plan.base_ms==30000 && plan.total_ms==30000);
+        const unsigned ids[]={RB_CHOREO_GROOVE_BOUNCE,RB_CHOREO_GROOVE_SIDE,RB_CHOREO_DANCE_POINT,
+            RB_CHOREO_ARM_WAVE,RB_CHOREO_DANCE_ROLL,RB_CHOREO_DIME_STOP};
+        const unsigned starts[]={0,3000,6000,12000,18000,24000};
+        for (unsigned event=0;event<6;++event) {
             assert(plan.events[event].action_id==ids[event] && plan.events[event].start_ms==starts[event]);
             assert(!plan.events[event].holding && !plan.events[event].transition);
             assert(at(starts[event]).clip_time_ms==0 && at(starts[event]).action_id==ids[event]);
         }
-        assert(at(23999).action_id==RB_CHOREO_FINALE && !at(23999).done);
-        assert(at(24000).done && at(24000).holding && at(24000).clip_time_ms==3999);
-        work.tempo=RB_CHOREO_SLOW; compile(); assert(plan.total_ms==36000);
-        work.tempo=RB_CHOREO_FAST; compile(); assert(plan.total_ms==19200);
+        assert(at(29999).action_id==RB_CHOREO_DIME_STOP && !at(29999).done);
+        assert(at(30000).done && at(30000).holding && at(30000).clip_time_ms==5999);
+        work.tempo=RB_CHOREO_SLOW; compile(); assert(plan.total_ms==45000);
+        work.tempo=RB_CHOREO_FAST; compile(); assert(plan.total_ms==24000);
     }
     rb_choreo_work_demo(&work,RB_CHOREO_SLOTS); assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_WORK_ID);
     rb_choreo_work_demo(NULL,0);
     init();
-    for (unsigned i=0;i<RB_CHOREO_MAX_STEPS;++i) { add(RB_CHOREO_WAVE,3000,0); work.steps[i].repeat=3; }
-    compile(); assert(plan.count==32 && plan.total_ms==120000);
-    /* A new dance action from folded state uses the existing recovery bridge. */
-    init(); add(RB_CHOREO_WITHDRAW,0,0); add(RB_CHOREO_NOD,0,0); compile();
-    assert(plan.count==3 && plan.total_ms==10000 && plan.events[1].action_id==RB_CHOREO_RECOVER && plan.events[1].transition);
+    for (unsigned i=0;i<RB_CHOREO_MAX_STEPS;++i) { add(RB_CHOREO_ARM_WAVE,3000,0); work.steps[i].repeat=3; }
+    compile(); assert(plan.count==32 && plan.total_ms==168000);
+    /* A dance action from folded state uses the existing recovery bridge. */
+    init(); add(RB_CHOREO_WITHDRAW,0,0); add(RB_CHOREO_GROOVE_BOUNCE,0,0); compile();
+    assert(plan.count==3 && plan.total_ms==11000 && plan.events[1].action_id==RB_CHOREO_RECOVER && plan.events[1].transition);
 
-    /* Completed performance material uses its own source duration and repeat
-       policy. SHAKE can repeat three times; BOW plays once then holds. */
-    init(); add(RB_CHOREO_SHAKE,0,0); work.steps[0].repeat=3;
-    add(RB_CHOREO_BOW,500,0); compile();
-    assert(plan.count==5 && plan.total_ms==10500 && plan.base_ms==10500);
-    assert(at(5999).action_id==RB_CHOREO_SHAKE && at(5999).clip_time_ms==1999);
-    assert(at(6000).action_id==RB_CHOREO_BOW && at(6000).clip_time_ms==0);
-    assert(at(10000).holding && at(10000).clip_time_ms==3999 && !at(10000).done);
-    assert(at(10500).done && at(10500).clip_time_ms==3999);
-    init(); add(RB_CHOREO_WITHDRAW,0,0); add(RB_CHOREO_SHAKE,0,0); compile();
-    assert(plan.total_ms==10000 && plan.events[1].action_id==RB_CHOREO_RECOVER && plan.events[1].transition);
+    /* Repeats and final hold sample the actual three/six-second clips. */
+    init(); add(RB_CHOREO_DANCE_HIT,0,0); work.steps[0].repeat=3;
+    add(RB_CHOREO_DIME_STOP,500,0); compile();
+    assert(plan.count==5 && plan.total_ms==15500 && plan.base_ms==15500);
+    assert(at(8999).action_id==RB_CHOREO_DANCE_HIT && at(8999).clip_time_ms==2999);
+    assert(at(9000).action_id==RB_CHOREO_DIME_STOP && at(9000).clip_time_ms==0);
+    assert(at(15000).holding && at(15000).clip_time_ms==5999 && !at(15000).done);
+    assert(at(15500).done && at(15500).clip_time_ms==5999);
 
     /* Stop holds current pixels; clock jumps cannot overflow or auto-restart. */
     init(); add(RB_CHOREO_HAPPY,0,0); compile();

@@ -1,6 +1,8 @@
 # 快速夹爪动作原画与绑定
 
-[turntable.png](turntable.png) 通过内置 ImageGen（builtin 模式）编辑前版三视角原画，左侧原夹指抬到双眼下方的面部中央；[完整提示词](prompt.txt)。右侧使用[前版独立夹指素材](../shared/gripper/jaws.png)，按固定比例装配后绕安装点旋转。左侧固定在身体图层中，不参与挥动。
+[turntable.png](turntable.png) 保留 V6 原始三视角原画和捂鼻造型，原提示词见 [prompt.txt](prompt.txt)。当前使用 [body-solid.png](body-solid.png)：左侧完整夹爪继续固定捂鼻，右侧原来的空心外壳已移除。右侧使用 [jaws-solid.png](jaws-solid.png) 中与捂鼻侧同造型的完整夹爪，外壳和黑色爪面一起绕腕部转动，尺寸按捂鼻侧校准，始终保持固定比例。
+
+本次使用内置 ImageGen 编辑源图；提示词见 [身体修正](body-solid-prompt.txt)、[完整夹爪](jaws-solid-prompt.txt)。这是 V6 的夹爪结构修正版，等待用户视觉确认，未替换固件中的独立猫步 Demo。
 
 [rig.json](rig.json) 记录固定侧、活动侧、安装点、节拍及视角顺序；[poses.png](poses.png) 是最终 GIF 的六帧抽样。
 
