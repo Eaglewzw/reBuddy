@@ -125,7 +125,7 @@ int main(void)
     unsigned independent=RB_FRAME_COUNT,delta=RB_FRAME_COUNT,other_delta=RB_FRAME_COUNT;
     for (unsigned i=1;i<RB_FRAME_COUNT;++i) {
         uint32_t codec=read_u32(blob+rb_frames[i].offset+12);
-        if (codec==1 && independent==RB_FRAME_COUNT) independent=i;
+        if ((codec==1 || codec==3) && independent==RB_FRAME_COUNT) independent=i;
         if (codec==2) {
             if (delta==RB_FRAME_COUNT) delta=i;
             else if (other_delta==RB_FRAME_COUNT) other_delta=i;
@@ -137,23 +137,37 @@ int main(void)
     for (unsigned n=0;n<2;++n) {
         unsigned frame=damaged_frames[n];
         unsigned payload=rb_frames[frame].offset+16+(n==1?4:0);
+        if(read_u32(blob+rb_frames[frame].offset+12)==3)payload+=2+2*(blob[payload]|(blob[payload+1]<<8));
         uint8_t saved=blob[payload]; blob[payload]^=0xff;
         assert(rb_assets_init(blob,(size_t)bytes,2));
         assert(rb_assets_frame(frame,&meta) && meta==&rb_frames[0]);
         assert(rb_assets_degraded()); blob[payload]=saved;
     }
+    /* Invalid palette sizes fail safely before reading entries/indices. */
+    unsigned paletted=RB_FRAME_COUNT;
+    for(unsigned i=1;i<RB_FRAME_COUNT;++i)if(read_u32(blob+rb_frames[i].offset+12)==3){paletted=i;break;}
+    assert(paletted<RB_FRAME_COUNT);
+    unsigned count_at=rb_frames[paletted].offset+16;uint8_t saved_count[2]={blob[count_at],blob[count_at+1]};
+    for(unsigned count=0;count<=257;count+=257) {
+        blob[count_at]=(uint8_t)count;blob[count_at+1]=(uint8_t)(count>>8);
+        assert(rb_assets_init(blob,(size_t)bytes,2));
+        assert(rb_assets_frame(paletted,&meta) && meta==&rb_frames[0]);
+        assert(rb_assets_degraded());
+    }
+    blob[count_at]=saved_count[0];blob[count_at+1]=saved_count[1];
     /* A valid delta must also fall back when its independent base is damaged. */
     unsigned dependent=RB_FRAME_COUNT,base_frame=RB_FRAME_COUNT;
     for (unsigned i=1;i<RB_FRAME_COUNT;++i) {
         if (read_u32(blob+rb_frames[i].offset+12)!=2) continue;
         unsigned candidate=read_u32(blob+rb_frames[i].offset+16);
         assert(candidate<RB_FRAME_COUNT);
-        if (read_u32(blob+rb_frames[candidate].offset+12)==1) {
+        if (read_u32(blob+rb_frames[candidate].offset+12)!=0) {
             dependent=i; base_frame=candidate; break;
         }
     }
     assert(dependent<RB_FRAME_COUNT && base_frame<RB_FRAME_COUNT);
     unsigned base_payload=rb_frames[base_frame].offset+16;
+    if(read_u32(blob+rb_frames[base_frame].offset+12)==3)base_payload+=2+2*(blob[base_payload]|(blob[base_payload+1]<<8));
     uint8_t saved_payload=blob[base_payload]; blob[base_payload]^=0xff;
     assert(rb_assets_init(blob,(size_t)bytes,2));
     assert(rb_assets_frame(dependent,&meta) && meta==&rb_frames[0]);

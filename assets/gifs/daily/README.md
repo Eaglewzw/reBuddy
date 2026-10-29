@@ -40,9 +40,9 @@
 
 ## 本版制作与验证
 
-使用内置 imagegen，依据 [角色基准](../../images/reference/approved/idle_master.png) 和 [互动示意](../../images/reference/interaction_storyboard.png) 制作独立动作原画。完整提示词、素材与选帧说明见 [制作目录](../../images/source/daily/base/README.md)。
+使用内置 imagegen，依据 [角色基准](../../images/reference/approved/idle_master.png) 和 [互动示意](../../images/reference/interaction_storyboard.png) 制作独立动作原画。素材与选帧说明见 [制作目录](../../images/source/daily/base/README.md)。
 
-导出只对整张图集做一次固定分辨率采样，再按底座标志做整数位置对齐。没有逐帧放大缩小、图像旋转拼接、网格变形、叠化或整体弹跳。轻蹭采用固定肩肘的新原画，仅选 4 个头侧轻靠姿态做两次短程往返；所选原画的肩肘局部模板最佳匹配位移均为 0 像素，详见 [原画检查](../../images/source/daily/nuzzle/joint-registration-analysis.json)。这项检查用于排除明显伸臂，不等于证明所有像素或零件几何完全相同。
+导出只对整张图集做一次固定分辨率采样，再按底座标志做整数位置对齐。没有逐帧放大缩小、图像旋转拼接、网格变形、叠化或整体弹跳。轻蹭采用固定肩肘的新原画，仅选 4 个头侧轻靠姿态做两次短程往返。图像中的姿态不等同于经过标定的机械臂角度。
 
 10 个 GIF 的帧内容、帧延迟和总时长用于生成固件资源；运行时按触摸状态选择动作，单次动作结束后的状态由行为逻辑控制。活泼与慵懒暂时均以 1.0 倍时长播放，不额外加速或减速。生成原画的零件细节及不同动作之间的连接还需视觉和实机评估；程序未使用缩放不等于已验证每个零件的几何完全一致。当前不发送机械臂指令，构建和硬件验证状态见 [验证摘要](../../verification/current.json)。
 

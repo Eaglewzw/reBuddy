@@ -50,6 +50,30 @@ static void pump(unsigned ms)
 }
 static void click(int x,int y)
 { point=(lv_point_t){x,y};pressed=true;pump(100);pressed=false;pump(100); }
+/* Real pointer motion: never programmatically scroll the widget under test. */
+static void swipe(int x,int from,int to)
+{
+    point=(lv_point_t){x,from};pressed=true;pump(40);
+    for(int i=1;i<=12;++i) { point.y=from+(to-from)*i/12;pump(20); }
+    pressed=false;pump(400);
+}
+static void scroll_touch_check(lv_obj_t *list,int top,int bottom)
+{
+    lv_obj_update_layout(list);
+    assert(lv_obj_get_scroll_y(list)==0 && lv_obj_get_scroll_bottom(list)>0);
+    /* Begin on blank scrollbar gutter, then on the body of a row button. */
+    swipe(309,bottom,top);assert(lv_obj_get_scroll_y(list)>0);
+    int before=lv_obj_get_scroll_y(list);swipe(160,bottom,top);
+    assert(lv_obj_get_scroll_y(list)>before);
+    for(unsigned i=0;i<12 && lv_obj_get_scroll_bottom(list)>0;++i) swipe(160,bottom,top);
+    assert(lv_obj_get_scroll_bottom(list)==0);
+    lv_area_t viewport,last;lv_obj_get_coords(list,&viewport);
+    lv_obj_get_coords(lv_obj_get_child(list,-1),&last);
+    assert(last.y1>=viewport.y1 && last.y2<=viewport.y2);
+    swipe(309,top,bottom);assert(lv_obj_get_scroll_bottom(list)>0);
+    for(unsigned i=0;i<12 && lv_obj_get_scroll_y(list)>0;++i) swipe(160,top,bottom);
+    assert(lv_obj_get_scroll_y(list)==0);
+}
 static lv_obj_t *find(lv_obj_t *parent,const char *text,bool prefix)
 {
     if (lv_obj_has_flag(parent,LV_OBJ_FLAG_HIDDEN)) return NULL;
@@ -123,6 +147,88 @@ static rb_choreo_work_t saved(unsigned slot)
 {
     rb_choreo_work_t work;assert(rb_choreo_store_load(slot,&work)==RB_CHOREO_STORE_OK);return work;
 }
+static uint16_t color565(unsigned r,unsigned g,unsigned b)
+{ return (uint16_t)(((r>>3)<<11)|((g>>2)<<5)|(b>>3)); }
+static void check_edge_matting(uint8_t *blob,size_t bytes,uint8_t *room,size_t room_bytes)
+{
+    /* Synthetic 25%-covered edge over cream has a known compositing result.
+       Interior white highlights and opaque dark outlines must not be erased. */
+    size_t offset=rb_frames[0].offset+16;
+    uint8_t *saved=malloc(RB_FRAME_BYTES);assert(saved);memcpy(saved,blob+offset,RB_FRAME_BYTES);
+    uint16_t *pixels=(uint16_t *)(blob+offset);
+    uint16_t key=color565(255,255,247),ink=color565(24,28,24);
+    for(unsigned i=0;i<320*240;++i)pixels[i]=key;
+    for(unsigned y=20;y<60;++y)for(unsigned x=60;x<100;++x)pixels[y*320+x]=ink;
+    for(unsigned x=61;x<99;++x)pixels[19*320+x]=color565(197,198,191);
+    pixels[35*320+80]=0xffff;pixels[35*320+81]=key;
+    assert(rb_assets_init(blob,bytes,2));assert(rb_assets_set_room(room,room_bytes));
+    const rb_frame_meta_t *meta=NULL;
+    const lv_image_dsc_t *image=rb_assets_dance_frame(0,&meta);assert(image && meta==&rb_frames[0]);
+    const uint16_t *out=(const uint16_t *)image->data,*bg=(const uint16_t *)(room+12);
+    assert(out[35*320+80]==0xffff && out[35*320+81]==key);
+    assert(out[20*320+80]==ink && out[18*320+80]==bg[18*320+80]);
+    for(unsigned x=62;x<98;++x) {
+        unsigned pos=19*320+x;uint16_t value=out[pos],back=bg[pos];
+        int actual[3]={((value>>11)&31)*255/31,((value>>5)&63)*255/63,(value&31)*255/31};
+        int expected[3]={(24+3*((back>>11)&31)*255/31)/4,(28+3*((back>>5)&63)*255/63)/4,(24+3*(back&31)*255/31)/4};
+        for(unsigned c=0;c<3;++c)assert(abs(actual[c]-expected[c])<=12);
+    }
+    assert(pixels[19*320+80]==color565(197,198,191));
+    memcpy(blob+offset,saved,RB_FRAME_BYTES);free(saved);
+    assert(rb_assets_init(blob,bytes,2));assert(rb_assets_set_room(room,room_bytes));
+}
+static void check_dance_room(void)
+{
+    const lv_image_dsc_t *room=rb_assets_room();assert(room);
+    const uint16_t *background=(const uint16_t *)room->data;
+    uint16_t *original=malloc(RB_FRAME_BYTES);assert(original);
+    for(unsigned id=RB_CHOREO_2D_NOD;id<=RB_CHOREO_END;++id) {
+        const rb_clip_meta_t *clip=&rb_clips[rb_choreo_clip_map[id]];
+        for(unsigned tick=0;tick<clip->count;++tick) {
+            unsigned frame=clip->frames[tick];const rb_frame_meta_t *meta=NULL;
+            const lv_image_dsc_t *raw=rb_assets_frame(frame,&meta);assert(meta==&rb_frames[frame]);
+            memcpy(original,raw->data,RB_FRAME_BYTES);
+            const lv_image_dsc_t *image=rb_assets_dance_frame(frame,&meta);assert(image && meta==&rb_frames[frame]);
+            const uint16_t *screen=(const uint16_t *)image->data;
+            unsigned changed=0;
+            for(unsigned i=0;i<320*240;++i) {
+                if(screen[i]!=original[i]) {
+                    if(screen[i]!=background[i]) {
+                        /* Soft matte correction is confined to the exterior boundary. */
+                        unsigned x=i%320,y=i/320;bool edge=false;
+                        for(int dy=-1;dy<=1;++dy) for(int dx=-1;dx<=1;++dx) {
+                            int nx=(int)x+dx,ny=(int)y+dy;
+                            if(nx>=0 && nx<320 && ny>=0 && ny<240) {
+                                unsigned n=(unsigned)ny*320+(unsigned)nx;
+                                if(screen[n]==background[n] && original[n]!=background[n]) edge=true;
+                            }
+                        }
+                        assert(edge);
+                    }
+                    ++changed;
+                }
+                if(i%320<40 || i%320>=280) assert(screen[i]==background[i]);
+                /* Dark outlines and saturated lime panels must remain intact. */
+                if((original[i]>>11)<20 || ((original[i]>>5)&63)<45 || (original[i]&31)<20)
+                    assert(screen[i]==original[i]);
+            }
+            assert(changed>320*240/2);
+            raw=rb_assets_frame(frame,&meta);assert(!memcmp(original,raw->data,RB_FRAME_BYTES));
+            /* Also inspect a rendered midpoint from each whole source clip. */
+            if(tick==clip->count/2) {
+                char name[64];snprintf(name,sizeof(name),"dance_room_%u.ppm",id);
+                FILE *f=fopen(name,"wb");assert(f);fprintf(f,"P6\n320 240\n255\n");
+                for(unsigned i=0;i<320*240;++i) {
+                    uint16_t v=screen[i];unsigned char rgb[]={((v>>11)&31)*255/31,((v>>5)&63)*255/63,(v&31)*255/31};
+                    assert(fwrite(rgb,1,3,f)==3);
+                } fclose(f);
+            }
+        }
+    }
+    free(original);
+    const rb_frame_meta_t *meta=NULL;
+    assert(!rb_assets_dance_frame(RB_FRAME_COUNT,&meta));assert(!rb_assets_dance_frame(0,NULL));
+}
 int main(void)
 {
     lv_init();
@@ -131,6 +237,8 @@ int main(void)
     assert(rb_choreo_store_init()==RB_CHOREO_STORE_OK);
     size_t bytes,room_bytes;uint8_t *blob=load(RB_ASSET_FILE,&bytes),*room=load(RB_ROOM_FILE,&room_bytes);
     assert(rb_assets_init(blob,bytes,2));assert(rb_assets_set_room(room,room_bytes));
+    check_edge_matting(blob,bytes,room,room_bytes);
+    check_dance_room();
     lv_display_t *display=lv_display_create(320,240);assert(display);
     lv_display_set_color_format(display,LV_COLOR_FORMAT_RGB565);
     lv_display_set_buffers(display,draw_a,draw_b,sizeof(draw_a),LV_DISPLAY_RENDER_MODE_PARTIAL);
@@ -138,140 +246,62 @@ int main(void)
     lv_indev_t *input=lv_indev_create();lv_indev_set_type(input,LV_INDEV_TYPE_POINTER);
     lv_indev_set_read_cb(input,read_touch);lv_indev_set_display(input,display);
     rb_pet_init(&pet,now);rb_pet_set_sink(&pet,sink,NULL);rb_ui_create(&pet);pump(200);
-    enter();snap("choreo_library.ppm");
-    tap_text("1  新建作品");assert(text("舞蹈 1") && disabled("预览"));
-    tap_text("预览");assert(!text("屏幕预览"));
-    add(NULL,"抬头看你");add("情绪","害羞收拢");add(NULL,"＋ 停留积木");
+    enter();
+    lv_obj_t *library=lv_obj_get_parent(lv_obj_get_parent(text("1  新建作品")));
+    scroll_touch_check(library,65,172);
+    assert(text("我的编排") && writes==0 && pet_events==0);
+    snap("choreo_library.ppm");
+    tap_text("1  新建作品");assert(disabled("预览"));
+    tap_text("添加动作");
+    const char *actions[]={"点头打拍","抬臂舒展","深蹲回升","前探伸展","底盘回转",
+        "大幅摇摆","折肘展开","抬头俯看","夹爪开合","大幅波浪"};
+    for(unsigned i=0;i<10;++i) assert(!disabled(actions[i]));
+    const char *removed[]={"开场","收尾","互动","情绪","表演","抬头看你","亲昵轻蹭","疑惑歪头","害羞收拢","安抚展开","开心回应"};
+    for(unsigned i=0;i<sizeof(removed)/sizeof(removed[0]);++i) assert(!text(removed[i]));
+    lv_obj_t *action_list=lv_obj_get_parent(lv_obj_get_parent(text("点头打拍")));
+    scroll_touch_check(action_list,88,175);
+    assert(text("添加动作") && writes==0 && pet_events==0);
+    snap("choreo_performance.ppm");tap_text("点头打拍");
+    add(NULL,"大幅摇摆");add(NULL,"夹爪开合");add(NULL,"＋ 停留积木");
     assert(writes==0 && pet_events==0);
-    tap_text("02  害羞收拢");click(290,65);assert(text("0.5s"));
-    assert(text("重复（固定）"));click(290,112);assert(text("1 次"));
-    tap_text("前移");assert(disabled("前移"));tap_text("完成");
-    assert(text("01  害羞收拢") && text("02  抬头看你"));
-    tap_text("03  停留");click(184,65);assert(text("0.5s"));
-    click(184,65);assert(text("0.5s"));
-    for(unsigned i=0;i<5;++i)click(290,65);
-    assert(text("3.0s"));click(290,65);assert(text("3.0s"));
-    for(unsigned i=0;i<4;++i)click(184,65);
-    assert(text("1.0s") && disabled("后移"));
-    snap("choreo_params.ppm");tap_text("前移");tap_text("完成");
-    tap_text("03  抬头看你");tap_text("删除");assert(!text("03  抬头看你"));
-    add("情绪","开心回应");
-    tap_text("01  害羞收拢");tap_text("完成");add(NULL,"亲昵轻蹭");
-    assert(text("02  亲昵轻蹭") && text("03  停留") && text("04  开心回应"));
-    tap_text("添加动作");tap_text("表演");
-    const char *dance_actions[]={"上下弹动","前后摇摆","左右律动","斜向指拍","关节波浪",
-        "环绕滚动","腕部隔离","几何折线","重拍弹点","移动定格"};
-    for(unsigned i=0;i<10;++i)assert(!disabled(dance_actions[i]));
-    assert(!text("左右交替") && !text("礼貌鞠躬") && !text("俏皮摇头"));
-    assert(!has_prefix("待素材"));snap("choreo_performance.ppm");tap_text("返回");
-    snap("choreo_editor.ppm");
-    tap_text("预览");assert(disabled("同步表演 · 待接入"));
-    tap_text("同步表演 · 待接入");assert(text("屏幕预览"));
-    tap_text("屏幕预览");pump(4000);assert(has_prefix("过渡"));snap("choreo_preview.ppm");
-    tap_text("停止预览");assert(has_prefix("已停止"));
-    uint32_t stopped=picture_hash();pump(5000);assert(picture_hash()==stopped);
-    assert(pet_events==0 && writes==0);snap("choreo_stopped.ppm");tap_text("返回编辑");
-    tap_text("节奏");snap("choreo_tempo.ppm");tap_text("快 · 时长 0.8 倍");
-    tap_text("保存");assert(writes==1 && disabled("已保存"));
-    rb_choreo_work_t work=saved(0);
-    assert(work.count==4 && work.tempo==RB_CHOREO_FAST && work.steps[0].action_id==RB_CHOREO_WITHDRAW);
-    assert(work.steps[0].hold_ms==500 && work.steps[1].action_id==RB_CHOREO_NUZZLE);
-    assert(work.steps[2].action_id==RB_CHOREO_WAIT && work.steps[2].duration_ms==1000);
-    assert(work.steps[3].action_id==RB_CHOREO_HAPPY && work.steps[3].hold_ms==0);
-    tap_text("04  开心回应");click(290,65);tap_text("完成");tap_text("返回");
-    assert(text("修改尚未保存"));snap("choreo_unsaved.ppm");tap_text("继续编辑");
-    fail_write=true;tap_text("保存");assert(text("暂时无法完成") && writes==1);
-    assert(saved(0).steps[3].hold_ms==0);fail_write=false;tap_text("返回");
-    tap_text("返回");tap_text("放弃修改");assert(text("我的编排"));
-    tap_text("1  舞蹈 1 · 4 步");assert(disabled("已保存") && !text("停止预览"));
-    uint64_t editing_age=pet.now-pet.last_interaction;
-    pump(120000);assert(pet.suspended && pet.state==RB_PET_NORMAL && pet.action==RB_ANIM_IDLE && pet_events==0);
-    tap_text("预览");tap_text("屏幕预览");pump(21000);
-    assert(has_prefix("已结束") && text("重播"));
-    stopped=picture_hash();pump(3000);assert(picture_hash()==stopped && pet_events==0);
-    snap("choreo_finished.ppm");tap_text("返回编辑");tap_text("返回");tap_text("返回");
-    assert(!rb_choreo_ui_active() && !pet.suspended && !pet.contact && !pet.pending_valid);
-    assert(pet.state==RB_PET_NORMAL && pet.action==RB_ANIM_IDLE);
-    assert(pet.now-pet.last_interaction<editing_age+1000);
-    /* Remaining slots, capacity boundaries and explicit unsaved save. */
-    enter();tap_text("2  新建作品");assert(text("舞蹈 2"));
-    for(unsigned i=0;i<8;++i)add(NULL,"＋ 停留积木");
-    assert(disabled("已满 8 步"));tap_text("已满 8 步");assert(!text("添加动作"));
-    snap("choreo_capacity.ppm");tap_text("08  停留");tap_text("删除");
-    tap_text("返回");tap_text("保存并返回");assert(saved(1).count==7);
-    /* Six basic dance steps remain individually editable and form 30 seconds. */
-    tap_text("基础律动");assert(text("基础律动"));
-    assert(text("基础 30.0s   含过渡 30.0s"));snap("choreo_dance_demo.ppm");
-    tap_text("01  上下弹动");assert(text("重复次数") && text("1 次"));
-    click(184,112);assert(text("1 次"));
-    click(290,112);click(290,112);assert(text("3 次"));
-    click(290,112);assert(text("3 次"));
-    snap("choreo_repeat.ppm");click(184,112);click(184,112);assert(text("1 次"));tap_text("完成");
-    tap_text("06  移动定格");assert(text("重复次数") && text("1 次"));
-    click(290,112);assert(text("2 次"));click(184,112);tap_text("完成");tap_text("保存");
-    work=saved(2);assert(work.count==6 && work.tempo==RB_CHOREO_STANDARD);
-    rb_choreo_plan_t dance_plan;assert(rb_choreo_compile(&work,&dance_plan,NULL)==RB_CHOREO_OK);
-    assert(dance_plan.count==6 && dance_plan.base_ms==30000 && dance_plan.total_ms==30000);
-    const uint8_t expected[]={RB_CHOREO_GROOVE_BOUNCE,RB_CHOREO_GROOVE_SIDE,RB_CHOREO_DANCE_POINT,
-        RB_CHOREO_ARM_WAVE,RB_CHOREO_DANCE_ROLL,RB_CHOREO_DIME_STOP};
-    for(unsigned i=0;i<6;++i)assert(dance_plan.events[i].action_id==expected[i] && !dance_plan.events[i].transition);
-    tap_text("预览");tap_text("屏幕预览");pump(600);
-    uint32_t dancing=picture_hash();bool dance_changed=false;
-    for(unsigned tick=0;tick<5;++tick) { pump(100);dance_changed|=picture_hash()!=dancing; }
-    assert(dance_changed);
-    snap("choreo_dance_bounce.ppm");pump(3000);snap("choreo_dance_side.ppm");
-    pump(3000);snap("choreo_dance_point.ppm");pump(6000);snap("choreo_dance_wave.ppm");
-    pump(6000);snap("choreo_dance_roll.ppm");pump(6000);snap("choreo_dance_stop.ppm");
-    pump(6000);assert(has_prefix("已结束") && pet_events==0);
+    tap_text("02  大幅摇摆");click(290,112);assert(text("2 次"));
+    click(290,65);assert(text("0.5s"));tap_text("前移");assert(disabled("前移"));tap_text("完成");
+    tap_text("保存");assert(saved(0).count==4 && saved(0).steps[0].action_id==RB_CHOREO_2D_SWAY);
+    assert(saved(0).steps[0].repeat==2 && saved(0).steps[0].hold_ms==500);
+    tap_text("预览");assert(disabled("同步表演 · 待接入"));tap_text("屏幕预览");pump(100);assert(has_prefix("开场"));
+    uint32_t stopped=picture_hash();pump(600);assert(stopped!=picture_hash());snap("choreo_selected_dance.ppm");
+    tap_text("停止预览");stopped=picture_hash();pump(2000);assert(stopped==picture_hash());
+    tap_text("重播");pump(14500);assert(has_prefix("收尾"));pump(4000);assert(has_prefix("已结束"));
+    stopped=picture_hash();pump(2000);assert(stopped==picture_hash());
     tap_text("返回编辑");tap_text("返回");
-    /* Every performance entry plays its own moving clip. Editing this scratch
-       work, including repeat parameters, must not write persistent storage. */
-    unsigned before_demos=writes;
-    tap_text("4  新建作品");
-    for(unsigned i=0;i<10;++i) {
-        add("表演",dance_actions[i]);
-        char title[64];snprintf(title,sizeof(title),"01  %s",dance_actions[i]);tap_text(title);
-        assert(text("重复次数"));click(290,112);click(290,112);assert(text("3 次"));
-        click(290,112);assert(text("3 次"));click(184,112);click(184,112);assert(text("1 次"));
-        tap_text("完成");tap_text("预览");tap_text("屏幕预览");
-        uint32_t initial=picture_hash();bool changed=false;
-        for(unsigned tick=0;tick<7;++tick) { pump(200);changed|=picture_hash()!=initial; }
-        assert(changed && text("停止预览") && !text("暂时无法完成"));
-        char image[64];snprintf(image,sizeof(image),"choreo_performance_%u.ppm",i+1);snap(image);
-        tap_text("停止预览");tap_text("返回编辑");tap_text(title);tap_text("删除");
-    }
-    tap_text("返回");tap_text("放弃修改");assert(writes==before_demos);
-    assert(!text("猫步律动") && writes==before_demos);
-    /* Create all ten works through scrolling and touch; slot ten survives reload. */
-    for(unsigned slot=3;slot<10;++slot) {
-        char title[64];snprintf(title,sizeof(title),"%u  新建作品",slot+1);tap_text(title);
-        add(NULL,"＋ 停留积木");tap_text("保存");
-        work=saved(slot);assert(work.work_id==slot+1 && work.count==1 && work.steps[0].action_id==RB_CHOREO_WAIT);
-        tap_text("返回");
-    }
-    tap_text("10  舞蹈 10 · 1 步");assert(text("舞蹈 10") && disabled("已保存"));
-    snap("choreo_slot10.ppm");tap_text("01  停留");click(290,65);tap_text("完成");tap_text("保存");
-    assert(saved(9).steps[0].duration_ms==1500);tap_text("返回");
-    tap_text("10  舞蹈 10 · 1 步");tap_text("01  停留");assert(text("1.5s"));
-    tap_text("完成");tap_text("返回");
-    tap_text("基础律动");assert(text("暂时无法完成"));tap_text("返回");
-    rebuild_first();assert(text("重建作品"));tap_text("返回");assert(saved(0).count==4);
+    /* Explicit rebuild never overwrites saved work until Save. */
     rebuild_first();tap_text("确认重建");assert(disabled("预览"));
-    tap_text("返回");tap_text("放弃修改");assert(saved(0).count==4);tap_text("返回");
-    assert(!rb_choreo_ui_active() && pet_events==0);
-    /* Saved resting state survives a long visit; ordinary screen contact
-       cannot become wake or replay an edited sequence after returning. */
+    tap_text("返回");tap_text("放弃修改");assert(saved(0).count==4);
+    /* Touch scrolling can select every imported primitive and persist it. */
+    for(unsigned slot=1;slot<10;++slot) {
+        char title[64];snprintf(title,sizeof(title),"%u  新建作品",slot+1);tap_text(title);
+        add(NULL,actions[slot]);tap_text("保存");
+        assert(saved(slot).steps[0].action_id==RB_CHOREO_2D_NOD+slot);tap_text("返回");
+    }
+    tap_text("2  舞蹈 2 · 1 步");
+    for(unsigned i=1;i<8;++i)add(NULL,"点头打拍");
+    assert(disabled("已满 8 步"));
+    lv_obj_t *steps=lv_obj_get_parent(lv_obj_get_parent(text("01  抬臂舒展")));
+    for(unsigned i=0;i<12 && lv_obj_get_scroll_y(steps)>0;++i) swipe(309,94,174);
+    scroll_touch_check(steps,94,174);assert(text("已满 8 步") && text("舞蹈 2"));
+    tap_text("08  点头打拍");tap_text("删除");
+    fail_write=true;tap_text("保存");assert(text("暂时无法完成"));fail_write=false;
+    tap_text("返回");tap_text("返回");tap_text("保存并返回");assert(saved(1).count==7);
+    tap_text("返回");assert(!rb_choreo_ui_active() && !pet.suspended && pet_events==0);
     rb_pet_rest(&pet);pump(RB_MS_REST+200);assert(pet.state==RB_PET_RESTING);
     unsigned before=pet_events;enter();pump(65000);tap_text("返回");
     assert(pet.state==RB_PET_RESTING && pet.action==RB_ANIM_IDLE && pet_events==before);
     click(145,110);assert(pet.state==RB_PET_RESTING && pet_events==before);
-    /* A fault in preview cancels playback and survives exiting the editor. */
     enter();tap_text("1  舞蹈 1 · 4 步");tap_text("预览");tap_text("屏幕预览");pump(1000);
     rb_pet_estop(&pet,false);pump(100);assert(has_prefix("故障停止") && disabled("重播"));
     stopped=picture_hash();pump(1500);assert(stopped==picture_hash());
     tap_text("返回编辑");tap_text("返回");tap_text("返回");
     assert(pet.state==RB_PET_STOPPED && !pet.estop_released && pet_events==before);
-    rb_pet_estop(&pet,true);pump(100);assert(pet.state==RB_PET_STOPPED);
-    printf("PASS real-touch choreography editing, boundaries, ten-slot persistence, dance repeats and 30-second preview, corruption-safe save failure, ten basic dance clips, retired actions absent, preview stop/end/fault, daily isolation and clock restoration; writes=%u\n",writes);
+    puts("PASS ten-dance-only touch library, all ten selections, repeat/hold/save, eight-step capacity, failure recovery, playback/stop/end/fault and Daily isolation");
     rb_assets_close();lv_deinit();free(blob);free(room);return 0;
 }

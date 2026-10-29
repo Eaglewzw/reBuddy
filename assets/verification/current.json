@@ -1,10 +1,10 @@
 {
-  "status": "individual_dance_visual_review_pending",
-  "date": "2026-10-28",
+  "status": "automatic_bookends_and_256_color_dance",
+  "date": "2026-10-29",
   "target": "esp32c5",
-  "application_sha256": null,
-  "application_bytes": null,
-  "application_note": "No firmware application or distribution package built for this GIF revision. Older build/dist artifacts do not contain this revision.",
+  "application_sha256": "21b7e017b7068538d731790ed49afb9c0c1f6cb02e9a2893052d01e8fc9f878b",
+  "application_bytes": 6237360,
+  "application_note": "ESP-IDF 5.5.6 build: build/reBuddy.bin; not flashed.",
   "host_tests": {
     "passed": 12,
     "failed": 0,
@@ -20,47 +20,75 @@
       "choreography_model",
       "choreography_storage",
       "daily_suspend",
-      "dance_assets"
-    ]
+      "asset_cleanup"
+    ],
+    "note": "All 12 tests passed: automatic bookends/tempo/stop/replay, 256-color frame comparison and palette decoding/corruption fallback."
   },
   "coverage": [
-    "Ten independent complete-character dance GIFs; exact 3/6-second timing, 8 FPS clock with held key poses, fixed room and loop closure.",
-    "Complete connected character extraction avoids grid-cell clipping; source-image-edge clipped poses excluded.",
-    "All 10 daily GIFs byte-identical to HEAD.",
-    "20 source GIFs match runtime RGB565 frame pixels and timing.",
-    "Coarse pedestal-size regression check only; not a proof of identical head/gripper geometry or rigid-body physics.",
-    "Existing host behavior, UI, storage and animation tests pass; no motor or display hardware test."
+    "Ten original dance GIFs and Daily GIFs remain unchanged.",
+    "Only action IDs 33–42 plus timing WAIT are allowed; Daily/retired IDs cannot be added, saved or loaded.",
+    "Every dance frame renders existing room on the sides, preserves dark/lime foreground and leaves source caches intact.",
+    "All ten dances selectable and persistent through real-touch host UI; repeat/hold/stop/end/fault verified.",
+    "ESP-IDF 5.5.6 build passed; not flashed or hardware-tested.",
+    "Real touch drags reach the final row and return to top in work library, ten-action picker and step editor; visible scrollbar and count/instruction labels.",
+    "Cream fringe correction limited to one-pixel bright silhouette band; interior highlights, opaque dark/lime pixels and source GIFs preserved. No new animation buffers.",
+    "Asset cleanup: 30 unused prompt/intermediate/legacy preview/cache files removed; 60 protected non-document source/runtime/config files unchanged; links and exporter syntax checked; 12 host tests pass.",
+    "Automatic start/end each 3000ms, outside saved steps; shared tempo; stop never forces end; replay restarts opening.",
+    "Original GIF files unchanged. Runtime dance quantization to approved shared 256 colors; frame average channel error below 4/255. Daily unchanged.",
+    "Palette-index expansion is lossless relative to converted frames, in-place without extra buffers; invalid palette sizes and corrupt streams fall back safely."
   ],
   "assets": {
-    "gif_count": 20,
+    "gif_count": 22,
     "daily_gif_count": 10,
     "dance_gif_count": 10,
-    "runtime_frame_count": 241,
-    "runtime_bytes": 5040050,
+    "runtime_frame_count": 413,
+    "runtime_bytes": 5422043,
     "nominal_fps": 8,
-    "combined_dance_gif_count": 0
+    "dance_sampling_ms": 100,
+    "dance_base_turn_frame_ms": 150,
+    "dance_renderer_extra_psram_bytes": 460800,
+    "automatic_bookend_gif_count": 2,
+    "dance_runtime_colors": 256,
+    "previous_runtime_bytes": 6158993,
+    "unoptimized_with_bookends_bytes": 7050090
   },
   "hardware_tested": false,
   "flashed": false,
   "pushed": false,
-  "visual_review": {
-    "status": "pending_user_review",
-    "scope": "Ten independent whole-character dance revisions replace the rejected layered GIFs. No combined choreography created.",
-    "remaining_issue": "Local redraw contours and timing feel need user review; no claim of exact rigid geometry or validated B601-RS motion."
-  },
-  "build_log": "build/dance-individual-review/host-build.log",
-  "test_log": "build/dance-individual-review/tests.log",
+  "build_log": "/tmp/rebuddy-bookends-current-build.log",
+  "test_log": "/tmp/rebuddy-bookends-tests.log",
   "choreography": {
     "schema_version": 1,
     "max_steps": 8,
     "slots": 10,
     "screen_only": true,
-    "available_actions": 16,
+    "available_actions": 10,
     "unavailable_actions": 0,
     "wait_block": true,
     "persistence": "NVS dual-record CRC",
     "motor_playback": false,
-    "snapshot": "assets/images/previews/choreography.png",
-    "dance_demo_ms": 30000
+    "dance_demo_enabled": false,
+    "daily_actions_allowed": false,
+    "automatic_daily_transitions": false,
+    "background": "assets/animation/room.bin",
+    "automatic_bookends": true,
+    "bookend_duration_ms": 3000,
+    "bookends_consume_steps": false
+  },
+  "restored_source_commit": "89affe0e387a9c3eb497c24660d73d00529563cb",
+  "cleanup": {
+    "removed_files": 30,
+    "removed_bytes": 6652115,
+    "removed_prompt_files": 15,
+    "removed_images": 5,
+    "runtime_assets_unchanged": true,
+    "current_build_and_dependencies_retained": true
+  },
+  "flash": {
+    "total_bytes": 8388608,
+    "application_partition_bytes": 8323072,
+    "application_bytes": 6237360,
+    "application_free_bytes": 2085712,
+    "application_used_percent": 74.94
   }
 }

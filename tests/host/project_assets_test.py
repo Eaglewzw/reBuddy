@@ -20,24 +20,14 @@ for path in (root/'assets').rglob('*'):
         assert path.is_relative_to(root/'assets/images'), path
 assert {p.name for p in gif_dir.glob('*.gif')} == {g['file'] for g in manifest['clips']}
 for folder, report in ((gif_dir, manifest), (root/'assets/gifs/expressions',
-        json.loads((root/'assets/gifs/expressions/manifest.json').read_text())),
-        (root/'assets/gifs/dance', json.loads((root/'assets/gifs/dance/manifest.json').read_text()))):
+        json.loads((root/'assets/gifs/expressions/manifest.json').read_text()))):
     for item in report['clips']:
         data = (folder/item['file']).read_bytes()
         assert hashlib.sha256(data).hexdigest() == item['sha256'], item['file']
         assert data[:6] in (b'GIF87a', b'GIF89a')
         assert struct.unpack_from('<HH', data, 6) == (320, 240)
-dance = json.loads((root/'assets/gifs/dance/manifest.json').read_text())
-assert len(dance['clips']) == 10
-assert {clip['action_id'] for clip in dance['clips']} == set(range(23, 33))
 for source in manifest['sources'].values():
     assert hashlib.sha256((root/source['path']).read_bytes()).hexdigest() == source['sha256']
-selected = root/'assets/gifs/cat-v6'
-v6 = json.loads((selected/'manifest.json').read_text())
-assert v6['status'] in ('user_selected_keep', 'solid_jaw_correction_pending_review')
-assert hashlib.sha256((selected/v6['file']).read_bytes()).hexdigest() == v6['sha256']
-for source, digest in v6['sources'].items():
-    assert hashlib.sha256((root/source).read_bytes()).hexdigest() == digest, source
 markdown = [root/'README.md', *sorted((root/'assets').rglob('*.md'))]
 for doc in markdown:
     for link in re.findall(r'!?\[[^\]]*\]\(([^)]+)\)', doc.read_text()):
@@ -45,10 +35,21 @@ for doc in markdown:
         if not target or re.match(r'[a-z]+:', target):
             continue
         assert (doc.parent/unquote(target)).exists(), f'{doc.relative_to(root)}: {target}'
-print('PASS ten current GIFs, three expression GIFs, ten basic dance GIFs, current source artwork and local asset links')
+print('PASS ten current GIFs, three expression GIFs, current source artwork and local asset links')
 
 for svg in (root/'assets').rglob('*.svg'):
     for element in ET.parse(svg).iter():
         href=element.get('href') or element.get('{http://www.w3.org/1999/xlink}href')
         if href and not href.startswith(('#','data:','http:','https:')):
             assert (svg.parent/href).is_file(), f'{svg}: missing linked image {href}'
+
+selected = root/'assets/gifs/dance'
+report = json.loads((selected/'manifest.json').read_text())
+assert len(report['clips']) == 12
+assert {p.name for p in selected.glob('*.gif')} == {c['file'] for c in report['clips']}
+assert [c['action_id'] for c in report['clips']] == list(range(33,45))
+for c in report['clips']:
+    data = (selected/c['file']).read_bytes()
+    assert hashlib.sha256(data).hexdigest() == c['sha256']
+    assert struct.unpack_from('<HH',data,6) == (640,640)
+    assert sum(c['delays_ms']) == c['duration_ms'] == (3000 if c.get('role')=='automatic_bookend' else 2400)

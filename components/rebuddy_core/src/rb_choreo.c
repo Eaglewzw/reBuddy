@@ -3,27 +3,26 @@
 #include <string.h>
 
 const rb_choreo_action_t rb_choreo_actions[]={
-    {RB_CHOREO_PROBE,"抬头看你",RB_CHOREO_INTERACTION,1,true,5000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_NUZZLE,"亲昵轻蹭",RB_CHOREO_INTERACTION,1,true,6000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_TILT,"疑惑歪头",RB_CHOREO_INTERACTION,1,true,5000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_WITHDRAW,"害羞收拢",RB_CHOREO_EMOTION,1,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_FOLDED},
-    {RB_CHOREO_RECOVER,"安抚展开",RB_CHOREO_EMOTION,1,true,5000,RB_CHOREO_POSE_FOLDED,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_HAPPY,"开心回应",RB_CHOREO_EMOTION,1,true,8000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_GROOVE_BOUNCE,"上下弹动",RB_CHOREO_PERFORMANCE,3,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_GROOVE_ROCK,"前后摇摆",RB_CHOREO_PERFORMANCE,3,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_GROOVE_SIDE,"左右律动",RB_CHOREO_PERFORMANCE,3,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_DANCE_POINT,"斜向指拍",RB_CHOREO_PERFORMANCE,3,true,6000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_ARM_WAVE,"关节波浪",RB_CHOREO_PERFORMANCE,3,true,6000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_DANCE_ROLL,"环绕滚动",RB_CHOREO_PERFORMANCE,3,true,6000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_WRIST_ISOLATION,"腕部隔离",RB_CHOREO_PERFORMANCE,3,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_DANCE_TUT,"几何折线",RB_CHOREO_PERFORMANCE,3,true,6000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_DANCE_HIT,"重拍弹点",RB_CHOREO_PERFORMANCE,3,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_DIME_STOP,"移动定格",RB_CHOREO_PERFORMANCE,3,true,6000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_NOD,"点头打拍",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_LIFT,"抬臂舒展",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_DIP,"深蹲回升",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_REACH,"前探伸展",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_BASE_TURN,"底盘回转",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_SWAY,"大幅摇摆",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_ELBOW,"折肘展开",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_WRIST,"抬头俯看",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_GRIP,"夹爪开合",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_2D_WAVE,"大幅波浪",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
     {RB_CHOREO_WAIT,"停留",RB_CHOREO_CONTROL,1,true,0,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE}
 };
 const size_t rb_choreo_action_count=sizeof(rb_choreo_actions)/sizeof(rb_choreo_actions[0]);
 const rb_choreo_action_t *rb_choreo_action(unsigned id)
 {
+    static const rb_choreo_action_t bookends[]={
+        {RB_CHOREO_START,"开场",RB_CHOREO_CONTROL,1,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+        {RB_CHOREO_END,"收尾",RB_CHOREO_CONTROL,1,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE}
+    };
+    if(id==RB_CHOREO_START || id==RB_CHOREO_END) return &bookends[id-RB_CHOREO_START];
     for (size_t i=0;i<rb_choreo_action_count;++i)
         if (rb_choreo_actions[i].action_id==id) return &rb_choreo_actions[i];
     return NULL;
@@ -41,20 +40,12 @@ void rb_choreo_work_init(rb_choreo_work_t *work,unsigned slot)
 void rb_choreo_work_demo(rb_choreo_work_t *work,unsigned slot)
 {
     rb_choreo_work_init(work,slot);
-    if (!work || slot>=RB_CHOREO_SLOTS) return;
-    (void)snprintf(work->name,sizeof(work->name),"基础律动");
-    work->count=6;
-    work->steps[0]=(rb_choreo_step_t){RB_CHOREO_GROOVE_BOUNCE,1,0,0};
-    work->steps[1]=(rb_choreo_step_t){RB_CHOREO_GROOVE_SIDE,1,0,0};
-    work->steps[2]=(rb_choreo_step_t){RB_CHOREO_DANCE_POINT,1,0,0};
-    work->steps[3]=(rb_choreo_step_t){RB_CHOREO_ARM_WAVE,1,0,0};
-    work->steps[4]=(rb_choreo_step_t){RB_CHOREO_DANCE_ROLL,1,0,0};
-    work->steps[5]=(rb_choreo_step_t){RB_CHOREO_DIME_STOP,1,0,0};
+    /* Users compose the selected primitives themselves. */
 }
 static rb_choreo_status_t validate_step(const rb_choreo_step_t *step)
 {
     const rb_choreo_action_t *action=rb_choreo_action(step->action_id);
-    if (!action) return RB_CHOREO_UNKNOWN_ACTION;
+    if (!action || step->action_id==RB_CHOREO_START || step->action_id==RB_CHOREO_END) return RB_CHOREO_UNKNOWN_ACTION;
     if (!action->available) return RB_CHOREO_UNAVAILABLE;
     if (!step->repeat || step->repeat>action->repeat_max) return RB_CHOREO_BAD_REPEAT;
     if (step->hold_ms>RB_CHOREO_HOLD_MAX_MS || step->hold_ms%RB_CHOREO_TIME_STEP_MS)
@@ -165,7 +156,8 @@ rb_choreo_status_t rb_choreo_compile(const rb_choreo_work_t *work,rb_choreo_plan
     rb_choreo_status_t status=rb_choreo_validate(work,bad_step);
     if (status!=RB_CHOREO_OK) return status;
     if (!work->count) return RB_CHOREO_EMPTY;
-    unsigned pose=RB_CHOREO_POSE_IDLE,last_action=0,last_source=0,last_time=0;
+    if(!append(plan,RB_CHOREO_START,RB_CHOREO_NO_STEP,true,false,3000,0,scaled(3000,work->tempo))) return RB_CHOREO_TOO_MANY_EVENTS;
+    unsigned last_action=RB_CHOREO_START,last_source=3000,last_time=2999;
     for (unsigned i=0;i<work->count;++i) {
         const rb_choreo_step_t *step=&work->steps[i];
         const rb_choreo_action_t *action=rb_choreo_action(step->action_id);
@@ -174,14 +166,8 @@ rb_choreo_status_t rb_choreo_compile(const rb_choreo_work_t *work,rb_choreo_plan
             continue;
         }
         for (unsigned repeat=0;repeat<step->repeat;++repeat) {
-            if (pose!=action->entry_pose) {
-                unsigned bridge=pose==RB_CHOREO_POSE_FOLDED?RB_CHOREO_RECOVER:RB_CHOREO_WITHDRAW;
-                const rb_choreo_action_t *connection=rb_choreo_action(bridge);
-                if (!append(plan,bridge,i,true,false,connection->duration_ms,0,scaled(connection->duration_ms,work->tempo))) goto full;
-                pose=connection->exit_pose;
-            }
             if (!append(plan,step->action_id,i,false,false,action->duration_ms,0,scaled(action->duration_ms,work->tempo))) goto full;
-            pose=action->exit_pose; last_action=step->action_id;
+            last_action=step->action_id;
             last_source=action->duration_ms; last_time=last_source-1;
         }
         if (step->hold_ms && !append(plan,last_action,i,false,true,last_source,last_time,scaled(step->hold_ms,work->tempo))) goto full;
@@ -190,6 +176,9 @@ full:
         memset(plan,0,sizeof(*plan));
         if (bad_step) *bad_step=(uint8_t)i;
         return RB_CHOREO_TOO_MANY_EVENTS;
+    }
+    if(!append(plan,RB_CHOREO_END,RB_CHOREO_NO_STEP,true,false,3000,0,scaled(3000,work->tempo))) {
+        memset(plan,0,sizeof(*plan));return RB_CHOREO_TOO_MANY_EVENTS;
     }
     return RB_CHOREO_OK;
 }

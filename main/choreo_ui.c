@@ -204,7 +204,14 @@ static void handle(enum command command,int arg)
 static lv_obj_t *list(int y,int h)
 {
     lv_obj_t *o=panel(ui.root,8,y,304,h,0xf7f5e9,0);
-    lv_obj_add_flag(o,LV_OBJ_FLAG_SCROLLABLE);
+    /* The list must receive a drag beginning between cards or on its gutter. */
+    lv_obj_add_flag(o,LV_OBJ_FLAG_SCROLLABLE|LV_OBJ_FLAG_CLICKABLE);
+    lv_obj_remove_flag(o,LV_OBJ_FLAG_SCROLL_CHAIN_HOR|LV_OBJ_FLAG_SCROLL_CHAIN_VER);
+    lv_obj_set_style_width(o,4,LV_PART_SCROLLBAR);
+    lv_obj_set_style_bg_color(o,lv_color_hex(0x8a9c63),LV_PART_SCROLLBAR);
+    lv_obj_set_style_bg_opa(o,LV_OPA_COVER,LV_PART_SCROLLBAR);
+    lv_obj_set_style_radius(o,2,LV_PART_SCROLLBAR);
+    lv_obj_set_style_pad_right(o,0,LV_PART_SCROLLBAR);
     lv_obj_set_scroll_dir(o,LV_DIR_VER);lv_obj_set_scrollbar_mode(o,LV_SCROLLBAR_MODE_AUTO);
     return o;
 }
@@ -223,7 +230,7 @@ static void draw_library(void)
         button(items,0,(int)i*48,rebuild?224:296,40,value,OPEN,(int)i,true,0xffffff);
         if (rebuild) button(items,232,(int)i*48,64,40,"重建",REBUILD,(int)i,true,0xe8e8da);
     }
-    button(ui.root,8,197,148,35,"基础律动",SAMPLE,0,true,0xe4edbf);
+    label(ui.root,12,204,296,"共10个编排 · 上下滑动查看",true);
 }
 static void draw_editor(void)
 {
@@ -233,8 +240,8 @@ static void draw_editor(void)
     snprintf(value,sizeof(value),"%u/%u 步 · %s · 屏幕时长估算",
         ui.work.count,RB_CHOREO_MAX_STEPS,tempos[ui.work.tempo]);
     label(ui.root,10,43,300,value,true);
-    snprintf(value,sizeof(value),"基础 %.1fs   含过渡 %.1fs",
-        valid?plan.base_ms/1000.0:0,valid?plan.total_ms/1000.0:0);
+    snprintf(value,sizeof(value),"总时长 %.1fs（含开场收尾）",
+        valid?plan.total_ms/1000.0:0);
     label(ui.root,10,60,300,value,true);
     lv_obj_t *items=list(82,108);
     if (!ui.work.count) {
@@ -260,12 +267,11 @@ static void draw_editor(void)
 static void draw_add(void)
 {
     header("添加动作",false);
-    const char *groups[]={"互动","情绪","表演"};
-    for (int i=0;i<3;++i) button(ui.root,8+i*104,45,96,32,groups[i],GROUP,i,true,ui.group==i?0xd8ef79:0xe8e8da);
-    lv_obj_t *items=list(85,105); int row=0;
+    label(ui.root,12,48,296,"共10组舞蹈 · 上下滑动查看",true);
+    lv_obj_t *items=list(72,118); int row=0;
     for (unsigned i=0;i<rb_choreo_action_count;++i) {
         const rb_choreo_action_t *action=&rb_choreo_actions[i];
-        if (action->group!=ui.group) continue;
+        if (action->group!=RB_CHOREO_PERFORMANCE) continue;
         char value[80];snprintf(value,sizeof(value),"%s%s",action->name,action->available?"":" · 待素材");
         button(items,0,row++*44,296,38,value,ADD_ACTION,action->action_id,action->available,0xffffff);
     }
@@ -387,7 +393,7 @@ void rb_choreo_ui_update(uint64_t now)
     unsigned frame=clip->frames[n];
     if (frame!=ui.frame) {
         const rb_frame_meta_t *meta=NULL;
-        const lv_image_dsc_t *image=rb_assets_frame(frame,&meta);
+        const lv_image_dsc_t *image=rb_assets_dance_frame(frame,&meta);
         if (!image || meta!=&rb_frames[frame]) {
             rb_choreo_player_stop(&ui.player,now);
             error_page("动画资源读取失败，预览已停止。",EDITOR);draw();return;
@@ -396,11 +402,14 @@ void rb_choreo_ui_update(uint64_t now)
     }
     char value[128];
     const rb_choreo_action_t *action=rb_choreo_action(sample->action_id);
-    const char *state=ui.faulted?"故障停止":!ui.player.running?(sample->done?"已结束":"已停止"):sample->transition?"过渡":sample->holding?"停留":"预览";
+    const char *state=ui.faulted?"故障停止":!ui.player.running?(sample->done?"已结束":"已停止"):sample->transition?(sample->action_id==RB_CHOREO_START?"开场":"收尾"):sample->holding?"停留":"预览";
     unsigned steps=ui.work.count;
     snprintf(value,sizeof(value),"%s · %u/%u · %s  %.1f/%.1fs",state,
         sample->step_index==RB_CHOREO_NO_STEP?steps:(unsigned)sample->step_index+1u,steps,
         action?action->name:"待机",ui.player.elapsed_ms/1000.0,ui.plan.total_ms/1000.0);
+    if(sample->step_index==RB_CHOREO_NO_STEP)
+        snprintf(value,sizeof(value),"%s · %s  %.1f/%.1fs",state,
+            ui.player.running?"自动播放":action->name,ui.player.elapsed_ms/1000.0,ui.plan.total_ms/1000.0);
     if (strcmp(lv_label_get_text(ui.progress),value)) lv_label_set_text(ui.progress,value);
     uint32_t elapsed=ui.player.elapsed_ms>ui.plan.total_ms?ui.plan.total_ms:ui.player.elapsed_ms;
     unsigned width=ui.plan.total_ms?(unsigned)(UINT64_C(320)*elapsed/ui.plan.total_ms):0;

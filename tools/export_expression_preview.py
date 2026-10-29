@@ -33,9 +33,8 @@ def main():
         archive = ROOT / 'build/expressions-combined-previous'
         archive.mkdir(parents=True, exist_ok=True)
         legacy.replace(archive / legacy.name)
-    contact = Image.new('RGB', (960, 260), 'white')
     records = []
-    for col, clip in enumerate(cfg['clips']):
+    for clip in cfg['clips']:
         timeline = [i for i, ticks in clip['keys'] for _ in range(ticks)]
         # Wider separated-finger poses 5 and 9–11 are intentionally excluded.
         assert set(timeline) <= {0, 1, 3, 4, 8, 12}
@@ -70,8 +69,6 @@ def main():
         assert set(actual) == {120, 130}
         records.append({**clip, 'encoded_frames': len(actual), 'delays_ms': actual,
                         'sha256': sha(output), 'loop_endpoints_identical': True})
-        contact.paste(frames[timeline.index(clip['key_pose'])], (col*320, 20))
-        ImageDraw.Draw(contact).text((col*320+8, 4), clip['id'], fill='black')
         print(f"PASS {clip['file']}: {len(actual)} frames, {sum(actual)} ms, 8 FPS, identical loop ends")
     assert len(records) == 3
     assert {p.name for p in OUTPUT.glob('*.gif')} == {c['file'] for c in records}
@@ -84,7 +81,6 @@ def main():
               'scale_policy': 'One fixed atlas sample; integer base registration; no dynamic zoom, warping or tweening.',
               'status': 'three_separate_previews_not_integrated_or_hardware_validated'}
     (OUTPUT / 'manifest.json').write_text(json.dumps(report, ensure_ascii=False, indent=2)+'\n')
-    contact.save(DESIGN / 'keyframes.png')
 
 
 if __name__ == '__main__':

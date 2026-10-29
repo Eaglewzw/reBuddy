@@ -1,6 +1,6 @@
 # 三关节三表情原画
 
-采用内置 imagegen，根据[角色参考](../../reference/character_reference.png)的待机、开心、好奇三种表情，以及[三关节角色基准](../daily/base/idle-master.png)制作。完整生成指令在 [prompt.txt](prompt.txt)，原画为 [atlas.png](atlas.png)。
+采用内置 imagegen，根据[角色参考](../../reference/character_reference.png)的待机、开心、好奇三种表情，以及[三关节角色基准](../daily/base/idle-master.png)制作。原画为 [atlas.png](atlas.png)。
 
 每个表情单独导出一个循环 GIF，均为 4 秒、32 个显示帧、8 FPS。它们分别是[待机](../../../gifs/expressions/01_三关节待机.gif)、[开心](../../../gifs/expressions/02_三关节开心.gif)、[好奇](../../../gifs/expressions/03_三关节好奇.gif)。三表情不再串在同一个 GIF 中。
 
@@ -8,6 +8,4 @@
 
 [时间轴](timing.json)按选定姿态原路回位，每段首尾都复用第 0 格。关键表情停留多帧，帧延迟交替为 120/130 ms。导出只做图集统一采样和底座整数平移，不做逐帧缩放。
 
-[关键姿态](keyframes.png)可查看三个独立 GIF 的代表帧。原画细节仍有细微差异，关节数量和夹爪形态经过视觉核对，尚不代表可执行的机械臂运动学。
-
-重新导出：`python3 tools/export_expression_preview.py`。旧的合并 GIF 已移入构建目录 `build/expressions-combined-previous/`，不再出现在发布文件夹。
+重新导出：`python3 tools/export_expression_preview.py`。三个独立 GIF 保留用于效果评估，尚未接入固件触摸动作。

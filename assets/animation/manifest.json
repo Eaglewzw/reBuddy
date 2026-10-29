@@ -2,20 +2,792 @@
   "asset_version": "gif-v2-rgb565",
   "interaction_revision": "gif-v2-8fps",
   "visual_status": "current_gifs_pending_device_review",
-  "format": "RBG2 RGB565 LE; codec0 raw, codec1 zlib, codec2 uint32 base + zlib XOR; no delta chains",
+  "format": "RBG2 RGB565 LE; codec0 raw, codec1 zlib, codec2 uint32 base + zlib XOR; codec3 uint16 palette count + RGB565 palette + zlib indices; no delta chains",
   "size": [
     320,
     240
   ],
   "nominal_fps": 8,
-  "unique_frames": 241,
-  "bytes": 5040050,
+  "unique_frames": 413,
+  "bytes": 5422043,
   "face_mode": "baked",
   "effects_mode": "baked",
   "source": "assets/gifs/daily/manifest.json",
   "source_sha256": "9d0c0d151c7edcc885171aa339e269bf2747a762d75eb35615aae57041da172c",
   "dance_source": "assets/gifs/dance/manifest.json",
-  "dance_source_sha256": "5a5d57fec5fb6d27f566b5e979360a6ff7a63102b8a0d0b290c51243bcfa3031",
+  "dance_source_sha256": "cb65465a2fffa6b5cad6236f3ba6ec987df59556fb6d874eae648110d42a8c1e",
+  "dance_conversion": "Original GIF files preserved; whole-frame fixed 640x640 to 240x240 fitting, centered x40; runtime 100ms sampling, base-turn retains 150ms; source duration unchanged. Room compositing at playback. User-approved runtime-only 256-color median-cut quantization, no dithering; original GIFs unchanged.",
+  "dance_palette_rgb": [
+    255,
+    255,
+    255,
+    255,
+    255,
+    254,
+    255,
+    254,
+    254,
+    254,
+    255,
+    255,
+    255,
+    255,
+    253,
+    255,
+    255,
+    251,
+    255,
+    255,
+    249,
+    255,
+    254,
+    249,
+    254,
+    254,
+    250,
+    253,
+    253,
+    250,
+    254,
+    253,
+    248,
+    253,
+    253,
+    248,
+    255,
+    255,
+    246,
+    253,
+    253,
+    246,
+    253,
+    252,
+    247,
+    255,
+    252,
+    244,
+    253,
+    252,
+    244,
+    252,
+    252,
+    246,
+    246,
+    254,
+    249,
+    254,
+    254,
+    225,
+    241,
+    253,
+    232,
+    251,
+    254,
+    180,
+    240,
+    254,
+    118,
+    237,
+    255,
+    57,
+    227,
+    254,
+    57,
+    223,
+    254,
+    51,
+    223,
+    254,
+    49,
+    221,
+    253,
+    51,
+    233,
+    255,
+    31,
+    227,
+    255,
+    30,
+    223,
+    254,
+    33,
+    220,
+    253,
+    40,
+    220,
+    254,
+    27,
+    217,
+    253,
+    35,
+    215,
+    252,
+    29,
+    214,
+    253,
+    23,
+    254,
+    251,
+    249,
+    254,
+    251,
+    245,
+    252,
+    251,
+    245,
+    254,
+    250,
+    250,
+    253,
+    251,
+    244,
+    252,
+    251,
+    244,
+    252,
+    250,
+    244,
+    250,
+    250,
+    245,
+    254,
+    251,
+    241,
+    252,
+    251,
+    243,
+    252,
+    251,
+    242,
+    252,
+    250,
+    242,
+    252,
+    250,
+    240,
+    252,
+    250,
+    239,
+    252,
+    249,
+    240,
+    251,
+    251,
+    243,
+    251,
+    250,
+    243,
+    251,
+    250,
+    242,
+    251,
+    250,
+    241,
+    251,
+    249,
+    240,
+    250,
+    250,
+    242,
+    250,
+    249,
+    242,
+    250,
+    249,
+    241,
+    250,
+    249,
+    240,
+    247,
+    249,
+    241,
+    242,
+    250,
+    192,
+    222,
+    251,
+    61,
+    219,
+    251,
+    37,
+    216,
+    250,
+    32,
+    215,
+    250,
+    26,
+    211,
+    251,
+    23,
+    209,
+    250,
+    20,
+    207,
+    250,
+    12,
+    249,
+    248,
+    242,
+    250,
+    248,
+    239,
+    250,
+    247,
+    239,
+    250,
+    246,
+    235,
+    248,
+    246,
+    240,
+    248,
+    244,
+    233,
+    244,
+    244,
+    236,
+    245,
+    240,
+    230,
+    243,
+    237,
+    225,
+    239,
+    237,
+    228,
+    238,
+    232,
+    221,
+    231,
+    230,
+    222,
+    238,
+    235,
+    201,
+    234,
+    227,
+    212,
+    230,
+    224,
+    210,
+    218,
+    247,
+    52,
+    218,
+    240,
+    69,
+    204,
+    236,
+    34,
+    210,
+    247,
+    21,
+    208,
+    243,
+    23,
+    203,
+    241,
+    19,
+    197,
+    233,
+    21,
+    193,
+    230,
+    22,
+    190,
+    226,
+    23,
+    229,
+    221,
+    207,
+    228,
+    218,
+    202,
+    225,
+    218,
+    205,
+    220,
+    218,
+    210,
+    220,
+    214,
+    200,
+    212,
+    208,
+    198,
+    219,
+    209,
+    193,
+    213,
+    205,
+    191,
+    213,
+    204,
+    182,
+    209,
+    198,
+    181,
+    205,
+    193,
+    175,
+    198,
+    196,
+    187,
+    189,
+    203,
+    76,
+    181,
+    216,
+    18,
+    168,
+    201,
+    16,
+    200,
+    189,
+    172,
+    199,
+    187,
+    169,
+    190,
+    186,
+    176,
+    198,
+    185,
+    166,
+    195,
+    183,
+    165,
+    172,
+    185,
+    77,
+    193,
+    180,
+    162,
+    190,
+    180,
+    163,
+    190,
+    178,
+    159,
+    188,
+    176,
+    157,
+    184,
+    177,
+    164,
+    173,
+    170,
+    162,
+    186,
+    174,
+    155,
+    184,
+    172,
+    154,
+    182,
+    170,
+    152,
+    175,
+    165,
+    150,
+    152,
+    171,
+    47,
+    167,
+    159,
+    147,
+    155,
+    154,
+    148,
+    156,
+    154,
+    116,
+    149,
+    145,
+    133,
+    151,
+    132,
+    123,
+    128,
+    145,
+    45,
+    125,
+    129,
+    91,
+    124,
+    121,
+    114,
+    113,
+    119,
+    69,
+    129,
+    110,
+    102,
+    115,
+    109,
+    102,
+    112,
+    108,
+    101,
+    111,
+    105,
+    98,
+    107,
+    106,
+    100,
+    107,
+    103,
+    94,
+    104,
+    99,
+    93,
+    100,
+    99,
+    93,
+    99,
+    95,
+    90,
+    97,
+    101,
+    60,
+    96,
+    92,
+    86,
+    93,
+    89,
+    83,
+    86,
+    97,
+    39,
+    87,
+    89,
+    70,
+    87,
+    87,
+    75,
+    88,
+    84,
+    79,
+    83,
+    82,
+    78,
+    79,
+    82,
+    56,
+    81,
+    78,
+    73,
+    79,
+    76,
+    73,
+    78,
+    74,
+    69,
+    74,
+    73,
+    68,
+    73,
+    71,
+    68,
+    69,
+    73,
+    45,
+    73,
+    69,
+    65,
+    71,
+    69,
+    65,
+    71,
+    68,
+    63,
+    71,
+    68,
+    62,
+    71,
+    66,
+    63,
+    70,
+    68,
+    63,
+    68,
+    67,
+    64,
+    68,
+    67,
+    61,
+    67,
+    65,
+    61,
+    65,
+    65,
+    61,
+    64,
+    63,
+    60,
+    62,
+    62,
+    60,
+    63,
+    62,
+    58,
+    60,
+    65,
+    39,
+    61,
+    59,
+    58,
+    61,
+    60,
+    56,
+    60,
+    60,
+    55,
+    59,
+    58,
+    56,
+    58,
+    58,
+    55,
+    59,
+    58,
+    53,
+    57,
+    57,
+    52,
+    56,
+    56,
+    55,
+    56,
+    56,
+    53,
+    57,
+    56,
+    52,
+    56,
+    56,
+    52,
+    56,
+    56,
+    51,
+    56,
+    55,
+    53,
+    48,
+    59,
+    36,
+    48,
+    56,
+    46,
+    55,
+    55,
+    52,
+    45,
+    55,
+    46,
+    54,
+    54,
+    50,
+    34,
+    54,
+    43,
+    53,
+    53,
+    52,
+    53,
+    53,
+    51,
+    53,
+    53,
+    49,
+    48,
+    53,
+    46,
+    53,
+    52,
+    54,
+    53,
+    52,
+    51,
+    52,
+    52,
+    51,
+    52,
+    52,
+    48,
+    48,
+    52,
+    46,
+    51,
+    51,
+    49,
+    48,
+    50,
+    48,
+    48,
+    48,
+    49,
+    49,
+    50,
+    46,
+    48,
+    50,
+    44,
+    47,
+    47,
+    45,
+    45,
+    48,
+    44,
+    45,
+    46,
+    44,
+    45,
+    47,
+    38,
+    42,
+    47,
+    35,
+    31,
+    48,
+    38,
+    44,
+    44,
+    44,
+    43,
+    44,
+    41,
+    40,
+    43,
+    41,
+    41,
+    43,
+    38,
+    40,
+    41,
+    38,
+    38,
+    42,
+    38,
+    38,
+    43,
+    31,
+    39,
+    40,
+    39,
+    37,
+    39,
+    38,
+    37,
+    39,
+    35,
+    36,
+    39,
+    30,
+    36,
+    37,
+    37,
+    35,
+    36,
+    32,
+    35,
+    35,
+    36,
+    30,
+    40,
+    31,
+    32,
+    35,
+    29,
+    24,
+    41,
+    32,
+    25,
+    36,
+    29,
+    32,
+    34,
+    31,
+    31,
+    33,
+    27,
+    25,
+    33,
+    28,
+    30,
+    31,
+    32,
+    29,
+    31,
+    27,
+    27,
+    31,
+    27,
+    23,
+    31,
+    26,
+    27,
+    28,
+    30,
+    25,
+    29,
+    27,
+    26,
+    28,
+    25,
+    24,
+    29,
+    26,
+    24,
+    28,
+    27,
+    24,
+    28,
+    25,
+    24,
+    27,
+    25,
+    25,
+    28,
+    23,
+    22,
+    28,
+    23,
+    24,
+    26,
+    26,
+    23,
+    23,
+    29,
+    23,
+    25,
+    21,
+    21,
+    22,
+    26,
+    21,
+    23,
+    20,
+    18,
+    21,
+    20,
+    17,
+    17,
+    27,
+    16,
+    18,
+    16,
+    13,
+    15,
+    16,
+    10,
+    11,
+    17,
+    2,
+    3,
+    8
+  ],
+  "dance_palette_method": "shared 256-color median-cut palette from first/middle/last source frames; no dithering",
   "choreography_clip_map": [
     0,
     1,
@@ -40,6 +812,16 @@
     255,
     255,
     255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
+    255,
     10,
     11,
     12,
@@ -49,7 +831,9 @@
     16,
     17,
     18,
-    19
+    19,
+    20,
+    21
   ],
   "room_source": "assets/images/source/room/room.png",
   "room_source_sha256": "ea5190931cf62fbf9850b0f086dad54320c7ddfd37c4e481aeed55c17f392772",
@@ -66,16 +850,18 @@
     "assets/gifs/daily/08_慢慢入睡.gif",
     "assets/gifs/daily/09_熟睡呼吸与Z.gif",
     "assets/gifs/daily/10_迷糊唤醒.gif",
-    "assets/gifs/dance/01_上下弹动.gif",
-    "assets/gifs/dance/02_前后摇摆.gif",
-    "assets/gifs/dance/03_左右律动.gif",
-    "assets/gifs/dance/04_斜向指拍.gif",
-    "assets/gifs/dance/05_关节波浪.gif",
-    "assets/gifs/dance/06_环绕滚动.gif",
-    "assets/gifs/dance/07_腕部隔离.gif",
-    "assets/gifs/dance/08_几何折线.gif",
-    "assets/gifs/dance/09_重拍弹点.gif",
-    "assets/gifs/dance/10_移动定格.gif"
+    "assets/gifs/dance/01_nod.gif",
+    "assets/gifs/dance/02_lift.gif",
+    "assets/gifs/dance/03_dip.gif",
+    "assets/gifs/dance/04_reach.gif",
+    "assets/gifs/dance/05_base_turn_complete_drawings.gif",
+    "assets/gifs/dance/06_sway.gif",
+    "assets/gifs/dance/07_elbow.gif",
+    "assets/gifs/dance/08_wrist.gif",
+    "assets/gifs/dance/09_grip.gif",
+    "assets/gifs/dance/10_wave.gif",
+    "assets/gifs/dance/00_start.gif",
+    "assets/gifs/dance/11_end.gif"
   ],
   "frames": [
     {
@@ -331,7 +1117,7 @@
     {
       "name": "PROBE_000",
       "offset": 176155,
-      "bytes": 43760,
+      "bytes": 36972,
       "sha256": "6128e6cc0f3a33067a299d58c853b723c5ff3f24c37f0fd0dec3acdee899ee8d",
       "claw_key": "probe-look-up:0",
       "claw_region": [
@@ -355,7 +1141,7 @@
     },
     {
       "name": "PROBE_004",
-      "offset": 219915,
+      "offset": 213127,
       "bytes": 15354,
       "sha256": "a528b55ccfeecee7ae4bcc93f53cb525b7843070a8f6f59e5924b7e857d580f9",
       "claw_key": "probe-look-up:4",
@@ -380,7 +1166,7 @@
     },
     {
       "name": "PROBE_007",
-      "offset": 235269,
+      "offset": 228481,
       "bytes": 16213,
       "sha256": "b385b477425378a8a7e797c76dbb0b84d8a790f51435df449dd4d9daab57b5ba",
       "claw_key": "probe-look-up:5",
@@ -405,7 +1191,7 @@
     },
     {
       "name": "PROBE_010",
-      "offset": 251482,
+      "offset": 244694,
       "bytes": 15968,
       "sha256": "af32c8f63157ba58dccfaf93a316456b22ddba4c6fe9dc0a4735bb4b51b0b01c",
       "claw_key": "probe-look-up:6",
@@ -430,7 +1216,7 @@
     },
     {
       "name": "PROBE_012",
-      "offset": 267450,
+      "offset": 260662,
       "bytes": 16603,
       "sha256": "4a38d2d699c2d398c32b126920e51e8d4e0421f0416bbb0fc9607d0e6b1b3514",
       "claw_key": "probe-look-up:7",
@@ -455,7 +1241,7 @@
     },
     {
       "name": "PROBE_014",
-      "offset": 284053,
+      "offset": 277265,
       "bytes": 15961,
       "sha256": "b5dfa1b91aef660409cdb894c6eaddff5a44b82ccca16b98e1892be8b4f3f9fd",
       "claw_key": "probe-look-up:8",
@@ -480,8 +1266,8 @@
     },
     {
       "name": "NUZZLE_000",
-      "offset": 300014,
-      "bytes": 44630,
+      "offset": 293226,
+      "bytes": 37544,
       "sha256": "4d9fdddbf720a71778865f7e1a264f3483b62a4ac933c9f3277cdd1a1ffa5a9a",
       "claw_key": "nuzzle-cheek:0",
       "claw_region": [
@@ -505,7 +1291,7 @@
     },
     {
       "name": "NUZZLE_006",
-      "offset": 344644,
+      "offset": 330770,
       "bytes": 15415,
       "sha256": "cf498521a33126f1509675f103dd062b14bc2ba1eeb8c85ab3007dc4afd2055d",
       "claw_key": "nuzzle-cheek:1",
@@ -530,7 +1316,7 @@
     },
     {
       "name": "NUZZLE_009",
-      "offset": 360059,
+      "offset": 346185,
       "bytes": 15246,
       "sha256": "5329e8a6556decc6ef0db553c5d0ef7d0d96ac8ee1f78b5d150a8287d513e395",
       "claw_key": "nuzzle-cheek:2",
@@ -555,7 +1341,7 @@
     },
     {
       "name": "NUZZLE_012",
-      "offset": 375305,
+      "offset": 361431,
       "bytes": 17309,
       "sha256": "60ec6187032becbd3bd252a2cdaf87d4b817fa359351916fda8c048f2df35c90",
       "claw_key": "nuzzle-cheek:3",
@@ -580,8 +1366,8 @@
     },
     {
       "name": "TILT_000",
-      "offset": 392614,
-      "bytes": 44648,
+      "offset": 378740,
+      "bytes": 37445,
       "sha256": "c8d51733c947046074cb46579846fb5169aa6d2be49070396ba4a51e27a46883",
       "claw_key": "tilt-clear:0",
       "claw_region": [
@@ -605,7 +1391,7 @@
     },
     {
       "name": "TILT_006",
-      "offset": 437262,
+      "offset": 416185,
       "bytes": 11612,
       "sha256": "5331324306e1b8a894bb7b4430dad46664d0c90ec9378efe641385c3b948b740",
       "claw_key": "tilt-clear:1",
@@ -630,7 +1416,7 @@
     },
     {
       "name": "TILT_009",
-      "offset": 448874,
+      "offset": 427797,
       "bytes": 11718,
       "sha256": "afabf1ba421bc45433a5ae1a81c898e25013c87201c781cd93de4d4a8e0f2590",
       "claw_key": "tilt-clear:1",
@@ -655,7 +1441,7 @@
     },
     {
       "name": "TILT_012",
-      "offset": 460592,
+      "offset": 439515,
       "bytes": 12294,
       "sha256": "bb280ffbb714b1fc7903064db3925098fed9aa11d953c62a60f2fa37613f69cd",
       "claw_key": "tilt-clear:2",
@@ -680,7 +1466,7 @@
     },
     {
       "name": "TILT_016",
-      "offset": 472886,
+      "offset": 451809,
       "bytes": 12392,
       "sha256": "c94b0e9b1136398ee36d01d2903ecdfd9142a4a1b78066a9c2fdb69c8a74c67d",
       "claw_key": "tilt-clear:2",
@@ -705,7 +1491,7 @@
     },
     {
       "name": "TILT_022",
-      "offset": 485278,
+      "offset": 464201,
       "bytes": 11942,
       "sha256": "0b70f37765e0e6ab13e696fc516b7ac57d143c487d00771ed5645a4a1850fe80",
       "claw_key": "tilt-clear:1",
@@ -730,7 +1516,7 @@
     },
     {
       "name": "TILT_028",
-      "offset": 497220,
+      "offset": 476143,
       "bytes": 546,
       "sha256": "4da6957e68d986c40c18dd5dc6d140330668335e0fd2115fb278e99d5247af82",
       "claw_key": "tilt-clear:0",
@@ -755,8 +1541,8 @@
     },
     {
       "name": "WITHDRAW_000",
-      "offset": 497766,
-      "bytes": 43643,
+      "offset": 476689,
+      "bytes": 36808,
       "sha256": "3a770a5ac4bf4e7b9f6aa60c746909604c057e7d2e22d01a26499ccf9067a5d0",
       "claw_key": "withdraw:0",
       "claw_region": [
@@ -780,7 +1566,7 @@
     },
     {
       "name": "WITHDRAW_002",
-      "offset": 541409,
+      "offset": 513497,
       "bytes": 17237,
       "sha256": "ca75e815429c594aa05f59d22ac24199c24fe84667a0ecf3fc8a1bac1d9f0443",
       "claw_key": "withdraw:2",
@@ -805,7 +1591,7 @@
     },
     {
       "name": "WITHDRAW_003",
-      "offset": 558646,
+      "offset": 530734,
       "bytes": 18025,
       "sha256": "0feb7262def5beea88e57fe3c10e2505dd15d5c348807e4fef6a8d3585e0613f",
       "claw_key": "withdraw:3",
@@ -830,7 +1616,7 @@
     },
     {
       "name": "WITHDRAW_004",
-      "offset": 576671,
+      "offset": 548759,
       "bytes": 18454,
       "sha256": "1d72ef25a6eb1f95044e3d37dd77d2aa49195974300c3c9f83c36e76c9a16bf9",
       "claw_key": "withdraw:4",
@@ -855,7 +1641,7 @@
     },
     {
       "name": "WITHDRAW_005",
-      "offset": 595125,
+      "offset": 567213,
       "bytes": 19482,
       "sha256": "3af6385ed84f77fe17a8507ad753341c954b497bdbec3828b351ae820cb62b30",
       "claw_key": "withdraw:5",
@@ -880,7 +1666,7 @@
     },
     {
       "name": "WITHDRAW_006",
-      "offset": 614607,
+      "offset": 586695,
       "bytes": 19613,
       "sha256": "04bab0bc0dd3105da651958f912b5ecd6596db306570b9dec93baea13bd8b17b",
       "claw_key": "withdraw:6",
@@ -905,7 +1691,7 @@
     },
     {
       "name": "WITHDRAW_007",
-      "offset": 634220,
+      "offset": 606308,
       "bytes": 20021,
       "sha256": "2670e7a466db7fa36eeba6f8b694b9531612bf450f43a3673422d0631b34a027",
       "claw_key": "withdraw:7",
@@ -930,7 +1716,7 @@
     },
     {
       "name": "WITHDRAW_008",
-      "offset": 654241,
+      "offset": 626329,
       "bytes": 20425,
       "sha256": "c7a227a081bda3999e8304a3425e7e975acacc32ed8912391ea14fb2cca362a1",
       "claw_key": "withdraw:8",
@@ -955,7 +1741,7 @@
     },
     {
       "name": "WITHDRAW_009",
-      "offset": 674666,
+      "offset": 646754,
       "bytes": 20236,
       "sha256": "1bf3866114d24ddd83e71a436d9f5f7c8112eea740ce1328f59f2a40ac0fa4d7",
       "claw_key": "withdraw:9",
@@ -980,7 +1766,7 @@
     },
     {
       "name": "WITHDRAW_010",
-      "offset": 694902,
+      "offset": 666990,
       "bytes": 20246,
       "sha256": "c60dcd7350b9e7e063d3353631142e78d571e8870e97b2a39dd977c003fdb58f",
       "claw_key": "withdraw:10",
@@ -1005,7 +1791,7 @@
     },
     {
       "name": "WITHDRAW_012",
-      "offset": 715148,
+      "offset": 687236,
       "bytes": 20390,
       "sha256": "8cf974fc24fd574d548179d68420cf179d282c2e4e6382fb58dcaf7caf8f579b",
       "claw_key": "withdraw:11",
@@ -1030,7 +1816,7 @@
     },
     {
       "name": "WITHDRAW_015",
-      "offset": 735538,
+      "offset": 707626,
       "bytes": 20593,
       "sha256": "bee2cb03f99ec61a4be06fe603f46fae7a55585c03d97d1be2c0b56fa63c35b5",
       "claw_key": "withdraw:12",
@@ -1055,8 +1841,8 @@
     },
     {
       "name": "RECOVER_000",
-      "offset": 756131,
-      "bytes": 43450,
+      "offset": 728219,
+      "bytes": 36560,
       "sha256": "a9541b239b7842234ff929dd8353e3a61ef7a402c81483db4c33682b183eae7e",
       "claw_key": "recover:0",
       "claw_region": [
@@ -1080,7 +1866,7 @@
     },
     {
       "name": "RECOVER_005",
-      "offset": 799581,
+      "offset": 764779,
       "bytes": 12470,
       "sha256": "528446ad98dd9c5204e1be02e2fbe20dbb3448810c20fbee3bfc2b29414f611b",
       "claw_key": "recover:1",
@@ -1105,7 +1891,7 @@
     },
     {
       "name": "RECOVER_008",
-      "offset": 812051,
+      "offset": 777249,
       "bytes": 12453,
       "sha256": "75a3b4ad4610b5a9a05b9db5ad01e665b397b7fec34431e65380928555eab78c",
       "claw_key": "recover:2",
@@ -1130,7 +1916,7 @@
     },
     {
       "name": "RECOVER_011",
-      "offset": 824504,
+      "offset": 789702,
       "bytes": 14011,
       "sha256": "f6437381d254be0d6659cc540d1f58c9dd3eff43963bf6b1a27d71e7882cf0aa",
       "claw_key": "recover:3",
@@ -1155,7 +1941,7 @@
     },
     {
       "name": "RECOVER_013",
-      "offset": 838515,
+      "offset": 803713,
       "bytes": 19453,
       "sha256": "d18019b710be755691a9b90129c60c58e233046d173e749bd2775fc37252cc6d",
       "claw_key": "recover:5",
@@ -1180,7 +1966,7 @@
     },
     {
       "name": "RECOVER_015",
-      "offset": 857968,
+      "offset": 823166,
       "bytes": 20122,
       "sha256": "1c1c41bb3d501fb9965f4538ab1436692baa35d4c4499fdb0927d73b4ec9d7e0",
       "claw_key": "recover:6",
@@ -1205,7 +1991,7 @@
     },
     {
       "name": "RECOVER_017",
-      "offset": 878090,
+      "offset": 843288,
       "bytes": 20918,
       "sha256": "0336c8157216df29cacbf4b5ab85f6244e7e6a955c5a994307079b418d0754d2",
       "claw_key": "recover:7",
@@ -1230,7 +2016,7 @@
     },
     {
       "name": "RECOVER_019",
-      "offset": 899008,
+      "offset": 864206,
       "bytes": 20448,
       "sha256": "ad7a9e53c86190eddcc255b57819f0bead91577853fb58ab7faeb6fb61e12225",
       "claw_key": "recover:8",
@@ -1255,7 +2041,7 @@
     },
     {
       "name": "RECOVER_021",
-      "offset": 919456,
+      "offset": 884654,
       "bytes": 20619,
       "sha256": "2aeafe4d3507f27be89fd3ee31f38ebea3a657938283b707f2dca5e35284d74f",
       "claw_key": "recover:9",
@@ -1280,7 +2066,7 @@
     },
     {
       "name": "RECOVER_023",
-      "offset": 940075,
+      "offset": 905273,
       "bytes": 21166,
       "sha256": "415613579304d7584c584987d23db773d06db977413d0ae4948eb44ba10d75e5",
       "claw_key": "recover:10",
@@ -1305,7 +2091,7 @@
     },
     {
       "name": "RECOVER_025",
-      "offset": 961241,
+      "offset": 926439,
       "bytes": 21028,
       "sha256": "bb89bff7b91a5c581451fd2c33cddd2232bcc828ce612cd527af40d8338846b0",
       "claw_key": "recover:11",
@@ -1330,7 +2116,7 @@
     },
     {
       "name": "RECOVER_028",
-      "offset": 982269,
+      "offset": 947467,
       "bytes": 20072,
       "sha256": "f989cd6b475bfa2d33a97f23d7bce7233e31652a41f8086002c2d4258e87da55",
       "claw_key": "recover:14",
@@ -1355,7 +2141,7 @@
     },
     {
       "name": "RECOVER_032",
-      "offset": 1002341,
+      "offset": 967539,
       "bytes": 21142,
       "sha256": "b1ae9328e32da8c17005c588006fa9d2ff69a2daad88701f206c0fbbabac74ba",
       "claw_key": "recover:15",
@@ -1380,8 +2166,8 @@
     },
     {
       "name": "HAPPY_000",
-      "offset": 1023483,
-      "bytes": 44078,
+      "offset": 988681,
+      "bytes": 37176,
       "sha256": "56ed2dcc59c30fb9e3bf1c24880a7c88cbc66c8526722e785b34e55890df05d3",
       "claw_key": "happy-rise-clap:0",
       "claw_region": [
@@ -1405,7 +2191,7 @@
     },
     {
       "name": "HAPPY_004",
-      "offset": 1067561,
+      "offset": 1025857,
       "bytes": 21919,
       "sha256": "ac0da9d84d5aa77ad5bcac8093ee62a259a7281e4ac54ca6d941620cd1a6d172",
       "claw_key": "happy-rise-clap:1",
@@ -1430,7 +2216,7 @@
     },
     {
       "name": "HAPPY_007",
-      "offset": 1089480,
+      "offset": 1047776,
       "bytes": 21442,
       "sha256": "c976bbb9338efd03e1aafd0b5f04175b647887f8aa5acd378c640b4f0874444e",
       "claw_key": "happy-rise-clap:2",
@@ -1455,7 +2241,7 @@
     },
     {
       "name": "HAPPY_010",
-      "offset": 1110922,
+      "offset": 1069218,
       "bytes": 22456,
       "sha256": "2e1ecc4d86428e37c279d9aa65d283ca28b155a319dad6bf96d3c79f561f5fb9",
       "claw_key": "happy-rise-clap:3",
@@ -1480,7 +2266,7 @@
     },
     {
       "name": "HAPPY_013",
-      "offset": 1133378,
+      "offset": 1091674,
       "bytes": 23839,
       "sha256": "e1e50fff11aecd453e9dfa1db0bbba62de8e4adf8b96f1d9ee30c02b3edd31f5",
       "claw_key": "happy-rise-clap:4",
@@ -1505,7 +2291,7 @@
     },
     {
       "name": "HAPPY_016",
-      "offset": 1157217,
+      "offset": 1115513,
       "bytes": 23204,
       "sha256": "30948da62bec34aa83d99127d5dc8d51d93f3095198310ced6a9061ec0173afa",
       "claw_key": "happy-rise-clap:5",
@@ -1530,7 +2316,7 @@
     },
     {
       "name": "HAPPY_019",
-      "offset": 1180421,
+      "offset": 1138717,
       "bytes": 22811,
       "sha256": "fa250c5963f5b8500a27f92eee8c6694fcdf9c1854075d30eae73ffbd32386ac",
       "claw_key": "happy-rise-clap:6",
@@ -1555,7 +2341,7 @@
     },
     {
       "name": "HAPPY_024",
-      "offset": 1203232,
+      "offset": 1161528,
       "bytes": 23033,
       "sha256": "e27b9292dadc86bd88f51d7346ac08dcb909e5fbdb7cd2b4dbe9928d17e7074a",
       "claw_key": "happy-rise-clap:7",
@@ -1580,7 +2366,7 @@
     },
     {
       "name": "HAPPY_026",
-      "offset": 1226265,
+      "offset": 1184561,
       "bytes": 23545,
       "sha256": "a424e653797f5d31dd182cc157cd7cd19db5d877a7f651d92b3865a1ba8cd7bd",
       "claw_key": "happy-rise-clap:8",
@@ -1605,8 +2391,8 @@
     },
     {
       "name": "REST_000",
-      "offset": 1249810,
-      "bytes": 43134,
+      "offset": 1208106,
+      "bytes": 36321,
       "sha256": "3056712afb3a700b3f65c96c830fcf548a13753aaea73065c2a8433549072bc1",
       "claw_key": "rest:0",
       "claw_region": [
@@ -1630,7 +2416,7 @@
     },
     {
       "name": "REST_003",
-      "offset": 1292944,
+      "offset": 1244427,
       "bytes": 17037,
       "sha256": "50121faa133f3c8cec37a68f0ac70736c1a4f88e2b763f1be485d6d4ba4f2e7c",
       "claw_key": "rest:1",
@@ -1655,7 +2441,7 @@
     },
     {
       "name": "REST_007",
-      "offset": 1309981,
+      "offset": 1261464,
       "bytes": 15758,
       "sha256": "0ea574f0c2d28dbd6cfa41e92f626869436d54eb3ad08806fba9777a0f1f1611",
       "claw_key": "rest:2",
@@ -1680,7 +2466,7 @@
     },
     {
       "name": "REST_011",
-      "offset": 1325739,
+      "offset": 1277222,
       "bytes": 17031,
       "sha256": "b9c9fc2c25916203ef99508668c2d33aa0733faad8241a7c2dab1abfa0d44180",
       "claw_key": "rest:3",
@@ -1705,7 +2491,7 @@
     },
     {
       "name": "REST_014",
-      "offset": 1342770,
+      "offset": 1294253,
       "bytes": 16364,
       "sha256": "464c28cef48d1a8616cf7dcee09627601c95f13dcd9ee0d763bb816d052bfc2d",
       "claw_key": "rest:4",
@@ -1730,7 +2516,7 @@
     },
     {
       "name": "REST_018",
-      "offset": 1359134,
+      "offset": 1310617,
       "bytes": 16284,
       "sha256": "60aeeede8b2c3c6f924953974cfa250307e8da700534b3cf45f6e15667904653",
       "claw_key": "rest:5",
@@ -1755,7 +2541,7 @@
     },
     {
       "name": "REST_022",
-      "offset": 1375418,
+      "offset": 1326901,
       "bytes": 18537,
       "sha256": "168bb81dfc87a9b2b7c06d1fcbb5a312fff0682215842dcaad515d328c6876cc",
       "claw_key": "rest:6",
@@ -1780,7 +2566,7 @@
     },
     {
       "name": "REST_026",
-      "offset": 1393955,
+      "offset": 1345438,
       "bytes": 19384,
       "sha256": "d5c09394bd14da8686cf9e4171f29ce19edd3e83568d934914a439d8da902b30",
       "claw_key": "rest:7",
@@ -1805,7 +2591,7 @@
     },
     {
       "name": "REST_030",
-      "offset": 1413339,
+      "offset": 1364822,
       "bytes": 19171,
       "sha256": "69e9e5a2d0093e896bea7017fb194f6f4c1bf025755ea8842a0d0f27349a6817",
       "claw_key": "rest:8",
@@ -1830,7 +2616,7 @@
     },
     {
       "name": "REST_034",
-      "offset": 1432510,
+      "offset": 1383993,
       "bytes": 19779,
       "sha256": "27dc0dc3fa25fa12cefee4317397f9ca3ab311b0b918ddd5e4d5d83fbdffb0ca",
       "claw_key": "rest:9",
@@ -1855,7 +2641,7 @@
     },
     {
       "name": "REST_038",
-      "offset": 1452289,
+      "offset": 1403772,
       "bytes": 20862,
       "sha256": "cb5e054d8c1b336dc1df1e37c02476e55924580c67d1245ba344015da13f0d4b",
       "claw_key": "rest:10",
@@ -1880,7 +2666,7 @@
     },
     {
       "name": "REST_042",
-      "offset": 1473151,
+      "offset": 1424634,
       "bytes": 21187,
       "sha256": "376fd58275e88f267a04d1f73dbd9ac9b3fdabad09a3b9d7e7ebf27c5b7eae64",
       "claw_key": "rest:11",
@@ -1905,7 +2691,7 @@
     },
     {
       "name": "REST_045",
-      "offset": 1494338,
+      "offset": 1445821,
       "bytes": 21149,
       "sha256": "34c78a54cb3e7dc931701a17ad529509815cbd78a5abc2d3b2118d82b4436b36",
       "claw_key": "rest:13",
@@ -1930,7 +2716,7 @@
     },
     {
       "name": "REST_048",
-      "offset": 1515487,
+      "offset": 1466970,
       "bytes": 21233,
       "sha256": "0d1d3dec84adf50f395fb54edbaed13711ef21a9f0b3fef7f076ad4afdd1bc6e",
       "claw_key": "rest:14",
@@ -1955,7 +2741,7 @@
     },
     {
       "name": "REST_051",
-      "offset": 1536720,
+      "offset": 1488203,
       "bytes": 21810,
       "sha256": "0e61d03dcecb8a3f1423f3992997aa1539a82a443d0ed39c08ee09c4453a355c",
       "claw_key": "rest:15",
@@ -1980,8 +2766,8 @@
     },
     {
       "name": "SLEEP_000",
-      "offset": 1558530,
-      "bytes": 43039,
+      "offset": 1510013,
+      "bytes": 36433,
       "sha256": "780a9d69fb0923ca7be4c999850226a05bfb76c2cdeee5eb6ace449da71feb11",
       "claw_key": "breath:0",
       "claw_region": [
@@ -2005,7 +2791,7 @@
     },
     {
       "name": "SLEEP_001",
-      "offset": 1601569,
+      "offset": 1546446,
       "bytes": 788,
       "sha256": "80e0b83f41168f65bbb00b0d838d36508109f856ea5e1cfd69f20d8918189b71",
       "claw_key": "breath:0",
@@ -2030,7 +2816,7 @@
     },
     {
       "name": "SLEEP_002",
-      "offset": 1602357,
+      "offset": 1547234,
       "bytes": 886,
       "sha256": "6ddb9e861539fb560644d963889df0cb0002054e144455d8568f61165a3ecf81",
       "claw_key": "breath:0",
@@ -2055,7 +2841,7 @@
     },
     {
       "name": "SLEEP_003",
-      "offset": 1603243,
+      "offset": 1548120,
       "bytes": 921,
       "sha256": "735388966a829067ca7c99a69c8d8a0e9af73e132ae3f6c2d3ee62b8318cd1de",
       "claw_key": "breath:0",
@@ -2080,7 +2866,7 @@
     },
     {
       "name": "SLEEP_004",
-      "offset": 1604164,
+      "offset": 1549041,
       "bytes": 15313,
       "sha256": "8df9422fb7aef3f46fd3af54aec50dc00d18ec8515adc956475b63e2293788e4",
       "claw_key": "breath:1",
@@ -2105,7 +2891,7 @@
     },
     {
       "name": "SLEEP_005",
-      "offset": 1619477,
+      "offset": 1564354,
       "bytes": 15322,
       "sha256": "984368492d681aca7701ee87ee8cf37069a2b3ec4bed938d2f249b680bfbfc1a",
       "claw_key": "breath:1",
@@ -2130,7 +2916,7 @@
     },
     {
       "name": "SLEEP_006",
-      "offset": 1634799,
+      "offset": 1579676,
       "bytes": 15317,
       "sha256": "163051d501aab0afbc1f2bb6ef605f186e0e0a645fb3c8fb9cc95b81d448675e",
       "claw_key": "breath:1",
@@ -2155,7 +2941,7 @@
     },
     {
       "name": "SLEEP_007",
-      "offset": 1650116,
+      "offset": 1594993,
       "bytes": 15649,
       "sha256": "5e380907b7c98247c4e495fc7dcce8e9c96223f68108953c9fc5be5553663306",
       "claw_key": "breath:2",
@@ -2180,7 +2966,7 @@
     },
     {
       "name": "SLEEP_008",
-      "offset": 1665765,
+      "offset": 1610642,
       "bytes": 15682,
       "sha256": "75c0648e1e380a1e9abdb5cbe1d6b0e1667cce404909171923c19a23edb32f68",
       "claw_key": "breath:2",
@@ -2205,7 +2991,7 @@
     },
     {
       "name": "SLEEP_009",
-      "offset": 1681447,
+      "offset": 1626324,
       "bytes": 15721,
       "sha256": "06739a26b1418e9055b0c87a5dc31daf533a689de8cac8b7f3f570997329488b",
       "claw_key": "breath:2",
@@ -2230,7 +3016,7 @@
     },
     {
       "name": "SLEEP_010",
-      "offset": 1697168,
+      "offset": 1642045,
       "bytes": 15237,
       "sha256": "081f8d348aa6fd792417d3823d6aef7a845963837324b6a3cae8e8ab4e9fe2fa",
       "claw_key": "breath:3",
@@ -2255,7 +3041,7 @@
     },
     {
       "name": "SLEEP_011",
-      "offset": 1712405,
+      "offset": 1657282,
       "bytes": 15264,
       "sha256": "1cdfc3e6204438dfe0a341ab975c7c7cc06295fd58884a5d8ed0eea9b8cb579c",
       "claw_key": "breath:3",
@@ -2280,7 +3066,7 @@
     },
     {
       "name": "SLEEP_012",
-      "offset": 1727669,
+      "offset": 1672546,
       "bytes": 15316,
       "sha256": "1ac0ada1b329476a91d0a905a135d3280016d6343086fa5e4919b085b488b01b",
       "claw_key": "breath:3",
@@ -2305,7 +3091,7 @@
     },
     {
       "name": "SLEEP_013",
-      "offset": 1742985,
+      "offset": 1687862,
       "bytes": 15833,
       "sha256": "6bf826bde0404d27f5f4470f7954ab2bde32da94aa214f4a5ee4daa025680266",
       "claw_key": "breath:4",
@@ -2330,7 +3116,7 @@
     },
     {
       "name": "SLEEP_014",
-      "offset": 1758818,
+      "offset": 1703695,
       "bytes": 15814,
       "sha256": "84cd9db08b21cbf427560ba5c3caa6e6605ace1fbacfab2da5a8289dd6943ae8",
       "claw_key": "breath:4",
@@ -2355,7 +3141,7 @@
     },
     {
       "name": "SLEEP_015",
-      "offset": 1774632,
+      "offset": 1719509,
       "bytes": 15688,
       "sha256": "ce856ff5f144cd47a4f3b636fedeb9b9ab4c61dbc32cb6703b4a1e3828e61179",
       "claw_key": "breath:4",
@@ -2380,7 +3166,7 @@
     },
     {
       "name": "SLEEP_016",
-      "offset": 1790320,
+      "offset": 1735197,
       "bytes": 17176,
       "sha256": "c6a01e67cebda66453ae1c5b1fe8d793c36549018b0b36aea0b7e05665652e4f",
       "claw_key": "breath:5",
@@ -2405,7 +3191,7 @@
     },
     {
       "name": "SLEEP_017",
-      "offset": 1807496,
+      "offset": 1752373,
       "bytes": 17549,
       "sha256": "f0a1018d7402e7cd03ed79d40b1e0e91105d748ff7fd2f10464719e7ffe7149f",
       "claw_key": "breath:5",
@@ -2430,7 +3216,7 @@
     },
     {
       "name": "SLEEP_018",
-      "offset": 1825045,
+      "offset": 1769922,
       "bytes": 17631,
       "sha256": "ea72046eaaddddedcc89348136b4e5d4028412d4e45b685f1a31b91ca9224768",
       "claw_key": "breath:5",
@@ -2455,7 +3241,7 @@
     },
     {
       "name": "SLEEP_019",
-      "offset": 1842676,
+      "offset": 1787553,
       "bytes": 18125,
       "sha256": "dc73090fd61cc990a4f41ffb073cab2f430a1e5a35d4eebaa8853eac968b2adb",
       "claw_key": "breath:6",
@@ -2480,7 +3266,7 @@
     },
     {
       "name": "SLEEP_020",
-      "offset": 1860801,
+      "offset": 1805678,
       "bytes": 18142,
       "sha256": "ce27f7c19171070266bd892f11e338663c0f1beb2f1a288515f2de60685920ae",
       "claw_key": "breath:6",
@@ -2505,7 +3291,7 @@
     },
     {
       "name": "SLEEP_021",
-      "offset": 1878943,
+      "offset": 1823820,
       "bytes": 18145,
       "sha256": "82b451f535b9d4473117c40e815b1b5e95b391cb6b666dbdb8e44c747edd6043",
       "claw_key": "breath:6",
@@ -2530,7 +3316,7 @@
     },
     {
       "name": "SLEEP_022",
-      "offset": 1897088,
+      "offset": 1841965,
       "bytes": 17905,
       "sha256": "44b240dd11950d86fb0d23e337aff12659e006da5aafd34d7d37d038c76163fb",
       "claw_key": "breath:7",
@@ -2555,7 +3341,7 @@
     },
     {
       "name": "SLEEP_023",
-      "offset": 1914993,
+      "offset": 1859870,
       "bytes": 17902,
       "sha256": "06ec4c0a2aa1c2260028e9adab706d692f7f0675c480236c2a00780b5a3fc3fc",
       "claw_key": "breath:7",
@@ -2580,7 +3366,7 @@
     },
     {
       "name": "SLEEP_024",
-      "offset": 1932895,
+      "offset": 1877772,
       "bytes": 17935,
       "sha256": "c4d3992cbfede55abe3c3609ea821666802b51e73c2510b0d615265edbaebc47",
       "claw_key": "breath:7",
@@ -2605,7 +3391,7 @@
     },
     {
       "name": "SLEEP_025",
-      "offset": 1950830,
+      "offset": 1895707,
       "bytes": 17970,
       "sha256": "94f16c6e3100b4c301fcb8b6bceb3306dcb5948ac7a7c3e8d65c05c509bd372b",
       "claw_key": "breath:7",
@@ -2630,7 +3416,7 @@
     },
     {
       "name": "SLEEP_026",
-      "offset": 1968800,
+      "offset": 1913677,
       "bytes": 17925,
       "sha256": "b142ecd13de2d9a9fbf8cf0d34af0773174606b80ddbad124b4b0d0f3a2db5d4",
       "claw_key": "breath:7",
@@ -2655,7 +3441,7 @@
     },
     {
       "name": "SLEEP_027",
-      "offset": 1986725,
+      "offset": 1931602,
       "bytes": 18195,
       "sha256": "0fd8289c410e59e46aebe097f93af12602a40c2fafdda1c1dec8ca0b971588ba",
       "claw_key": "breath:6",
@@ -2680,7 +3466,7 @@
     },
     {
       "name": "SLEEP_028",
-      "offset": 2004920,
+      "offset": 1949797,
       "bytes": 18248,
       "sha256": "118f9550a409857a4ce4c9b18abc99fb34a0c4546865b50db2f0a62346fddaed",
       "claw_key": "breath:6",
@@ -2705,7 +3491,7 @@
     },
     {
       "name": "SLEEP_029",
-      "offset": 2023168,
+      "offset": 1968045,
       "bytes": 18202,
       "sha256": "e92c9ed6b283905d2a0860ceac55b67d341c16ef32c8fc09c53fd885527d1219",
       "claw_key": "breath:6",
@@ -2730,7 +3516,7 @@
     },
     {
       "name": "SLEEP_030",
-      "offset": 2041370,
+      "offset": 1986247,
       "bytes": 17787,
       "sha256": "3bc90ac648a041d9e3d10554339a0df264b2d49cb481a425abba593ef89614cc",
       "claw_key": "breath:5",
@@ -2755,7 +3541,7 @@
     },
     {
       "name": "SLEEP_031",
-      "offset": 2059157,
+      "offset": 2004034,
       "bytes": 17670,
       "sha256": "90e6b8bd8198808df353b3fba30e5913e8a32218247e08dd11701e564a6fefab",
       "claw_key": "breath:5",
@@ -2780,7 +3566,7 @@
     },
     {
       "name": "SLEEP_033",
-      "offset": 2076827,
+      "offset": 2021704,
       "bytes": 15594,
       "sha256": "1c0ab990d7c00deb7fd7e1baae00f55e9df392ac981fe1a5434c67e26e83ad75",
       "claw_key": "breath:4",
@@ -2805,7 +3591,7 @@
     },
     {
       "name": "SLEEP_034",
-      "offset": 2092421,
+      "offset": 2037298,
       "bytes": 15684,
       "sha256": "3f51fa2c0c58a64763bedacc2d093a2acc25cafeda265e5eb9347c86435b140a",
       "claw_key": "breath:4",
@@ -2830,7 +3616,7 @@
     },
     {
       "name": "SLEEP_035",
-      "offset": 2108105,
+      "offset": 2052982,
       "bytes": 15774,
       "sha256": "727d4b61a6a45dc3bb0f4ba244edbd51e5a25416aab8c280fe8820c49aecab63",
       "claw_key": "breath:4",
@@ -2855,7 +3641,7 @@
     },
     {
       "name": "SLEEP_036",
-      "offset": 2123879,
+      "offset": 2068756,
       "bytes": 15210,
       "sha256": "acface3d33d91bdf1a5c421523eafeb723e9e041337862ad4faa7bb22bedcb0d",
       "claw_key": "breath:3",
@@ -2880,7 +3666,7 @@
     },
     {
       "name": "SLEEP_037",
-      "offset": 2139089,
+      "offset": 2083966,
       "bytes": 15223,
       "sha256": "f6d8a18b3fc97235869abc78f95a8a421ade2208c8326ce08cbb95ee73cada12",
       "claw_key": "breath:3",
@@ -2905,7 +3691,7 @@
     },
     {
       "name": "SLEEP_038",
-      "offset": 2154312,
+      "offset": 2099189,
       "bytes": 15223,
       "sha256": "eb3f08107f83f79fcd52f98c383353c54be013d9d3bd28d911bbfad2705b8b5f",
       "claw_key": "breath:3",
@@ -2930,7 +3716,7 @@
     },
     {
       "name": "SLEEP_042",
-      "offset": 2169535,
+      "offset": 2114412,
       "bytes": 15315,
       "sha256": "720004dd6f9225fe916480dc635004ef62adfd5011073b6df56e64bd35176a87",
       "claw_key": "breath:1",
@@ -2955,7 +3741,7 @@
     },
     {
       "name": "SLEEP_043",
-      "offset": 2184850,
+      "offset": 2129727,
       "bytes": 15353,
       "sha256": "64a22cce518aacb39d5cd1b5368b5b38102be13a407e1c47d91ccbef8c61d669",
       "claw_key": "breath:1",
@@ -2980,7 +3766,7 @@
     },
     {
       "name": "SLEEP_044",
-      "offset": 2200203,
+      "offset": 2145080,
       "bytes": 15383,
       "sha256": "f74ac912227ddcb315358e502fa3b9b3d6100f9c1da03cc78634196f5512b5d9",
       "claw_key": "breath:1",
@@ -3005,7 +3791,7 @@
     },
     {
       "name": "SLEEP_045",
-      "offset": 2215586,
+      "offset": 2160463,
       "bytes": 889,
       "sha256": "3bdf8f139fcc8561bb3b328df70f2141f7d0a944d1e0081e29fb57cbb3e3ec72",
       "claw_key": "breath:0",
@@ -3030,7 +3816,7 @@
     },
     {
       "name": "SLEEP_046",
-      "offset": 2216475,
+      "offset": 2161352,
       "bytes": 862,
       "sha256": "dde47a6e0147ab3aa050325a64935d2469b8444ef85612128f9582199c9637bb",
       "claw_key": "breath:0",
@@ -3055,7 +3841,7 @@
     },
     {
       "name": "SLEEP_047",
-      "offset": 2217337,
+      "offset": 2162214,
       "bytes": 752,
       "sha256": "b66d59a7e07a77637d5f70f66bfdb8cddc96f0e463bfa74796e9bcf36b3c33fa",
       "claw_key": "breath:0",
@@ -3080,8 +3866,8 @@
     },
     {
       "name": "WAKE_000",
-      "offset": 2218089,
-      "bytes": 42117,
+      "offset": 2162966,
+      "bytes": 35684,
       "sha256": "bb6fa3a55aa5cd406df89865a9ec9e527b2b2a1fed043fd62231e5e158369748",
       "claw_key": "rest:15",
       "claw_region": [
@@ -3105,7 +3891,7 @@
     },
     {
       "name": "WAKE_005",
-      "offset": 2260206,
+      "offset": 2198650,
       "bytes": 15735,
       "sha256": "96d60ab816ae3eee386f476cb8b821bffe0e1bbf4589718472edd40d9b6070d5",
       "claw_key": "rest:14",
@@ -3130,7 +3916,7 @@
     },
     {
       "name": "WAKE_008",
-      "offset": 2275941,
+      "offset": 2214385,
       "bytes": 18078,
       "sha256": "0707f262c95d9b3f0a79bfe3fe09b73e787d267fd9fbdfbdcf8fefdfd80bfb8c",
       "claw_key": "rest:13",
@@ -3155,7 +3941,7 @@
     },
     {
       "name": "WAKE_011",
-      "offset": 2294019,
+      "offset": 2232463,
       "bytes": 18743,
       "sha256": "e9fbba0b4249526aabeb50221cd1c9ffd782d7e9b61526a3002d06f9692b279e",
       "claw_key": "rest:11",
@@ -3180,7 +3966,7 @@
     },
     {
       "name": "WAKE_014",
-      "offset": 2312762,
+      "offset": 2251206,
       "bytes": 20133,
       "sha256": "714da77347af4638a8539a8969827b8c59fc6853cb46093e1fa995973af3ed8d",
       "claw_key": "rest:10",
@@ -3205,7 +3991,7 @@
     },
     {
       "name": "WAKE_017",
-      "offset": 2332895,
+      "offset": 2271339,
       "bytes": 20806,
       "sha256": "9aea4cbef2b88aced2ccba7fd007d32bb4e0af48d76a3ffaa875dcebf189dbc9",
       "claw_key": "rest:9",
@@ -3230,7 +4016,7 @@
     },
     {
       "name": "WAKE_020",
-      "offset": 2353701,
+      "offset": 2292145,
       "bytes": 21683,
       "sha256": "03f3ef8febe32ad0248cb0d7b11a50a9a531234cbea535516fd95966cb55b315",
       "claw_key": "rest:8",
@@ -3255,7 +4041,7 @@
     },
     {
       "name": "WAKE_023",
-      "offset": 2375384,
+      "offset": 2313828,
       "bytes": 21453,
       "sha256": "016769b01940a8460b6f12783a1207ebe08599aef2b475f073f5b6f820317039",
       "claw_key": "rest:7",
@@ -3280,7 +4066,7 @@
     },
     {
       "name": "WAKE_026",
-      "offset": 2396837,
+      "offset": 2335281,
       "bytes": 21819,
       "sha256": "977352055ad6c15600baad9a1da15c6792fcb2a80173d696cfd53384a24340b8",
       "claw_key": "rest:6",
@@ -3305,7 +4091,7 @@
     },
     {
       "name": "WAKE_029",
-      "offset": 2418656,
+      "offset": 2357100,
       "bytes": 22006,
       "sha256": "b160586da898f964ca4994422f341bba656dd42a8a90af53a2d9525f5550b2ee",
       "claw_key": "rest:5",
@@ -3330,7 +4116,7 @@
     },
     {
       "name": "WAKE_032",
-      "offset": 2440662,
+      "offset": 2379106,
       "bytes": 22237,
       "sha256": "796e8720593eb19f5a449e201a55217d202a8a7b24a12996611a7d3373ccce38",
       "claw_key": "rest:4",
@@ -3355,7 +4141,7 @@
     },
     {
       "name": "WAKE_034",
-      "offset": 2462899,
+      "offset": 2401343,
       "bytes": 22122,
       "sha256": "eeeb9cde83dcb512a75faa3e6ab836a6e0bd9f7da97d3066ef45ab32b52ea5e9",
       "claw_key": "rest:3",
@@ -3380,7 +4166,7 @@
     },
     {
       "name": "WAKE_037",
-      "offset": 2485021,
+      "offset": 2423465,
       "bytes": 22447,
       "sha256": "5c8b768f1fbce6cee4e5b7030dd5c15d9c4dcea67ac997f02bd62da761d24a8a",
       "claw_key": "rest:1",
@@ -3405,7 +4191,7 @@
     },
     {
       "name": "WAKE_040",
-      "offset": 2507468,
+      "offset": 2445912,
       "bytes": 22267,
       "sha256": "43a2f38c32b3e94fcdbd006a6c7c5e3925aaac068dabe5b05827eeba4694819c",
       "claw_key": "rest:0",
@@ -3429,10 +4215,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_000",
-      "offset": 2529735,
-      "bytes": 45751,
-      "sha256": "6a91613cffd9ae4135e7945dc0439c3e0c3ab64b263c165fe8f8c7972ead2d95",
+      "name": "DANCE_NOD_000",
+      "offset": 2468179,
+      "bytes": 11663,
+      "sha256": "043ed888d02e5ab204af25b8834728a218c2095465ae52d0664aca416f36e149",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3454,10 +4240,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_001",
-      "offset": 2575486,
-      "bytes": 22373,
-      "sha256": "da30bf621146cf7a3b9f810ba7e3ca0f4f60d121baa4cff08e84be3d69f952ce",
+      "name": "DANCE_NOD_005",
+      "offset": 2479842,
+      "bytes": 11517,
+      "sha256": "1747a3e9858c88bd4c345ceea4d8d264af204cd089b32169ca83b4526a753250",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3479,10 +4265,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_002",
-      "offset": 2597859,
-      "bytes": 24185,
-      "sha256": "2bfba69bb74b2d6c9f87e99045f4e2b5f06942d69b938eb3a3a68848b09b908e",
+      "name": "DANCE_NOD_010",
+      "offset": 2491359,
+      "bytes": 11583,
+      "sha256": "59c0645248b8295c7b9c97c68bedb1d6ec1379c0f3de5dc963f2bd27e259c5fa",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3504,10 +4290,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_005",
-      "offset": 2622044,
-      "bytes": 22649,
-      "sha256": "0884eb82e9d92d93655614adfd65924660318f47b4f79623d0a9ed2cb92592a1",
+      "name": "DANCE_NOD_015",
+      "offset": 2502942,
+      "bytes": 11498,
+      "sha256": "46762398679f7dccf59f8b7fd1342334adda1a9e80d1c6ba1a7455f0db0d7a59",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3529,10 +4315,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_007",
-      "offset": 2644693,
-      "bytes": 22611,
-      "sha256": "c8bfff64e0ff15491aeb1920c99570cfc879f23783b73c881e84d5b71ed2f23b",
+      "name": "DANCE_NOD_020",
+      "offset": 2514440,
+      "bytes": 11583,
+      "sha256": "5624e7c61daf53601c2c0ff7c114bf6b549a5f66ee04f92c992275a95667f465",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3554,10 +4340,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_010",
-      "offset": 2667304,
-      "bytes": 18630,
-      "sha256": "32ca5f456268cb8ad53b4b2123d18e9f2473ccbdb487d1c3ce7b3a458537457c",
+      "name": "DANCE_NOD_025",
+      "offset": 2526023,
+      "bytes": 11509,
+      "sha256": "40bdc85bae98f1c5fec1c71e57594480c7d247cc44c8f1d78b25c69203b57ae8",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3579,10 +4365,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_012",
-      "offset": 2685934,
-      "bytes": 16439,
-      "sha256": "ded174c06131199c2bb5c71d5b648638b44de03bb1b93424e7cbba701ff26ff7",
+      "name": "DANCE_NOD_030",
+      "offset": 2537532,
+      "bytes": 11588,
+      "sha256": "08dcc4e3afc1230e3462ca76a780a70243b2f8868c64f1e0511e028a03fc98d6",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3604,10 +4390,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_013",
-      "offset": 2702373,
-      "bytes": 22932,
-      "sha256": "2174b165e2adb8c7fb538b7ef8c6f639d8ad33cdad1e9a00e23232610424f382",
+      "name": "DANCE_NOD_035",
+      "offset": 2549120,
+      "bytes": 11562,
+      "sha256": "027dcb06c658ce5891cd61209d50443ec11d549d359846b930e2906cf3b30b8f",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3629,10 +4415,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_014",
-      "offset": 2725305,
-      "bytes": 24027,
-      "sha256": "04a88b4507b427807e395eb792ea2528cf289486584e5348caa1a773b44565b1",
+      "name": "DANCE_NOD_040",
+      "offset": 2560682,
+      "bytes": 11518,
+      "sha256": "ef07c4f6ed0c4e11c4f7e6b6d6c6080af1f658809b0817a477d637fe33fe82c5",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3654,10 +4440,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_017",
-      "offset": 2749332,
-      "bytes": 22127,
-      "sha256": "ca6006c7ce694d051b049a7c3f570b2691bde036ef58bc0871ed77a30574915f",
+      "name": "DANCE_NOD_045",
+      "offset": 2572200,
+      "bytes": 11561,
+      "sha256": "848de47b6e27a22bb1c3f93929014b26948e212efeae85411108139412faf0a4",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3679,10 +4465,10 @@
       ]
     },
     {
-      "name": "GROOVE_BOUNCE_019",
-      "offset": 2771459,
-      "bytes": 21697,
-      "sha256": "a8fc788b097584ceecaee77f9ebab9ab69660d6cbe5cd74ad300b59012f4a81d",
+      "name": "DANCE_NOD_050",
+      "offset": 2583761,
+      "bytes": 11567,
+      "sha256": "1592c0543631946155f8e2181d4d8d1c8cb106129c23005b68968dedf6540b3a",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3704,10 +4490,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_000",
-      "offset": 2793156,
-      "bytes": 45293,
-      "sha256": "7470f0ae0d5987bc281cb1706ed66e436b7467cfecd94ffcf0d564231a2de533",
+      "name": "DANCE_NOD_055",
+      "offset": 2595328,
+      "bytes": 11627,
+      "sha256": "2766d4c90b527050f9bb96065a3f52a3b161d873bd6bdf8f9a6a67685632f796",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3729,10 +4515,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_002",
-      "offset": 2838449,
-      "bytes": 16389,
-      "sha256": "e99d1dd30fb51e41c506766a23ca7e00e0fb62d431ee3c32d04d7debed444b23",
+      "name": "DANCE_NOD_059",
+      "offset": 2606955,
+      "bytes": 3014,
+      "sha256": "3434b66b325e14b13401b4260d7081a9c14d19dd05592ac4eef4da2f79780114",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3754,10 +4540,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_004",
-      "offset": 2854838,
-      "bytes": 19895,
-      "sha256": "6c89e0f565a24759a7fe356b346476387277f3ed0a90177355e2dbd212f1f47a",
+      "name": "DANCE_NOD_064",
+      "offset": 2609969,
+      "bytes": 11607,
+      "sha256": "507ac17a8869a41b705ff4df08e08e44b7884c56a0293b6681dff9a6283803e0",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3779,10 +4565,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_006",
-      "offset": 2874733,
-      "bytes": 19059,
-      "sha256": "98ca9091a3272c8765328da5d88ef71be47d025ee4b23b48b7c7ddff51737412",
+      "name": "DANCE_NOD_069",
+      "offset": 2621576,
+      "bytes": 11547,
+      "sha256": "e4b422426479ba9570c4b76418aee5cacc6a338fc93a93104106c5ccd6457960",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3804,10 +4590,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_008",
-      "offset": 2893792,
-      "bytes": 18199,
-      "sha256": "20879a82db5df56043affe591fef6e276191c8d7b2e560e911334d05f4f02803",
+      "name": "DANCE_NOD_074",
+      "offset": 2633123,
+      "bytes": 11591,
+      "sha256": "ed38b6b87725810ae01daca8076290c36a2bb143c4bf5b0d7d57a81e0876b5b7",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3829,10 +4615,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_010",
-      "offset": 2911991,
-      "bytes": 19472,
-      "sha256": "a624d92daba97b29972b4b332e4a03dcffbf793e5f13cd5d07414612abe0b6fa",
+      "name": "DANCE_NOD_079",
+      "offset": 2644714,
+      "bytes": 11566,
+      "sha256": "36c046a61e9f71f4ca457421e0040a89ebeef9819aed96fee3d3ecc1314f08d1",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3854,10 +4640,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_012",
-      "offset": 2931463,
-      "bytes": 19165,
-      "sha256": "2f630c54b628b2b32a521bccdaa81dc84f98e0e02e850cf83200953ca2411cb8",
+      "name": "DANCE_NOD_084",
+      "offset": 2656280,
+      "bytes": 11578,
+      "sha256": "56941450d9285a553fed74d9c83ead51cad43fdca019e8ef6047ff88b04b658d",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3879,10 +4665,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_014",
-      "offset": 2950628,
-      "bytes": 18302,
-      "sha256": "83d8ee275d90027deaaa4e2f14a0011d0d1969ca4066a2b0de71ae3c1daa3386",
+      "name": "DANCE_NOD_089",
+      "offset": 2667858,
+      "bytes": 11622,
+      "sha256": "acde8f4a0aca613eca5b41e4441b5ac5b26509dcfdd539db9c4897e8491d2654",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3904,10 +4690,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_016",
-      "offset": 2968930,
-      "bytes": 17892,
-      "sha256": "fd6803c148176d300a553279b327a4af1ba93d982511dd20d4d51bbc39c7caa4",
+      "name": "DANCE_NOD_094",
+      "offset": 2679480,
+      "bytes": 11552,
+      "sha256": "c912feaa18e5a935e898373b066b6ec716b2d777a918c0d9cfe5ea886aef9f71",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3929,10 +4715,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_018",
-      "offset": 2986822,
-      "bytes": 18992,
-      "sha256": "bbd0683eb1cf03cadbf6ba633af9aaa2769450676f6cb3d210122fe230bec0ce",
+      "name": "DANCE_NOD_099",
+      "offset": 2691032,
+      "bytes": 11549,
+      "sha256": "d1b86581b085dc7189753ab3d1787f93a9d35e6610a0ab47a894980393b70a40",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3954,10 +4740,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_020",
-      "offset": 3005814,
-      "bytes": 18249,
-      "sha256": "155cfe6f747054f643700da1676debbfa8752106fbae0d34cba759b961cda0aa",
+      "name": "DANCE_NOD_104",
+      "offset": 2702581,
+      "bytes": 11510,
+      "sha256": "b3fbd9287d87f55876eec4f6299746e8249ed281bd2adbb871fe86c9cf07ebb4",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -3979,10 +4765,10 @@
       ]
     },
     {
-      "name": "GROOVE_ROCK_022",
-      "offset": 3024063,
-      "bytes": 15919,
-      "sha256": "e3cb78477c123fa5b96289e2155e580946df5c222a313d909d754f52b52cac54",
+      "name": "DANCE_NOD_109",
+      "offset": 2714091,
+      "bytes": 11609,
+      "sha256": "5994376fbf616a6ecf9faf264187c3eac8d7f7ccc0f0e9ab5f068c476f30a1a3",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4004,10 +4790,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_000",
-      "offset": 3039982,
-      "bytes": 44847,
-      "sha256": "365f6d6224c25b083ad302cbb9737df7bfc972a7dd2fa776f9642bc0bb463d59",
+      "name": "DANCE_NOD_114",
+      "offset": 2725700,
+      "bytes": 9667,
+      "sha256": "8ea40b837988ab1ce43d174cf1bd3abaaa8af5ac1fe5bf30a0a60b41caa153c5",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4029,10 +4815,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_002",
-      "offset": 3084829,
-      "bytes": 18906,
-      "sha256": "7ab9dd62da2bb8e20d962e1e4e8c0f9fb9d2cf9ade6ed31e7556995908991ad6",
+      "name": "DANCE_LIFT_000",
+      "offset": 2735367,
+      "bytes": 11662,
+      "sha256": "d0653d4c00a97c351a55d89ee68bd6855e3114d68f26dee1f93ea19a7a1cfb61",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4054,10 +4840,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_004",
-      "offset": 3103735,
-      "bytes": 20557,
-      "sha256": "8a07d45c5db0be253af8ba46e63e847afaa791d674ad2a2531f3dee47549bb6f",
+      "name": "DANCE_LIFT_005",
+      "offset": 2747029,
+      "bytes": 6406,
+      "sha256": "a9d34ee67517c4162d04a82dca1f3cba5272390e8deafd755d550424a6affbcb",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4079,10 +4865,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_006",
-      "offset": 3124292,
-      "bytes": 19430,
-      "sha256": "f5bde912df2a2ae139ee2a2b714f4ca2a00fd04ff277dd999b0fac87c8b8d56b",
+      "name": "DANCE_LIFT_010",
+      "offset": 2753435,
+      "bytes": 11639,
+      "sha256": "af4b8d0f4332dd144b0a68f8c3f1a5ee3473904a419fdd966de5eae5fe09c7e0",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4104,10 +4890,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_008",
-      "offset": 3143722,
-      "bytes": 18247,
-      "sha256": "5f9ebb2b20ccf4552c1af41c5cbae17f47022435f1dcd08d7f359840772828f6",
+      "name": "DANCE_LIFT_015",
+      "offset": 2765074,
+      "bytes": 11670,
+      "sha256": "9f70828c6ed484ac48fcff56062fe88c186a8f4257508102d460d15b03186c77",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4129,10 +4915,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_010",
-      "offset": 3161969,
-      "bytes": 17766,
-      "sha256": "d487f7cb47d99747c1acd029c5be2604939a4a2b72e4eb407582cf9ea9a15b09",
+      "name": "DANCE_LIFT_020",
+      "offset": 2776744,
+      "bytes": 11692,
+      "sha256": "05adfc94d6211234debb97ae4cf871ca9e27488fa9e7dd7d42ec263a6b7e7af6",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4154,10 +4940,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_014",
-      "offset": 3179735,
-      "bytes": 20734,
-      "sha256": "8a1f015829e72c7dc4c4120793c23db5380f9c661c5aa2ed257fabf74b6b34bf",
+      "name": "DANCE_LIFT_025",
+      "offset": 2788436,
+      "bytes": 11621,
+      "sha256": "a29c5f2db99f2be668a0b5138efd0c759f21da167dcd0e800569e1ecc7ad7c70",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4179,10 +4965,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_018",
-      "offset": 3200469,
-      "bytes": 19532,
-      "sha256": "f36d4b0ba7a6e8c632ac1b032b2808e4d89ba0aed8b9c25ea5849f6061a36719",
+      "name": "DANCE_LIFT_030",
+      "offset": 2800057,
+      "bytes": 11738,
+      "sha256": "00bf4812bbe21972c7d2b24a4326f0920d0b11145e048171a6c3d1be60493779",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4204,10 +4990,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_020",
-      "offset": 3220001,
-      "bytes": 18386,
-      "sha256": "14cf7f8bccab0a7d4d032150f433a94d588afe7a7b1ec78f55bd7554ccde95cb",
+      "name": "DANCE_LIFT_035",
+      "offset": 2811795,
+      "bytes": 11730,
+      "sha256": "693b84af0b437881b66efb18b8a9f9e096544ddc07b9d1671855ef29902e75f4",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4229,10 +5015,10 @@
       ]
     },
     {
-      "name": "GROOVE_SIDE_022",
-      "offset": 3238387,
-      "bytes": 18708,
-      "sha256": "fd794841c66d47d557d2c5fd004ae32479ad4c6654d751a590f32c2ae845de58",
+      "name": "DANCE_LIFT_040",
+      "offset": 2823525,
+      "bytes": 11694,
+      "sha256": "3dce764d46e170c54cd9ae6eae1d6d3bbf7f8d6852de6d1165fcba79ee786e37",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4254,10 +5040,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_000",
-      "offset": 3257095,
-      "bytes": 46226,
-      "sha256": "bc1135e077284ed4d1e61d59e5af232171c6b59e6e6c295396d641a209148ac5",
+      "name": "DANCE_LIFT_045",
+      "offset": 2835219,
+      "bytes": 11716,
+      "sha256": "00bd56f7596174a060a7f5fdca0b610e0b104f868869e590e0bf8eb4d0a4b0c0",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4279,10 +5065,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_004",
-      "offset": 3303321,
-      "bytes": 21308,
-      "sha256": "c0e486e997ac4d43f9eba7dc1f1fdf74cec63ec78b9325d3b808f22d63625dbf",
+      "name": "DANCE_LIFT_050",
+      "offset": 2846935,
+      "bytes": 11714,
+      "sha256": "adb244a8a4f6493733418fc2958078c0a0a388fab4de9d635f1f339a7478a6e4",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4304,10 +5090,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_008",
-      "offset": 3324629,
-      "bytes": 23387,
-      "sha256": "282b96225d4f69173daf23e112289db2357ec46b42e4aa0f6ac9ce4a2af81ee2",
+      "name": "DANCE_LIFT_055",
+      "offset": 2858649,
+      "bytes": 11725,
+      "sha256": "577bfb309786ad161422f24f229e9d386de41a3ab55cda7a7ff2ad9ee92b2f15",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4329,10 +5115,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_012",
-      "offset": 3348016,
-      "bytes": 23165,
-      "sha256": "7b95e6bf3bd5781146bed3e4d0f935f0f9ead4167f5b893a331885307f7caba9",
+      "name": "DANCE_LIFT_059",
+      "offset": 2870374,
+      "bytes": 11727,
+      "sha256": "39739802745374ced23cbde7a41f4b492f3485341fa3cf741e18d9bab04f971c",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4354,10 +5140,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_016",
-      "offset": 3371181,
-      "bytes": 24257,
-      "sha256": "b01bad6e6ca457d92450ed99a8ab2cf5c8c0ed56aca15a8ab25401610a0f9df3",
+      "name": "DANCE_LIFT_064",
+      "offset": 2882101,
+      "bytes": 11650,
+      "sha256": "12fe47801337745c1e9626bf8cfa358a20601df70872d6ce6edcd9a283159ae0",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4379,10 +5165,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_020",
-      "offset": 3395438,
-      "bytes": 17279,
-      "sha256": "d4b63be1b12976c851f30e4a0c0b9714961e47c4874d96f3079678c2b8e2f636",
+      "name": "DANCE_LIFT_069",
+      "offset": 2893751,
+      "bytes": 11728,
+      "sha256": "b22cc7537154e943b4e793a286b3a378028710d8ec26463ad83fce05577ad7a3",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4404,10 +5190,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_024",
-      "offset": 3412717,
-      "bytes": 21626,
-      "sha256": "8e532b512712a09c865617643b6eac016d9dac285f69f543ebc1a3be2ef8dd4a",
+      "name": "DANCE_LIFT_074",
+      "offset": 2905479,
+      "bytes": 11734,
+      "sha256": "af155c9e2234f8df22596fafdf7c593feb3dadf890681101d87bef647472e588",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4429,10 +5215,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_028",
-      "offset": 3434343,
-      "bytes": 22811,
-      "sha256": "5c70e6ca45f9b4060508aa361041f37f5f11d65cf1c27fd503b9b09f74187b96",
+      "name": "DANCE_LIFT_079",
+      "offset": 2917213,
+      "bytes": 11625,
+      "sha256": "17c926e951f276b7d51278e57b0b9cb5803f97f424ae6103222f72d0b979f11c",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4454,10 +5240,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_032",
-      "offset": 3457154,
-      "bytes": 22824,
-      "sha256": "84f45ab87330255261874f9424d919e34ab0c48dc861b48b7c7572da6edc06d5",
+      "name": "DANCE_LIFT_084",
+      "offset": 2928838,
+      "bytes": 11669,
+      "sha256": "4f2a3073f7b56ece37d2629b820f46fd75cb7497fa58fd1439e3ac67b20363d5",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4479,10 +5265,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_036",
-      "offset": 3479978,
-      "bytes": 24137,
-      "sha256": "a6e4f68d4e0ed39a55e7223562548473f817821ed79b368843edd29fc620f77c",
+      "name": "DANCE_LIFT_089",
+      "offset": 2940507,
+      "bytes": 11630,
+      "sha256": "f173e3bd8ac9c60e06bf8cd00abea895c50158ef3d475c7873f120d3a6fe3e46",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4504,10 +5290,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_040",
-      "offset": 3504115,
-      "bytes": 23125,
-      "sha256": "dc91d97548b6206d2b5ed44ff396252136f1796a9e6037ceb33fd5ae0bf8410e",
+      "name": "DANCE_LIFT_094",
+      "offset": 2952137,
+      "bytes": 11619,
+      "sha256": "4731367b6aef9a4796c25027802866c719735cad048343765ae0f4788ed4995c",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4529,10 +5315,10 @@
       ]
     },
     {
-      "name": "DANCE_POINT_044",
-      "offset": 3527240,
-      "bytes": 16505,
-      "sha256": "fb650d7b7a205ebf81d4966ca8d910a41e13f74fd7d1d497a9525855b6f8437c",
+      "name": "DANCE_LIFT_099",
+      "offset": 2963756,
+      "bytes": 11653,
+      "sha256": "44bbaf956778b8b6a625693a9f5bc9447883e99ed8d615a83176e86533870f92",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4554,10 +5340,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_000",
-      "offset": 3543745,
-      "bytes": 45357,
-      "sha256": "bd04d9ac5ea595003164a51f16a26ac35e1616cc632faca85a753b0bcd15f3f3",
+      "name": "DANCE_LIFT_104",
+      "offset": 2975409,
+      "bytes": 11680,
+      "sha256": "1912cdeeaa64379d27eb7494bb13d9942fd7ca3e58969351761a3511002ce7ff",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4579,10 +5365,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_004",
-      "offset": 3589102,
-      "bytes": 22064,
-      "sha256": "f161b855e75ea127c392aaa7e2e97ab6d95b27d0cfb7e95690243219a9205174",
+      "name": "DANCE_LIFT_109",
+      "offset": 2987089,
+      "bytes": 11045,
+      "sha256": "b9b934d00dd7987b2b05adbe6913acffce20c255202a257ef56b0ebbf66a5a94",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4604,10 +5390,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_008",
-      "offset": 3611166,
-      "bytes": 22816,
-      "sha256": "5869a9fb175c91fbaed952fe1fde51a35352487a9cc49daba29ce53c8c0957af",
+      "name": "DANCE_LIFT_114",
+      "offset": 2998134,
+      "bytes": 4727,
+      "sha256": "6a17aa29101a17fb2772ac6b5853da04916239a4b1b28d7d513d80142cf7533d",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4629,10 +5415,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_012",
-      "offset": 3633982,
-      "bytes": 22105,
-      "sha256": "2b729a31ae7a23994588f5239c308a74ef8b45bb5069eb14373885656c0bb207",
+      "name": "DANCE_DIP_000",
+      "offset": 3002861,
+      "bytes": 11677,
+      "sha256": "ee9fe4985db6cda0561a747e31ae84f14e20e62283b249cf14717dc3a2da8ba1",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4654,10 +5440,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_016",
-      "offset": 3656087,
-      "bytes": 23468,
-      "sha256": "d3e367f8f60c08d2ba179b86da8411dbfa17e5fef5f239256315153640f3c6b8",
+      "name": "DANCE_DIP_005",
+      "offset": 3014538,
+      "bytes": 6228,
+      "sha256": "0c4b8770f4c05d31baf000a202234c6ddf6b81fd9b666082f08ed404777199c7",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4679,10 +5465,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_020",
-      "offset": 3679555,
-      "bytes": 22990,
-      "sha256": "08cf1f85d1a691ea0d94948e147411efc555baf2a822e23aa98ffe64c401cf3f",
+      "name": "DANCE_DIP_010",
+      "offset": 3020766,
+      "bytes": 11608,
+      "sha256": "972041f8cc4f91e67849e712a86b939408d014dcc4dc9eb23384b8acc3361d26",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4704,10 +5490,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_024",
-      "offset": 3702545,
-      "bytes": 23875,
-      "sha256": "b7d93360c64d65a44166673865a9efa9f47a9f47d32a84d6c684b80db336680e",
+      "name": "DANCE_DIP_015",
+      "offset": 3032374,
+      "bytes": 11595,
+      "sha256": "09cff55a456799fca95688b7c72f7d81c72f7d2efd04a31be2aedb2b34da4650",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4729,10 +5515,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_032",
-      "offset": 3726420,
-      "bytes": 24019,
-      "sha256": "df95685dc726a7358670eff37d46150757df8349d0f780367f6cb6bb01e7b72f",
+      "name": "DANCE_DIP_020",
+      "offset": 3043969,
+      "bytes": 11538,
+      "sha256": "4a0b14bc0335590d51ec57733feb7b7f741426acde44ad5748b01cdd783da7b0",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4754,10 +5540,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_036",
-      "offset": 3750439,
-      "bytes": 23152,
-      "sha256": "0975ad740066f357468f28011bd11f39ab400a420df9b7b6e05268c0e8d2afbf",
+      "name": "DANCE_DIP_025",
+      "offset": 3055507,
+      "bytes": 11615,
+      "sha256": "9644f0f7a54a8b4dde2d94b3f67ab0e0ffd3a490b61f7ab61ea0b0aff2fd2287",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4779,10 +5565,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_040",
-      "offset": 3773591,
-      "bytes": 21812,
-      "sha256": "ced6efe053aece5628fccab38e64877f60a822268d8e84005b9b4b724f4e5929",
+      "name": "DANCE_DIP_030",
+      "offset": 3067122,
+      "bytes": 11628,
+      "sha256": "20ad2e8a0f58144661a0eb4d2b76bc9028180eb42767cb59259b218aadbc6dcc",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4804,10 +5590,10 @@
       ]
     },
     {
-      "name": "ARM_WAVE_044",
-      "offset": 3795403,
-      "bytes": 17854,
-      "sha256": "e9af30db2903797974be5592a24dadd51cd7b17c53213501a6d7cad4d5098510",
+      "name": "DANCE_DIP_035",
+      "offset": 3078750,
+      "bytes": 11572,
+      "sha256": "4faf1e74699e99cc9964eaa425a96ac0aefb59c9ff1bb37d028d50dacb4f8a40",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4829,10 +5615,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_000",
-      "offset": 3813257,
-      "bytes": 46009,
-      "sha256": "233fac87f1f4aac74298691bb02cf0792d610954d82dc869a9af21fe74afaadf",
+      "name": "DANCE_DIP_040",
+      "offset": 3090322,
+      "bytes": 11528,
+      "sha256": "51d5545d7319bd559a7bdac794296311dec6a1e3fc96af151cbfe75e19b2c748",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4854,10 +5640,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_004",
-      "offset": 3859266,
-      "bytes": 22596,
-      "sha256": "c9c7c8edd705ec5a8f4888105d64f79f384a0bcf22ebc6c4d98013cbbb909b0c",
+      "name": "DANCE_DIP_045",
+      "offset": 3101850,
+      "bytes": 11548,
+      "sha256": "bac1f9dd2f9181af62c8deafd5f6f9880915c92e6bd74004a63ce53716dacee0",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4879,10 +5665,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_008",
-      "offset": 3881862,
-      "bytes": 22758,
-      "sha256": "6fa4e2b8227796716fdc9323853c681e1e4d92e59c6eb5bb77805b0e4c5af36b",
+      "name": "DANCE_DIP_050",
+      "offset": 3113398,
+      "bytes": 11574,
+      "sha256": "de40c393a3572f2378b6bf2e0dcc9ef147e3b1d265ba1c4c6126abad913cf223",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4904,10 +5690,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_012",
-      "offset": 3904620,
-      "bytes": 19337,
-      "sha256": "94813b87488c603547fa99e306d12de8c7300e657eb8305b40332bac1fe2f4cd",
+      "name": "DANCE_DIP_055",
+      "offset": 3124972,
+      "bytes": 11492,
+      "sha256": "4c1fee229a2223d89e2baef6d256255508018e665084afa3fb6a6fcab6c797ea",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4929,10 +5715,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_020",
-      "offset": 3923957,
-      "bytes": 22429,
-      "sha256": "98a7570986ade8a2ca40d0da5fab577f28e0f37c40e5ec4e61e9b695fedc11f7",
+      "name": "DANCE_DIP_059",
+      "offset": 3136464,
+      "bytes": 11499,
+      "sha256": "0540e06262ec215d8a3dd311c2546e2fac1266c1d572958db0e612d8be680fbf",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4954,10 +5740,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_024",
-      "offset": 3946386,
-      "bytes": 23315,
-      "sha256": "a1da57a289ad418f06457d858eb5b4bb78ca6b292419acc6ce51ff7e89eaec62",
+      "name": "DANCE_DIP_064",
+      "offset": 3147963,
+      "bytes": 11537,
+      "sha256": "73ab46885b951a84c43c4b7ee6a889832aa07bc74345263ba9da5c1867cff5cd",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -4979,10 +5765,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_028",
-      "offset": 3969701,
-      "bytes": 23480,
-      "sha256": "526cb3090486a372eafc026dbc34b4b2afd2c35805b4e8e3f865ff64f6d20500",
+      "name": "DANCE_DIP_069",
+      "offset": 3159500,
+      "bytes": 11527,
+      "sha256": "c238762c1db8edd120f327d58e960ee51711f4f71d6c6140ffa418f1fb5cca07",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5004,10 +5790,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_040",
-      "offset": 3993181,
-      "bytes": 22549,
-      "sha256": "865e8b93678e35703e6415790e53d71f20eaa20a7842d1869e217911355b94ac",
+      "name": "DANCE_DIP_074",
+      "offset": 3171027,
+      "bytes": 11597,
+      "sha256": "e1d736aeba860c8bcd0be0cbd0617cf62d87977098d8a5740a78a591627aa95a",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5029,10 +5815,10 @@
       ]
     },
     {
-      "name": "DANCE_ROLL_044",
-      "offset": 4015730,
-      "bytes": 19320,
-      "sha256": "4a638fd4d508ce6415b89c17373b215e78d6e7a7d4204683821e9182751d0f5b",
+      "name": "DANCE_DIP_079",
+      "offset": 3182624,
+      "bytes": 11606,
+      "sha256": "3c25e89818eb00fc6e795f285ccc0909c2927dfa0de26ea3dd2b26ef452bba6b",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5054,10 +5840,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_000",
-      "offset": 4035050,
-      "bytes": 45877,
-      "sha256": "790e25a85f864f66b704129a3484dc8bf16789dbba6d5f5e2f410eb3d6e0d057",
+      "name": "DANCE_DIP_084",
+      "offset": 3194230,
+      "bytes": 11588,
+      "sha256": "bc5d98738e43ca86c5a64aced5600c402f0d30a1fcdabb93d840127cced5a4b7",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5079,10 +5865,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_002",
-      "offset": 4080927,
-      "bytes": 19665,
-      "sha256": "0b42142271c01852e4c91f73e14e3df719b6ac5d395d44402ae1b4cced9837e8",
+      "name": "DANCE_DIP_089",
+      "offset": 3205818,
+      "bytes": 11637,
+      "sha256": "1ea766d73a5547b794a7b2cc656591a02185defa54bc6ca46481ca0769c493b3",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5104,10 +5890,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_004",
-      "offset": 4100592,
-      "bytes": 18745,
-      "sha256": "a5a1bf36074eb9c73f85fec42ec54be6b28a132e6a60a35121184218af0c67c1",
+      "name": "DANCE_DIP_094",
+      "offset": 3217455,
+      "bytes": 11576,
+      "sha256": "f9823c379bf8ad6044ef60f0e0516153a3fc65704f84bd0e5ec4e111ba3b55ac",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5129,10 +5915,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_006",
-      "offset": 4119337,
-      "bytes": 20066,
-      "sha256": "a5bf5952c12ef1dc70a30b2fcd2e46972123de150cd93b604bd54474d1d54688",
+      "name": "DANCE_DIP_099",
+      "offset": 3229031,
+      "bytes": 11550,
+      "sha256": "704bb70ca6f36947021c42568754c089fab7164675e1396c03c7eab03ec21f0a",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5154,10 +5940,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_008",
-      "offset": 4139403,
-      "bytes": 19602,
-      "sha256": "c0f26f60c86e692e688091f393c412d97cbac39449292f32afd4b859c25ddcdf",
+      "name": "DANCE_DIP_104",
+      "offset": 3240581,
+      "bytes": 11651,
+      "sha256": "9e8b0659e3e4e98093bc3e10d87f2b1bb6b41a94634df925d376efb16efc70c8",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5179,10 +5965,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_010",
-      "offset": 4159005,
-      "bytes": 14886,
-      "sha256": "977980fc9502aceb2f8ee310d359c68d666832c7aa0d2788c423cd8cf669f6f1",
+      "name": "DANCE_DIP_109",
+      "offset": 3252232,
+      "bytes": 11066,
+      "sha256": "705766745a14217729e3c95f20102870b51ea9bfaedb6c3fd9c93d6d21b1821d",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5204,10 +5990,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_012",
-      "offset": 4173891,
-      "bytes": 18745,
-      "sha256": "f357566ff2f677ae4041293238c82c4cebbf31f148c39ce4011eb885db085725",
+      "name": "DANCE_DIP_114",
+      "offset": 3263298,
+      "bytes": 4625,
+      "sha256": "0d60a8b6eb412e64b2d6651eae55bbd8c477aca7b3367a6607f7b159ebfd210c",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5229,10 +6015,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_014",
-      "offset": 4192636,
-      "bytes": 19539,
-      "sha256": "d4c995e84e2796a4c6fe665ad9269f045488d6c8ffc4fbe60b323b07d6b3e1a8",
+      "name": "DANCE_REACH_000",
+      "offset": 3267923,
+      "bytes": 11663,
+      "sha256": "bc3c3edc5f5cb4681aaa091e307919868a90181e155982471633b43acac898cd",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5254,10 +6040,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_016",
-      "offset": 4212175,
-      "bytes": 19613,
-      "sha256": "a8d17974d24867246b479c8345bcdb6a26e9cd6205ad986e0c0493c7152b4341",
+      "name": "DANCE_REACH_005",
+      "offset": 3279586,
+      "bytes": 7957,
+      "sha256": "da614fe6baada8cdbb99c79c9add95d73bbb801e6661cc604afb67965a0d89df",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5279,10 +6065,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_018",
-      "offset": 4231788,
-      "bytes": 19470,
-      "sha256": "abe7b896486edd23f25a4757aa9cc80ab484a4ea4767efea60c33d018ca81a1d",
+      "name": "DANCE_REACH_010",
+      "offset": 3287543,
+      "bytes": 11673,
+      "sha256": "3520b2a487e1a3bfe6fb1123468a3f99cae2b048e4094009e52eedf2fc070ad7",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5304,10 +6090,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_020",
-      "offset": 4251258,
-      "bytes": 15333,
-      "sha256": "f8411b99014c86089f81792f7056032f191652ffb4bfdeb40ddc0b519dedb487",
+      "name": "DANCE_REACH_015",
+      "offset": 3299216,
+      "bytes": 11581,
+      "sha256": "6de9c2bf27f7b9464854c0255c124ff7c4d0f953926177853a2324d812184e9e",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5329,10 +6115,10 @@
       ]
     },
     {
-      "name": "WRIST_ISOLATION_022",
-      "offset": 4266591,
-      "bytes": 15780,
-      "sha256": "7394574a66fa42a0d81e7ce86f75315def7c7b0c81abe3b87b15dfe9e63091a6",
+      "name": "DANCE_REACH_020",
+      "offset": 3310797,
+      "bytes": 11617,
+      "sha256": "80cbcceb9f0159cc62a1618c72e81a1ca9a453f45ec82935f3978db0d46fc4cb",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5354,10 +6140,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_000",
-      "offset": 4282371,
-      "bytes": 45752,
-      "sha256": "8b99c211c82ee7335831575bfef2d42dd3888377c95502ddec0b64fc671fb667",
+      "name": "DANCE_REACH_025",
+      "offset": 3322414,
+      "bytes": 11653,
+      "sha256": "5437dcb94b92bef48207099d4e74aa51c45e2b5237b01e1cc66f4a7c7c3aa02d",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5379,10 +6165,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_004",
-      "offset": 4328123,
-      "bytes": 22751,
-      "sha256": "9672386579f3662a2b936b4e0d7d27c0ea21fd32bbfa0a152aa76eae79d6e1fb",
+      "name": "DANCE_REACH_030",
+      "offset": 3334067,
+      "bytes": 11679,
+      "sha256": "86dc1d25114f1cd7528112ae6b8487174bdc5daed6dc87fb573c3ceeaf1d06f1",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5404,10 +6190,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_008",
-      "offset": 4350874,
-      "bytes": 24746,
-      "sha256": "8cfb5e1b2fdc128ad571e4d3a25b955f891651faf1543de5f048c882ca4d8ecb",
+      "name": "DANCE_REACH_035",
+      "offset": 3345746,
+      "bytes": 11663,
+      "sha256": "6d3b0559660111e1a65b9448911439fed0c09681cb7ac6bc9862fb33937990ba",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5429,10 +6215,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_012",
-      "offset": 4375620,
-      "bytes": 24328,
-      "sha256": "c44ace41dcbf24d4ffdd268aef061f52876a116d2bed2d8362d0596a914b4c8f",
+      "name": "DANCE_REACH_040",
+      "offset": 3357409,
+      "bytes": 11583,
+      "sha256": "0429323d2469dc0a216f94a2c0fb377ca6aa2c1ed4edf0820a378fe2abf28c29",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5454,10 +6240,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_016",
-      "offset": 4399948,
-      "bytes": 25234,
-      "sha256": "c9135309ef003cbb3401115cb4617dc075fab40c5d8b11fe08108c914893fcc4",
+      "name": "DANCE_REACH_045",
+      "offset": 3368992,
+      "bytes": 11662,
+      "sha256": "a34faf74126f76cb001e09d58a781bdc8f4463102a5b77f4fb8665e1c9d5d4d0",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5479,10 +6265,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_020",
-      "offset": 4425182,
-      "bytes": 24129,
-      "sha256": "fc7c50f2f5c3199e2210c3a598e0c9d425f7491e21d071b3bdd7521770873823",
+      "name": "DANCE_REACH_050",
+      "offset": 3380654,
+      "bytes": 11702,
+      "sha256": "478fc14705fa6112def46dffe4715671dc4e805cfa28f3a7bf7e8b0eff8b0f04",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5504,10 +6290,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_024",
-      "offset": 4449311,
-      "bytes": 23790,
-      "sha256": "36a14ea202ad0089a3e4e23030f07f7a62bae7f7c011068a60df6d1aedd67e54",
+      "name": "DANCE_REACH_055",
+      "offset": 3392356,
+      "bytes": 11612,
+      "sha256": "3e131a371917f834560677a4f7bceeb71a64bbb700309032dab6159194ef6bd9",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5529,10 +6315,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_036",
-      "offset": 4473101,
-      "bytes": 25789,
-      "sha256": "25837bb50dea019fac7acd9124f733849af90e3691afd32914909013bac09a53",
+      "name": "DANCE_REACH_059",
+      "offset": 3403968,
+      "bytes": 11622,
+      "sha256": "66ee0c2fe782f0343570397c0ad27c7f25972c8e95ac5634a7ce15bc905675ef",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5554,10 +6340,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_040",
-      "offset": 4498890,
-      "bytes": 19461,
-      "sha256": "e1764f43d92f49a4b6916469325d8b1c60dd5871e0adccd2b69511758b2fd9a0",
+      "name": "DANCE_REACH_064",
+      "offset": 3415590,
+      "bytes": 11610,
+      "sha256": "e56c53faf202fe1b5bb082f196022f8d42fb59c5389daea993f053b6e4990561",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5579,10 +6365,10 @@
       ]
     },
     {
-      "name": "DANCE_TUT_044",
-      "offset": 4518351,
-      "bytes": 18157,
-      "sha256": "3a387ea531689c301ddadd36c94d916b88c076fd5dcc7d7d841b22ea7fa56aaa",
+      "name": "DANCE_REACH_069",
+      "offset": 3427200,
+      "bytes": 11626,
+      "sha256": "b1c641ddc4fdda8b68d9aeffc6dd4f77b563c21895e89ce5bc4bf9f5e5fd63f9",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5604,10 +6390,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_000",
-      "offset": 4536508,
-      "bytes": 45722,
-      "sha256": "e93b65b6ac5b456587e0eed80342dd9e474f068ce2940f71448a4300cd68f692",
+      "name": "DANCE_REACH_074",
+      "offset": 3438826,
+      "bytes": 11679,
+      "sha256": "9f8e8aecfd1991eb27adda335bb12ee316df2a6f5403d2bd99e907a2eba596a2",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5629,10 +6415,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_002",
-      "offset": 4582230,
-      "bytes": 20355,
-      "sha256": "bf74b4e2062268a607329713029b4599e7e01bd5b747e79372009217677eb501",
+      "name": "DANCE_REACH_079",
+      "offset": 3450505,
+      "bytes": 11606,
+      "sha256": "91aa9c5df79bbf6960c2130104826a2b0e34ac6bec5fcf98c322e512852bd801",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5654,10 +6440,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_003",
-      "offset": 4602585,
-      "bytes": 26085,
-      "sha256": "add5fb0d0bfbc68232b78d8e6f9ee914207b6b9cd0b9541cee4b18024d54b147",
+      "name": "DANCE_REACH_084",
+      "offset": 3462111,
+      "bytes": 11670,
+      "sha256": "d9b2a840ac5b38a4a0250d24994d3d5f6e8a7d514ca656b333d6afa736277e3a",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5679,10 +6465,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_005",
-      "offset": 4628670,
-      "bytes": 25686,
-      "sha256": "6ff9a7a5c06a81f40094cf47e8de303f45aa53b1736cdcbe6b957d5d83d041db",
+      "name": "DANCE_REACH_089",
+      "offset": 3473781,
+      "bytes": 11741,
+      "sha256": "d470379c2816f544251633107352cac61a716cde54aa5c83286c28eafedd3adf",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5704,10 +6490,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_007",
-      "offset": 4654356,
-      "bytes": 25436,
-      "sha256": "d5e30a377616c66a0d4d9a34cbd50fc82c0fc395057e638cb08050564aa410ab",
+      "name": "DANCE_REACH_094",
+      "offset": 3485522,
+      "bytes": 11746,
+      "sha256": "5f487670a19e284bfd8aab1c0823cdc887ddfbc80e456e7d7e333d10f8a7a52f",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5729,10 +6515,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_009",
-      "offset": 4679792,
-      "bytes": 17472,
-      "sha256": "c004ac02c3ce9a81fa8889cd2c3eaea8b9d31ead032fade13a6dd1163701adcf",
+      "name": "DANCE_REACH_099",
+      "offset": 3497268,
+      "bytes": 11590,
+      "sha256": "6c52402d926873100d325735fe19c7b369125d2400b6a8a492d3562a77096915",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5754,10 +6540,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_012",
-      "offset": 4697264,
-      "bytes": 16678,
-      "sha256": "a5276504e7946841507600e55425e61d56087d57d415ffb5f96f6d1550edc750",
+      "name": "DANCE_REACH_104",
+      "offset": 3508858,
+      "bytes": 11559,
+      "sha256": "c3cb2a518ccc0358adebbc4342c370ccde5dc92bc8622deb3e9f4c022b61ad69",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5779,10 +6565,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_014",
-      "offset": 4713942,
-      "bytes": 20203,
-      "sha256": "a7bf336a669759ada2eb6e7889ce71f5ba3a58cc9a1d150a4bffb5ae935bcf92",
+      "name": "DANCE_REACH_109",
+      "offset": 3520417,
+      "bytes": 11720,
+      "sha256": "833b6eb15e1242feea1c02b388dbe8b34f9d1a800bdcb9a7684485ebb8fa1d08",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5804,10 +6590,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_015",
-      "offset": 4734145,
-      "bytes": 26173,
-      "sha256": "1b3f120904515fa55aa5b26907a7544a7841ee3a3142a1f798718e80fd7ad5c0",
+      "name": "DANCE_REACH_114",
+      "offset": 3532137,
+      "bytes": 6116,
+      "sha256": "b5c72395a992435f862ccf57d4c8853fc5ecc9ea4bbe2d4a4c5a733504edba49",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5829,10 +6615,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_017",
-      "offset": 4760318,
-      "bytes": 25898,
-      "sha256": "0d081f36d92476eef200a874042427b9507e834e0c3926fcf6383afd62fbdf07",
+      "name": "DANCE_BASE_TURN_000",
+      "offset": 3538253,
+      "bytes": 13607,
+      "sha256": "330ff436bb98d37002befbe7b056928538c991e2c6b2f735f327f83b4c0460da",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5854,10 +6640,10 @@
       ]
     },
     {
-      "name": "DANCE_HIT_019",
-      "offset": 4786216,
-      "bytes": 25281,
-      "sha256": "034fc1cf78092f806187d8191043d1fa59e1b69743e2b7b65cbe969b9e291848",
+      "name": "DANCE_BASE_TURN_001",
+      "offset": 3551860,
+      "bytes": 17263,
+      "sha256": "cf64bb7f859605b2234ea0fbd6063887ce6c472861eb8da1c9ec7ec2a1252314",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5879,10 +6665,10 @@
       ]
     },
     {
-      "name": "DIME_STOP_000",
-      "offset": 4811497,
-      "bytes": 45855,
-      "sha256": "2db16281acc7ee59d4a4ebc9b4623af69da07894a76c0fe4d4ea97a14a6c2fce",
+      "name": "DANCE_BASE_TURN_002",
+      "offset": 3569123,
+      "bytes": 12352,
+      "sha256": "2feb6e3321ca8c8d650aba002797c917a19a40aafbc76acc1ffa04a5b450a611",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5904,10 +6690,10 @@
       ]
     },
     {
-      "name": "DIME_STOP_002",
-      "offset": 4857352,
-      "bytes": 21954,
-      "sha256": "48e9a6969210ef971b54fb4a37f2677a82e09f0708b6fd51f6ed9b01ee3b7301",
+      "name": "DANCE_BASE_TURN_003",
+      "offset": 3581475,
+      "bytes": 16835,
+      "sha256": "1f061de983b7cd0b8d0dc44c627f1279e539ff9331c0150904bb7ad219c8affb",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5929,10 +6715,10 @@
       ]
     },
     {
-      "name": "DIME_STOP_005",
-      "offset": 4879306,
-      "bytes": 23566,
-      "sha256": "d0703b44614cf96c62120b2318a5c032b1cd289e2033ab343acfe596cafce91c",
+      "name": "DANCE_BASE_TURN_004",
+      "offset": 3598310,
+      "bytes": 10262,
+      "sha256": "0be6879385844857d50236722e8a2e7c11994d8eef28aa2a06e7caf7a52fc243",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5954,10 +6740,10 @@
       ]
     },
     {
-      "name": "DIME_STOP_012",
-      "offset": 4902872,
-      "bytes": 23496,
-      "sha256": "f5c4427adf74f3d0c306e38a5fefce173fe6f8e8962e7fc0bbc6c3779fda51a7",
+      "name": "DANCE_BASE_TURN_005",
+      "offset": 3608572,
+      "bytes": 16218,
+      "sha256": "499e63b049236c52eab4899db090c8b8972da8cb8216732e722880e1c6af19ba",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -5979,10 +6765,10 @@
       ]
     },
     {
-      "name": "DIME_STOP_013",
-      "offset": 4926368,
-      "bytes": 22661,
-      "sha256": "7f961644ba0d6be27acfbd19c2847334be92945a123a50c2fc6d3e4ef068da33",
+      "name": "DANCE_BASE_TURN_006",
+      "offset": 3624790,
+      "bytes": 12316,
+      "sha256": "bb4b6735b039a0d4badc5bb8d28ab62924da16ff38644219c2d5d83c7fafbee1",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -6004,10 +6790,10 @@
       ]
     },
     {
-      "name": "DIME_STOP_016",
-      "offset": 4949029,
-      "bytes": 24072,
-      "sha256": "d77b2308f3e2db96db84795b86cc44f718c4532d4cffdd39334820d9647f0cb7",
+      "name": "DANCE_BASE_TURN_007",
+      "offset": 3637106,
+      "bytes": 17923,
+      "sha256": "ada82503119c919a87ea996a2a7487f64988e9be538051467863ba28511f6a7a",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -6029,10 +6815,10 @@
       ]
     },
     {
-      "name": "DIME_STOP_023",
-      "offset": 4973101,
-      "bytes": 23805,
-      "sha256": "4601bb5d4636b97c0e5196aa79aed43148026bbb0be7956e38d2dc67fce9e377",
+      "name": "DANCE_BASE_TURN_008",
+      "offset": 3655029,
+      "bytes": 13643,
+      "sha256": "05986c6adabb1541d6d756936aac66f8c47c9ee6ea3697972cc4e9f8174772aa",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -6054,10 +6840,10 @@
       ]
     },
     {
-      "name": "DIME_STOP_024",
-      "offset": 4996906,
-      "bytes": 22080,
-      "sha256": "c26301c1013aea901c474e7088464699fdd8656754c00b738f0837e0231b2945",
+      "name": "DANCE_SWAY_000",
+      "offset": 3668672,
+      "bytes": 11662,
+      "sha256": "28b3018fab3e4a635f29696779c2e6e82aed172d277ac882c69099d45f86b9c1",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -6079,10 +6865,4310 @@
       ]
     },
     {
-      "name": "DIME_STOP_027",
-      "offset": 5018986,
-      "bytes": 21064,
-      "sha256": "c24ecb6c158fcfd4d61b0b574222543d596fac576a917c2ff82c6d057f56e88c",
+      "name": "DANCE_SWAY_005",
+      "offset": 3680334,
+      "bytes": 11612,
+      "sha256": "96b0878bcf4fe41b5b37e96ff4b90a8c1bab3364f5e9f898042c63c9f8a35fac",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_010",
+      "offset": 3691946,
+      "bytes": 11521,
+      "sha256": "60f3b0e820220fa5b2ed487e36727fa7671ce5992e6f33db5b47131b5e1cee46",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_015",
+      "offset": 3703467,
+      "bytes": 11619,
+      "sha256": "072af5c2866d2d7de8a16ca3f6910f45dd285ab6cb5792920b8b7451d60f0082",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_020",
+      "offset": 3715086,
+      "bytes": 11691,
+      "sha256": "49193f415f9e3f372b4f41c5dbe9b53dc3231e48fe1991893c06176585b9e52b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_025",
+      "offset": 3726777,
+      "bytes": 11711,
+      "sha256": "f27697b4cd469ad83061dff5590936c743dfd01cac42098972152825bcb1cfb1",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_030",
+      "offset": 3738488,
+      "bytes": 11673,
+      "sha256": "bb712b981c6a0e3eb307497837990eab3438bd8db98674a38170eb41660b5859",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_035",
+      "offset": 3750161,
+      "bytes": 11620,
+      "sha256": "9baeb96d9a74b1c5985e5459b24cbceec3a1cf924bd7006334d5da260a63019a",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_040",
+      "offset": 3761781,
+      "bytes": 11643,
+      "sha256": "3aabbc3f1eae657cb87895103ccc1a4b41478c42d1a742c904ce7e9010d6744c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_045",
+      "offset": 3773424,
+      "bytes": 11649,
+      "sha256": "743352a2e591da3700c6641c9f8547de6d734b0675ccee00c79c8ba727e29bb1",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_050",
+      "offset": 3785073,
+      "bytes": 11640,
+      "sha256": "2fd65721868020c06ac946432190ed86901c51a66e74097075263d7c6c892c41",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_055",
+      "offset": 3796713,
+      "bytes": 11649,
+      "sha256": "09a93b41681560b491a37993a5e5467fb9e9c7cd315ca41b9d8f6c575bfca325",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_060",
+      "offset": 3808362,
+      "bytes": 11612,
+      "sha256": "9534da09c1a8ee94c923241e891c0ec1a55fc10b2bf19a8d6775a3f27f3d4806",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_065",
+      "offset": 3819974,
+      "bytes": 11576,
+      "sha256": "263ab7f28752f993ede613ae198c88cef40523d0fc12797e3574ddd2a5ef523d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_070",
+      "offset": 3831550,
+      "bytes": 11551,
+      "sha256": "f89785e830410367f65324ea83eb97aba96118b554847d5b219944de8b9d64ee",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_075",
+      "offset": 3843101,
+      "bytes": 11509,
+      "sha256": "443752ad358fd02c1cb54fe44bde5a72f22d586e33516cfc630a247cf0e52479",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_080",
+      "offset": 3854610,
+      "bytes": 11529,
+      "sha256": "1e9920f016436e9e7370326850ddbce2f2b09df6249b77add9bcd8bd7b971222",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_085",
+      "offset": 3866139,
+      "bytes": 11539,
+      "sha256": "eb657240899466d77158188b12f5adc62d0e6b406f632a0b62dcf27317d2e5f9",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_090",
+      "offset": 3877678,
+      "bytes": 11571,
+      "sha256": "fdeef374e5ddeb47e307c361792f1b3e862273b9b04762265cee88de29ab1c57",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_095",
+      "offset": 3889249,
+      "bytes": 11589,
+      "sha256": "e60fb3f3d78a836cc6173e4817ef465119f14fb0bee888af84ad40e2efc92b31",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_100",
+      "offset": 3900838,
+      "bytes": 11677,
+      "sha256": "d9612db3da9eb2717a284f79f6994795b7df4ad92e6808f5e2976c028449f001",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_105",
+      "offset": 3912515,
+      "bytes": 11691,
+      "sha256": "799603280f430042d847ea5c098e7ff33f84396ead0c9f27587242a52fa15cbb",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_110",
+      "offset": 3924206,
+      "bytes": 11641,
+      "sha256": "7903e4b38f2cf643cbbb7a4943a3ef0b0c5d1734394d3845b56e0db3382e835c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_SWAY_115",
+      "offset": 3935847,
+      "bytes": 10051,
+      "sha256": "60d00382ae961b9b31d40ea7c59f9c08f9d7dcccde5cbd3aedbf5f67794e406f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_000",
+      "offset": 3945898,
+      "bytes": 11636,
+      "sha256": "b741faf54846f36a29d2d59d94543220a8d865507dc1657d0c7c34d304a58ef9",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_005",
+      "offset": 3957534,
+      "bytes": 10298,
+      "sha256": "833d77a3d873549554100134098b95425e4eca810c56408469f0f91674b7558c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_010",
+      "offset": 3967832,
+      "bytes": 11644,
+      "sha256": "e2ae333f96e1d0ebc142360db875f72c670033b88ca2b28c035c61c96a83ea05",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_015",
+      "offset": 3979476,
+      "bytes": 11650,
+      "sha256": "1aa842b26c6322eee39eda1136cf27405f3a775f16775f9a100086aeff8c6412",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_020",
+      "offset": 3991126,
+      "bytes": 11604,
+      "sha256": "64bcf6c09b5d64a335e77521af46f8400f3069d666d70278c5240db3d39a8cca",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_025",
+      "offset": 4002730,
+      "bytes": 11603,
+      "sha256": "ea849ed00f2b4ea53534397d34052a35b31ef5450ca8ed545aa43a39b017293f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_030",
+      "offset": 4014333,
+      "bytes": 11547,
+      "sha256": "3f5247df7c2536b18f2a5914dd9623d16d975ddc22acd98307e2d718202f1fc7",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_035",
+      "offset": 4025880,
+      "bytes": 11630,
+      "sha256": "99e00a2cb438a02070203d8a0afa24925022a8a69fd7aa300ef6d65fcdc27879",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_040",
+      "offset": 4037510,
+      "bytes": 11581,
+      "sha256": "c8da47d2bdf2224c62515637b8c6299d5290aee0b561995e4cccec42f79f7514",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_045",
+      "offset": 4049091,
+      "bytes": 11605,
+      "sha256": "b153f266abf1443d93098566e184faf2d62352c587498a47872f323c0c6b6b2e",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_050",
+      "offset": 4060696,
+      "bytes": 11517,
+      "sha256": "bd310c3a188caea4f239f402d944bf59c5140486bd063b8232836877def7980f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_055",
+      "offset": 4072213,
+      "bytes": 11658,
+      "sha256": "45a53cc531ca231cfe1c9bd2205d151f78bc9406f6ecc98c1d8529871c3fb46c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_060",
+      "offset": 4083871,
+      "bytes": 11592,
+      "sha256": "a780dc7e553ac26711078b5eac1d08a46d9d5714ef4f62415979b34607ed9af5",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_065",
+      "offset": 4095463,
+      "bytes": 11620,
+      "sha256": "36e376502fdf25fe4022cf8dcdf56b4ba08862bc23801dff2e2f48bee782373a",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_070",
+      "offset": 4107083,
+      "bytes": 11458,
+      "sha256": "86a3023433c545f6328b5b0925152fc40ede05f1ea39f502c1b6eeabf3020252",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_075",
+      "offset": 4118541,
+      "bytes": 11553,
+      "sha256": "6ab88d3bd9152dcea2a1fd41e565a43919aa73bafa71cbc2a7fe5ff7a2fcc9e3",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_080",
+      "offset": 4130094,
+      "bytes": 11501,
+      "sha256": "8b378b51452c2a24407314b954efc08b101be4b52d92883f80d784de8d085a4a",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_085",
+      "offset": 4141595,
+      "bytes": 11550,
+      "sha256": "a0a9ea500f629b597f584b5c7902bb4241db5ead932ccbfb5675bfa20d7b656b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_090",
+      "offset": 4153145,
+      "bytes": 11575,
+      "sha256": "3777bdb1950713f87a6a51506e15e6b7aee18476ead25f3c6beb1800f02b0eb4",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_095",
+      "offset": 4164720,
+      "bytes": 11516,
+      "sha256": "270db3d3b481c154c354e6360059573c10cecf6810eefc7e5b4259752f692f9e",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_100",
+      "offset": 4176236,
+      "bytes": 11606,
+      "sha256": "84cb53a8a5bb49ee7dd02c13db1c66fd4351da0fe88a714a89a937d357b8e127",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_105",
+      "offset": 4187842,
+      "bytes": 11708,
+      "sha256": "1c0589e55ba008e080f74aa31946bef971492e132cb8a7d252b0604a7a47cc1d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_110",
+      "offset": 4199550,
+      "bytes": 11483,
+      "sha256": "631cc5c528ebb16a93059b8d240fb2d69ca3010f29ccbf2400a9141606d7dc82",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_ELBOW_115",
+      "offset": 4211033,
+      "bytes": 8583,
+      "sha256": "7facb6b6edc8e8bddaf61bb882c3fc485d1f5003d62800389be28ad55ba4e9e9",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_000",
+      "offset": 4219616,
+      "bytes": 11604,
+      "sha256": "42337b735aac9db027cf625126080e0522c0d53ce130e2d074e4d14ddceca43f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_005",
+      "offset": 4231220,
+      "bytes": 8707,
+      "sha256": "c8978650e9ed403dc30994785d50858413215df6e853cdc96ad90f12c481058d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_010",
+      "offset": 4239927,
+      "bytes": 11540,
+      "sha256": "d8516ec3565e890c7058b7b9c13ea092835f5252562430e71aa880c3f31d5a52",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_015",
+      "offset": 4251467,
+      "bytes": 11583,
+      "sha256": "74cd19841870fecdc232dbd9e52ecc22e1237c9b0ee650249b837f91a4f90e3e",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_020",
+      "offset": 4263050,
+      "bytes": 11531,
+      "sha256": "5498aff0a5b15a303465bc3593b9923280e84eb9c9f01a3539e5d171fc546429",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_025",
+      "offset": 4274581,
+      "bytes": 11518,
+      "sha256": "73d54af9c853336ca66e1fae65b0d34c36355ddcb76e19ead5379cdf6f0f8b4d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_030",
+      "offset": 4286099,
+      "bytes": 11476,
+      "sha256": "7b7a41c9ea760ca04fcb02c80cffed7e6b786acccb87264302e07b5bcdad9ce6",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_035",
+      "offset": 4297575,
+      "bytes": 11507,
+      "sha256": "18133c732af5d73ac62f53b3f3fe489568f95c7a61a5842ab47938d1dda022bb",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_040",
+      "offset": 4309082,
+      "bytes": 11530,
+      "sha256": "ad7c4679c0676d03f2299d531c1ce960f3ece76f6968616b215f123479e38ba1",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_045",
+      "offset": 4320612,
+      "bytes": 11537,
+      "sha256": "2484007e02e3ffaaad561d57c94ac518c5d81c2e30142bcde70a26cd242789a6",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_050",
+      "offset": 4332149,
+      "bytes": 11522,
+      "sha256": "bf71c45a923fee938f624f6bdc1735363ec99cb7f8e5dbea157b0b8fdd646578",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_055",
+      "offset": 4343671,
+      "bytes": 11575,
+      "sha256": "51503104798a9c1ab179440736739885483476c4a763ec1c7b7f7c0a10c608af",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_060",
+      "offset": 4355246,
+      "bytes": 11536,
+      "sha256": "0f6e5e54e9eee49786ec39c309a9f5799e35574510f0dec58742fca3aba73122",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_065",
+      "offset": 4366782,
+      "bytes": 11499,
+      "sha256": "182929d76f78885380e8889a92de5f15e9852c576bab875867acdb4d64651464",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_070",
+      "offset": 4378281,
+      "bytes": 11525,
+      "sha256": "38626217dc882873ab497336291d9bbd9136077498c8cf4bc47c37dadd84d97a",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_075",
+      "offset": 4389806,
+      "bytes": 11481,
+      "sha256": "56b44f31a6e71f09b4ea6c2299ef266fee2eb580139147048d1dd97235b6a20c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_080",
+      "offset": 4401287,
+      "bytes": 11504,
+      "sha256": "ca15ec10da2b8a9fb7371240fa608fd7b9e15a530f5039245e5df829302c38d5",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_085",
+      "offset": 4412791,
+      "bytes": 11567,
+      "sha256": "a68212ff71e2ff3fcede7c9d12d581210168745ae8b1523331ccedb43131ac4c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_090",
+      "offset": 4424358,
+      "bytes": 11551,
+      "sha256": "784bd3464ceb1ef68f8d08d24f82f1fc944ccc559a6f650de6cbe04e009a1baa",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_095",
+      "offset": 4435909,
+      "bytes": 11608,
+      "sha256": "cdaa5e3cb26b2f19a9b2d894d1f45347fb4d52a75230d4a0053d05cf67967c5b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_100",
+      "offset": 4447517,
+      "bytes": 11593,
+      "sha256": "6b3df5e18816cddb17f42a87bcd84829a8403360de8fdf6ba13eecfc45fd6c53",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_105",
+      "offset": 4459110,
+      "bytes": 11484,
+      "sha256": "068b5a0f61efa63052472b779d6d732efca083f80d37cab61cff301699973d50",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_110",
+      "offset": 4470594,
+      "bytes": 11638,
+      "sha256": "87e3f8ceeb2af0adbd69a4332df0a3c312fed782390e05e7232133bafec783e8",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WRIST_115",
+      "offset": 4482232,
+      "bytes": 8371,
+      "sha256": "136e1fe4b8a0fc99b89334e6e0db9c58856ecab19058b97b895ba859deb649c9",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_000",
+      "offset": 4490603,
+      "bytes": 11682,
+      "sha256": "e69879a190b1a52b3f79e63b4d8cb609a8f90b443bcf0c60b83f11022622e162",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_005",
+      "offset": 4502285,
+      "bytes": 1872,
+      "sha256": "27709f5fca50b6d74ff29c291bf344625449270f245fdfc2f8962d5c4c280990",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_010",
+      "offset": 4504157,
+      "bytes": 2641,
+      "sha256": "3059fcd7b207d8de7cf3daf9679e0ccf17488d5d6122c20258227846219b10b2",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_015",
+      "offset": 4506798,
+      "bytes": 3135,
+      "sha256": "02f76946cb5a5af7ed0a75f2d018b9eb7b020213070131bb0e8914737f9e5cb7",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_020",
+      "offset": 4509933,
+      "bytes": 3472,
+      "sha256": "d4bd48a9f0ae5820a7c5192927f03ac147eb71ab8c0673a29b4669ea56ac31cb",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_025",
+      "offset": 4513405,
+      "bytes": 3609,
+      "sha256": "fea1e9ee2cc110cfd5c297599ae3b2f85ea8bf5de4e900490135a9ad9a28edbc",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_030",
+      "offset": 4517014,
+      "bytes": 3719,
+      "sha256": "89d0748115ba88cfb5117299d175a2fa60d06aa64164a765066a4701d50d92dd",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_035",
+      "offset": 4520733,
+      "bytes": 3669,
+      "sha256": "fc25ceda9b31048731599bbc3e2a02ebb9864b1364b10f033da9f734d3bc6138",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_040",
+      "offset": 4524402,
+      "bytes": 3581,
+      "sha256": "b358287f22dc7411871b022b6c37ac699b97d602dc240b4a3ffef5d37cc8de55",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_045",
+      "offset": 4527983,
+      "bytes": 3385,
+      "sha256": "24b58e686b8bfc27961cbd409cb6c9467d2c9d25a7e7ead43d306d3817ca7bb3",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_050",
+      "offset": 4531368,
+      "bytes": 2945,
+      "sha256": "fcb6e2e00abcd6d5672a863feb5542e3ff295ca5f59dfa65aae3061856f42da6",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_055",
+      "offset": 4534313,
+      "bytes": 2338,
+      "sha256": "1415735a76b3fb5ac7ab374cc4716d914293d747aab216d1da46847a9b47d212",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_059",
+      "offset": 4536651,
+      "bytes": 572,
+      "sha256": "97f4ccfd62b7d7ba49519d9149dd2ec502c35f9bcf38905006bff6e4436d3469",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_064",
+      "offset": 4537223,
+      "bytes": 2461,
+      "sha256": "dc048ae79c80484b31d4b4b106ec0b405d187a93725e9f1691bf465c5bfd26cf",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_069",
+      "offset": 4539684,
+      "bytes": 3064,
+      "sha256": "9643e5f445126b453b773176baa8805f6a821e96ac7ebeb215934e6616ea51cd",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_074",
+      "offset": 4542748,
+      "bytes": 3420,
+      "sha256": "1705ffbce1992a4822aae363284b1972b66438babd503681e03594b84a817ec2",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_079",
+      "offset": 4546168,
+      "bytes": 3619,
+      "sha256": "5e7250b5e5791d98ff276b27a780b157ce3457651534581949f8f2b383c42ce5",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_084",
+      "offset": 4549787,
+      "bytes": 3679,
+      "sha256": "6e5ba04c5ed4a9883c5e37c3df96623140777163041e31d227cbc863d4011c0a",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_089",
+      "offset": 4553466,
+      "bytes": 3692,
+      "sha256": "ddfd8c997c8c452ca51bf4c7addf7b5fd5c3086081051c17fc06b8e155fd1674",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_094",
+      "offset": 4557158,
+      "bytes": 3631,
+      "sha256": "38d77b5115dc1e1fe8ade34299dc184e450e294ca8706604129642a48be3970f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_099",
+      "offset": 4560789,
+      "bytes": 3442,
+      "sha256": "a518b18c62b383944dd0af7404d901548d4aa638c1b4e154154f93387327e8dd",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_104",
+      "offset": 4564231,
+      "bytes": 3062,
+      "sha256": "84396a79635443990eaf69cbaee4559b90b66da108eb3176a96541d75dd12a1f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_109",
+      "offset": 4567293,
+      "bytes": 2508,
+      "sha256": "f7d1c09baae0673ec72b9bfec0efd80a58f8de22d40e2776744c7d538786e34c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_GRIP_114",
+      "offset": 4569801,
+      "bytes": 1573,
+      "sha256": "a262dc6acd82ce0f94a754fb95130788d88364aadc249a48d33fe15d39ad25de",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_000",
+      "offset": 4571374,
+      "bytes": 11608,
+      "sha256": "c978503e63bfe311ef3df820b72e639d3eb5a79f4b6efb5490454784ec200cb9",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_005",
+      "offset": 4582982,
+      "bytes": 10898,
+      "sha256": "b3191cdc6cbfac84acd07a977a522dcccc081205bf476862baeaf68e37fd3fb4",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_010",
+      "offset": 4593880,
+      "bytes": 11533,
+      "sha256": "9181d74305864dc9ee38d461adb6369d76b32e8bbb4498ccb351380dd054860d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_015",
+      "offset": 4605413,
+      "bytes": 11593,
+      "sha256": "7c1d88656163652cb877d2d1b2557dd5248d920e178d8c53b4f22f38db0326d8",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_020",
+      "offset": 4617006,
+      "bytes": 11600,
+      "sha256": "c3bf7adbf8585db9e2aa8ff568ab16722fdacff0b9de425000474244154f55d6",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_025",
+      "offset": 4628606,
+      "bytes": 11581,
+      "sha256": "637e65d92769d3040791d3c02e1db2da73000056b78d26c28ecd078b2884cc1f",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_030",
+      "offset": 4640187,
+      "bytes": 11626,
+      "sha256": "e92ef647e487423567a9fe8c6426196ef808ad4855f223e88276338bb49a282d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_035",
+      "offset": 4651813,
+      "bytes": 11633,
+      "sha256": "1d2b7d068189564dde5f1ab7d287cc7efc7add124a85d8d59008d00db3ae1654",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_040",
+      "offset": 4663446,
+      "bytes": 11660,
+      "sha256": "ca386fb455c6adb11de8fa001bfdcf02a700df5566e60317d63fdb814187fb01",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_045",
+      "offset": 4675106,
+      "bytes": 11689,
+      "sha256": "7a125643787805b46d68ea1fdc9dd06a711873a55fd2a2995cad6c2a7d2ed1a5",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_050",
+      "offset": 4686795,
+      "bytes": 11628,
+      "sha256": "de32c41f63d24db129f98496dc9510419b40dc96c1d2c0722ed8c9d6d397dacc",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_055",
+      "offset": 4698423,
+      "bytes": 11646,
+      "sha256": "da734ddc0f80a37673572450d9b522280ba1a0e761ba36adfd2c4b8803a9d141",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_060",
+      "offset": 4710069,
+      "bytes": 11598,
+      "sha256": "0bb62f2b4cfaf5e94bbf40475f8a4424c51bdf8a245210a9d898fdc5d868a081",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_065",
+      "offset": 4721667,
+      "bytes": 11555,
+      "sha256": "d3227dd56eab88a17403176e7d2ffb5830a9d08e0f2d67d893ea182aad63ec9b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_070",
+      "offset": 4733222,
+      "bytes": 11609,
+      "sha256": "6dbd2ab1db94a6f4af8df1120c0222b296d3fa0ef0de4b0a80c968bdaa575afe",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_075",
+      "offset": 4744831,
+      "bytes": 11641,
+      "sha256": "4fa43fa9871dc6ee3fa43e063a7be06890b1c9c6b32e7a79f944e9f8709bd383",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_080",
+      "offset": 4756472,
+      "bytes": 11554,
+      "sha256": "aba504faed50f6c2d952fa2dd8f7c8d7c66821976c72f69048174641433082a6",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_085",
+      "offset": 4768026,
+      "bytes": 11529,
+      "sha256": "258999fd89c6f5a89625652eb485fc7eba71382da0afaf680bec10ce796b25d8",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_090",
+      "offset": 4779555,
+      "bytes": 11610,
+      "sha256": "8edbedffcc9c095aa5513aed3b23d0c066fbe493693c6f419720e7b17573b80c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_095",
+      "offset": 4791165,
+      "bytes": 11608,
+      "sha256": "e04d05346d2e087721a64b93119953331e06905367f19286ee9879ba944a2ace",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_100",
+      "offset": 4802773,
+      "bytes": 11598,
+      "sha256": "07c8eced73d12362333f31063c08a64e847a76f19f68937bd3541a6d66b46468",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_105",
+      "offset": 4814371,
+      "bytes": 11577,
+      "sha256": "0ccdc2f930dee750306757ba0d8d533b4d3727b080bf828c7bd91e3f0fb9164b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_110",
+      "offset": 4825948,
+      "bytes": 11655,
+      "sha256": "4c528ce7b8605773527df7bdd0a33309f5e98e82729f701d0c31119a30650721",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_WAVE_115",
+      "offset": 4837603,
+      "bytes": 8363,
+      "sha256": "fc31c492e943f0264f373bb8b419e60ea88f326b66cf8bbe2af9415ec7d86b9c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_000",
+      "offset": 4845966,
+      "bytes": 11407,
+      "sha256": "ca1b55496d6dc43de6e575065865468c85cdd7b20e31f7c957d2a188012bc705",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_001",
+      "offset": 4857373,
+      "bytes": 300,
+      "sha256": "a6016c138925a117320905ed646520e8b74730a6036a253f45c571e2dcdb3c1c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_006",
+      "offset": 4857673,
+      "bytes": 4196,
+      "sha256": "1ceaf2ebc8015f3b7ad7122c0be8ff40386ae4f83227b9e729ff05931ce7951d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_011",
+      "offset": 4861869,
+      "bytes": 8739,
+      "sha256": "a7cba13531473b9ac2d9f4d6d0a2ab525e709707336c3a8e14baefa2a24bec45",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_016",
+      "offset": 4870608,
+      "bytes": 11340,
+      "sha256": "067f18e73ced893c7cc55439119e5c20efeddf293e5d9019bf6fe54e9db34a14",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_021",
+      "offset": 4881948,
+      "bytes": 11363,
+      "sha256": "ab7d4ece96f205eb556057384aa2af0f0ace7d9e9f21bcede02f9a08271a3cb6",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_026",
+      "offset": 4893311,
+      "bytes": 11426,
+      "sha256": "1250d6db345cf16e88b6691b27699ae97458136023c8e5c6f73b74cd30fd5c9d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_031",
+      "offset": 4904737,
+      "bytes": 11435,
+      "sha256": "db6d9e4b291bf8ed7a3d226a33bef7ad297bab9e68272abc0fb4a2e245b623e6",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_036",
+      "offset": 4916172,
+      "bytes": 11470,
+      "sha256": "34440c6b9aa48041a2678c2f1365b1ca2f6652c5c8a09a6ecc708d6a3b4c8abd",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_041",
+      "offset": 4927642,
+      "bytes": 11486,
+      "sha256": "0f6e9ba3c0c0e0e914319c7c35093e97a352d662ec57a674d626f5f5d1027f33",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_046",
+      "offset": 4939128,
+      "bytes": 11486,
+      "sha256": "03c7a1c3287f9a2cca02883b7b5d5f246c17459cb68f286e9941cb6d035b0641",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_051",
+      "offset": 4950614,
+      "bytes": 11390,
+      "sha256": "6e663eb257ac3cc2eee21edcf2c5f919e9e6533185a37bba8aeff0825191a248",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_056",
+      "offset": 4962004,
+      "bytes": 11480,
+      "sha256": "b0169884c65a2a318ecd5928d2609c6bd431e8191a3b14d9082196a28377249b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_061",
+      "offset": 4973484,
+      "bytes": 11467,
+      "sha256": "551989ad5e728c6ee88d7d05378ccff4d039eee7d47fdd0be35da5cacb62f654",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_066",
+      "offset": 4984951,
+      "bytes": 11520,
+      "sha256": "24081aa5525b9a0e0ad2807f442bca06942fa3c506b0b9f60e8db8e20e13863b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_071",
+      "offset": 4996471,
+      "bytes": 11528,
+      "sha256": "dd631bdc50a45ed828907dde6cd5ffbe82c6b06c0acce23df24c7b0c86e1111c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_076",
+      "offset": 5007999,
+      "bytes": 11475,
+      "sha256": "518b805fcd91c6d6a76c82c1df0501cc3c393b70422626cb6e4772790bf4f591",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_081",
+      "offset": 5019474,
+      "bytes": 11520,
+      "sha256": "34d8bae829c00e306a3b55ab66e3e3bc15c397f6d45ed704ffebe8a7e429f8cf",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_086",
+      "offset": 5030994,
+      "bytes": 11536,
+      "sha256": "2de5ec327eacb8de21c0afd70844df2bc3922a6935360128ac31b9d0a4fd67ee",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_091",
+      "offset": 5042530,
+      "bytes": 11514,
+      "sha256": "bc9f0bc576ac911e251211ac77bdf52a966535e3828896c0109933c05155b59a",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_096",
+      "offset": 5054044,
+      "bytes": 11484,
+      "sha256": "366e969be5a1d5f148546614433c07c57829f7b57b164b850e874ecfcc10baf2",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_101",
+      "offset": 5065528,
+      "bytes": 11446,
+      "sha256": "b1cdaafef306eefa86baec7bc8b791c1bf592507f8eb8028adf727610c8ef198",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_106",
+      "offset": 5076974,
+      "bytes": 11436,
+      "sha256": "4556ac38574692a74a95ac6f170741519a7c58c4c8f8a7c8284092f9fb21cfe9",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_111",
+      "offset": 5088410,
+      "bytes": 11479,
+      "sha256": "70640cfdfdbe7b55389178b69b93c2ae2efdb10299bf744e9e45444457280e42",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_116",
+      "offset": 5099889,
+      "bytes": 11546,
+      "sha256": "b189c644eb126b2c8f77ceded7cf534514cef495d5025b2c64f9b4c3e6665ddb",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_121",
+      "offset": 5111435,
+      "bytes": 11541,
+      "sha256": "c5b41eb1a6c912c95bb798503fe2694e2f2906b4cee91c46e4f89c4d500f5ce2",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_126",
+      "offset": 5122976,
+      "bytes": 11514,
+      "sha256": "18bbeca43daa027dd58b7b16452e993fb54bc67a0f598c351868c376733b3ce7",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_START_131",
+      "offset": 5134490,
+      "bytes": 11501,
+      "sha256": "d9cb49f493b5db4537630522952326527e8ac182332f342d6f6123a90019c6e7",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_001",
+      "offset": 5145991,
+      "bytes": 392,
+      "sha256": "a36e1028875582381d8045cf2fcb9dad36da7546b4985e8552ba25e0c97c352a",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_006",
+      "offset": 5146383,
+      "bytes": 3905,
+      "sha256": "1a3bebca030f4d7f489bbda9ec515b6ee5ddddbd7850b90274763552834954af",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_011",
+      "offset": 5150288,
+      "bytes": 8253,
+      "sha256": "7abc6101c96c4faf279fe164f73f82900ac24366019247f04b0cbf37fe72d899",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_016",
+      "offset": 5158541,
+      "bytes": 11388,
+      "sha256": "493d69795a41a73138d680f646a619824b9f1d3e703849f065f66b81c1e2b34c",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_021",
+      "offset": 5169929,
+      "bytes": 11493,
+      "sha256": "960fab67261c5021885de0351bcd175794982a80feb3fbbc4cb0f54e2936cdac",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_026",
+      "offset": 5181422,
+      "bytes": 11395,
+      "sha256": "2cfe1c4c96a2d9fc836aec83690bd6a3c5b477188eac176daea6162902206780",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_031",
+      "offset": 5192817,
+      "bytes": 11446,
+      "sha256": "5f2b5492866ba8e938a061157c4db0b75a5ba75a406e5b27c9f1ba34efae1d72",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_036",
+      "offset": 5204263,
+      "bytes": 11536,
+      "sha256": "07fc4cdd66d20146c4d5bd842ef0e86c398232346bdda89dbba313c5cb5f53ba",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_041",
+      "offset": 5215799,
+      "bytes": 11546,
+      "sha256": "c5c27cbb960e2473008d5b7797f9b05de9614973cef7d38b41c71102cb24c5b1",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_046",
+      "offset": 5227345,
+      "bytes": 11562,
+      "sha256": "eeb7f91dccf4bd32464685a4b10a0778df37bea323aa50c0ea086645c1401fd7",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_051",
+      "offset": 5238907,
+      "bytes": 11519,
+      "sha256": "0d7a8c4e6477456447ffa5afbf443186d01100294acc84fe7c055dfd915e4e9b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_056",
+      "offset": 5250426,
+      "bytes": 11458,
+      "sha256": "034a6d48b8e4b67f189a415a2a99303fb0349c967d1ce68c307b35025b011c91",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_061",
+      "offset": 5261884,
+      "bytes": 11474,
+      "sha256": "efae17828469f2d4aeac2bad08dd120b19aee1f3f885fbd0aafe6f16982afc9b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_066",
+      "offset": 5273358,
+      "bytes": 11522,
+      "sha256": "09298e646fe1ab473ce80c2b8271184ef38a9bf9cf652b15e30213f1830023ba",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_071",
+      "offset": 5284880,
+      "bytes": 11508,
+      "sha256": "ff282fe00b346a54a1e7ebd874a65a565b7f1ac1d8f4eb27216649266022cbb3",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_076",
+      "offset": 5296388,
+      "bytes": 11472,
+      "sha256": "e4ecef12cfbf77ad06e1f94574c875720e0ace2b9ce3f732d7bd68e6a6e82c49",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_081",
+      "offset": 5307860,
+      "bytes": 11421,
+      "sha256": "183b79b20fb6605e866443f7a0e131bb9b7f06be30d22213a95a0ab59ae8090b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_086",
+      "offset": 5319281,
+      "bytes": 11457,
+      "sha256": "53ed636dc5c8fd643da5c26990f6944cf7acbdd412473a7aa0fb2780399cfee3",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_091",
+      "offset": 5330738,
+      "bytes": 11457,
+      "sha256": "34b43d502a1bf76fd8aa2be3a44570b74cefa06ccb4979e74b8ce5ae51faad46",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_096",
+      "offset": 5342195,
+      "bytes": 11442,
+      "sha256": "3e248d61237e72b523128850619a9b6d52b7a05abd7da268cb24b4907eaec03d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_101",
+      "offset": 5353637,
+      "bytes": 11396,
+      "sha256": "982df8505f54828424bf31d96a202564e0f178953844057c7a0a6ff121d96490",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_106",
+      "offset": 5365033,
+      "bytes": 11413,
+      "sha256": "db94b51f01badbfedb8407f8184f9b10366ff29a2c3fbead5d8f66fc1074288d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_111",
+      "offset": 5376446,
+      "bytes": 11406,
+      "sha256": "c2ab1145d1ab63fda893892b0cfc8964f42d3ecdea560f7f6ad593f2c330fa4d",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_116",
+      "offset": 5387852,
+      "bytes": 11350,
+      "sha256": "c2e1cea5d7c40df3f500403353ecc9bca387eb9346d8d2ba688b840b767f633b",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_121",
+      "offset": 5399202,
+      "bytes": 11434,
+      "sha256": "b62413e9c54b94abcbabb9c16e8aa688f8f1509137c08f8c0fb30848d0af5055",
+      "claw_key": "idle:0",
+      "claw_region": [
+        [
+          98,
+          74
+        ],
+        [
+          147,
+          74
+        ],
+        [
+          147,
+          108
+        ],
+        [
+          98,
+          108
+        ]
+      ]
+    },
+    {
+      "name": "DANCE_END_126",
+      "offset": 5410636,
+      "bytes": 11407,
+      "sha256": "19d10c192e34a6d3db1ce4a03408cbe3d1c4c89d57051d9841ace2958f54e827",
       "claw_key": "idle:0",
       "claw_region": [
         [
@@ -7120,834 +12206,720 @@
       "loop": false
     },
     {
-      "id": "GROOVE_BOUNCE",
-      "source_gif": "assets/gifs/dance/01_上下弹动.gif",
-      "source_sha256": "cdafc238bdaf086242e16585cf96494ee957368f43301be765426b16705267c3",
+      "id": "DANCE_NOD",
+      "source_gif": "assets/gifs/dance/01_nod.gif",
+      "source_sha256": "c419c553452c96c6bb39c77e991c15f7f0e2d6be921afcac351e4f4be18bb78d",
       "frames": [
         134,
         135,
         136,
-        136,
-        136,
-        137,
         137,
         138,
-        138,
-        138,
-        139,
         139,
         140,
         141,
         142,
-        142,
-        142,
-        143,
         143,
         144,
-        144,
-        144,
-        134,
-        134
-      ],
-      "at_ms": [
-        0,
-        120,
-        250,
-        370,
-        500,
-        620,
-        750,
-        870,
-        1000,
-        1120,
-        1250,
-        1370,
-        1500,
-        1620,
-        1750,
-        1870,
-        2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870
-      ],
-      "duration_ms": 3000,
-      "loop": true
-    },
-    {
-      "id": "GROOVE_ROCK",
-      "source_gif": "assets/gifs/dance/02_前后摇摆.gif",
-      "source_sha256": "0f4954c0417548a1fe392fcf77efd7ea835d7fea135121bd6ba00fdfac9ec2d4",
-      "frames": [
-        145,
         145,
         146,
-        146,
-        147,
         147,
         148,
-        148,
-        149,
         149,
         150,
-        150,
-        151,
         151,
         152,
-        152,
-        153,
         153,
         154,
-        154,
-        155,
         155,
         156,
-        145
-      ],
-      "at_ms": [
-        0,
-        120,
-        250,
-        370,
-        500,
-        620,
-        750,
-        870,
-        1000,
-        1120,
-        1250,
-        1370,
-        1500,
-        1620,
-        1750,
-        1870,
-        2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870
-      ],
-      "duration_ms": 3000,
-      "loop": true
-    },
-    {
-      "id": "GROOVE_SIDE",
-      "source_gif": "assets/gifs/dance/03_左右律动.gif",
-      "source_sha256": "b6188bf4bb9788abb6b28268166378dcf68912975b98ad207e0f9b2a38878df6",
-      "frames": [
-        157,
-        157,
-        158,
-        158,
-        159,
-        159,
-        160,
-        160,
-        161,
-        161,
-        162,
-        162,
-        161,
-        161,
-        163,
-        163,
-        163,
-        163,
-        164,
-        164,
-        165,
-        165,
-        166,
         157
       ],
       "at_ms": [
         0,
-        120,
-        250,
-        370,
+        100,
+        200,
+        300,
+        400,
         500,
-        620,
-        750,
-        870,
+        600,
+        700,
+        800,
+        900,
         1000,
-        1120,
-        1250,
-        1370,
+        1100,
+        1200,
+        1300,
+        1400,
         1500,
-        1620,
-        1750,
-        1870,
+        1600,
+        1700,
+        1800,
+        1900,
         2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870
+        2100,
+        2200,
+        2300
       ],
-      "duration_ms": 3000,
-      "loop": true
+      "duration_ms": 2400,
+      "loop": false
     },
     {
-      "id": "DANCE_POINT",
-      "source_gif": "assets/gifs/dance/04_斜向指拍.gif",
-      "source_sha256": "274cfcef3db0ecbd57b667d82878eac818746a8d71028aa33c9d988baaf7bf62",
+      "id": "DANCE_LIFT",
+      "source_gif": "assets/gifs/dance/02_lift.gif",
+      "source_sha256": "9eae8ee86a2bc3ea60907aededd77d12325cec37922ea9405d4380301ce48483",
       "frames": [
-        167,
-        167,
-        167,
+        158,
+        159,
+        160,
+        161,
+        162,
+        163,
+        164,
+        165,
+        166,
         167,
         168,
-        168,
-        168,
-        168,
-        169,
-        169,
-        169,
         169,
         170,
-        170,
-        170,
-        170,
-        171,
-        171,
-        171,
         171,
         172,
-        172,
-        172,
-        172,
-        173,
-        173,
-        173,
         173,
         174,
-        174,
-        174,
-        174,
-        175,
-        175,
-        175,
         175,
         176,
-        176,
-        176,
-        176,
-        177,
-        177,
-        177,
         177,
         178,
-        178,
-        178,
-        167
+        179,
+        180,
+        181
       ],
       "at_ms": [
         0,
-        120,
-        250,
-        370,
+        100,
+        200,
+        300,
+        400,
         500,
-        620,
-        750,
-        870,
+        600,
+        700,
+        800,
+        900,
         1000,
-        1120,
-        1250,
-        1370,
+        1100,
+        1200,
+        1300,
+        1400,
         1500,
-        1620,
-        1750,
-        1870,
+        1600,
+        1700,
+        1800,
+        1900,
         2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870,
-        3000,
-        3120,
-        3250,
-        3370,
-        3500,
-        3620,
-        3750,
-        3870,
-        4000,
-        4120,
-        4250,
-        4370,
-        4500,
-        4620,
-        4750,
-        4870,
-        5000,
-        5120,
-        5250,
-        5370,
-        5500,
-        5620,
-        5750,
-        5870
+        2100,
+        2200,
+        2300
       ],
-      "duration_ms": 6000,
-      "loop": true
+      "duration_ms": 2400,
+      "loop": false
     },
     {
-      "id": "ARM_WAVE",
-      "source_gif": "assets/gifs/dance/05_关节波浪.gif",
-      "source_sha256": "76b59cb12214f1cf4b99c93800f941af4f18eade7b5d07651481144dee815b24",
+      "id": "DANCE_DIP",
+      "source_gif": "assets/gifs/dance/03_dip.gif",
+      "source_sha256": "429c27077f52ad664369e35d1052c5de07c1bd712212c41c3438b5688879bf1f",
       "frames": [
-        179,
-        179,
-        179,
-        179,
-        180,
-        180,
-        180,
-        180,
-        181,
-        181,
-        181,
-        181,
-        182,
-        182,
-        182,
         182,
         183,
-        183,
-        183,
-        183,
-        184,
-        184,
-        184,
         184,
         185,
-        185,
-        185,
-        185,
-        185,
-        185,
-        185,
-        185,
-        186,
-        186,
-        186,
         186,
         187,
-        187,
-        187,
-        187,
-        188,
-        188,
-        188,
         188,
         189,
-        189,
-        189,
-        179
-      ],
-      "at_ms": [
-        0,
-        120,
-        250,
-        370,
-        500,
-        620,
-        750,
-        870,
-        1000,
-        1120,
-        1250,
-        1370,
-        1500,
-        1620,
-        1750,
-        1870,
-        2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870,
-        3000,
-        3120,
-        3250,
-        3370,
-        3500,
-        3620,
-        3750,
-        3870,
-        4000,
-        4120,
-        4250,
-        4370,
-        4500,
-        4620,
-        4750,
-        4870,
-        5000,
-        5120,
-        5250,
-        5370,
-        5500,
-        5620,
-        5750,
-        5870
-      ],
-      "duration_ms": 6000,
-      "loop": true
-    },
-    {
-      "id": "DANCE_ROLL",
-      "source_gif": "assets/gifs/dance/06_环绕滚动.gif",
-      "source_sha256": "d916516f77821b57060885d12fd27ace7502461dda3e33a8b119b311e4a439d0",
-      "frames": [
-        190,
-        190,
-        190,
         190,
         191,
-        191,
-        191,
-        191,
-        192,
-        192,
-        192,
         192,
         193,
-        193,
-        193,
-        193,
-        193,
-        193,
-        193,
-        193,
         194,
-        194,
-        194,
-        194,
-        195,
-        195,
-        195,
         195,
         196,
-        196,
-        196,
-        196,
-        195,
-        195,
-        195,
-        195,
-        194,
-        194,
-        194,
-        194,
-        197,
-        197,
-        197,
         197,
         198,
-        198,
-        198,
-        190
-      ],
-      "at_ms": [
-        0,
-        120,
-        250,
-        370,
-        500,
-        620,
-        750,
-        870,
-        1000,
-        1120,
-        1250,
-        1370,
-        1500,
-        1620,
-        1750,
-        1870,
-        2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870,
-        3000,
-        3120,
-        3250,
-        3370,
-        3500,
-        3620,
-        3750,
-        3870,
-        4000,
-        4120,
-        4250,
-        4370,
-        4500,
-        4620,
-        4750,
-        4870,
-        5000,
-        5120,
-        5250,
-        5370,
-        5500,
-        5620,
-        5750,
-        5870
-      ],
-      "duration_ms": 6000,
-      "loop": true
-    },
-    {
-      "id": "WRIST_ISOLATION",
-      "source_gif": "assets/gifs/dance/07_腕部隔离.gif",
-      "source_sha256": "b0557faa941b78e4ad6394d68faeccc51e6c66116a5bdd1138d74f68bff82007",
-      "frames": [
-        199,
         199,
         200,
+        201,
+        202,
+        203,
+        204,
+        205
+      ],
+      "at_ms": [
+        0,
+        100,
         200,
-        201,
-        201,
-        202,
-        202,
-        203,
-        203,
-        204,
-        204,
-        205,
-        205,
-        206,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+        2100,
+        2200,
+        2300
+      ],
+      "duration_ms": 2400,
+      "loop": false
+    },
+    {
+      "id": "DANCE_REACH",
+      "source_gif": "assets/gifs/dance/04_reach.gif",
+      "source_sha256": "f9652e68d411625429b60239c101084a7cbe3f0a4700bb7e560c969cacd734f4",
+      "frames": [
         206,
         207,
-        207,
         208,
-        208,
-        209,
         209,
         210,
-        199
-      ],
-      "at_ms": [
-        0,
-        120,
-        250,
-        370,
-        500,
-        620,
-        750,
-        870,
-        1000,
-        1120,
-        1250,
-        1370,
-        1500,
-        1620,
-        1750,
-        1870,
-        2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870
-      ],
-      "duration_ms": 3000,
-      "loop": true
-    },
-    {
-      "id": "DANCE_TUT",
-      "source_gif": "assets/gifs/dance/08_几何折线.gif",
-      "source_sha256": "0c043b4c8af3fb2723b025eea4a50b5ed5ba3829b9e94f5b80cc426314a10b75",
-      "frames": [
-        211,
-        211,
-        211,
         211,
         212,
-        212,
-        212,
-        212,
-        213,
-        213,
-        213,
         213,
         214,
-        214,
-        214,
-        214,
-        215,
-        215,
-        215,
         215,
         216,
-        216,
-        216,
-        216,
         217,
-        217,
-        217,
-        217,
-        217,
-        217,
-        217,
-        217,
-        216,
-        216,
-        216,
-        216,
         218,
-        218,
-        218,
-        218,
-        219,
-        219,
-        219,
         219,
         220,
-        220,
-        220,
-        211
-      ],
-      "at_ms": [
-        0,
-        120,
-        250,
-        370,
-        500,
-        620,
-        750,
-        870,
-        1000,
-        1120,
-        1250,
-        1370,
-        1500,
-        1620,
-        1750,
-        1870,
-        2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870,
-        3000,
-        3120,
-        3250,
-        3370,
-        3500,
-        3620,
-        3750,
-        3870,
-        4000,
-        4120,
-        4250,
-        4370,
-        4500,
-        4620,
-        4750,
-        4870,
-        5000,
-        5120,
-        5250,
-        5370,
-        5500,
-        5620,
-        5750,
-        5870
-      ],
-      "duration_ms": 6000,
-      "loop": true
-    },
-    {
-      "id": "DANCE_HIT",
-      "source_gif": "assets/gifs/dance/09_重拍弹点.gif",
-      "source_sha256": "9b062cb1ea4da7b0eae66131bfe743ed760702ba6fd32d6eec05ed7138b88132",
-      "frames": [
-        221,
         221,
         222,
         223,
-        223,
-        224,
         224,
         225,
-        225,
         226,
-        226,
-        226,
-        227,
         227,
         228,
-        229,
-        229,
-        230,
-        230,
-        231,
-        231,
-        221,
-        221,
-        221
+        229
       ],
       "at_ms": [
         0,
-        120,
-        250,
-        370,
+        100,
+        200,
+        300,
+        400,
         500,
-        620,
-        750,
-        870,
+        600,
+        700,
+        800,
+        900,
         1000,
-        1120,
-        1250,
-        1370,
+        1100,
+        1200,
+        1300,
+        1400,
         1500,
-        1620,
-        1750,
-        1870,
+        1600,
+        1700,
+        1800,
+        1900,
         2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870
+        2100,
+        2200,
+        2300
       ],
-      "duration_ms": 3000,
-      "loop": true
+      "duration_ms": 2400,
+      "loop": false
     },
     {
-      "id": "DIME_STOP",
-      "source_gif": "assets/gifs/dance/10_移动定格.gif",
-      "source_sha256": "ffb9e9dc0ced07fb72c9b5590894ce348075dd297db0f87d8be0bf5116ea1491",
+      "id": "DANCE_BASE_TURN",
+      "source_gif": "assets/gifs/dance/05_base_turn_complete_drawings.gif",
+      "source_sha256": "4ca376aa1e355b85fc1063d59c8efb43d82f4398bd0827170e39a25490109135",
       "frames": [
+        230,
+        231,
         232,
-        232,
         233,
-        233,
-        233,
-        234,
-        234,
-        234,
-        234,
-        234,
-        234,
         234,
         235,
         236,
-        236,
-        236,
-        237,
-        237,
-        237,
-        237,
-        237,
-        237,
         237,
         238,
-        239,
-        239,
-        239,
-        240,
-        240,
-        240,
-        240,
-        240,
-        240,
-        240,
-        240,
-        240,
-        240,
-        240,
-        240,
-        240,
+        237,
+        236,
+        235,
+        234,
+        233,
         232,
-        232,
-        232,
-        232,
-        232,
-        232,
-        232,
-        232
+        231
       ],
       "at_ms": [
         0,
-        120,
-        250,
-        370,
-        500,
-        620,
+        150,
+        300,
+        450,
+        600,
         750,
-        870,
-        1000,
-        1120,
-        1250,
-        1370,
+        900,
+        1050,
+        1200,
+        1350,
         1500,
-        1620,
-        1750,
-        1870,
-        2000,
-        2120,
-        2250,
-        2370,
-        2500,
-        2620,
-        2750,
-        2870,
-        3000,
-        3120,
-        3250,
-        3370,
-        3500,
-        3620,
-        3750,
-        3870,
-        4000,
-        4120,
-        4250,
-        4370,
-        4500,
-        4620,
-        4750,
-        4870,
-        5000,
-        5120,
-        5250,
-        5370,
-        5500,
-        5620,
-        5750,
-        5870
+        1650,
+        1800,
+        1950,
+        2100,
+        2250
       ],
-      "duration_ms": 6000,
-      "loop": true
+      "duration_ms": 2400,
+      "loop": false
+    },
+    {
+      "id": "DANCE_SWAY",
+      "source_gif": "assets/gifs/dance/06_sway.gif",
+      "source_sha256": "ba7647cb4227b947078af91068d040790ab83ca06c781db54dd2727577e490ca",
+      "frames": [
+        239,
+        240,
+        241,
+        242,
+        243,
+        244,
+        245,
+        246,
+        247,
+        248,
+        249,
+        250,
+        251,
+        252,
+        253,
+        254,
+        255,
+        256,
+        257,
+        258,
+        259,
+        260,
+        261,
+        262
+      ],
+      "at_ms": [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+        2100,
+        2200,
+        2300
+      ],
+      "duration_ms": 2400,
+      "loop": false
+    },
+    {
+      "id": "DANCE_ELBOW",
+      "source_gif": "assets/gifs/dance/07_elbow.gif",
+      "source_sha256": "b064e48ed668b77269e09ab21753694127a93d63b19708cb44c868a8528a5cf1",
+      "frames": [
+        263,
+        264,
+        265,
+        266,
+        267,
+        268,
+        269,
+        270,
+        271,
+        272,
+        273,
+        274,
+        275,
+        276,
+        277,
+        278,
+        279,
+        280,
+        281,
+        282,
+        283,
+        284,
+        285,
+        286
+      ],
+      "at_ms": [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+        2100,
+        2200,
+        2300
+      ],
+      "duration_ms": 2400,
+      "loop": false
+    },
+    {
+      "id": "DANCE_WRIST",
+      "source_gif": "assets/gifs/dance/08_wrist.gif",
+      "source_sha256": "ba88e77409d6aacf68eb35658d3305b09b35ea6e429edbfb931ebbd22710189d",
+      "frames": [
+        287,
+        288,
+        289,
+        290,
+        291,
+        292,
+        293,
+        294,
+        295,
+        296,
+        297,
+        298,
+        299,
+        300,
+        301,
+        302,
+        303,
+        304,
+        305,
+        306,
+        307,
+        308,
+        309,
+        310
+      ],
+      "at_ms": [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+        2100,
+        2200,
+        2300
+      ],
+      "duration_ms": 2400,
+      "loop": false
+    },
+    {
+      "id": "DANCE_GRIP",
+      "source_gif": "assets/gifs/dance/09_grip.gif",
+      "source_sha256": "1f3d70eb33e1f886dcabc351a26cfdc1dc239b65ecf970e4987d90dea6f6ec91",
+      "frames": [
+        311,
+        312,
+        313,
+        314,
+        315,
+        316,
+        317,
+        318,
+        319,
+        320,
+        321,
+        322,
+        323,
+        324,
+        325,
+        326,
+        327,
+        328,
+        329,
+        330,
+        331,
+        332,
+        333,
+        334
+      ],
+      "at_ms": [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+        2100,
+        2200,
+        2300
+      ],
+      "duration_ms": 2400,
+      "loop": false
+    },
+    {
+      "id": "DANCE_WAVE",
+      "source_gif": "assets/gifs/dance/10_wave.gif",
+      "source_sha256": "0f81b60dcbd05f60b1bb32274cb3cab5622093afd8db31fff493d8ac39817f84",
+      "frames": [
+        335,
+        336,
+        337,
+        338,
+        339,
+        340,
+        341,
+        342,
+        343,
+        344,
+        345,
+        346,
+        347,
+        348,
+        349,
+        350,
+        351,
+        352,
+        353,
+        354,
+        355,
+        356,
+        357,
+        358
+      ],
+      "at_ms": [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+        2100,
+        2200,
+        2300
+      ],
+      "duration_ms": 2400,
+      "loop": false
+    },
+    {
+      "id": "DANCE_START",
+      "source_gif": "assets/gifs/dance/00_start.gif",
+      "source_sha256": "791a63434aedd1cb1d5c2f877b931b4016b39275b0ee5df2a47d1b592d744371",
+      "frames": [
+        359,
+        359,
+        360,
+        361,
+        362,
+        363,
+        364,
+        365,
+        366,
+        367,
+        368,
+        369,
+        370,
+        371,
+        372,
+        373,
+        374,
+        375,
+        376,
+        377,
+        378,
+        379,
+        380,
+        381,
+        382,
+        383,
+        384,
+        385,
+        386,
+        386
+      ],
+      "at_ms": [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+        2100,
+        2200,
+        2300,
+        2400,
+        2500,
+        2600,
+        2700,
+        2800,
+        2900
+      ],
+      "duration_ms": 3000,
+      "loop": false
+    },
+    {
+      "id": "DANCE_END",
+      "source_gif": "assets/gifs/dance/11_end.gif",
+      "source_sha256": "c66e1b8833ed73434eefd7fbfc9958332338625d495947a8cdbb14387f16e876",
+      "frames": [
+        386,
+        386,
+        387,
+        388,
+        389,
+        390,
+        391,
+        392,
+        393,
+        394,
+        395,
+        396,
+        397,
+        398,
+        399,
+        400,
+        401,
+        402,
+        403,
+        404,
+        405,
+        406,
+        407,
+        408,
+        409,
+        410,
+        411,
+        412,
+        359,
+        359
+      ],
+      "at_ms": [
+        0,
+        100,
+        200,
+        300,
+        400,
+        500,
+        600,
+        700,
+        800,
+        900,
+        1000,
+        1100,
+        1200,
+        1300,
+        1400,
+        1500,
+        1600,
+        1700,
+        1800,
+        1900,
+        2000,
+        2100,
+        2200,
+        2300,
+        2400,
+        2500,
+        2600,
+        2700,
+        2800,
+        2900
+      ],
+      "duration_ms": 3000,
+      "loop": false
     },
     {
       "id": "FOLDED_HOLD",
@@ -7974,7 +12946,7 @@
       9
     ],
     [
-      20,
+      22,
       1,
       2,
       3,
@@ -7997,13 +12969,13 @@
     ]
   ],
   "compression": {
-    "scheme": "independent-anchor-xor-zlib",
-    "full_frame_zlib_bytes": 10813117,
-    "delta_frames": 221,
+    "scheme": "independent-anchor-xor-palette-zlib",
+    "full_frame_zlib_bytes": 10306497,
+    "delta_frames": 172,
     "extra_psram_bytes": 153600
   },
   "limitations": [
-    "RGB565 quantization only; GIF geometry and timing preserved.",
+    "Daily pixels/timing preserved through RGB565; imported dances use fixed screen fit and documented time sampling.",
     "20ms UI timer and device load may affect actual presentation times.",
     "Three separate expression previews remain supplementary GIFs."
   ]

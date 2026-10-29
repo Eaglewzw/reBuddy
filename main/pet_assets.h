@@ -11,3 +11,6 @@ void rb_assets_close(void);
 const lv_image_dsc_t *rb_assets_frame(unsigned frame,const rb_frame_meta_t **meta);
 size_t rb_assets_cache_bytes(void);
 bool rb_assets_degraded(void);
+
+/* Display selected dance over the existing room without modifying source frames. */
+const lv_image_dsc_t *rb_assets_dance_frame(unsigned frame,const rb_frame_meta_t **meta);

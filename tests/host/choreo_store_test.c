@@ -129,6 +129,16 @@ static void legacy_wire_compatibility(void)
         rb_choreo_work_t loaded;
         assert(rb_choreo_store_load(slot,&loaded)==RB_CHOREO_STORE_EMPTY);
     }
+    /* A checksum-valid old daily-action work must not enter dance playback. */
+    for(unsigned id=RB_CHOREO_PROBE;id<=RB_CHOREO_HAPPY;++id) {
+        memcpy(memory.records[0],legacy_record,sizeof(legacy_record));
+        memory.records[0][57]=(uint8_t)id;
+        memory.records[0][61]=memory.records[0][62]=0;
+        reseal(&memory,0);
+        rb_choreo_work_t loaded=make_work(1,500),unchanged=loaded;
+        assert(rb_choreo_store_load(0,&loaded)==RB_CHOREO_STORE_CORRUPT);
+        equal_work(&loaded,&unchanged);
+    }
     assert(memory.writes==0); /* init/load perform no migration writes */
     assert(rb_choreo_store_set_backend(NULL)==RB_CHOREO_STORE_OK);
 }
@@ -273,32 +283,24 @@ int main(void)
     tenth.steps[0].duration_ms=500;
     restart(&memory); load_equal(9,&tenth);
     load_equal(0,&maximum);
-    /* New dance IDs retain the v1 wire layout and coexist with the old work.
-       Reload every new action after a simulated restart, then compile it. */
+    /* Removed artwork cannot be newly saved; rejection leaves records intact. */
     rb_choreo_work_t dance;
-    rb_choreo_work_demo(&dance,8);
-    assert(dance.schema_version==1 && dance.count==6);
-    assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_OK);
-    restart(&memory); load_equal(8,&dance); load_equal(0,&maximum);
-    rb_choreo_plan_t plan;
-    assert(rb_choreo_store_load(8,&loaded)==RB_CHOREO_STORE_OK);
-    assert(rb_choreo_compile(&loaded,&plan,NULL)==RB_CHOREO_OK && plan.total_ms==30000);
-    for (unsigned i=0;i<dance.count;++i) assert(loaded.steps[i].action_id==dance.steps[i].action_id);
-    /* Each of the ten new stable IDs survives persistence independently. */
-    for (unsigned id=RB_CHOREO_GROOVE_BOUNCE;id<=RB_CHOREO_DIME_STOP;++id) {
-        rb_choreo_work_init(&dance,8);
-        dance.count=1;
-        dance.steps[0]=(rb_choreo_step_t){(uint8_t)id,3,500,0};
-        assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_OK);
-        restart(&memory); load_equal(8,&dance);
-        assert(rb_choreo_store_load(8,&loaded)==RB_CHOREO_STORE_OK);
-        assert(rb_choreo_compile(&loaded,&plan,NULL)==RB_CHOREO_OK);
-        assert(plan.total_ms==rb_choreo_action(id)->duration_ms*3u+500u);
+    rb_choreo_work_init(&dance,8);dance.count=1;
+    for (unsigned id=0;id<=RB_CHOREO_DIME_STOP;++id) {
+        dance.steps[0]=(rb_choreo_step_t){(uint8_t)id,1,0,0};writes=memory.writes;
+        assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_INVALID);
+        assert(memory.writes==writes);
     }
     for (unsigned id=9;id<=22;++id) {
         if (id==RB_CHOREO_WAIT) continue;
+        if (id==RB_CHOREO_WAIT) continue;
         dance.steps[0].action_id=(uint8_t)id; writes=memory.writes;
         assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_INVALID && memory.writes==writes);
+    }
+    for (unsigned id=RB_CHOREO_2D_NOD;id<=RB_CHOREO_2D_WAVE;++id) {
+        dance.steps[0]=(rb_choreo_step_t){(uint8_t)id,3,0,0};
+        assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_OK);
+        restart(&memory); load_equal(8,&dance);
     }
     rb_choreo_store_backend_t incomplete={0};
     assert(rb_choreo_store_set_backend(&incomplete)==RB_CHOREO_STORE_INVALID);
