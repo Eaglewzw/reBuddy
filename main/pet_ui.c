@@ -71,7 +71,7 @@ static void touch(lv_event_t *event)
         raw_down_at=now; feedback_pending=true;
     }
     rb_pet_input(pet,code!=LV_EVENT_RELEASED,point.x,point.y,now);
-    /* Only record input here: frame/cache work stays in the 20ms UI timer. */
+    /* Only record input here: frame/cache work stays in the UI timer. */
 }
 static void button_event(lv_event_t *event)
 {

@@ -147,36 +147,6 @@ static rb_choreo_work_t saved(unsigned slot)
 {
     rb_choreo_work_t work;assert(rb_choreo_store_load(slot,&work)==RB_CHOREO_STORE_OK);return work;
 }
-static uint16_t color565(unsigned r,unsigned g,unsigned b)
-{ return (uint16_t)(((r>>3)<<11)|((g>>2)<<5)|(b>>3)); }
-static void check_edge_matting(uint8_t *blob,size_t bytes,uint8_t *room,size_t room_bytes)
-{
-    /* Synthetic 25%-covered edge over cream has a known compositing result.
-       Interior white highlights and opaque dark outlines must not be erased. */
-    size_t offset=rb_frames[0].offset+16;
-    uint8_t *saved=malloc(RB_FRAME_BYTES);assert(saved);memcpy(saved,blob+offset,RB_FRAME_BYTES);
-    uint16_t *pixels=(uint16_t *)(blob+offset);
-    uint16_t key=color565(255,255,247),ink=color565(24,28,24);
-    for(unsigned i=0;i<320*240;++i)pixels[i]=key;
-    for(unsigned y=20;y<60;++y)for(unsigned x=60;x<100;++x)pixels[y*320+x]=ink;
-    for(unsigned x=61;x<99;++x)pixels[19*320+x]=color565(197,198,191);
-    pixels[35*320+80]=0xffff;pixels[35*320+81]=key;
-    assert(rb_assets_init(blob,bytes,2));assert(rb_assets_set_room(room,room_bytes));
-    const rb_frame_meta_t *meta=NULL;
-    const lv_image_dsc_t *image=rb_assets_dance_frame(0,&meta);assert(image && meta==&rb_frames[0]);
-    const uint16_t *out=(const uint16_t *)image->data,*bg=(const uint16_t *)(room+12);
-    assert(out[35*320+80]==0xffff && out[35*320+81]==key);
-    assert(out[20*320+80]==ink && out[18*320+80]==bg[18*320+80]);
-    for(unsigned x=62;x<98;++x) {
-        unsigned pos=19*320+x;uint16_t value=out[pos],back=bg[pos];
-        int actual[3]={((value>>11)&31)*255/31,((value>>5)&63)*255/63,(value&31)*255/31};
-        int expected[3]={(24+3*((back>>11)&31)*255/31)/4,(28+3*((back>>5)&63)*255/63)/4,(24+3*(back&31)*255/31)/4};
-        for(unsigned c=0;c<3;++c)assert(abs(actual[c]-expected[c])<=12);
-    }
-    assert(pixels[19*320+80]==color565(197,198,191));
-    memcpy(blob+offset,saved,RB_FRAME_BYTES);free(saved);
-    assert(rb_assets_init(blob,bytes,2));assert(rb_assets_set_room(room,room_bytes));
-}
 static void check_dance_room(void)
 {
     const lv_image_dsc_t *room=rb_assets_room();assert(room);
@@ -190,29 +160,9 @@ static void check_dance_room(void)
             memcpy(original,raw->data,RB_FRAME_BYTES);
             const lv_image_dsc_t *image=rb_assets_dance_frame(frame,&meta);assert(image && meta==&rb_frames[frame]);
             const uint16_t *screen=(const uint16_t *)image->data;
-            unsigned changed=0;
-            for(unsigned i=0;i<320*240;++i) {
-                if(screen[i]!=original[i]) {
-                    if(screen[i]!=background[i]) {
-                        /* Soft matte correction is confined to the exterior boundary. */
-                        unsigned x=i%320,y=i/320;bool edge=false;
-                        for(int dy=-1;dy<=1;++dy) for(int dx=-1;dx<=1;++dx) {
-                            int nx=(int)x+dx,ny=(int)y+dy;
-                            if(nx>=0 && nx<320 && ny>=0 && ny<240) {
-                                unsigned n=(unsigned)ny*320+(unsigned)nx;
-                                if(screen[n]==background[n] && original[n]!=background[n]) edge=true;
-                            }
-                        }
-                        assert(edge);
-                    }
-                    ++changed;
-                }
-                if(i%320<40 || i%320>=280) assert(screen[i]==background[i]);
-                /* Dark outlines and saturated lime panels must remain intact. */
-                if((original[i]>>11)<20 || ((original[i]>>5)&63)<45 || (original[i]&31)<20)
-                    assert(screen[i]==original[i]);
-            }
-            assert(changed>320*240/2);
+            assert(!memcmp(original,screen,RB_FRAME_BYTES));
+            for(unsigned y=0;y<240;++y)for(unsigned x=0;x<320;++x)
+                if(x<40 || x>=280)assert(screen[y*320+x]==background[y*320+x]);
             raw=rb_assets_frame(frame,&meta);assert(!memcmp(original,raw->data,RB_FRAME_BYTES));
             /* Also inspect a rendered midpoint from each whole source clip. */
             if(tick==clip->count/2) {
@@ -237,7 +187,7 @@ int main(void)
     assert(rb_choreo_store_init()==RB_CHOREO_STORE_OK);
     size_t bytes,room_bytes;uint8_t *blob=load(RB_ASSET_FILE,&bytes),*room=load(RB_ROOM_FILE,&room_bytes);
     assert(rb_assets_init(blob,bytes,2));assert(rb_assets_set_room(room,room_bytes));
-    check_edge_matting(blob,bytes,room,room_bytes);
+
     check_dance_room();
     lv_display_t *display=lv_display_create(320,240);assert(display);
     lv_display_set_color_format(display,LV_COLOR_FORMAT_RGB565);
@@ -265,9 +215,9 @@ int main(void)
     add(NULL,"大幅摇摆");add(NULL,"夹爪开合");add(NULL,"＋ 停留积木");
     assert(writes==0 && pet_events==0);
     tap_text("02  大幅摇摆");click(290,112);assert(text("2 次"));
-    click(290,65);assert(text("0.5s"));tap_text("前移");assert(disabled("前移"));tap_text("完成");
+    click(290,65);assert(text("0.3s"));tap_text("前移");assert(disabled("前移"));tap_text("完成");
     tap_text("保存");assert(saved(0).count==4 && saved(0).steps[0].action_id==RB_CHOREO_2D_SWAY);
-    assert(saved(0).steps[0].repeat==2 && saved(0).steps[0].hold_ms==500);
+    assert(saved(0).steps[0].repeat==2 && saved(0).steps[0].hold_ms==300);
     tap_text("预览");assert(disabled("同步表演 · 待接入"));tap_text("屏幕预览");pump(100);assert(has_prefix("开场"));
     uint32_t stopped=picture_hash();pump(600);assert(stopped!=picture_hash());snap("choreo_selected_dance.ppm");
     tap_text("停止预览");stopped=picture_hash();pump(2000);assert(stopped==picture_hash());

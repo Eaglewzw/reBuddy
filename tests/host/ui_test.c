@@ -7,6 +7,7 @@
 #include <string.h>
 #include <time.h>
 #include <inttypes.h>
+#include <zlib.h>
 static uint16_t buffer[320*40], buffer2[320*40];
 static uint16_t pixels[320*240];
 static rb_pet_t pet;
@@ -118,10 +119,32 @@ int main(void)
     for (unsigned i=0;i<RB_FRAME_COUNT;++i) {
         const lv_image_dsc_t *frame=rb_assets_frame(i,&meta);
         assert(frame && meta==&rb_frames[i]);
+        assert(crc32(0,frame->data,frame->data_size)==rb_frames[i].crc32);
         assert(frame->header.w==320 && frame->header.h==240);
         assert(frame->header.stride==640 && frame->data_size==153600);
     }
-    assert(rb_assets_cache_bytes()==460800); /* Two frames plus one independent base. */
+    assert(rb_assets_cache_bytes()==614400); /* Two frames, independent base, indexed-plane scratch. */
+    /* Seek backwards and across clips: bounded dance deltas must not depend
+       on playback history or on a previously decoded daily base. */
+    for(unsigned i=RB_FRAME_COUNT;i-->0;) {
+        const lv_image_dsc_t *frame=rb_assets_frame(i,&meta);
+        assert(frame && meta==&rb_frames[i]);
+        assert(crc32(0,frame->data,frame->data_size)==rb_frames[i].crc32);
+    }
+    unsigned dance_delta=RB_FRAME_COUNT;
+    for(unsigned i=0;i<RB_FRAME_COUNT;++i)
+        if(read_u32(blob+rb_frames[i].offset+12)==5){dance_delta=i;break;}
+    assert(dance_delta<RB_FRAME_COUNT);
+    unsigned reference=rb_frames[dance_delta].offset+16;
+    uint32_t saved_reference=read_u32(blob+reference);
+    write_u32(blob+reference,dance_delta);
+    assert(!rb_assets_init(blob,(size_t)bytes,2));
+    write_u32(blob+reference,saved_reference);
+    unsigned stream=reference+4;uint8_t saved_stream=blob[stream];blob[stream]^=0xff;
+    assert(rb_assets_init(blob,(size_t)bytes,2));
+    assert(!rb_assets_dance_frame(dance_delta,&meta) && rb_assets_degraded());
+    blob[stream]=saved_stream;
+    assert(rb_assets_init(blob,(size_t)bytes,2));
     unsigned independent=RB_FRAME_COUNT,delta=RB_FRAME_COUNT,other_delta=RB_FRAME_COUNT;
     for (unsigned i=1;i<RB_FRAME_COUNT;++i) {
         uint32_t codec=read_u32(blob+rb_frames[i].offset+12);
@@ -145,7 +168,7 @@ int main(void)
     }
     /* Invalid palette sizes fail safely before reading entries/indices. */
     unsigned paletted=RB_FRAME_COUNT;
-    for(unsigned i=1;i<RB_FRAME_COUNT;++i)if(read_u32(blob+rb_frames[i].offset+12)==3){paletted=i;break;}
+    for(unsigned i=1;i<RB_FRAME_COUNT;++i)if(read_u32(blob+rb_frames[i].offset+12)==4){paletted=i;break;}
     assert(paletted<RB_FRAME_COUNT);
     unsigned count_at=rb_frames[paletted].offset+16;uint8_t saved_count[2]={blob[count_at],blob[count_at+1]};
     for(unsigned count=0;count<=257;count+=257) {

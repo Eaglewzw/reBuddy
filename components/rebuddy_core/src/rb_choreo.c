@@ -137,6 +137,27 @@ static uint32_t scaled(unsigned duration,unsigned tempo)
     static const unsigned numerator[]={3,1,4},denominator[]={2,1,5};
     return (uint32_t)duration*numerator[tempo]/denominator[tempo];
 }
+uint16_t rb_choreo_beat_ms(unsigned tempo)
+{
+    static const uint16_t beats[]={900,600,480};
+    return tempo<RB_CHOREO_TEMPO_COUNT?beats[tempo]:0;
+}
+/* Only the first/last half-beat changes speed. The polynomial reaches the
+ * shared neutral with zero speed/acceleration, and joins the central linear
+ * phase with unit speed and zero acceleration. Internal beat markers stay put.
+ * This is time remapping of a visual clip, not a calibrated arm trajectory. */
+static unsigned joined_time(unsigned time,unsigned duration)
+{
+    const unsigned edge=RB_CHOREO_HALF_BEAT_MS;
+    if(duration<=edge*2 || time>=duration) return time;
+    bool tail=time>duration-edge;
+    unsigned distance=tail?duration-time:time;
+    if(distance>=edge) return time;
+    double u=(double)distance/edge;
+    unsigned mapped=(unsigned)(edge*u*u*u*(6+u*(-8+3*u)));
+    unsigned result=tail?duration-mapped:mapped;
+    return result>=duration?duration-1:result;
+}
 static bool append(rb_choreo_plan_t *plan,unsigned action,unsigned step,bool transition,bool holding,
     unsigned source_duration,unsigned clip_time,unsigned duration)
 {
@@ -156,7 +177,7 @@ rb_choreo_status_t rb_choreo_compile(const rb_choreo_work_t *work,rb_choreo_plan
     rb_choreo_status_t status=rb_choreo_validate(work,bad_step);
     if (status!=RB_CHOREO_OK) return status;
     if (!work->count) return RB_CHOREO_EMPTY;
-    if(!append(plan,RB_CHOREO_START,RB_CHOREO_NO_STEP,true,false,3000,0,scaled(3000,work->tempo))) return RB_CHOREO_TOO_MANY_EVENTS;
+    if(!append(plan,RB_CHOREO_START,RB_CHOREO_NO_STEP,true,false,3000,0,scaled(2400,work->tempo))) return RB_CHOREO_TOO_MANY_EVENTS;
     unsigned last_action=RB_CHOREO_START,last_source=3000,last_time=2999;
     for (unsigned i=0;i<work->count;++i) {
         const rb_choreo_step_t *step=&work->steps[i];
@@ -177,7 +198,7 @@ full:
         if (bad_step) *bad_step=(uint8_t)i;
         return RB_CHOREO_TOO_MANY_EVENTS;
     }
-    if(!append(plan,RB_CHOREO_END,RB_CHOREO_NO_STEP,true,false,3000,0,scaled(3000,work->tempo))) {
+    if(!append(plan,RB_CHOREO_END,RB_CHOREO_NO_STEP,true,false,3000,0,scaled(2400,work->tempo))) {
         memset(plan,0,sizeof(*plan));return RB_CHOREO_TOO_MANY_EVENTS;
     }
     return RB_CHOREO_OK;
@@ -195,8 +216,10 @@ bool rb_choreo_sample(const rb_choreo_plan_t *plan,uint32_t elapsed_ms,rb_choreo
     unsigned time=event->holding?event->clip_time_ms:
         (unsigned)((uint64_t)local*event->source_duration_ms/event->duration_ms);
     if (done && !event->holding) time=event->source_duration_ms?event->source_duration_ms-1:0;
+    if (!event->holding && !event->transition && !done) time=joined_time(time,event->source_duration_ms);
     *sample=(rb_choreo_sample_t){.action_id=event->action_id,.step_index=event->step_index,
-        .clip_time_ms=(uint16_t)time,.holding=event->holding || done,.transition=event->transition,.done=done};
+        .clip_time_ms=(uint16_t)time,.holding=event->holding || done,.transition=event->transition,.done=done,
+        .phase_q16=event->source_duration_ms>1?(uint16_t)((uint32_t)time*65535/(event->source_duration_ms-1)):0};
     return true;
 }
 bool rb_choreo_player_start(rb_choreo_player_t *player,const rb_choreo_plan_t *plan,uint64_t now_ms)

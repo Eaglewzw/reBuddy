@@ -9,9 +9,11 @@
 #define RB_CHOREO_NAME_BYTES 32u
 #define RB_CHOREO_MAX_EVENTS 40u
 #define RB_CHOREO_HOLD_MAX_MS 3000u
-#define RB_CHOREO_WAIT_MIN_MS 500u
+#define RB_CHOREO_WAIT_MIN_MS 300u
 #define RB_CHOREO_WAIT_MAX_MS 3000u
-#define RB_CHOREO_TIME_STEP_MS 500u
+/* Storage accepts legacy 500ms multiples; new UI edits use half a 100 BPM beat. */
+#define RB_CHOREO_TIME_STEP_MS 100u
+#define RB_CHOREO_HALF_BEAT_MS 300u
 #define RB_CHOREO_NO_STEP UINT8_MAX
 
 typedef enum { RB_CHOREO_SLOW, RB_CHOREO_STANDARD, RB_CHOREO_FAST, RB_CHOREO_TEMPO_COUNT } rb_choreo_tempo_t;
@@ -99,7 +101,9 @@ typedef struct {
     uint8_t action_id, step_index;
     uint16_t clip_time_ms;
     bool holding, transition, done;
+    uint16_t phase_q16; /* Shared normalized authored phase, never joint angles. */
 } rb_choreo_sample_t;
+uint16_t rb_choreo_beat_ms(unsigned tempo);
 rb_choreo_status_t rb_choreo_compile(const rb_choreo_work_t *work,rb_choreo_plan_t *plan,uint8_t *bad_step);
 /* clip_time_ms is unscaled GIF time. Holds/WAIT retain the last decoded pose.
    This module is a visual preview only and never emits motor commands. */

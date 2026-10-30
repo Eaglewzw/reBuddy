@@ -27,6 +27,7 @@ static i2c_master_dev_handle_t pca;
 static esp_lcd_touch_handle_t touch;
 static uint16_t output_levels;
 static bool started;
+static bool ready;
 
 #if CONFIG_REBUDDY_DISPLAY_STATS
 /* These callbacks and the log timer all run in the LVGL task. No ISR logging. */
@@ -83,6 +84,12 @@ static esp_err_t set_output(uint16_t mask, bool high)
     return err;
 }
 static void delay_ms(uint32_t ms) { vTaskDelay(pdMS_TO_TICKS(ms)); }
+
+esp_err_t rb_board_can1_standby(bool standby)
+{
+    if (!ready) return ESP_ERR_INVALID_STATE;
+    return set_output(1u<<8,standby);
+}
 
 bool rb_board_display_lock(uint32_t timeout_ms) { return lvgl_port_lock(timeout_ms); }
 void rb_board_display_unlock(void) { lvgl_port_unlock(); }
@@ -200,7 +207,7 @@ esp_err_t rb_board_init(void)
     ESP_RETURN_ON_ERROR(esp_lcd_touch_new_i2c_gt911(touch_io, &touch_config, &touch), TAG, "GT911");
 
     lvgl_port_cfg_t lvgl_config = ESP_LVGL_PORT_INIT_CONFIG();
-    lvgl_config.task_max_sleep_ms = 20;
+    lvgl_config.task_max_sleep_ms = 10;
     ESP_RETURN_ON_ERROR(lvgl_port_init(&lvgl_config), TAG, "LVGL");
     const lvgl_port_display_cfg_t display_config = {
         .io_handle = lcd_io, .panel_handle = panel, .buffer_size = 320 * 40,
@@ -212,8 +219,8 @@ esp_err_t rb_board_init(void)
     lv_display_t *display = lvgl_port_add_disp(&display_config);
     ESP_RETURN_ON_FALSE(display, ESP_ERR_NO_MEM, TAG, "LVGL display");
     ESP_RETURN_ON_FALSE(lvgl_port_lock(0), ESP_ERR_TIMEOUT, TAG, "LVGL lock");
-    /* Override older sdkconfig values too: match the 20ms behavior/input tick. */
-    lv_timer_set_period(lv_display_get_refr_timer(display), 20);
+    /* 50ms dance frames align with this 10ms display check. Input stays at 20ms. */
+    lv_timer_set_period(lv_display_get_refr_timer(display), 10);
 #if CONFIG_REBUDDY_DISPLAY_STATS
     display_stats.since_us=esp_timer_get_time();
     lv_display_add_event_cb(display,display_event,LV_EVENT_RENDER_START,NULL);
@@ -232,7 +239,8 @@ esp_err_t rb_board_init(void)
     ESP_RETURN_ON_FALSE(pointer, ESP_ERR_NO_MEM, TAG, "Touch pointer");
     ESP_RETURN_ON_ERROR(set_output(BACKLIGHT, true), TAG, "Backlight");
     ESP_LOGI(TAG, "Touch-only board ready: 320x240, GT911, PCA9535 outputs only; no key/GPIO-stop input; CAN in standby");
-    ESP_LOGI(TAG, "Display: %dMHz SPI, 2x320x40 RGB565 DMA buffers, 20ms refresh target",
+    ESP_LOGI(TAG, "Display: %dMHz SPI, 2x320x40 RGB565 DMA buffers, 10ms refresh polling / 20ms input",
              CONFIG_REBUDDY_LCD_SPI_MHZ);
+    ready=true;
     return ESP_OK;
 }

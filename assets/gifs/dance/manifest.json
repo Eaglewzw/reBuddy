@@ -616,9 +616,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_LIFT",
@@ -1233,9 +1231,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_DIP",
@@ -1850,9 +1846,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_REACH",
@@ -2467,9 +2461,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_BASE_TURN",
@@ -2569,8 +2561,7 @@
         150
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_note": "All 16 original frames and 150ms delays retained"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_SWAY",
@@ -3190,9 +3181,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_ELBOW",
@@ -3812,9 +3801,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_WRIST",
@@ -4434,9 +4421,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_GRIP",
@@ -5051,9 +5036,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_WAVE",
@@ -5673,9 +5656,7 @@
         20
       ],
       "claw_key": "idle:0",
-      "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
-      "runtime_note": "Original GIF untouched; sample source at 100ms steps, same 2400ms duration"
+      "screen_fit": "square240_center"
     },
     {
       "id": "DANCE_START",
@@ -6356,7 +6337,6 @@
       ],
       "claw_key": "idle:0",
       "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
       "role": "automatic_bookend"
     },
     {
@@ -7038,10 +7018,8 @@
       ],
       "claw_key": "idle:0",
       "screen_fit": "square240_center",
-      "runtime_sampling_ms": 100,
       "role": "automatic_bookend"
     }
   ],
-  "conversion": "Original GIF files preserved; whole-frame fixed 640x640 to 240x240 fitting, centered x40; runtime 100ms sampling, base-turn retains 150ms; source duration unchanged. Room compositing at playback. User-approved runtime-only 256-color median-cut quantization, no dithering; original GIFs unchanged.",
-  "runtime_colors": 256
+  "conversion": "Original source GIFs preserved. Current runtime palette, sampling, neutral connections and bounded compression are defined by tools/build_screen_preview.py and assets/animation/manifest.json; see assets/docs/DANCE_OPTIMIZATION.md."
 }

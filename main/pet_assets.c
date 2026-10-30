@@ -5,9 +5,11 @@
 #ifdef ESP_PLATFORM
 #include "esp_heap_caps.h"
 #include "miniz.h"
+#include "esp_timer.h"
 static tinfl_decompressor *inflater;
 #else
 #include <zlib.h>
+#include <time.h>
 #endif
 #define PIXEL_BYTES RB_FRAME_BYTES
 static const uint8_t *blob;
@@ -15,11 +17,20 @@ static size_t blob_size;
 static struct { unsigned index; uint8_t *pixels; lv_image_dsc_t image; } slots[2];
 static unsigned slot_count,next_slot;
 static uint8_t *base_pixels;
+static uint8_t *dance_planes;
 static unsigned cached_base=UINT32_MAX;
 static bool degraded;
-static lv_image_dsc_t direct,room_image,dance_image;
-static uint16_t *dance_pixels;
-static uint32_t *dance_queue;
+static rb_asset_stats_t stats;
+static uint64_t decode_clock(void)
+{
+#ifdef ESP_PLATFORM
+    return (uint64_t)esp_timer_get_time();
+#else
+    struct timespec t;clock_gettime(CLOCK_MONOTONIC,&t);
+    return (uint64_t)t.tv_sec*1000000+(uint64_t)t.tv_nsec/1000;
+#endif
+}
+static lv_image_dsc_t direct,room_image;
 #define DANCE_PIXELS (RB_FRAME_WIDTH*RB_FRAME_HEIGHT)
 static void *asset_alloc(size_t bytes)
 {
@@ -35,6 +46,7 @@ static uint32_t le32(const uint8_t *p)
 bool rb_assets_set_room(const uint8_t *data,size_t bytes)
 {
     memset(&room_image,0,sizeof(room_image));
+    for (unsigned i=0;i<slot_count;++i) slots[i].index=UINT32_MAX;
     if (!data || bytes!=153612u || data[0]!=LV_IMAGE_HEADER_MAGIC ||
         data[1]!=LV_COLOR_FORMAT_RGB565 || le16(data+2)!=0 || le16(data+4)!=320 ||
         le16(data+6)!=240 || le16(data+8)!=640) return false;
@@ -50,9 +62,11 @@ static const uint8_t *frame_record(unsigned index)
     if (offset>blob_size || bytes<=16 || bytes>blob_size-offset) return NULL;
     const uint8_t *h=blob+offset;
     if (memcmp(h,"RBG2",4) || le16(h+4)!=RB_FRAME_WIDTH || le16(h+6)!=RB_FRAME_HEIGHT ||
-        le32(h+8)!=PIXEL_BYTES || le32(h+12)>3) return NULL;
+        le32(h+8)!=PIXEL_BYTES || le32(h+12)>5) return NULL;
     if (le32(h+12)==0 && bytes!=16+PIXEL_BYTES) return NULL;
     if (le32(h+12)==2 && bytes<=20) return NULL;
+    if (le32(h+12)==5 && bytes<=20) return NULL;
+    if (le32(h+12)==4 && bytes<=20) return NULL;
     return h;
 }
 static lv_image_dsc_t descriptor(const uint8_t *pixels)
@@ -65,9 +79,7 @@ void rb_assets_close(void)
 {
     for (unsigned i=0;i<slot_count;++i) { lv_image_cache_drop(&slots[i].image); free(slots[i].pixels); }
     lv_image_cache_drop(&direct);
-    lv_image_cache_drop(&dance_image);
-    free(dance_pixels);dance_pixels=NULL;free(dance_queue);dance_queue=NULL;
-    memset(&dance_image,0,sizeof(dance_image));
+    free(dance_planes);dance_planes=NULL;
     free(base_pixels); base_pixels=NULL; cached_base=UINT32_MAX;
 #ifdef ESP_PLATFORM
     free(inflater); inflater=NULL;
@@ -78,20 +90,35 @@ void rb_assets_close(void)
 bool rb_assets_init(const uint8_t *data,size_t bytes,unsigned cache_slots)
 {
     rb_assets_close(); blob=data; blob_size=bytes; degraded=false;
+    memset(&stats,0,sizeof(stats));
     bool has_delta=false;
     for (unsigned i=0;i<RB_FRAME_COUNT;++i) {
         const uint8_t *record=frame_record(i);
         if (!record || (i==0 && le32(record+12)!=0)) {
             blob=NULL; blob_size=0; degraded=true; return false;
         }
-        if (le32(record+12)==2) {
+        unsigned codec=le32(record+12);
+        if(codec>=4)has_delta=true;
+        if (codec==2 || codec==5) {
             has_delta=true;
             unsigned base=le32(record+16);
             const uint8_t *base_record=frame_record(base);
             /* A delta may reference only a complete raw, zlib or palette frame. This
                rules out self-references, cycles and unbounded decode chains. */
-            if (!base_record || le32(base_record+12)==2) {
+            if (!base_record || (codec==5?(base>=i || le32(base_record+12)<4):
+                (le32(base_record+12)==2 || le32(base_record+12)>3))) {
                 blob=NULL; blob_size=0; degraded=true; return false;
+            }
+        }
+        if(codec==5) {
+            unsigned node=i,depth=0;
+            const uint8_t *r=record;
+            while(le32(r+12)==5) {
+                unsigned next=le32(r+16);
+                if(++depth>7 || next>=node || !(r=frame_record(next)) || le32(r+12)<4) {
+                    blob=NULL;blob_size=0;degraded=true;return false;
+                }
+                node=next;
             }
         }
     }
@@ -137,6 +164,68 @@ static bool inflate_buffer(const uint8_t *source,size_t length,uint8_t *pixels,s
 }
 static bool inflate_pixels(const uint8_t *source,size_t length,uint8_t *pixels)
 { return inflate_buffer(source,length,pixels,PIXEL_BYTES); }
+static bool palette_planes(unsigned frame,const uint8_t *record,uint8_t *pixels)
+{
+    size_t bytes=rb_frames[frame].bytes;
+    unsigned count=le16(record+16);
+    size_t header=20+count*2;
+    return count && count<=256 && bytes>header &&
+        inflate_pixels(record+header,bytes-header,pixels);
+}
+static bool decode_dance(unsigned frame,const uint8_t *record,uint8_t *pixels)
+{
+    if (!room_image.data) return false;
+    if (!dance_planes) dance_planes=asset_alloc(PIXEL_BYTES);
+    if (!dance_planes) return false;
+    if(!base_pixels)return false;
+    unsigned chain[8],length=0,current=frame;
+    const uint8_t *palette=record;
+    for(;;) {
+        if(length>=8 || !palette)return false;
+        chain[length++]=current;
+        unsigned codec=le32(palette+12);
+        if(codec==4)break;
+        if(codec!=5)return false;
+        unsigned next=le32(palette+16);
+        if(next>=current)return false;
+        current=next;palette=frame_record(current);
+    }
+    int reuse=-1;
+    for(unsigned n=0;n<length;++n)if(chain[n]==cached_base)reuse=(int)n;
+    if(reuse<0) {
+        cached_base=UINT32_MAX;
+        if(!palette_planes(current,palette,base_pixels))return false;
+        cached_base=current;reuse=(int)length-1;
+    }
+    while(reuse>0) {
+        unsigned next=chain[--reuse];const uint8_t *delta=frame_record(next);
+        cached_base=UINT32_MAX;
+        if(!delta || !inflate_pixels(delta+20,rb_frames[next].bytes-20,dance_planes))return false;
+        for(unsigned i=0;i<PIXEL_BYTES;++i)base_pixels[i]^=dance_planes[i];
+        cached_base=next;
+    }
+    unsigned count=le16(palette+16);
+    uint16_t key=le16(palette+18);
+    int matte[3]={(key>>11)*255/31,((key>>5)&63)*255/63,(key&31)*255/31};
+    for (unsigned i=0;i<PIXEL_BYTES/2;++i) {
+        unsigned index=base_pixels[i],alpha=base_pixels[PIXEL_BYTES/2+i];
+        if (index>=count) { cached_base=UINT32_MAX;return false; }
+        uint16_t pixel=le16(palette+20+index*2),room=le16(room_image.data+i*2);
+        if (!alpha) pixel=room;
+        else if (alpha<255) {
+            int c[3]={(pixel>>11)*255/31,((pixel>>5)&63)*255/63,(pixel&31)*255/31};
+            int bg[3]={(room>>11)*255/31,((room>>5)&63)*255/63,(room&31)*255/31};
+            for(unsigned j=0;j<3;++j) {
+                c[j]+=(int)(255-alpha)*(bg[j]-matte[j])/255;
+                if(c[j]<0)c[j]=0;
+                if(c[j]>255)c[j]=255;
+            }
+            pixel=(uint16_t)(((c[0]>>3)<<11)|((c[1]>>2)<<5)|(c[2]>>3));
+        }
+        pixels[2*i]=(uint8_t)pixel;pixels[2*i+1]=(uint8_t)(pixel>>8);
+    }
+    return true;
+}
 static bool decode_complete(unsigned frame,const uint8_t *record,uint8_t *pixels)
 {
     unsigned codec=le32(record+12);
@@ -158,6 +247,7 @@ static bool decode_complete(unsigned frame,const uint8_t *record,uint8_t *pixels
 }
 static bool decode(unsigned frame,const uint8_t *record,uint8_t *pixels)
 {
+    if (le32(record+12)>=4) return decode_dance(frame,record,pixels);
     if (le32(record+12)!=2) return decode_complete(frame,record,pixels);
     if (!base_pixels) return false;
     unsigned base=le32(record+16);
@@ -192,93 +282,24 @@ const lv_image_dsc_t *rb_assets_frame(unsigned frame,const rb_frame_meta_t **met
     unsigned i=next_slot++%slot_count;
     lv_image_cache_drop(&slots[i].image);
     slots[i].index=UINT32_MAX;
-    if (!decode(frame,record,slots[i].pixels)) return fallback(meta);
+    uint64_t began=decode_clock();
+    bool ok=decode(frame,record,slots[i].pixels);
+    uint32_t cost=(uint32_t)(decode_clock()-began);
+    ++stats.frames;stats.total_us+=cost;if(cost>stats.max_us)stats.max_us=cost;
+    if (!ok) { ++stats.failures;return fallback(meta); }
     slots[i].index=frame; *meta=&rb_frames[frame]; return &slots[i].image;
 }
-/* Render the source's exterior cream backdrop as the existing room.
-   Flood only border-connected colors: eye/gloss highlights inside the dark
-   robot outline remain opaque. The original frame/cache/anchor never changes. */
-static bool backdrop(uint16_t pixel,uint16_t key)
-{
-    return abs((int)(pixel>>11)-(int)(key>>11))<=1 &&
-           abs((int)((pixel>>5)&63)-(int)((key>>5)&63))<=2 &&
-           abs((int)(pixel&31)-(int)(key&31))<=2;
-}
-static void rgb_channels(uint16_t value,int rgb[3])
-{
-    rgb[0]=((value>>11)&31)*255/31;
-    rgb[1]=((value>>5)&63)*255/63;
-    rgb[2]=(value&31)*255/31;
-}
-/* Remove the old cream matte from a one-pixel antialiased silhouette band.
-   Estimate coverage from a neighboring dark outline, then replace only the
-   background contribution: C_new = C_old + (1-alpha)*(room-key).
-   Interior highlights are never candidates; geometry and source pixels stay
-   unchanged. Read neighbors from source so processing order cannot affect it. */
-static uint16_t blend_dance_edge(unsigned pos,const uint8_t *source,uint16_t key,uint16_t room,uint16_t marker)
-{
-    uint16_t pixel=le16(source+2*pos);
-    if((pixel>>11)<20 || ((pixel>>5)&63)<45 || (pixel&31)<20) return pixel;
-    unsigned x=pos%RB_FRAME_WIDTH,y=pos/RB_FRAME_WIDTH;
-    if(!x || !y || x+1==RB_FRAME_WIDTH || y+1==RB_FRAME_HEIGHT) return pixel;
-    bool exterior=false;int darkest=766;uint16_t foreground=pixel;
-    for(int dy=-1;dy<=1;++dy) for(int dx=-1;dx<=1;++dx) {
-        if(!dx && !dy) continue;
-        unsigned n=(unsigned)((int)pos+dy*RB_FRAME_WIDTH+dx);
-        if(dance_pixels[n]==marker) { exterior=true;continue; }
-        uint16_t neighbor=le16(source+2*n);int rgb[3];rgb_channels(neighbor,rgb);
-        int light=rgb[0]+rgb[1]+rgb[2];
-        if(light<darkest) { darkest=light;foreground=neighbor; }
-    }
-    if(!exterior || darkest>300) return pixel;
-    int c[3],f[3],k[3],b[3];rgb_channels(pixel,c);rgb_channels(foreground,f);
-    rgb_channels(key,k);rgb_channels(room,b);
-    int numerator=0,denominator=0;
-    for(unsigned j=0;j<3;++j) { int delta=k[j]-f[j];numerator+=(k[j]-c[j])*delta;denominator+=delta*delta; }
-    if(!denominator) return pixel;
-    int alpha=numerator*256/denominator;if(alpha<0)alpha=0;if(alpha>256)alpha=256;
-    for(unsigned j=0;j<3;++j) { c[j]+=(256-alpha)*(b[j]-k[j])/256;if(c[j]<0)c[j]=0;if(c[j]>255)c[j]=255; }
-    return (uint16_t)(((c[0]>>3)<<11)|((c[1]>>2)<<5)|(c[2]>>3));
-}
+/* Dance frames already carry offline coverage; decode directly into the regular
+   double cache. No flood fill, temporary image, or per-frame work queue. */
 const lv_image_dsc_t *rb_assets_dance_frame(unsigned frame,const rb_frame_meta_t **meta)
 {
-    if (!meta || frame>=RB_FRAME_COUNT) return NULL;
-    const lv_image_dsc_t *source=rb_assets_frame(frame,meta);
-    if (!source || !room_image.data || *meta!=&rb_frames[frame]) return NULL;
-    if (!dance_pixels) dance_pixels=asset_alloc(PIXEL_BYTES);
-    if (!dance_queue) dance_queue=asset_alloc(DANCE_PIXELS*sizeof(*dance_queue));
-    if (!dance_pixels || !dance_queue) { degraded=true; return NULL; }
-    lv_image_cache_drop(&dance_image);
-    memcpy(dance_pixels,source->data,PIXEL_BYTES);
-    uint16_t key=dance_pixels[0];
-    /* Magenta is a temporary flood marker, absent from the reviewed cream,
-       lime and charcoal palette. Refuse it instead of damaging source pixels. */
-    const uint16_t marker=0xf81f;
-    for (unsigned i=0;i<DANCE_PIXELS;++i) if(dance_pixels[i]==marker) return NULL;
-    unsigned head=0,tail=0;
-    for(unsigned y=0;y<RB_FRAME_HEIGHT;++y) for(unsigned x=0;x<RB_FRAME_WIDTH;++x) {
-        if (x && y && x+1<RB_FRAME_WIDTH && y+1<RB_FRAME_HEIGHT) continue;
-        unsigned pos=y*RB_FRAME_WIDTH+x;
-        if(backdrop(dance_pixels[pos],key)) { dance_pixels[pos]=marker;dance_queue[tail++]=pos; }
-    }
-    while(head<tail) {
-        unsigned pos=dance_queue[head++],x=pos%RB_FRAME_WIDTH,y=pos/RB_FRAME_WIDTH;
-        unsigned neighbors[4]={x?pos-1:pos,x+1<RB_FRAME_WIDTH?pos+1:pos,
-            y?pos-RB_FRAME_WIDTH:pos,y+1<RB_FRAME_HEIGHT?pos+RB_FRAME_WIDTH:pos};
-        for(unsigned k=0;k<4;++k) {
-            unsigned next=neighbors[k];
-            if(backdrop(dance_pixels[next],key)) { dance_pixels[next]=marker;dance_queue[tail++]=next; }
-        }
-    }
-    const uint8_t *room=room_image.data;
-    /* Keep flood markers until every edge has been evaluated. */
-    for(unsigned i=0;i<DANCE_PIXELS;++i) if(dance_pixels[i]!=marker)
-        dance_pixels[i]=blend_dance_edge(i,source->data,key,le16(room+i*2),marker);
-    for(unsigned i=0;i<DANCE_PIXELS;++i) if(dance_pixels[i]==marker) dance_pixels[i]=le16(room+i*2);
-    dance_image=descriptor((const uint8_t *)dance_pixels);
-    return &dance_image;
+    if (!meta || !room_image.data) return NULL;
+    const uint8_t *record=frame_record(frame);
+    if (!record || le32(record+12)<4) return NULL;
+    const lv_image_dsc_t *image=rb_assets_frame(frame,meta);
+    return image && *meta==&rb_frames[frame]?image:NULL;
 }
 size_t rb_assets_cache_bytes(void)
-{ return (slot_count+(base_pixels?1u:0u)+(dance_pixels?1u:0u))*PIXEL_BYTES+
-    (dance_queue?DANCE_PIXELS*sizeof(*dance_queue):0); }
+{ return (slot_count+(base_pixels?1u:0u)+(dance_planes?1u:0u))*PIXEL_BYTES; }
 bool rb_assets_degraded(void) { return degraded; }
+rb_asset_stats_t rb_assets_stats(void) { return stats; }

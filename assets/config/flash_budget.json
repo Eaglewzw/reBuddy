@@ -1,0 +1,8 @@
+{
+  "application_partition_bytes": 8323072,
+  "animation_limit_bytes": 5242880,
+  "future_motion_data_bytes": 524288,
+  "future_code_growth_bytes": 1048576,
+  "unallocated_margin_bytes": 524288,
+  "note": "Reserve is enforced against the built application; no partition movement or NVS erase. Motion budget is provisional until real calibrated trajectories exist."
+}

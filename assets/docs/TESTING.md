@@ -25,7 +25,7 @@ python3 tools/render_previews.py build/host build/ui-preview
 | daily_suspend | 编辑期间冻结动作和入睡计时、清除旧手势、恢复睡眠与停止状态、急停优先 |
 | choreography_ui | 真实 LVGL 触摸编辑、排序与容量、缺失素材条目与示例禁用、保存失败、停止与完成、故障、与日常模式隔离 |
 
-带 LVGL 时共 12 项。UI 测试输出实际 PPM 截图，转换后的 `build/ui-preview/contact-sheet.png` 和 `choreography.png` 用于布局检查。图片生成和模拟测试不能代替实屏动画效果、触摸手感或硬件连续运行验收。
+带 LVGL 时共 19 项。UI 测试输出实际 PPM 截图，转换后的 `build/ui-preview/contact-sheet.png` 和 `choreography.png` 用于布局检查。图片生成和模拟测试不能代替实屏动画效果、触摸手感或硬件连续运行验收。
 
 最新整理验证见 [current.json](../verification/current.json)，实机记录使用 [ACCEPTANCE.md](ACCEPTANCE.md)。代码仓库只保留当前验证摘要，构建和测试日志输出到被忽略的 `build/`。
 
@@ -36,3 +36,10 @@ python3 tools/render_previews.py build/host build/ui-preview
 边缘去白验证：已知 25% 覆盖率的人工轮廓对照小屋背景检查混合颜色，验证内部白色高光与深色轮廓保持不变；十组舞蹈逐帧检查软边修改只发生在外部背景邻接处，原始解码缓存不变。
 
 开场收尾与压缩：自动段不占步骤，校验不同节奏、停止、重播、收尾末帧及禁止手动保存；色表编码逐帧独立解码并比对转换像素，损坏色表／压缩流安全回退；舞蹈减色后的平均每通道误差上限为 4/255，日常仍按原像素验证。
+
+舞蹈优化新增 `motion_bridge` 与 `flash_budget`。逐帧资源测试覆盖 64 色索引／覆盖率、最多七层差分、所有中立首尾组合；C 解码器独立核对全部 CRC，正序与倒序访问并检查循环引用和压缩流损坏。UI 测试覆盖半拍调整和旧作品兼容。详情见 [DANCE_OPTIMIZATION.md](DANCE_OPTIMIZATION.md)。历史段落中的 256 色与仅单层差分描述已由本轮舞蹈格式替代，日常差分仍为单层。
+
+`dance_cavities` 覆盖 25 个含封闭空隙的时间轴采样，检查空隙透明、眼睛／关节高光不透明，并拒绝过期的种子坐标、面积或边界。
+
+
+控制组件接入增加四项主机测试：`arm_component_snapshot` 校验固定组件源码；`arm_adapter` 使用实际适配层与上游公开头文件，覆盖默认待机、硬件只听模式、七路型号映射、重复初始化/部分失败隔离、反馈时效及总线异常；`arm_vendor_joint_path` 与 `arm_vendor_teach` 在本仓库源码上运行参考工程的轨迹与七通道示教回归。主机替身不访问硬件。固件还需分别验证默认待机和 `CONFIG_REBUDDY_ARM_MONITOR=y` 配置的构建；监听与真实电机控制仍需上板验收。

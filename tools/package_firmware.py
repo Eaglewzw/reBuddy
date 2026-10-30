@@ -8,6 +8,7 @@ import shutil
 import shlex
 import subprocess
 import sys
+from check_flash_budget import check
 
 ROOT = Path(__file__).resolve().parents[1]
 parser = argparse.ArgumentParser()
@@ -21,6 +22,8 @@ description=json.loads((build/'project_description.json').read_text())
 behavior=json.loads((ROOT/'assets/config/behavior_defaults.json').read_text())
 assets=json.loads((ROOT/'assets/animation/manifest.json').read_text())
 app=(build/flash['app']['file']).read_bytes()
+check(len(app), (ROOT/'assets/animation/frames.bin').stat().st_size,
+      json.loads((ROOT/'assets/config/flash_budget.json').read_text()))
 if (ROOT/'assets/animation/frames.bin').read_bytes() not in app:
     raise SystemExit('Application does not contain current animation assets; rebuild before packaging.')
 if assets.get('asset_version')!='gif-v2-rgb565':
@@ -52,6 +55,7 @@ source=Path(description['config_file'])
 shutil.copy2(source,out/'sdkconfig')
 for relative in ['LICENSE', 'assets/docs/THIRD_PARTY_NOTICES.md',
                  'assets/config/behavior_defaults.json', 'assets/config/claw_touch_regions.json',
+                 'assets/config/flash_budget.json', 'assets/config/arm_components.json', 'assets/config/dance_cavity_seeds.json', 'assets/docs/DANCE_OPTIMIZATION.md',
                  'assets/animation/manifest.json', 'assets/fonts/OFL.txt',
                  'assets/docs/GETTING_STARTED.md', 'assets/docs/HARDWARE.md',
                  'assets/docs/TESTING.md', 'assets/docs/ACCEPTANCE.md', 'assets/docs/DISPLAY_PERFORMANCE.md',
@@ -77,6 +81,8 @@ manifest = {
     'animation_unique_frames': assets['unique_frames'],
     'animation_bytes': assets['bytes'], 'room_sha256': assets['room_sha256'],
     'input_mode': 'touch_only', 'physical_keys': False, 'gpio_estop_input': False,
+    'arm_components_integrated': True, 'arm_motion_enabled': False,
+    'arm_monitor': 'CONFIG_REBUDDY_ARM_MONITOR=y' in source.read_text().splitlines(),
     'board_component': 'rebuddy_board', 'private_dependencies': False,
     'flash_files': flash['flash_files'], 'flash_settings': flash['flash_settings']}
 (out/'manifest.json').write_text(json.dumps(manifest,ensure_ascii=False,indent=2)+'\n')
@@ -113,7 +119,7 @@ if preview.exists(): shutil.copy2(preview,out/'ui-preview.png')
     f'平均 8 FPS，开心回应 8 秒；全局时长倍率 {behavior["animation_playback"]["duration_scale"]}，活泼与慵懒暂时均为 1.0 倍，触摸识别时限独立。\n'
     '直接触摸角色互动；左下暂停/继续，右下设置；没有英文状态栏。\n'
     '设置→编排：编辑、预览并保存作品，每段最多 8 步，保存 10 段；仅十组舞蹈动作可选，另支持停留计时。\n'
-    '另有十组选定舞蹈，每段 2.4 秒，自动开场收尾各 3 秒；板端高帧率动作按 10 FPS 取帧，底盘回转保留 16 帧；舞蹈使用共享 256 色，原 GIF 不变。\n'
+    '十组舞蹈采用统一中立首尾、半拍编辑和 64 色压缩；标准节奏多数基础动作目标 20 FPS，开场收尾各四拍。底盘回转保留稀疏源姿态并增加首尾连接，原 GIF 不变。\n'
     '编排仅使用当前屏幕动画；保存后断电保留，加载不自动播放。详见 assets/docs/CHOREOGRAPHY.md。\n'
     '硬件：XIAO ESP32-C5 CAN Console，8 MiB Flash / 8 MiB Quad PSRAM。\n'
     '已通过主机测试与编译，尚未实际烧录或完成实机 30 分钟验证。\n'
@@ -122,7 +128,7 @@ if preview.exists(): shutil.copy2(preview,out/'ui-preview.png')
     'merged.bin 为可选整合镜像，从 0x0 写入会覆盖间隙内原有数据；优先用 flash.sh。\n'
     '轻点探头，慢慢抚摸轻蹭，连续三次轻点收拢，抚摸安抚，快划歪头。\n'
     '轻柔来回摸爪累计约 0.6 秒有效移动可触发开心；设置→休息可快速看入睡，持续循环睡眠，长按左下角恢复。\n'
-    '左下暂停图标冻结画面，再点击同一位置的播放图标继续。不读取实体按键或 GPIO 急停输入。CAN 保持待机，无电机后端。\n'
+    '左下暂停图标冻结画面，再点击同一位置的播放图标继续。不读取实体按键或 GPIO 急停输入。控制组件已集成，默认 CAN 待机，可选被动监听见 HARDWARE.md；未开放电机动作。\n'
     '房间装饰暂不响应触摸；部分动作中间帧仍待细化，详见 assets/docs/GETTING_STARTED.md。\n')
 entries=[]
 for file in sorted(out.rglob('*')):

@@ -11,6 +11,8 @@ void rb_assets_close(void);
 const lv_image_dsc_t *rb_assets_frame(unsigned frame,const rb_frame_meta_t **meta);
 size_t rb_assets_cache_bytes(void);
 bool rb_assets_degraded(void);
+typedef struct { uint32_t frames, failures; uint64_t total_us; uint32_t max_us; } rb_asset_stats_t;
+rb_asset_stats_t rb_assets_stats(void);
 
-/* Display selected dance over the existing room without modifying source frames. */
+/* Decode offline dance coverage against the current room into the normal double cache. */
 const lv_image_dsc_t *rb_assets_dance_frame(unsigned frame,const rb_frame_meta_t **meta);

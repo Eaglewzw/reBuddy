@@ -145,7 +145,7 @@ static void handle(enum command command,int arg)
     case ADD_PAGE:ui.page=ADD;ui.group=RB_CHOREO_INTERACTION;break;
     case GROUP:ui.group=arg;break;
     case ADD_ACTION: {
-        rb_choreo_step_t item={.action_id=arg,.repeat=1,.duration_ms=arg==RB_CHOREO_WAIT?1000:0};
+        rb_choreo_step_t item={.action_id=arg,.repeat=1,.duration_ms=arg==RB_CHOREO_WAIT?600:0};
         int insertion=ui.selected<0?ui.work.count:ui.selected+1;
         if (rb_choreo_add_after(&ui.work,ui.selected,&item)==RB_CHOREO_OK) {
             ui.selected=insertion;ui.dirty=true;ui.page=EDITOR;
@@ -168,7 +168,8 @@ static void handle(enum command command,int arg)
     case HOLD_LESS:case HOLD_MORE:
         if (step) {
             uint16_t *value=step->action_id==RB_CHOREO_WAIT?&step->duration_ms:&step->hold_ms;
-            int next=*value+(command==HOLD_MORE?(int)RB_CHOREO_TIME_STEP_MS:-(int)RB_CHOREO_TIME_STEP_MS);
+            int next=command==HOLD_MORE?((*value/RB_CHOREO_HALF_BEAT_MS)+1)*RB_CHOREO_HALF_BEAT_MS:
+                (*value?((*value-1)/RB_CHOREO_HALF_BEAT_MS)*RB_CHOREO_HALF_BEAT_MS:0);
             int minimum=step->action_id==RB_CHOREO_WAIT?RB_CHOREO_WAIT_MIN_MS:0;
             int maximum=step->action_id==RB_CHOREO_WAIT?RB_CHOREO_WAIT_MAX_MS:RB_CHOREO_HOLD_MAX_MS;
             if (next>=minimum && next<=maximum) { *value=(uint16_t)next;ui.dirty=true; }
@@ -286,7 +287,7 @@ static void draw_params(void)
     unsigned value=wait?step->duration_ms:step->hold_ms;
     unsigned minimum=wait?RB_CHOREO_WAIT_MIN_MS:0;
     unsigned maximum=wait?RB_CHOREO_WAIT_MAX_MS:RB_CHOREO_HOLD_MAX_MS;
-    label(ui.root,12,61,145,wait?"停留时长":"结束后停留",false);
+    label(ui.root,12,61,145,wait?"停留时长":"停留（半拍调整）",false);
     button(ui.root,164,48,40,38,"-",HOLD_LESS,0,value>minimum,0xe8e8da);
     char number[24];snprintf(number,sizeof(number),"%.1fs",value/1000.0);
     label(ui.root,212,61,58,number,false);
@@ -311,7 +312,7 @@ static void draw(void)
     case PARAMS:draw_params();break;
     case TEMPO: {
         header("屏幕节奏",false);
-        const char *names[]={"慢 · 时长 1.5 倍","标准 · 原始时长","快 · 时长 0.8 倍"};
+        const char *names[]={"慢 · 约67 BPM","标准 · 100 BPM","快 · 125 BPM"};
         for (int i=0;i<3;++i) button(ui.root,8,48+i*46,304,38,names[i],SET_TEMPO,i,true,ui.work.tempo==i?0xd8ef79:0xffffff);
         label(ui.root,12,197,296,"仅调整屏幕预览，实体节奏待标定",true);break;
     }
@@ -331,8 +332,16 @@ static void draw(void)
         button(ui.root,16,121,288,46,"同步表演 · 待接入",NONE,0,false,0xe8e8da);
         label(ui.root,20,186,280,"当前只播放屏幕动画\n机械臂动作与标定后续接入",true);break;
     case PREVIEW:
-        ui.image=lv_image_create(ui.root);lv_obj_set_pos(ui.image,0,0);
+        /* The room is static. Clip frame invalidations to the 240px dance
+           viewport instead of transmitting unchanged side walls each frame. */
+        {
+        lv_obj_t *background=lv_image_create(ui.root);
+        lv_image_set_src(background,rb_assets_room());
+        lv_obj_remove_flag(background,LV_OBJ_FLAG_CLICKABLE);
+        lv_obj_t *viewport=panel(ui.root,40,0,240,192,0xf7f5e9,0);
+        ui.image=lv_image_create(viewport);lv_obj_set_pos(ui.image,-40,0);
         lv_obj_remove_flag(ui.image,LV_OBJ_FLAG_CLICKABLE);
+        }
         ui.progress=label(ui.root,0,0,320,"",true);
         lv_obj_set_style_bg_color(ui.progress,lv_color_hex(0xfffdf3),0);
         lv_obj_set_style_bg_opa(ui.progress,LV_OPA_90,0);

@@ -4,6 +4,7 @@
 | --- | --- |
 | `python3 tools/generate_pet_config.py` | 当前行为 JSON → `rb_pet_config.h`；`--check` 只检查 |
 | `python3 tools/build_screen_preview.py` | 10 个日常、10 个舞蹈与开场收尾 GIF → 去重压缩的 RGB565 帧、小屋背景、清单与 C 帧表 |
+| `python3 tools/check_flash_budget.py --app build/reBuddy.bin` | 检查整个应用与动画预算，保留未来机械臂空间 |
 | `python3 tools/build_room_font.py` | Noto Sans CJK → 中文菜单字形子集 |
 | `python3 tools/export_gifs_v2.py` | 新版源图和时间轴 → `assets/gifs/daily/` 的 10 个动作 GIF |
 | `python3 tools/export_expression_preview.py` | 三关节待机、开心、好奇 → 三个独立表情 GIF，不替换触摸动作 |

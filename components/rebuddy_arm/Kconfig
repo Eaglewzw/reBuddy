@@ -1,0 +1,10 @@
+menu "reBuddy arm components"
+    config REBUDDY_ARM_MONITOR
+        bool "Start CAN1 in passive listen-only mode"
+        default n
+        help
+            Receives existing RS status broadcasts at 1 Mbps. Sends no frames
+            or ACKs and does not discover, configure or enable motors.
+            Another active CAN node is needed to acknowledge broadcasts.
+            Disabled by default: both transceivers remain in standby.
+endmenu

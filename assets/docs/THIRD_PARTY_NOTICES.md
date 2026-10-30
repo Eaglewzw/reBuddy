@@ -18,3 +18,6 @@
 当前睡眠使用日常素材目录中的无腮红 `rest-atlas.png` 和 `breath-atlas.png`；已删除不再使用的旧版睡眠修补脚本与源图。
 
 当前十组舞蹈来自用户提供的 `2D机械臂_当前10组合集.zip`，仅导入 `gifs/` 中的原始文件，未导入对比稿。来源及逐文件校验见 `assets/gifs/dance/manifest.json`，转换说明见该目录 README；代码许可证不自动覆盖这些素材。
+
+
+控制基础组件 `can_console_bsp`、`can_console_can`、`can_console_motor`、`can_console_ik`、`can_console_arm_motion` 来自用户提供的本机 `esp32c5_ui_console`，保留原源码的 SPDX/版权声明。来源提交和文件校验保存在 [arm_components.json](../config/arm_components.json)。`tests/host/arm_vendor_*` 为随组件迁入的主机回归及替身，调整了文件名和本地导入路径。模型 URDF 仅用于来源追溯，未嵌入固件；固件使用原组件的模型常量。
