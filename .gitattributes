@@ -1,0 +1,4 @@
+# Recorded CSV files use CRLF and are referenced by byte-exact SHA-256 hashes.
+# Preserve their original bytes when cloning on any platform.
+record/**/*.csv -text whitespace=cr-at-eol
+record/**/*.tch -text

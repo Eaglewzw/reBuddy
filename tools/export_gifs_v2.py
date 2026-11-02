@@ -143,7 +143,7 @@ def main():
         assert grid in (2,4)
         sheet=source.resize((grid*160,grid*160),RESAMPLE.LANCZOS);poses=[];meta=[]
         for i in range(grid*grid):
-            clear=name in ('probe-look-up','nuzzle-cheek','tilt-clear','happy-rise-clap','idle') or (name=='withdraw' and i<7) or (name=='recover' and i>6) or (name=='rest' and i<8)
+            clear=name in ('probe-look-up','nuzzle-cheek','tilt-clear','happy-rise-clap','idle') or (name=='rest' and i<8)
             im,record=prepare(sheet.crop((i%grid*160,i//grid*160,i%grid*160+160,i//grid*160+160)),clear,cavity_seeds_for(name,i))
             poses.append(im);meta.append(record)
         if name=='idle':

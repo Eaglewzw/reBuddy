@@ -1,0 +1,59 @@
+{
+  "schema": "rebuddy.gravity_diagnostics.v1",
+  "date": "2026-10-31",
+  "enable_requested": false,
+  "motion_requested": false,
+  "operator_reports_reliable_support": false,
+  "live_recording_enabled": false,
+  "fault_reproduced": false,
+  "root_cause": "unresolved; clean disabled-state reads do not validate enabled control",
+  "changes": [
+    "diagnose CLI retains SDK/raw evidence before validation",
+    "strict raw position-read diagnostic",
+    "reject parameter replies carrying failure status"
+  ],
+  "runs": [
+    {
+      "read_mode": "parallel",
+      "seconds_requested": 30,
+      "samples": 1500,
+      "success": true,
+      "sdk_compared": true,
+      "sdk_raw_mismatch_count": 0,
+      "out_of_range_count": 0,
+      "max_cycle_ms": 15.911177993984893,
+      "report": "build/record-review/feedback-audit-1793440113950780012.json",
+      "report_sha256": "0a0cc884fc9bd5a8e537f8f25977634ace2726f4698e3f54fce2e3c5ffda4659",
+      "raw_log": "build/record-review/feedback-audit-1793440113950780012.jsonl",
+      "raw_sha256": "9755c1fa02a9cfd8235f61d2aa81ee6e5fd0d1dcbe2664362a53e50525b17085"
+    },
+    {
+      "read_mode": "serial",
+      "seconds_requested": 30,
+      "samples": 504,
+      "success": true,
+      "sdk_compared": true,
+      "sdk_raw_mismatch_count": 0,
+      "out_of_range_count": 0,
+      "max_cycle_ms": 61.68458500178531,
+      "report": "build/record-review/feedback-audit-1793440156738018145.json",
+      "report_sha256": "d594f7bd70e8b80930d8e28a3e22a7f1cf5d144a586798bac565c76c7a049c60",
+      "raw_log": "build/record-review/feedback-audit-1793440156738018145.jsonl",
+      "raw_sha256": "8b07f36777bbf82448e8b57d347b4fda5134d4b644ecd4ef379bfcda697beff7"
+    },
+    {
+      "read_mode": "raw",
+      "seconds_requested": 30,
+      "samples": 1500,
+      "success": true,
+      "sdk_compared": false,
+      "sdk_raw_mismatch_count": 0,
+      "out_of_range_count": 0,
+      "max_cycle_ms": 8.631211996544152,
+      "report": "build/record-review/feedback-audit-1793440255789979090.json",
+      "report_sha256": "130c85239570e3d6cea600327e957ce7b79e7d8c627c7862eb9c5f6cfb354fa6",
+      "raw_log": "build/record-review/feedback-audit-1793440255789979090.jsonl",
+      "raw_sha256": "94605953f69834717ef9a7c8a81bafce15833b48dd2ba9d3023a565a10541cac"
+    }
+  ]
+}

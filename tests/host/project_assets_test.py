@@ -10,7 +10,7 @@ import xml.etree.ElementTree as ET
 root = Path(__file__).resolve().parents[2]
 gif_dir = root/'assets/gifs/daily'
 manifest = json.loads((gif_dir/'manifest.json').read_text())
-assert len(manifest['clips']) == 10
+assert len(manifest['clips']) == 8
 for obsolete in ('gifs-v2','gifs-preview','design','approved','reference','previews'):
     assert not (root/'assets'/obsolete).exists(), f'obsolete asset directory: {obsolete}'
 for path in (root/'assets').rglob('*'):
@@ -35,7 +35,7 @@ for doc in markdown:
         if not target or re.match(r'[a-z]+:', target):
             continue
         assert (doc.parent/unquote(target)).exists(), f'{doc.relative_to(root)}: {target}'
-print('PASS ten current GIFs, three expression GIFs, current source artwork and local asset links')
+print('PASS eight current GIFs, three expression GIFs, current source artwork and local asset links')
 
 for svg in (root/'assets').rglob('*.svg'):
     for element in ET.parse(svg).iter():

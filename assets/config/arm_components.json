@@ -28,14 +28,14 @@
     "components/can_console_motor/core/safety_manager.c": "336c7e022a926936659768f730b7272d22199fbf177974fd4bbb68027c02c899",
     "components/can_console_motor/core/safety_manager.h": "aa8b6d45664276ce70b240adf913751d096360810f40c2ca46624eb8e164b0c9",
     "components/can_console_motor/include/can_console_motor.h": "464e4fde1aede49bab70b59cbe467e71b5a4bda4e71ad818396accc90dddbffc",
-    "components/can_console_motor/include/can_console_motor_client.h": "968a527ee77942fd3283bd7e7b42b3eeb242364d375460c42601bbcd4dca95af",
+    "components/can_console_motor/include/can_console_motor_client.h": "be8544208c93faa0bbc908287d46353ffbca939b59618195d66622e4d1fc8efc",
     "components/can_console_motor/include/can_console_motor_runtime.h": "7638bf7d9ce41e7b79a2e872082dd9cbd6344ce4b9fd6d7b944437a0ed84b53c",
     "components/can_console_motor/include/can_console_motor_session.h": "6723074252be564445e2794256189fae7c889341880a27c40597d2b0a0bbba27",
     "components/can_console_motor/include/can_console_motor_types.h": "5c26d78f2b4e4edf1a497ad7c132862c4b6ce9410801128423aeab37c58dab92",
     "components/can_console_motor/mb_port.h": "e2a334cf9b06231301668612ebc74851519ebeedd980317d8a5e2938980076f7",
     "components/can_console_motor/protocol/host_protocol.c": "8030e03fec2fa83809799a61c7ecdd8056d7bb710f0856d7284e4f1ec1ad6e40",
     "components/can_console_motor/protocol/host_protocol.h": "4c305a645099b7d7434138b69bd34f31a328691bb0502dc423de6d18f7dc6b3c",
-    "components/can_console_motor/service/can_console_motor_client.c": "3776bf1a1bf402f3df084c72beacb113de033c86d37931afb598873bed19438f",
+    "components/can_console_motor/service/can_console_motor_client.c": "582ef9bcfbd54b1e8e03c157aa901ff04b1967b4192309e85ce589b32090f6d7",
     "components/can_console_motor/service/can_console_motor_runtime.c": "d943a6dba4cba05b472344fccbab4fab4d028592064cd3eb048fa796e43a9f54",
     "components/can_console_motor/service/frame_router.c": "fdf244949a4a4fd2ca7516273bfa7acf55757e70fae50fec46bb5050e9d23875",
     "components/can_console_motor/service/frame_router.h": "917d9266a56df599c8691925ab5f5edcb2f622a43a857caf61b5224715041eed",
@@ -83,5 +83,15 @@
     "components/can_console_arm_motion/src/arm_trajectory.c": "740301eed7313624904a90bd93d3e50f5ac7fea4f66b33c82ec250eff19d3cf5",
     "components/can_console_arm_motion/src/can_console_arm_motion.c": "2531ee3090a8b021282f45c6623704089a611d06d0e424a2cbde78b50634ab16"
   },
-  "integration_note": "Local CMake components. Upstream registry manifests and READMEs omitted; no sibling-project or registry dependency added."
+  "integration_note": "Local CMake components. Upstream registry manifests and READMEs omitted; no sibling-project or registry dependency added.",
+  "local_patches": {
+    "components/can_console_motor/include/can_console_motor_client.h": {
+      "upstream_sha256": "968a527ee77942fd3283bd7e7b42b3eeb242364d375460c42601bbcd4dca95af",
+      "reason": "Expose typed RS active-report subscription using the existing vendor frame builder; no enable, zero or run-mode changes."
+    },
+    "components/can_console_motor/service/can_console_motor_client.c": {
+      "upstream_sha256": "3776bf1a1bf402f3df084c72beacb113de033c86d37931afb598873bed19438f",
+      "reason": "Expose typed RS active-report subscription using the existing vendor frame builder; no enable, zero or run-mode changes."
+    }
+  }
 }

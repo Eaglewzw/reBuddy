@@ -1,0 +1,18 @@
+{
+  "success": false,
+  "enable_requested": true,
+  "disable_requested": true,
+  "disable_confirmed": true,
+  "zero_return_requested": false,
+  "zero_return_completed": false,
+  "idle_entry_requested": true,
+  "idle_entry_completed": false,
+  "folder": "/home/verser/esp32/reBuddy/record/gravity/20261101T074631Z-1793519191303016627",
+  "mock": false,
+  "errors": [
+    "RuntimeError: motor 1: unexpected mode or fault"
+  ],
+  "reason": "fault",
+  "logging_errors": [],
+  "clips": []
+}

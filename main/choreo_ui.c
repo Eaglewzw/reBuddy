@@ -389,9 +389,7 @@ void rb_choreo_ui_update(uint64_t now)
     rb_choreo_player_tick(&ui.player,now);
     if (running && !ui.player.running) draw();
     const rb_choreo_sample_t *sample=&ui.player.sample;
-    unsigned origin=sample->action_id==RB_ANIM_RECOVER?RB_POSE_FOLDED:RB_POSE_IDLE;
-    unsigned clip_index=sample->action_id<RB_ANIM_COUNT?rb_clip_map[origin][sample->action_id]:
-        sample->action_id<sizeof(rb_choreo_clip_map)/sizeof(rb_choreo_clip_map[0])?rb_choreo_clip_map[sample->action_id]:UINT8_MAX;
+    unsigned clip_index=sample->action_id<sizeof(rb_choreo_clip_map)/sizeof(rb_choreo_clip_map[0])?rb_choreo_clip_map[sample->action_id]:UINT8_MAX;
     if (clip_index==UINT8_MAX) {
         rb_choreo_player_stop(&ui.player,now);
         error_page("当前动作缺少动画，预览已停止。",EDITOR);draw();return;

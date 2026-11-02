@@ -16,6 +16,8 @@ static lv_point_t point;
 static bool pressed;
 static uint64_t flushed_pixels;
 static unsigned flushed_frames;
+static unsigned arm_commands;
+static void arm_command(void) {++arm_commands;}
 uint64_t rb_platform_now_ms(void) { return now; }
 static void flush(lv_display_t *d,const lv_area_t *area,uint8_t *data)
 {
@@ -271,11 +273,11 @@ int main(void)
     assert(pet.contact && pet.action==RB_ANIM_IDLE && pet.happy_ms==0);
     pressed=false; pump(100); click(145,110); pump(300);
     assert(pet.action==RB_ANIM_PROBE); snap("curious.ppm"); pump(1200);
-    click(145,110); click(145,110); click(145,110); pump(RB_MS_PROBE+RB_MS_WITHDRAW+400);
-    assert(pet.state==RB_PET_FOLDED); snap("folded.ppm");
+    click(145,110); click(145,110); click(145,110); pump(2*RB_MS_PROBE+400);
+    assert(pet.state==RB_PET_NORMAL && pet.pose==RB_POSE_IDLE); snap("repeated-tap.ppm");
     point=(lv_point_t){130,110}; pressed=true; pump(100);
     for (unsigned n=0;n<100;++n) { unsigned t=n%60; point.x=130+(t<=30?t:60-t)*2; pump(20); }
-    pump(RB_MS_RECOVER+400); assert(pet.state==RB_PET_NORMAL); snap("relaxed.ppm");
+    pump(RB_MS_NUZZLE_CYCLE+400); assert(pet.state==RB_PET_NORMAL); snap("relaxed.ppm");
     pressed=false; pump(100);
     /* Same moving contact on body cannot build happiness. */
     point=(lv_point_t){120,165}; pressed=true; pump(100);
@@ -302,16 +304,14 @@ int main(void)
     click(290,212); pump(100); snap("lazy.ppm");
     click(290,212); pump(100); click(240,156); pump((unsigned)(RB_MS_REST*RB_PLAYBACK_DURATION_SCALE*RB_STYLE_LAZY)+500);
     assert(pet.state==RB_PET_RESTING); snap("sleep.ppm");
-    lv_obj_t *sleep_hint=find_label(lv_screen_active(),"长按左下角恢复");
+    lv_obj_t *sleep_hint=find_label(lv_screen_active(),"点击左下恢复");
     assert(sleep_hint && !lv_obj_has_flag(sleep_hint,LV_OBJ_FLAG_HIDDEN));
     unsigned sleep_requests=pet.requests;
     click(145,110); click(145,110); click(145,110);
     click(290,212); assert(!lv_obj_has_flag(menu,LV_OBJ_FLAG_HIDDEN));
     click(240,156); assert(pet.state==RB_PET_RESTING && pet.requests==sleep_requests);
     click(290,212); assert(lv_obj_has_flag(menu,LV_OBJ_FLAG_HIDDEN));
-    click(28,212);
     point=(lv_point_t){145,110}; pressed=true; pump(2000); pressed=false; pump(100);
-    click(28,212); click(28,212);
     point=(lv_point_t){28,212}; pressed=true; pump(100);
     lv_indev_reset(indev,NULL); pressed=false; pump(100);
     point=(lv_point_t){28,212}; pressed=true; pump(100);
@@ -347,7 +347,7 @@ int main(void)
     assert(pet.state==RB_PET_RESTING);
     click(20,120); assert(pet.state==RB_PET_RESTING);
     click(145,110); pump(100); assert(pet.state==RB_PET_RESTING && pet.action==RB_ANIM_IDLE);
-    point=(lv_point_t){28,212}; pressed=true; pump(800); pressed=false; pump(100);
+    click(28,212);
     assert(pet.action==RB_ANIM_WAKE);
     assert(lv_obj_has_flag(sleep_hint,LV_OBJ_FLAG_HIDDEN));
     assert_action_frame(); /* Wake uses its own baked background, with no stale Z overlay. */
@@ -390,5 +390,15 @@ int main(void)
     click(28,212); assert(pet.state==RB_PET_STOPPED);
     assert(find_label(lv_screen_active(),"?")==NULL);
     printf("PASS reference UI, RGB565 sequence/cache fallback, anchors, gestures, STOP freeze and stable heap; cache=%zu bytes\n",rb_assets_cache_bytes());
+    rb_ui_set_arm_control(arm_command);rb_pet_init_sleep(&pet,now);
+    rb_pet_use_daily_timing(&pet,true);pet.motion_clock=true;
+    rb_ui_create(&pet);pump(100);snap("daily-boot-sleep.ppm");
+    assert(pet.state==RB_PET_RESTING && pet.requests==0);
+    click(145,110);click(278,18);assert(pet.requests==0 && arm_commands==0);
+    click(28,212);assert(pet.action==RB_ANIM_WAKE && pet.requests==1);
+    pump(10000);assert(pet.action==RB_ANIM_WAKE && pet.phase==0);
+    rb_pet_follow_motion(&pet,1,1,true);pump(100);assert(pet.state==RB_PET_NORMAL);
+    rb_ui_arm_status("IDLE HOLD",true);pump(100);assert(find_label(lv_screen_active(),"HOME"));
+    click(278,18);assert(arm_commands==1);snap("daily-arm-connected.ppm");
     rb_assets_close(); lv_deinit(); free(blob); free(room); return 0;
 }

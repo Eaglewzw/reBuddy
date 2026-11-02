@@ -13,6 +13,7 @@
 #include "service/motor_service.h"
 #include "transport/can_manager.h"
 #include "vendors/motor_vendor.h"
+#include "vendors/robstride/robstride_protocol.h"
 
 static bool valid_motor_id(uint8_t motor_id)
 {
@@ -51,6 +52,16 @@ static bool finite_target(const can_console_motor_target_t *target)
 uint8_t can_console_motor_max_id(void)
 {
     return (uint8_t)motor_manager_count();
+}
+
+esp_err_t can_console_motor_request_rs_report(uint8_t id, uint8_t host)
+{
+    motor_state_t m;
+    if (!id || !valid_motor_id(id) || !motor_manager_get_state(id,&m) ||
+        !m.vendor || strcmp(m.vendor->name,"robstride")) return ESP_ERR_INVALID_ARG;
+    twai_message_t frame;
+    robstride_build_active_report_frame(id,host,true,&frame);
+    return can_manager_send(m.channel,&frame,1);
 }
 
 esp_err_t can_console_motor_get_state(uint8_t motor_id,

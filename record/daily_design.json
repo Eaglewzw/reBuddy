@@ -1,0 +1,691 @@
+{
+  "schema": "rebuddy.daily.design.v1",
+  "status": "pc_prepared_pending_user_trial",
+  "motion_enabled": false,
+  "incident": "assets/docs/RS_PLAYBACK_INCIDENT.md",
+  "duration_policy": "Screen phase timing is an expressive target only. Physical speed/acceleration limits may require longer motion and a shared retimed screen timeline; never squeeze raw recordings into GIF duration.",
+  "poses": {
+    "ATTENTIVE": {
+      "joints_rad": [
+        -0.02854241178754498,
+        0.783538395283269,
+        1.1638101947073842,
+        -0.49324551224708557,
+        -0.05379759951257238,
+        -0.012223720568798337,
+        0.0010715288443344773
+      ],
+      "hardware_accepted": false,
+      "capture": {
+        "command": "pose idle",
+        "preset_file": "record/gravity/presets/idle.json",
+        "method": "Mean of approximately one second of continuous, stable measured seven-axis feedback; per-axis range <=0.5 degrees.",
+        "calibration_bound": true,
+        "automatic_motion": false
+      }
+    },
+    "SUPPORTED_REST": {
+      "joints_rad": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0010715288443344773
+      ],
+      "hardware_accepted": false
+    }
+  },
+  "transition_policy": {
+    "normal_actions": "Return PROBE/NUZZLE/TILT/HAPPY to the same validated ATTENTIVE pose; no implicit jumps.",
+    "sleep": "REST: slowly return J1-J6 to calibrated zero and hold enabled; SLEEP: verify zero then disable; WAKE: enable from measured pose and slowly return to ATTENTIVE.",
+    "interruption": "PC daily trial software PD torque budget rejection after full enable/ramp: abort action and latch checked current-position hold; quit/first SIGINT/SIGTERM: verified zero return then disable; failed hold, repeat interruption or other feedback/control failure: disable.",
+    "continuity": "Check position, velocity and acceleration continuity across actual physical segments. Repeated NUZZLE cycles need a periodic path rather than hard stops at every source sample.",
+    "recording_anchor": "Explicit calibration-bound gravity CSVs; generated entry/return connect exactly to saved ATTENTIVE. Raw interrupted files retain their original incomplete status."
+  },
+  "storage_policy": {
+    "embed_source_recordings": false,
+    "shared_anchors": true,
+    "format": "Pending actual path reduction/error validation; keep original TCH/CSV as PC-side source evidence.",
+    "motion_budget_bytes": 524288
+  },
+  "actions": [
+    {
+      "file_order": 1,
+      "id": "IDLE",
+      "pet_action_id": 0,
+      "visual_gif": "assets/gifs/daily/01_待机眨眼.gif",
+      "visual_sha256": "683794423745d9e89729d449d0ab043c9770ae63ff8a1258ace69033904c3c82",
+      "screen_duration_ms": 6000,
+      "physical_duration_ms": null,
+      "intent": "保持已保存的七轴待机位置；眨眼仅为屏幕效果。",
+      "entry_pose": "ATTENTIVE",
+      "exit_pose": "ATTENTIVE_ENABLED",
+      "recording_reference": null,
+      "recording_use": "no teaching required",
+      "phases": [
+        {
+          "id": "hold_attentive",
+          "screen_target_ms": 6000,
+          "description": "保持已验收互动姿态"
+        }
+      ],
+      "joint_keyframes": null,
+      "hardware_accepted": false,
+      "physical_motion_design": {
+        "active_joints": [],
+        "held_joints": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "sequence": "保持 ATTENTIVE，持续发送位置保持与重力补偿指令。",
+        "amplitude": "按本地整理后计划；不使用旧 TCH 或 GIF 像素推导角度。",
+        "character": "保持已保存的七轴待机位置；眨眼仅为屏幕效果。"
+      },
+      "prepared_reference": "record/daily_ready/manifest.json#IDLE"
+    },
+    {
+      "file_order": 2,
+      "id": "PROBE",
+      "pet_action_id": 1,
+      "visual_gif": "assets/gifs/daily/02_抬头看你.gif",
+      "visual_sha256": "36f10f6624531f9239d979263e8e6e81547c916388baa95c88eb2f99058c4077",
+      "screen_duration_ms": 5000,
+      "physical_duration_ms": 9080,
+      "intent": "使用本次抬头示教数据，衔接统一待机起终点。",
+      "entry_pose": "ATTENTIVE",
+      "exit_pose": "ATTENTIVE_ENABLED",
+      "recording_reference": null,
+      "recording_use": "explicit gravity CSV source and derived plan",
+      "phases": [
+        {
+          "id": "notice",
+          "screen_target_ms": 500,
+          "description": "短暂停顿"
+        },
+        {
+          "id": "look_up",
+          "screen_target_ms": 1300,
+          "description": "小幅抬头"
+        },
+        {
+          "id": "look_hold",
+          "screen_target_ms": 1500,
+          "description": "注视停留"
+        },
+        {
+          "id": "return_attentive",
+          "screen_target_ms": 1700,
+          "description": "平滑回位"
+        }
+      ],
+      "joint_keyframes": null,
+      "hardware_accepted": false,
+      "physical_motion_design": {
+        "active_joints": [
+          4
+        ],
+        "held_joints": [
+          1,
+          2,
+          3,
+          5,
+          6,
+          7
+        ],
+        "sequence": "待机 → 已录抬头动作 → 生成返回待机段。",
+        "amplitude": "按本地整理后计划；不使用旧 TCH 或 GIF 像素推导角度。",
+        "character": "使用本次抬头示教数据，衔接统一待机起终点。"
+      },
+      "prepared_reference": "record/daily_ready/manifest.json#PROBE"
+    },
+    {
+      "file_order": 3,
+      "id": "NUZZLE",
+      "pet_action_id": 2,
+      "visual_gif": "assets/gifs/daily/03_轻蹭.gif",
+      "visual_sha256": "d981470523426d5ecdc68eface44d0eecc2d4e429a6b0d87040d4cd4f72d21bf",
+      "screen_duration_ms": 6000,
+      "physical_duration_ms": 17619,
+      "intent": "使用本次轻蹭示教数据，衔接统一待机起终点。",
+      "entry_pose": "ATTENTIVE",
+      "exit_pose": "ATTENTIVE_ENABLED",
+      "recording_reference": null,
+      "recording_use": "explicit gravity CSV source and derived plan",
+      "phases": [
+        {
+          "id": "lean_in",
+          "screen_target_ms": 800,
+          "description": "缓慢侧靠"
+        },
+        {
+          "id": "nuzzle_first",
+          "screen_target_ms": 1600,
+          "description": "第一次轻蹭往返"
+        },
+        {
+          "id": "nuzzle_second",
+          "screen_target_ms": 1600,
+          "description": "第二次轻蹭往返"
+        },
+        {
+          "id": "return_attentive",
+          "screen_target_ms": 2000,
+          "description": "缓慢回位"
+        }
+      ],
+      "joint_keyframes": null,
+      "hardware_accepted": false,
+      "physical_motion_design": {
+        "active_joints": [
+          5,
+          6
+        ],
+        "held_joints": [
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "sequence": "待机 → 已录轻蹭动作 → 生成返回待机段。",
+        "amplitude": "按本地整理后计划；不使用旧 TCH 或 GIF 像素推导角度。",
+        "character": "使用本次轻蹭示教数据，衔接统一待机起终点。"
+      },
+      "prepared_reference": "record/daily_ready/manifest.json#NUZZLE"
+    },
+    {
+      "file_order": 4,
+      "id": "TILT",
+      "pet_action_id": 3,
+      "visual_gif": "assets/gifs/daily/04_疑惑歪头.gif",
+      "visual_sha256": "73a5555bf1c186794a29de9853f68cee64975f90758b4560c38f8013ec78da09",
+      "screen_duration_ms": 5000,
+      "physical_duration_ms": 21722,
+      "intent": "使用本次歪头示教数据，衔接统一待机起终点。",
+      "entry_pose": "ATTENTIVE",
+      "exit_pose": "ATTENTIVE_ENABLED",
+      "recording_reference": null,
+      "recording_use": "explicit gravity CSV source and derived plan",
+      "phases": [
+        {
+          "id": "notice",
+          "screen_target_ms": 500,
+          "description": "稍停"
+        },
+        {
+          "id": "tilt",
+          "screen_target_ms": 1250,
+          "description": "侧歪"
+        },
+        {
+          "id": "tilt_hold",
+          "screen_target_ms": 1250,
+          "description": "保持疑惑"
+        },
+        {
+          "id": "return_attentive",
+          "screen_target_ms": 2000,
+          "description": "回正"
+        }
+      ],
+      "joint_keyframes": null,
+      "hardware_accepted": false,
+      "physical_motion_design": {
+        "active_joints": [
+          6
+        ],
+        "held_joints": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          7
+        ],
+        "sequence": "待机 → 已录歪头动作 → 生成返回待机段。",
+        "amplitude": "按本地整理后计划；不使用旧 TCH 或 GIF 像素推导角度。",
+        "character": "使用本次歪头示教数据，衔接统一待机起终点。"
+      },
+      "prepared_reference": "record/daily_ready/manifest.json#TILT"
+    },
+    {
+      "file_order": 5,
+      "id": "HAPPY",
+      "pet_action_id": 6,
+      "visual_gif": "assets/gifs/daily/05_开心回应.gif",
+      "visual_sha256": "c1ac445e084d65aab2ec078193ab15dd24581d7a69f0463bc0678d97ba40c78d",
+      "screen_duration_ms": 8000,
+      "physical_duration_ms": 11011,
+      "intent": "从待机平稳切入，快速展开，夹爪开合两次同时J1左右摆动两轮，随后立即平滑返回待机。",
+      "entry_pose": "ATTENTIVE",
+      "exit_pose": "ATTENTIVE_ENABLED",
+      "recording_reference": null,
+      "recording_use": "explicit gravity CSV source and derived plan",
+      "phases": [
+        {
+          "id": "rise",
+          "screen_target_ms": 2000,
+          "description": "舒展"
+        },
+        {
+          "id": "open_first",
+          "screen_target_ms": 1000,
+          "description": "第一次轻开"
+        },
+        {
+          "id": "close_first",
+          "screen_target_ms": 1000,
+          "description": "第一次合拢"
+        },
+        {
+          "id": "open_second",
+          "screen_target_ms": 1000,
+          "description": "第二次轻开"
+        },
+        {
+          "id": "close_second",
+          "screen_target_ms": 1000,
+          "description": "第二次合拢"
+        },
+        {
+          "id": "return_attentive",
+          "screen_target_ms": 2000,
+          "description": "回位"
+        }
+      ],
+      "joint_keyframes": null,
+      "hardware_accepted": false,
+      "physical_motion_design": {
+        "active_joints": [
+          1,
+          2,
+          3,
+          4,
+          7
+        ],
+        "held_joints": [
+          5,
+          6
+        ],
+        "sequence": "待机 → 平稳切入 → 已录快速展开 → 夹爪120°开合两次，同时J1相对展开角±5°摆动两轮，共3.6秒 → 立即平滑回待机。",
+        "amplitude": "按本地整理后计划；不使用旧 TCH 或 GIF 像素推导角度。",
+        "character": "夹爪与底座同步表达开心，结束后立即回待机。"
+      },
+      "prepared_reference": "record/daily_ready/manifest.json#HAPPY"
+    },
+    {
+      "file_order": 6,
+      "id": "REST",
+      "pet_action_id": 7,
+      "visual_gif": "assets/gifs/daily/06_慢慢入睡.gif",
+      "visual_sha256": "bb564b8201a70c388852240c74ba883dcfb4e7e30fc9851c68be380aff96ab40",
+      "screen_duration_ms": 7000,
+      "physical_duration_ms": 4364,
+      "intent": "慢慢回到机械零位，保持使能。",
+      "entry_pose": "ATTENTIVE",
+      "exit_pose": "ZERO_ENABLED",
+      "recording_reference": null,
+      "recording_use": "no teaching required",
+      "phases": [
+        {
+          "id": "drowsy_hold",
+          "screen_target_ms": 2000,
+          "description": "屏幕慢眨，实体暂保持"
+        },
+        {
+          "id": "lower_to_rest",
+          "screen_target_ms": 4000,
+          "description": "缓慢降低"
+        },
+        {
+          "id": "rest_settle",
+          "screen_target_ms": 1000,
+          "description": "稳定在休息姿态"
+        }
+      ],
+      "joint_keyframes": null,
+      "hardware_accepted": false,
+      "physical_motion_design": {
+        "active_joints": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "held_joints": [
+          7
+        ],
+        "sequence": "J1～J6 缓慢回零 → 稳定到位 → 持续位置保持，不失能。",
+        "amplitude": "按本地整理后计划；不使用旧 TCH 或 GIF 像素推导角度。",
+        "character": "慢慢回到机械零位，保持使能。"
+      },
+      "prepared_reference": "record/daily_ready/manifest.json#REST"
+    },
+    {
+      "file_order": 7,
+      "id": "SLEEP",
+      "pet_action_id": null,
+      "visual_gif": "assets/gifs/daily/07_熟睡呼吸与Z.gif",
+      "visual_sha256": "10e726f9364c48790f1b2ef3b27faa7fd8e955a667c0cc1ead56494d4e38cc5b",
+      "screen_duration_ms": 6000,
+      "physical_duration_ms": null,
+      "intent": "机械零位确认到位后失能；无需实体呼吸动作。",
+      "entry_pose": "ZERO_ENABLED",
+      "exit_pose": "ZERO_DISABLED",
+      "recording_reference": null,
+      "recording_use": "no teaching required",
+      "phases": [
+        {
+          "id": "hold_rest",
+          "screen_target_ms": 6000,
+          "description": "实体保持，屏幕循环"
+        }
+      ],
+      "joint_keyframes": null,
+      "hardware_accepted": false,
+      "physical_motion_design": {
+        "active_joints": [],
+        "held_joints": [],
+        "sequence": "若仍在待机则先执行入睡；零位确认后失能，等待唤醒。",
+        "amplitude": "按本地整理后计划；不使用旧 TCH 或 GIF 像素推导角度。",
+        "character": "机械零位确认到位后失能；无需实体呼吸动作。"
+      },
+      "prepared_reference": "record/daily_ready/manifest.json#SLEEP"
+    },
+    {
+      "file_order": 8,
+      "id": "WAKE",
+      "pet_action_id": 8,
+      "visual_gif": "assets/gifs/daily/08_迷糊唤醒.gif",
+      "visual_sha256": "24077ea623ae9b0d76b0c3001957755cf524a8fbb5e76b9f209aca116ce9f8a9",
+      "screen_duration_ms": 5500,
+      "physical_duration_ms": 4364,
+      "intent": "从熟睡使能，缓慢回到保存的待机姿态。",
+      "entry_pose": "ZERO_DISABLED",
+      "exit_pose": "ATTENTIVE_ENABLED",
+      "recording_reference": null,
+      "recording_use": "no teaching required",
+      "phases": [
+        {
+          "id": "wake_notice",
+          "screen_target_ms": 500,
+          "description": "屏幕睁眼，实体暂保持"
+        },
+        {
+          "id": "rise_from_rest",
+          "screen_target_ms": 3500,
+          "description": "缓慢抬起"
+        },
+        {
+          "id": "attentive_settle",
+          "screen_target_ms": 1500,
+          "description": "恢复互动姿态"
+        }
+      ],
+      "joint_keyframes": null,
+      "hardware_accepted": false,
+      "physical_motion_design": {
+        "active_joints": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6,
+          7
+        ],
+        "held_joints": [],
+        "sequence": "读取实际位置 → 使能并渐入保持 → 缓慢回待机 → 持续保持。",
+        "amplitude": "按本地整理后计划；不使用旧 TCH 或 GIF 像素推导角度。",
+        "character": "从熟睡使能，缓慢回到保存的待机姿态。"
+      },
+      "prepared_reference": "record/daily_ready/manifest.json#WAKE"
+    }
+  ],
+  "recording_review": [
+    {
+      "file": "trajectory-1.tch",
+      "sha256": "15bb8e9984d9326121afbd729b2f5dbdc9df114bec6dbdc74e21390f513e6ab0",
+      "samples": 537,
+      "duration_s": 13.87,
+      "start_deg": [
+        -3.008,
+        0.201,
+        1.604,
+        1.427,
+        0.218,
+        2.79,
+        0.0
+      ],
+      "end_deg": [
+        -3.14,
+        0.155,
+        1.341,
+        2.154,
+        1.008,
+        2.922,
+        0.0
+      ],
+      "range_deg": [
+        0.544,
+        51.2,
+        76.868,
+        38.325,
+        1.186,
+        0.201,
+        0.0
+      ],
+      "interpretation": "Large joint excursions are measured; setup/expressive/return phase boundaries require review. Recorded motion is not proof of safe replay."
+    },
+    {
+      "file": "trajectory-2.tch",
+      "sha256": "cb5e417e820ae724c6e43bcb03af0e7fc9c63be73cf672c28c9be40d03aa3c7f",
+      "samples": 553,
+      "duration_s": 14.38,
+      "start_deg": [
+        -1.14,
+        0.218,
+        1.558,
+        1.667,
+        2.154,
+        2.744,
+        0.0
+      ],
+      "end_deg": [
+        -1.495,
+        0.155,
+        1.364,
+        2.55,
+        -1.364,
+        2.991,
+        0.0
+      ],
+      "range_deg": [
+        2.217,
+        65.592,
+        89.101,
+        60.006,
+        4.945,
+        3.209,
+        0.0
+      ],
+      "interpretation": "Large joint excursions are measured; setup/expressive/return phase boundaries require review. Recorded motion is not proof of safe replay."
+    },
+    {
+      "file": "trajectory-3.tch",
+      "sha256": "6c2c2c059953dba4ace7aafd224d2459d27582b893b42575d73945252aef7049",
+      "samples": 507,
+      "duration_s": 12.969,
+      "start_deg": [
+        1.1,
+        0.155,
+        1.341,
+        2.332,
+        -0.9,
+        2.922,
+        0.0
+      ],
+      "end_deg": [
+        1.581,
+        0.155,
+        1.364,
+        2.309,
+        -0.178,
+        3.008,
+        0.0
+      ],
+      "range_deg": [
+        3.449,
+        88.396,
+        100.525,
+        82.294,
+        7.357,
+        0.178,
+        0.0
+      ],
+      "interpretation": "Large joint excursions are measured; setup/expressive/return phase boundaries require review. Recorded motion is not proof of safe replay."
+    },
+    {
+      "file": "trajectory-4.tch",
+      "sha256": "b30f0a79f85cdd71df32f0990d0cc472ca8e05acbabcc6759388d07e3ac033c9",
+      "samples": 421,
+      "duration_s": 10.83,
+      "start_deg": [
+        0.659,
+        0.155,
+        1.341,
+        2.263,
+        -0.596,
+        5.363,
+        0.0
+      ],
+      "end_deg": [
+        1.627,
+        0.155,
+        1.364,
+        2.945,
+        -4.131,
+        7.93,
+        0.0
+      ],
+      "range_deg": [
+        4.526,
+        59.416,
+        63.043,
+        7.317,
+        31.725,
+        67.282,
+        0.0
+      ],
+      "interpretation": "Large joint excursions are measured; setup/expressive/return phase boundaries require review. Recorded motion is not proof of safe replay."
+    }
+  ],
+  "release_blockers": [
+    "Latest actions have opt-in native C5 CAN execution and feedback-driven screen timing; C5 hardware acceptance is pending."
+  ],
+  "latest_read_only_probe": {
+    "date": "2026-10-31",
+    "validation_passed": true,
+    "enable_requested": false,
+    "motion_requested": false,
+    "evidence": "assets/verification/rs_recalibration.json",
+    "joint_positions_deg": [
+      -0.00244,
+      0.00244,
+      -0.00244,
+      0.0044,
+      -0.00439,
+      0.0,
+      0.0
+    ],
+    "motor_status": {
+      "1": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "2": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "3": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "4": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "5": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "6": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "7": {
+        "mode": 0,
+        "fault_bits": 0
+      }
+    },
+    "runtime": {
+      "python": "/home/verser/Python/lerobot/.venv/bin/python",
+      "motorbridge": "0.5.3"
+    }
+  },
+  "current_calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+  "operator_update": {
+    "date": "2026-10-31",
+    "source": "current_chat_user",
+    "drop_issue_reported_resolved": true,
+    "reliable_support_and_stop_reported": true,
+    "note": "用户确认现场问题已解决；历史事件记录保留。本轮为实体动作设计，未通电验收新轨迹。"
+  },
+  "physical_choreography": {
+    "version": 1,
+    "target": "reBot Arm B601-RS physical arm",
+    "joint_roles": {
+      "1": "shoulder_pan / 底座转向",
+      "2": "shoulder_lift / 肩",
+      "3": "elbow_flex / 肘",
+      "4": "wrist_flex / 腕俯仰",
+      "5": "wrist_yaw / 腕偏转",
+      "6": "wrist_roll / 腕旋转",
+      "7": "gripper / 同一夹爪双指"
+    },
+    "mapping_evidence": "assets/verification/rs_recalibration.json",
+    "amplitude_status": "下面的幅度是编排候选范围，不是已验证的电机目标或安全限值。以新标定下的互动姿态为基准，方向符号与末端安装朝向确认后才生成绝对关节角。",
+    "coordinate_note": "URDF 关节坐标、LeRobot follower 坐标与原始电机坐标不可直接混用；特别是肩肘的方向和零点需要核对。",
+    "head_frame_note": "将末端装饰/夹爪组件作为角色头部。J4/J5/J6 是首选分工；最终俯仰、偏转、侧歪需按真实头部安装坐标验证，必要时腕部协同。",
+    "anchors_required": [
+      "ATTENTIVE：朝向用户、肩肘自然弯曲、留有腕部双向余量的七轴实测姿态",
+      "SUPPORTED_REST：与实际支撑适配的七轴实测休息姿态",
+      "HAPPY_EXTENDED：肩肘舒展、末端略上升的实测姿态",
+      "J7 经标定的互动开度与表达开度"
+    ],
+    "trajectory_policy": "使用连续时间轨迹；停留点位置、速度、加速度连续，正常首尾速度和加速度为零。限速后若超出 GIF 时间，同步延长屏幕阶段。125ms 显示帧不能作为电机跳点周期。",
+    "commissioning_order": [
+      "TILT",
+      "PROBE",
+      "NUZZLE",
+      "HAPPY",
+      "REST",
+      "WAKE",
+      "IDLE",
+      "SLEEP"
+    ],
+    "sleep_policy": "首版睡眠保持不动，呼吸由屏幕表现；实体呼吸可在休息姿态验收后作为独立可选动作评估。",
+    "next_input": "重新校零后的 ATTENTIVE 与 SUPPORTED_REST 七轴姿态，以及头部安装方向；现有零点回读不能代替互动姿态。"
+  },
+  "local_trial": "tools/daily session --supported",
+  "firmware_integration": "native_CAN_execution_opt_in; C5_hardware_acceptance_pending"
+}

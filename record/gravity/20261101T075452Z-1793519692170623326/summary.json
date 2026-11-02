@@ -1,0 +1,20 @@
+{
+  "success": false,
+  "enable_requested": true,
+  "disable_requested": true,
+  "disable_confirmed": true,
+  "zero_return_requested": false,
+  "zero_return_completed": false,
+  "idle_entry_requested": true,
+  "idle_entry_completed": false,
+  "startup_zero_requested": true,
+  "startup_zero_completed": false,
+  "folder": "/home/verser/esp32/reBuddy/record/gravity/20261101T075452Z-1793519692170623326",
+  "mock": false,
+  "errors": [
+    "RuntimeError: 自动待机未稳定到位；未开始拖动录制"
+  ],
+  "reason": "fault",
+  "logging_errors": [],
+  "clips": []
+}

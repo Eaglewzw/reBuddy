@@ -9,7 +9,7 @@
 #define RB_ARM_FEEDBACK_MAX_AGE_US 100000LL
 
 typedef enum {
-    RB_ARM_UNINITIALIZED, RB_ARM_STANDBY, RB_ARM_MONITORING, RB_ARM_FAULT
+    RB_ARM_UNINITIALIZED, RB_ARM_STANDBY, RB_ARM_MONITORING, RB_ARM_FAULT, RB_ARM_CONTROL
 } rb_arm_state_t;
 
 typedef struct {
@@ -33,6 +33,9 @@ typedef struct {
  * No trajectory, calibration, motor enable, reset or zero write is performed.
  */
 esp_err_t rb_arm_init(bool monitor);
+/* Active CAN transport only. Motors remain disabled until an explicit daily
+ * request; initialization never sends enable/zero/trajectory commands. */
+esp_err_t rb_arm_init_control(void);
 /* Concurrent read-only snapshots after init returns. Invalid feedback is NaN.
  * Seven latest measurements are not an atomic physical joint sample.
  */

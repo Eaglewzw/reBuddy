@@ -2,7 +2,7 @@
 
 | 目录 | 内容 | 用途 |
 | --- | --- | --- |
-| [daily](daily/README.md) | 10 个日常动作 | 当前固件动画源 |
+| [daily](daily/README.md) | 8 个日常动作 | 当前固件动画源 |
 | [dance](dance/README.md) | 10 个基本舞蹈＋自动开场与收尾 | 当前编排动画源 |
 | [expressions](expressions/README.md) | 待机、开心、好奇三个独立表情 | 补充预览 |
 

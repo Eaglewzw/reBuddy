@@ -1,12 +1,12 @@
 {
-  "status": "arm_components_integrated_motion_disabled",
-  "date": "2026-10-30",
+  "status": "daily_cleanup_verified_host_playback_quarantined",
+  "date": "2026-10-31",
   "target": "esp32c5",
-  "application_sha256": "de9dc50dbeffd2822f2df72d9d08d4db332a2197b387f7dd27d211436945e55f",
-  "application_bytes": 6002528,
+  "application_sha256": "ba0eb96e0fb7bf2c02a1f43c5786eb4892078f24ad6097271326e71db5804b0d",
+  "application_bytes": 5487808,
   "application_note": "Local v5.5.5 build: build/reBuddy.bin; not flashed. Repository dependency lock remains 5.5.6.",
   "host_tests": {
-    "passed": 19,
+    "passed": 20,
     "failed": 0,
     "names": [
       "board_input",
@@ -27,27 +27,29 @@
       "arm_adapter",
       "arm_component_snapshot",
       "arm_vendor_joint_path",
-      "arm_vendor_teach"
+      "arm_vendor_teach",
+      "rs_record_playback"
     ]
   },
   "coverage": [
     "Independent Python decoder and firmware C decoder CRC validation for every runtime frame.",
     "Every one of the 100 selected-action seams shares exact neutral pixels, including repeat and base turn.",
-    "Daily decoded pixels/timestamps and room hash match the previous Git HEAD; source GIF bytes unchanged.",
+    "Remaining eight daily GIF bytes and all twenty active runtime frame CRCs/timestamps match previous Git HEAD; retired fold/unfold clips and triggers removed.",
     "Forward/reverse seeks, bounded depth, self-reference/corrupt payload rejection, fallback and cache memory tested.",
     "Real LVGL editing, half-beat adjustments, stop/replay, all ten actions, existing NVS schema and legacy 500ms holds tested.",
     "Generic motion bridge joint bounds, analytic speed/acceleration duration, endpoints and invalid arguments tested; no calibrated trajectories or motor backend.",
     "Full firmware build, application reserve enforcement and exact-boundary/over-budget tests passed.",
     "25 reviewed enclosed-cavity samples reveal the room; eye/metal highlights preserved. All 600 dance samples compared to the pre-fix coverage: changes confined to reviewed holes plus one-pixel edges.",
-    "Pinned local CAN/BSP/motor/IK/motion sources; adapter boot and every initialization failure, seven-channel feedback validity and bus faults; vendor planner/teach regressions. Both standby and passive-monitor firmware builds passed."
+    "Pinned CAN/BSP/motor/IK/motion source checks and adapter/vendor regressions passed. Current default standby firmware built; prior passive-monitor build remains historical evidence only.",
+    "Retired IDs 4/5 rejected, repeated taps remain normal, gesture cleanup and sleep/wake regression passed. Host playback lock, rejected-frame logging, offline TCH/curve/bridge/status/watchdog tests passed; no hardware acceptance."
   ],
   "assets": {
-    "gif_count": 22,
-    "daily_gif_count": 10,
+    "gif_count": 20,
+    "daily_gif_count": 8,
     "dance_gif_count": 10,
     "automatic_bookend_gif_count": 2,
-    "runtime_frame_count": 511,
-    "runtime_bytes": 5064506,
+    "runtime_frame_count": 486,
+    "runtime_bytes": 4552514,
     "nominal_fps": 8,
     "dance_sampling_ms": 50,
     "dance_standard_target_fps": 20,
@@ -56,8 +58,9 @@
     "dance_max_delta_depth": 7,
     "animation_cache_peak_bytes": 614400,
     "previous_animation_cache_peak_bytes": 921600,
-    "previous_runtime_bytes": 5422043,
-    "base_turn_note": "Sparse original turn poses retained; offline neutral bridges only. Not 20 distinct turn poses per second."
+    "previous_runtime_bytes": 5064506,
+    "base_turn_note": "Sparse original turn poses retained; offline neutral bridges only. Not 20 distinct turn poses per second.",
+    "saved_runtime_bytes": 511992
   },
   "choreography": {
     "schema_version": 1,
@@ -80,8 +83,8 @@
   "flash": {
     "total_bytes": 8388608,
     "application_partition_bytes": 8323072,
-    "application_bytes": 6002528,
-    "application_free_bytes": 2320544,
+    "application_bytes": 5487808,
+    "application_free_bytes": 2835264,
     "reserved_bytes": 2097152,
     "future_motion_data_bytes": 524288,
     "future_code_growth_bytes": 1048576,
@@ -90,9 +93,9 @@
   "hardware_tested": false,
   "flashed": false,
   "pushed": false,
-  "build_log": "/tmp/rebuddy-arm-build.log",
-  "test_log": "/tmp/rebuddy-arm-host.log",
-  "preview": "build/cavity-fix/dance-preview-fixed.mp4",
+  "build_log": "/tmp/rebuddy-cleanup-firmware.log",
+  "test_log": "/tmp/rebuddy-cleanup-tests.log",
+  "preview": "build/daily-cleanup-preview/contact-sheet.png",
   "limitations": [
     "Frame rate and decode/transfer latency need board measurements.",
     "Shared-neutral joins do not provide arbitrary pose-to-pose dancing.",
@@ -116,7 +119,18 @@
     "monitor_build": {
       "application_bytes": 6002528,
       "sha256": "30d19f2479b92514ca9beea2641efac11f1e42df54d100a6f8a8543a559a60f5",
-      "build_log": "/tmp/rebuddy-arm-monitor-build.log"
+      "build_log": "/tmp/rebuddy-arm-monitor-build.log",
+      "scope": "Historical pre-cleanup monitor build (2026-10-30); not rebuilt in this change."
     }
+  },
+  "host_playback": {
+    "status": "quarantined_after_observed_drop",
+    "recorded_actions": 4,
+    "offline_checks_passed": 4,
+    "attempted_actions": 1,
+    "accepted_actions": 0,
+    "playback_enabled": false,
+    "incident": "assets/verification/rs_playback_incident.json",
+    "note": "PC SocketCAN trial; unrelated to ESP32 firmware hardware_tested flag. Disable was confirmed but does not establish safe mechanical support."
   }
 }

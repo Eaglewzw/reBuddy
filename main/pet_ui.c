@@ -1,4 +1,5 @@
 #include "pet_ui.h"
+#include "rb_daily.h"
 #include "pet_assets.h"
 #include "choreo_ui.h"
 #include "lvgl.h"
@@ -19,6 +20,17 @@ static unsigned previous_clip;
 static rb_pet_action_t previous_action;
 static bool settings_open;
 static bool choreography_requested;
+static void (*arm_command)(void);
+static lv_obj_t *arm_button,*arm_status;
+void rb_ui_set_arm_control(void (*command)(void)) { arm_command=command; }
+void rb_ui_arm_status(const char *status,bool active)
+{
+    if(!arm_button)return;
+    lv_label_set_text(arm_button,"HOME");
+    if(active)lv_obj_remove_flag(lv_obj_get_parent(arm_button),LV_OBJ_FLAG_HIDDEN);
+    else lv_obj_add_flag(lv_obj_get_parent(arm_button),LV_OBJ_FLAG_HIDDEN);
+    lv_label_set_text(arm_status,status);
+}
 /* Decide on touch-down, so holding Pause cannot also restore that pause. */
 static enum { RESTORE_NONE, RESTORE_CLICK, RESTORE_HOLD } restore_gesture;
 static uint64_t feedback_ms,raw_down_at;
@@ -50,6 +62,8 @@ static bool resting(void)
         ((pet->state==RB_PET_RESTING) || pet->action==RB_ANIM_REST ||
          (pet->pending_valid && pet->pending==RB_ANIM_REST));
 }
+static bool asleep(void)
+{ return pet->state==RB_PET_RESTING && pet->action==RB_ANIM_IDLE; }
 static void touch(lv_event_t *event)
 {
     if (rb_choreo_ui_active() || choreography_requested) return;
@@ -78,6 +92,7 @@ static void button_event(lv_event_t *event)
     if (rb_choreo_ui_active() || choreography_requested) return;
     intptr_t id=(intptr_t)lv_event_get_user_data(event);
     lv_event_code_t code=lv_event_get_code(event);
+    if(id==7) { if(code==LV_EVENT_CLICKED && arm_command)arm_command();return; }
     if (code==LV_EVENT_PRESS_LOST || code==LV_EVENT_INDEV_RESET) {
         if (id==3) restore_gesture=RESTORE_NONE;
         if (id==5) wake_armed=false;
@@ -95,8 +110,8 @@ static void button_event(lv_event_t *event)
         }
     }
     if (id==5) {
-        if (code==LV_EVENT_PRESSED) wake_armed=resting();
-        else if (code==LV_EVENT_LONG_PRESSED && wake_armed && resting()) {
+        if (code==LV_EVENT_PRESSED) wake_armed=asleep();
+        else if (code==LV_EVENT_CLICKED && wake_armed && asleep()) {
             wake_armed=false; rb_pet_wake(pet);
             if (indev) lv_indev_wait_release(indev);
         } else if (code==LV_EVENT_CLICKED) wake_armed=false;
@@ -154,6 +169,7 @@ static lv_obj_t *button(lv_obj_t *parent,int x,int y,int w,int h,const char *lab
 void rb_ui_create(rb_pet_t *engine)
 {
     pet=engine; settings_open=false; restore_gesture=RESTORE_NONE; body_frame=UINT32_MAX; body_updates=0;
+    arm_button=arm_status=NULL;
     wake_armed=false;
     choreography_requested=false;
     feedback_ms=0; feedback_pending=false; anchor=&rb_frames[0];
@@ -195,6 +211,11 @@ void rb_ui_create(rb_pet_t *engine)
     stop_label=button(root,8,192,44,40,LV_SYMBOL_PAUSE,3,0xeee7dd);
     settings_label=button(root,268,192,44,40,LV_SYMBOL_SETTINGS,0,0xeeeee3);
     wake_label=button(root,8,192,44,40,LV_SYMBOL_REFRESH,5,0xeee7dd);
+    if(arm_command) {
+        arm_button=button(root,246,4,66,28,"HOME",7,0xd8ef79);
+        hidden(lv_obj_get_parent(arm_button),true);
+        arm_status=text(root,8,10,"ARM OFF");
+    }
     rb_ui_update();
 }
 void rb_ui_update(void)
@@ -221,7 +242,8 @@ void rb_ui_update(void)
        would skip authored 120/130ms GIF boundaries and alter their pacing. */
     if (body_frame==UINT32_MAX || !stopped) {
         unsigned origin=pet->action==RB_ANIM_IDLE?pet->pose:pet->origin;
-        unsigned clip_index=rb_clip_map[origin][pet->action];
+        const rb_daily_action_t *daily=pet->daily_timing?rb_daily_for_screen(pet->action,origin):NULL;
+        unsigned clip_index=daily?daily->gif_index:rb_clip_map[origin][pet->action];
         const rb_clip_meta_t *clip=&rb_clips[clip_index];
         if (clip_index!=previous_clip || pet->action!=previous_action) idle_clock_ms=0;
         else if (!stopped && pet->action==RB_ANIM_IDLE) idle_clock_ms+=elapsed;
@@ -230,7 +252,8 @@ void rb_ui_update(void)
         if (pet->action==RB_ANIM_IDLE) {
             phase_ms=clip->duration_ms?(unsigned)(idle_clock_ms%clip->duration_ms):0;
         } else {
-            phase_ms=(unsigned)(fmaxf(0,fminf(1,pet->phase))*clip->duration_ms);
+            phase_ms=daily?rb_daily_clip_time(daily->id,pet->phase):
+                (unsigned)(fmaxf(0,fminf(1,pet->phase))*clip->duration_ms);
         }
         unsigned n=0;
         while (n+1<clip->count && clip->at[n+1]<=phase_ms) ++n;
@@ -252,7 +275,8 @@ void rb_ui_update(void)
     label_text(rest_label,"休息");
     bool screen_pause=stopped && pet->stop_reason && !strcmp(pet->stop_reason,"SCREEN STOP");
     label_text(stop_label,stopped?(screen_pause?LV_SYMBOL_PLAY:LV_SYMBOL_REFRESH):LV_SYMBOL_PAUSE);
-    label_text(status_label,rest?"长按左下角恢复":!pet->estop_released?"请释放急停":screen_pause?"点击左下继续":"长按左下恢复");
+    label_text(status_label,rest?"点击左下恢复":!pet->estop_released?"请释放急停":screen_pause?"点击左下继续":"长按左下恢复");
+    if(pet->motion_clock && stopped)label_text(status_label,"HOME");
     lv_obj_align(status_label,LV_ALIGN_BOTTOM_MID,0,-8);
     if (stopped) {
         lv_obj_add_state(lv_obj_get_parent(style_label),LV_STATE_DISABLED);
@@ -263,9 +287,9 @@ void rb_ui_update(void)
     }
     if (rest) lv_obj_add_state(lv_obj_get_parent(rest_label),LV_STATE_DISABLED);
     hidden(settings,!settings_open);
-    hidden(status_label,!stopped && !rest);
-    hidden(lv_obj_get_parent(wake_label),!rest);
-    hidden(lv_obj_get_parent(stop_label),rest);
+    hidden(status_label,!stopped && !asleep());
+    hidden(lv_obj_get_parent(wake_label),!asleep());
+    hidden(lv_obj_get_parent(stop_label),asleep());
     hidden(lv_obj_get_parent(settings_label),false);
     hidden(contact_mark,!pet->contact || stopped || settings_open || rest);
     if (pet->contact && !stopped && !settings_open)

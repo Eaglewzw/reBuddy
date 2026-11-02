@@ -1,0 +1,41 @@
+{
+  "schema": "rebuddy.raw_decode_regression.v1",
+  "source": "/home/verser/esp32/reBuddy/record/gravity/20261031T100649Z-1793441209302037648/can.jsonl",
+  "source_sha256": "cfdf0f50070c92bae7f151f1af72de2ee14f2e8c58bb895e3ce3d0d95420292b",
+  "frames": 110290,
+  "previous_invalid_position_count": 1,
+  "current_invalid_position_count": 0,
+  "reclassified_frames": [
+    {
+      "received_unix_ns": 1793441262250737889,
+      "packet": "fd058091080000007f7480027fb4012c",
+      "old_decoded": {
+        "kind": "invalid_position",
+        "motor": 5,
+        "register": 29823,
+        "read_status": 128,
+        "reason": "parameter_read_failed",
+        "data": "7f7480027fb4012c"
+      },
+      "new_decoded": {
+        "kind": "other_parameter",
+        "motor": 5,
+        "register": 29823,
+        "read_status": 128,
+        "data": "7f7480027fb4012c"
+      },
+      "last_position_age_ms": {
+        "1": 1.996837,
+        "2": 1.739165,
+        "3": 1.253017,
+        "4": 0.985706,
+        "5": 0.721538,
+        "6": 0.427823,
+        "7": 0.097299
+      }
+    }
+  ],
+  "hardware_opened": false,
+  "motion_requested": false,
+  "scope": "Offline packet decoding only; not a control replay or proof of hardware repair. No automatic homing implemented."
+}

@@ -1,0 +1,153 @@
+{
+  "success": false,
+  "enable_requested": true,
+  "disable_requested": true,
+  "disable_confirmed": true,
+  "zero_return_requested": true,
+  "zero_return_completed": false,
+  "idle_entry_requested": true,
+  "idle_entry_completed": true,
+  "folder": "/home/verser/esp32/reBuddy/record/gravity/20261101T074356Z-1793519036406134122",
+  "mock": false,
+  "errors": [
+    "RuntimeError: zero-pose feedback is not following the command; check that motors are enabled and verify calibration. outside_tolerance=[elbow_flex=2.0923deg] tolerance=2.0000deg; no improvement >= 0.1000deg over 5.00s; stalled_joints=['elbow_flex']; actual_deg=[-0.0806  0.1782  2.0923  0.7317 -0.0857 -0.0923] command_deg=[-1.6313e-24  0.0000e+00  0.0000e+00  0.0000e+00  0.0000e+00 -1.0910e-23] sent_deg=[0. 0. 0. 0. 0. 0.]"
+  ],
+  "reason": "zero_return_failed",
+  "logging_errors": [],
+  "clips": [
+    {
+      "name": "nuzzle",
+      "file": "nuzzle.csv",
+      "samples": 1387,
+      "sha256": "25061845604494b9e55c6b60376641f504413231a44ea8a56a933cf030073ccc",
+      "complete": true,
+      "hardware_accepted": false,
+      "start_ns": 274217640420186,
+      "end_reason": "operator_stop",
+      "anchor": {
+        "action": "nuzzle",
+        "idle_pose": {
+          "schema": "rebuddy.idle_pose.v1",
+          "name": "ATTENTIVE",
+          "created_at": "2026-10-31T11:28:19.829723+00:00",
+          "source_session": "/home/verser/esp32/reBuddy/record/gravity/20261031T112755Z-1793446075081499801",
+          "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+          "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+          "mock": false,
+          "joint_names": [
+            "shoulder_pan",
+            "shoulder_lift",
+            "elbow_flex",
+            "wrist_flex",
+            "wrist_yaw",
+            "wrist_roll",
+            "gripper"
+          ],
+          "q_rad": [
+            -0.02854241178754498,
+            0.783538395283269,
+            1.1638101947073842,
+            -0.49324551224708557,
+            -0.05379759951257238,
+            -0.012223720568798337,
+            0.0010715288443344773
+          ],
+          "samples": 51,
+          "spread_deg": [
+            0.02197197150799055,
+            0.019530925931651462,
+            0.017095963492541916,
+            0.015381586010868715,
+            0.010985718949730822,
+            0.017578185520115395,
+            0.01538158267581541
+          ],
+          "source_start_ns": 201237351044546,
+          "source_end_ns": 201238350972127,
+          "hardware_accepted": false,
+          "purpose": "shared idle anchor; not an executable move or zero calibration"
+        },
+        "entry_idle": true,
+        "exit_idle": true
+      },
+      "manual_end_ns": 274230159730863,
+      "manual_end_rad": [
+        -0.02658902294933796,
+        1.1725579500198364,
+        1.3383129835128784,
+        -0.3887874186038971,
+        -0.05238542705774307,
+        -0.008590293116867542,
+        0.001035451889038086
+      ],
+      "auto_return": true
+    },
+    {
+      "name": "tilt",
+      "file": "tilt.csv",
+      "samples": 1090,
+      "sha256": "cf6db5603d6592435b436948c185eecd801160174a23b04a48bc69cbe2eb4d9a",
+      "complete": true,
+      "hardware_accepted": false,
+      "start_ns": 274254640158059,
+      "end_reason": "operator_stop",
+      "anchor": {
+        "action": "tilt",
+        "idle_pose": {
+          "schema": "rebuddy.idle_pose.v1",
+          "name": "ATTENTIVE",
+          "created_at": "2026-10-31T11:28:19.829723+00:00",
+          "source_session": "/home/verser/esp32/reBuddy/record/gravity/20261031T112755Z-1793446075081499801",
+          "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+          "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+          "mock": false,
+          "joint_names": [
+            "shoulder_pan",
+            "shoulder_lift",
+            "elbow_flex",
+            "wrist_flex",
+            "wrist_yaw",
+            "wrist_roll",
+            "gripper"
+          ],
+          "q_rad": [
+            -0.02854241178754498,
+            0.783538395283269,
+            1.1638101947073842,
+            -0.49324551224708557,
+            -0.05379759951257238,
+            -0.012223720568798337,
+            0.0010715288443344773
+          ],
+          "samples": 51,
+          "spread_deg": [
+            0.02197197150799055,
+            0.019530925931651462,
+            0.017095963492541916,
+            0.015381586010868715,
+            0.010985718949730822,
+            0.017578185520115395,
+            0.01538158267581541
+          ],
+          "source_start_ns": 201237351044546,
+          "source_end_ns": 201238350972127,
+          "hardware_accepted": false,
+          "purpose": "shared idle anchor; not an executable move or zero calibration"
+        },
+        "entry_idle": true,
+        "exit_idle": true
+      },
+      "manual_end_ns": 274267260308704,
+      "manual_end_rad": [
+        -0.02786734327673912,
+        0.9786797761917114,
+        1.313982367515564,
+        -0.44757723808288574,
+        -0.051004838198423386,
+        0.12697528302669525,
+        0.001457262085750699
+      ],
+      "auto_return": true
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+set -euo pipefail
+script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+interpreter="${REBUDDY_PYTHON:-$HOME/Python/lerobot/.venv/bin/python}"
+if [[ ! -x "$interpreter" ]]; then
+    echo "找不到 Python：$interpreter；请设置 REBUDDY_PYTHON。" >&2
+    exit 2
+fi
+export PYTHONDONTWRITEBYTECODE=1
+exec "$interpreter" "$script_dir/rs_gravity_record.py" "$@"

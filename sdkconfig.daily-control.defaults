@@ -1,0 +1,3 @@
+# Opt-in native motor execution; boot still requires clicking the wake arrow from SLEEP.
+CONFIG_REBUDDY_ARM_DAILY_CONTROL=y
+# CONFIG_REBUDDY_ARM_MONITOR is not set

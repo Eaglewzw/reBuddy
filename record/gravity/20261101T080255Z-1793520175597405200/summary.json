@@ -1,0 +1,88 @@
+{
+  "success": false,
+  "enable_requested": true,
+  "disable_requested": true,
+  "disable_confirmed": true,
+  "zero_return_requested": true,
+  "zero_return_completed": false,
+  "idle_entry_requested": true,
+  "idle_entry_completed": true,
+  "startup_zero_requested": true,
+  "startup_zero_completed": true,
+  "folder": "/home/verser/esp32/reBuddy/record/gravity/20261101T080255Z-1793520175597405200",
+  "mock": false,
+  "errors": [
+    "RuntimeError: zero-pose feedback is not following the command; check that motors are enabled and verify calibration. outside_tolerance=[elbow_flex=2.0947deg] tolerance=2.0000deg; no improvement >= 0.1000deg over 5.00s; stalled_joints=['elbow_flex']; actual_deg=[-0.0781  0.1953  2.0947  0.7317 -0.1121 -0.0857] command_deg=[-1.7724e-24  0.0000e+00  4.7243e-32 -3.3732e-24  0.0000e+00  0.0000e+00] sent_deg=[0. 0. 0. 0. 0. 0.]"
+  ],
+  "reason": "zero_return_failed",
+  "logging_errors": [],
+  "clips": [
+    {
+      "name": "happy",
+      "file": "happy.csv",
+      "samples": 1366,
+      "sha256": "15975818a663865f23e46780fcfcbb069eda62b22c60d92d6c4cd28d2febdb91",
+      "complete": false,
+      "hardware_accepted": false,
+      "start_ns": 275375927630558,
+      "end_reason": "signal_2",
+      "anchor": {
+        "action": "happy",
+        "idle_pose": {
+          "schema": "rebuddy.idle_pose.v1",
+          "name": "ATTENTIVE",
+          "created_at": "2026-10-31T11:28:19.829723+00:00",
+          "source_session": "/home/verser/esp32/reBuddy/record/gravity/20261031T112755Z-1793446075081499801",
+          "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+          "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+          "mock": false,
+          "joint_names": [
+            "shoulder_pan",
+            "shoulder_lift",
+            "elbow_flex",
+            "wrist_flex",
+            "wrist_yaw",
+            "wrist_roll",
+            "gripper"
+          ],
+          "q_rad": [
+            -0.02854241178754498,
+            0.783538395283269,
+            1.1638101947073842,
+            -0.49324551224708557,
+            -0.05379759951257238,
+            -0.012223720568798337,
+            0.0010715288443344773
+          ],
+          "samples": 51,
+          "spread_deg": [
+            0.02197197150799055,
+            0.019530925931651462,
+            0.017095963492541916,
+            0.015381586010868715,
+            0.010985718949730822,
+            0.017578185520115395,
+            0.01538158267581541
+          ],
+          "source_start_ns": 201237351044546,
+          "source_end_ns": 201238350972127,
+          "hardware_accepted": false,
+          "purpose": "shared idle anchor; not an executable move or zero calibration"
+        },
+        "entry_idle": true,
+        "exit_idle": true
+      },
+      "manual_end_ns": 275389806565014,
+      "manual_end_rad": [
+        -0.051644034683704376,
+        0.7800719141960144,
+        0.9064974188804626,
+        -0.126591756939888,
+        -0.053881075233221054,
+        -0.011428154073655605,
+        0.001303863595239818
+      ],
+      "auto_return": true
+    }
+  ]
+}

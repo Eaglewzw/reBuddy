@@ -131,7 +131,7 @@ for index, frame in enumerate(manifest['frames']):
     decoded.append(pixels)
 
 source_by_id = {clip['id']: clip for clip in all_sources}
-assert len(manifest['clips']) == len(source_by_id) + 1
+assert len(manifest['clips']) == len(source_by_id)
 assert len([c for c in manifest['clips'] if c.get('source_gif')]) == len(source_by_id)
 checked = 0
 for clip in manifest['clips']:
@@ -140,9 +140,7 @@ for clip in manifest['clips']:
     assert clip['at_ms'] == sorted(set(clip['at_ms']))
     assert clip['at_ms'][-1] < clip['duration_ms']
     assert all(0 <= i < len(decoded) for i in clip['frames'])
-    if not clip.get('source_gif'):
-        assert len(clip['frames']) == 1  # Deliberate folded hold, no separate GIF.
-        continue
+    assert clip.get('source_gif'), 'runtime clip must have an active source GIF'
     source = source_by_id[clip['id']]
     path = source_paths[clip['id']]
     assert root/clip['source_gif'] == path
@@ -200,22 +198,20 @@ assert set(manifest['source_gifs']) == {str(p.relative_to(root)) for p in source
 
 choreo = manifest['choreography_clip_map']
 assert len(choreo) == 45 and choreo[15] == 255
-retired_ids = set(range(9, 15)) | set(range(16, 23))
+retired_ids = {4, 5} | set(range(9, 15)) | set(range(16, 23))
 assert all(choreo[action] == 255 for action in retired_ids), 'retired work IDs alias new animation'
 assert all(choreo[action] == 255 for action in range(23, 33)), 'removed dances still mapped'
-for action, name in enumerate(('IDLE', 'PROBE', 'NUZZLE', 'TILT', 'WITHDRAW', 'RECOVER', 'HAPPY')):
+for action, name in {0:'IDLE', 1:'PROBE', 2:'NUZZLE', 3:'TILT', 6:'HAPPY'}.items():
     assert manifest['clips'][choreo[action]]['id'] == name, 'daily mapping changed'
 mapping = manifest['clip_map']
 assert len(mapping) == 3 and all(len(row) == 9 for row in mapping)
-ids = ['IDLE', 'PROBE', 'NUZZLE', 'TILT', 'WITHDRAW', 'RECOVER', 'HAPPY', 'REST', 'WAKE']
+ids = ['IDLE', 'PROBE', 'NUZZLE', 'TILT', 'IDLE', 'IDLE', 'HAPPY', 'REST', 'WAKE']
 for row in mapping:
     for action in range(1, 9):
         assert manifest['clips'][row[action]]['id'] == ids[action]
 assert manifest['clips'][mapping[0][0]]['id'] == 'IDLE'
 assert manifest['clips'][mapping[2][0]]['id'] == 'SLEEP'
-folded = manifest['clips'][mapping[1][0]]
-withdraw = manifest['clips'][mapping[0][4]]
-assert set(folded['frames']) == {withdraw['frames'][-1]}, 'folded idle unexpectedly animates or unfolds'
+assert manifest['clips'][mapping[1][0]]['id'] == 'IDLE'
 
 header = (root/'components/rebuddy_core/include/rb_pet_config.h').read_text()
 for key, value in cfg['gesture'].items():

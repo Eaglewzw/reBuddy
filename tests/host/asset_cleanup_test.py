@@ -17,7 +17,7 @@ for path in (
 ):
     assert not (root / path).exists(), path
 runtime = json.loads((root / 'assets/animation/manifest.json').read_text())
-assert len(runtime['source_gifs']) == 22
+assert len(runtime['source_gifs']) == 20
 assert all(path.startswith(('assets/gifs/daily/', 'assets/gifs/dance/')) for path in runtime['source_gifs'])
 assert runtime['dance_source'] == 'assets/gifs/dance/manifest.json'
 assert all(runtime['choreography_clip_map'][i] == 255 for i in range(23, 33))
@@ -26,3 +26,13 @@ print('PASS removed dance artwork/generators absent; only daily and selected dan
 assert not list((root/'assets').rglob('*prompt*.txt')), 'unused generation prompts returned'
 for name in ('middle.png', 'moderate.png', 'strong-peak.png', 'pose-analysis.json', 'timing-suggestion.json'):
     assert not (root/'assets/images/source/daily/tilt'/name).exists()
+
+retired = {'WITHDRAW', 'RECOVER', 'FOLDED_HOLD'}
+assert not retired.intersection(c['id'] for c in runtime['clips'])
+assert all(runtime['choreography_clip_map'][i] == 255 for i in (4, 5))
+for filename in ('05_害羞缩回.gif', '06_安抚展开.gif'):
+    assert not (root/'assets/gifs/daily'/filename).exists()
+for path in ('assets/gifs/daily/manifest.json', 'assets/images/source/daily/base/timing.json'):
+    source = json.loads((root/path).read_text())
+    assert len(source['clips']) == 8
+    assert not retired.intersection(c['id'] for c in source['clips'])

@@ -1,11 +1,12 @@
 #include "rb_pet.h"
+#include "rb_daily.h"
 #include <math.h>
 #include <string.h>
 
 static bool inside(int x,int y) { return x>=RB_ROLE_X && x<RB_ROLE_X+RB_ROLE_WIDTH && y>=RB_ROLE_Y && y<RB_ROLE_Y+RB_ROLE_HEIGHT; }
 static unsigned priority(rb_pet_action_t a)
 {
-    const unsigned values[]={0,2,2,6,8,5,4,1,9};
+    const unsigned values[]={0,2,2,6,0,0,4,1,9};
     return a<RB_ANIM_COUNT?values[a]:0;
 }
 static void clear_happy(rb_pet_t *p)
@@ -24,6 +25,13 @@ void rb_pet_init(rb_pet_t *p,uint64_t now)
 }
 void rb_pet_set_sink(rb_pet_t *p,rb_pet_sink_t sink,void *context)
 { p->sink=sink; p->sink_context=context; }
+void rb_pet_init_sleep(rb_pet_t *p,uint64_t now)
+{
+    rb_pet_init(p,now);p->state=RB_PET_RESTING;
+    p->pose=p->origin=RB_POSE_REST;
+}
+void rb_pet_use_daily_timing(rb_pet_t *p,bool enabled)
+{ if (p->action==RB_ANIM_IDLE) p->daily_timing=enabled; }
 void rb_pet_set_claw_region(rb_pet_t *p,const int16_t points[4][2])
 { memcpy(p->claw_region,points,sizeof(p->claw_region)); }
 static bool on_claw(const rb_pet_t *p,int x,int y)
@@ -43,28 +51,27 @@ static bool on_claw(const rb_pet_t *p,int x,int y)
 }
 static bool allowed(const rb_pet_t *p,rb_pet_action_t a)
 {
-    if (p->suspended || p->state==RB_PET_STOPPED) return false;
+    if (p->suspended || p->state==RB_PET_STOPPED ||
+        (unsigned)a>=RB_ANIM_COUNT || a==RB_ANIM_RESERVED_4 || a==RB_ANIM_RESERVED_5) return false;
     if (a==RB_ANIM_WAKE) return true;
     if (p->state==RB_PET_RESTING) return false;
-    if (a==RB_ANIM_WITHDRAW || a==RB_ANIM_REST) return true;
-    if (a==RB_ANIM_RECOVER) return p->state==RB_PET_FOLDED;
+    if (a==RB_ANIM_REST) return true;
     return p->state==RB_PET_NORMAL;
 }
 static void start(rb_pet_t *p,rb_pet_action_t a,rb_pet_source_t source,int direction)
 {
-    const unsigned ms[]={0,RB_MS_PROBE,RB_MS_NUZZLE_CYCLE,RB_MS_TILT,RB_MS_WITHDRAW,
-        RB_MS_RECOVER,RB_MS_HAPPY,RB_MS_REST,RB_MS_WAKE};
+    const unsigned ms[]={0,RB_MS_PROBE,RB_MS_NUZZLE_CYCLE,RB_MS_TILT,0,
+        0,RB_MS_HAPPY,RB_MS_REST,RB_MS_WAKE};
     p->action=a; p->origin=p->pose; p->phase=0; p->started=p->now;
     p->active_direction=direction;
     p->active_lazy=p->lazy; p->duration=(uint64_t)(ms[a]*RB_PLAYBACK_DURATION_SCALE*(p->active_lazy?RB_STYLE_LAZY:RB_STYLE_LIVELY));
+    const rb_daily_action_t *daily=p->daily_timing?rb_daily_find(a):NULL;
+    if (daily && daily->duration_ms) p->duration=daily->duration_ms;
     p->returning=false;
-    if (a==RB_ANIM_WITHDRAW) p->state=RB_PET_FOLDED;
     if (a==RB_ANIM_HAPPY) { p->happy_latched=true; clear_happy(p); }
     p->last_event=(rb_pet_event_t){a,++p->requests,source,
-        a==RB_ANIM_REST?RB_PET_RESTING:a==RB_ANIM_WITHDRAW?RB_PET_FOLDED:
-        (a==RB_ANIM_RECOVER || a==RB_ANIM_WAKE)?RB_PET_NORMAL:p->state,p->active_lazy,p->now};
+        a==RB_ANIM_REST?RB_PET_RESTING:a==RB_ANIM_WAKE?RB_PET_NORMAL:p->state,p->active_lazy,p->now};
     if (p->sink) p->sink(p->sink_context,&p->last_event);
-    if (a==RB_ANIM_WITHDRAW && p->pose==RB_POSE_FOLDED) p->action=RB_ANIM_IDLE;
 }
 /* Retrace authored poses at their original speed. Compressing a multi-second
    GIF into the old 180ms recovery would turn the new motions into a flash. */
@@ -79,8 +86,9 @@ static void request(rb_pet_t *p,rb_pet_action_t a,rb_pet_source_t source)
     if (!allowed(p,a)) return;
     if (a==RB_ANIM_NUZZLE && (p->action==a || p->now<p->nuzzle_hold)) return;
     if (a==RB_ANIM_WAKE && p->action==a) return;
-    if (a==RB_ANIM_WITHDRAW && p->state==RB_PET_FOLDED && p->action!=RB_ANIM_RECOVER) return;
     if (p->action==RB_ANIM_IDLE) { start(p,a,source,p->direction); return; }
+    /* An active physical trajectory cannot be reversed by a screen gesture. */
+    if (p->motion_clock) return;
     if (!p->pending_valid || priority(a)>=priority(p->pending)) {
         p->pending=a; p->pending_source=source; p->pending_valid=true;
         p->pending_direction=p->direction;
@@ -96,8 +104,6 @@ static void run_pending(rb_pet_t *p)
     if (!p->pending_valid) return;
     rb_pet_action_t a=p->pending; rb_pet_source_t source=p->pending_source;
     p->pending_valid=false;
-    if (a==RB_ANIM_RECOVER && (p->soothe_ms<RB_CFG_SOOTHE_VALID_MS ||
-        p->now-p->last_gentle>RB_CFG_SOOTHE_RESET_PAUSE_MS)) return;
     if (a==RB_ANIM_HAPPY && (p->happy_ms<RB_CFG_HAPPY_VALID_MS || p->happy_latched ||
         !on_claw(p,p->raw_x,p->raw_y))) return;
     if (allowed(p,a) && (a!=RB_ANIM_NUZZLE || p->stroke)) start(p,a,source,p->pending_direction);
@@ -106,12 +112,11 @@ static void finish(rb_pet_t *p)
 {
     rb_pet_action_t old=p->action; p->action=RB_ANIM_IDLE; p->phase=0; ++p->completed;
     p->last_interaction=p->now;
-    if (old==RB_ANIM_WITHDRAW) p->pose=RB_POSE_FOLDED;
-    else if (old==RB_ANIM_REST) { p->pose=RB_POSE_REST; p->state=RB_PET_RESTING; p->pending_valid=false; }
+    if (old==RB_ANIM_REST) { p->pose=RB_POSE_REST; p->state=RB_PET_RESTING; p->pending_valid=false; }
     else { p->pose=RB_POSE_IDLE; }
-    if (old==RB_ANIM_RECOVER || old==RB_ANIM_WAKE) {
+    if (old==RB_ANIM_WAKE) {
         p->state=RB_PET_NORMAL; p->consumed=p->contact || p->raw_down;
-        p->soothe_ms=0; p->tap_count=0; clear_happy(p); p->pending_valid=false;
+        clear_happy(p); p->pending_valid=false;
     }
     if (old==RB_ANIM_HAPPY) p->happy_cooldown_until=p->now+RB_CFG_HAPPY_COOLDOWN_MS;
     if (old==RB_ANIM_NUZZLE) {
@@ -123,6 +128,7 @@ static void finish(rb_pet_t *p)
 }
 static void animate(rb_pet_t *p)
 {
+    if (p->motion_clock) return;
     if (p->action==RB_ANIM_IDLE) { run_pending(p); return; }
     if (p->returning) {
         float t=(float)(p->now-p->return_started)/(float)p->return_duration;
@@ -133,11 +139,18 @@ static void animate(rb_pet_t *p)
     p->phase=p->duration?(float)(p->now-p->started)/p->duration:1;
     if (p->phase>=1) finish(p);
 }
+void rb_pet_follow_motion(rb_pet_t *p,unsigned request_id,float phase,bool completed)
+{
+    if(!p->motion_clock || p->state==RB_PET_STOPPED || p->suspended ||
+        p->action==RB_ANIM_IDLE || p->last_event.request_id!=request_id || !isfinite(phase))return;
+    p->phase=fmaxf(0,fminf(1,phase));
+    if(completed)finish(p);
+}
 void rb_pet_cancel(rb_pet_t *p)
 {
     if (p->suspended) return;
     p->contact=false; p->blocked=p->raw_down; p->consumed=false;
-    clear_contact(p); clear_happy(p); p->soothe_ms=0; p->tap_count=0;
+    clear_contact(p); clear_happy(p);
     p->last_interaction=p->release_at=p->now;
     if (p->pending_valid && priority(p->pending)<=4) p->pending_valid=false;
 }
@@ -154,12 +167,11 @@ void rb_pet_suspend(rb_pet_t *p,uint64_t now)
     p->raw_x=p->raw_y=p->x=p->y=p->start_x=p->start_y=0;
     p->previous_raw_x=p->previous_raw_y=0;
     p->raw_changed=p->down_at=p->sampled=p->last_motion=p->last_gentle=p->release_at=0;
-    p->soothe_ms=p->tap_count=p->nuzzle_cycles=0;
+    p->nuzzle_cycles=0;
     clear_contact(p); clear_happy(p);
     memset(p->positions,0,sizeof(p->positions));
     memset(p->candidate,0,sizeof(p->candidate));
     memset(p->happy_history,0,sizeof(p->happy_history));
-    memset(p->taps,0,sizeof(p->taps));
     /* Cooldown and the active HAPPY latch are timing constraints, not
        gesture credits. Keep them to avoid replaying HAPPY immediately. */
     if (p->action!=RB_ANIM_HAPPY && p->now>=p->happy_cooldown_until) p->happy_latched=false;
@@ -203,7 +215,7 @@ static void down(rb_pet_t *p)
     clear_contact(p); p->positions[0].x=p->x; p->positions[0].y=p->y;
     p->positions[0].at=p->now; p->position_count=1;
     if (p->state==RB_PET_RESTING || p->action==RB_ANIM_REST || p->action==RB_ANIM_WAKE) {
-        p->consumed=true; p->tap_count=p->soothe_ms=0; clear_happy(p);
+        p->consumed=true; clear_happy(p);
         /* Rest is persistent. Only the explicit wake control can end it. */
     }
 }
@@ -211,17 +223,8 @@ static void tap(rb_pet_t *p)
 {
     clear_happy(p);
     if (p->pending_valid && p->pending==RB_ANIM_HAPPY) p->pending_valid=false;
-    if (p->action==RB_ANIM_RECOVER) {
-        p->soothe_ms=0; p->pending_valid=false; request(p,RB_ANIM_WITHDRAW,RB_INPUT_TAP); return;
-    }
     if (p->state!=RB_PET_NORMAL) { p->blink_until=p->now+120; return; }
-    unsigned count=0;
-    for (unsigned i=0;i<p->tap_count;++i)
-        if (p->now-p->taps[i]<=RB_CFG_POKE_WINDOW_MS) p->taps[count++]=p->taps[i];
-    p->taps[count++]=p->now; p->tap_count=count;
-    if (count>=RB_CFG_POKE_COUNT) {
-        p->tap_count=0; p->pending_valid=false; request(p,RB_ANIM_WITHDRAW,RB_INPUT_POKE);
-    } else request(p,RB_ANIM_PROBE,RB_INPUT_TAP);
+    request(p,RB_ANIM_PROBE,RB_INPUT_TAP);
 }
 static void up(rb_pet_t *p)
 {
@@ -243,13 +246,6 @@ static void expire_happy(rb_pet_t *p)
 }
 static void credit(rb_pet_t *p,rb_valid_interval_t v)
 {
-    if (p->state==RB_PET_FOLDED) {
-        if (p->action!=RB_ANIM_RECOVER) {
-            p->soothe_ms+=v.duration;
-            if (p->soothe_ms>=RB_CFG_SOOTHE_VALID_MS) request(p,RB_ANIM_RECOVER,RB_INPUT_STROKE);
-        }
-        return;
-    }
     if (p->happy_latched || p->state!=RB_PET_NORMAL || !v.claw_duration) return;
     v.duration=v.claw_duration;
     expire_happy(p);
@@ -298,10 +294,9 @@ static void motion(rb_pet_t *p)
     else p->fast_ms=0;
     if (p->fast_ms>=RB_CFG_SWIPE_MIN_MS && offset>=RB_CFG_SWIPE_MIN_DISPLACEMENT_PX) {
         p->direction=p->raw_x-p->start_x < -(int)RB_CFG_JITTER_PX?-1:1;
-        p->swiped=true; p->stroke=false; p->tap_count=p->soothe_ms=0; clear_happy(p);
+        p->swiped=true; p->stroke=false; clear_happy(p);
         p->pending_valid=false;
-        if (p->action==RB_ANIM_RECOVER) request(p,RB_ANIM_WITHDRAW,RB_INPUT_SWIPE);
-        else request(p,RB_ANIM_TILT,RB_INPUT_SWIPE);
+        request(p,RB_ANIM_TILT,RB_INPUT_SWIPE);
         return;
     }
     if (moved && p->speed>=RB_CFG_STROKE_SPEED_MIN && p->speed<=RB_CFG_STROKE_SPEED_MAX) {
@@ -312,7 +307,7 @@ static void motion(rb_pet_t *p)
             p->candidate_ms+=moving; p->candidate_path+=dist;
             if (p->candidate_ms>=RB_CFG_STROKE_MIN_MS && p->candidate_path>=RB_CFG_STROKE_MIN_PATH_PX) {
                 p->direction=p->raw_x-p->start_x < -(int)RB_CFG_JITTER_PX?-1:1;
-                p->stroke=true; p->tap_count=0;
+                p->stroke=true;
                 for (unsigned i=0;i<p->candidate_count;++i) credit(p,p->candidate[i]);
                 p->candidate_count=0;
             }
@@ -335,7 +330,6 @@ void rb_pet_tick(rb_pet_t *p,uint64_t now)
     if (p->state==RB_PET_STOPPED || p->suspended) return;
     expire_happy(p);
     animate(p);
-    if (now-p->last_gentle>RB_CFG_SOOTHE_RESET_PAUSE_MS) p->soothe_ms=0;
     if (now-p->raw_changed>=RB_CFG_CONTACT_DEBOUNCE_MS) {
         if (!p->raw_down) {
             if (p->contact) up(p);
@@ -371,16 +365,19 @@ void rb_pet_stop(rb_pet_t *p,const char *reason)
     }
     /* Keep action/phase/origin frozen so STOP never changes the rendered pose. */
     p->state=RB_PET_STOPPED; p->stop_reason=reason; p->pending_valid=false;
-    p->nuzzle_cycles=0; p->contact=false; p->blocked=true; p->consumed=true; p->soothe_ms=p->tap_count=0;
+    p->nuzzle_cycles=0; p->contact=false; p->blocked=true; p->consumed=true;
     clear_contact(p); clear_happy(p);
 }
 void rb_pet_estop(rb_pet_t *p,bool released)
 { p->estop_released=released; if (!released) rb_pet_stop(p,"E-STOP"); }
 bool rb_pet_reset(rb_pet_t *p,uint64_t now)
 {
+    /* A physical hold/fault has no implicit replay or reverse transition.
+     * The arm HOME command owns recovery and subsequent re-connection. */
+    if(p->motion_clock)return false;
     if (p->suspended || p->state!=RB_PET_STOPPED || !p->estop_released || now<p->now) return false;
     p->now=p->last_interaction=now; p->stop_reason=NULL;
-    p->state=p->pose==RB_POSE_FOLDED?RB_PET_FOLDED:RB_PET_NORMAL;
+    p->state=RB_PET_NORMAL;
     p->happy_latched=false; p->happy_cooldown_until=0;
     p->pending=RB_ANIM_WAKE; p->pending_source=RB_INPUT_RESET; p->pending_valid=true;
     if (p->action!=RB_ANIM_IDLE) begin_return(p);
@@ -405,6 +402,6 @@ void rb_pet_wake(rb_pet_t *p)
 }
 const char *rb_pet_action_name(rb_pet_action_t action)
 {
-    static const char *names[]={"IDLE","PROBE","NUZZLE","TILT","WITHDRAW","RECOVER","HAPPY","REST","WAKE"};
+    static const char *names[]={"IDLE","PROBE","NUZZLE","TILT","RESERVED_4","RESERVED_5","HAPPY","REST","WAKE"};
     return action<RB_ANIM_COUNT?names[action]:"INVALID";
 }

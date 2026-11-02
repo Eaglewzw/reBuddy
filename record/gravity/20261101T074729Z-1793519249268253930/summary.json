@@ -1,0 +1,18 @@
+{
+  "success": false,
+  "enable_requested": false,
+  "disable_requested": false,
+  "disable_confirmed": false,
+  "zero_return_requested": false,
+  "zero_return_completed": false,
+  "idle_entry_requested": false,
+  "idle_entry_completed": false,
+  "folder": "/home/verser/esp32/reBuddy/record/gravity/20261101T074729Z-1793519249268253930",
+  "mock": false,
+  "errors": [
+    "ValueError: curve exceeds motor 2 bounds: -0.105..44.893deg"
+  ],
+  "reason": "fault",
+  "logging_errors": [],
+  "clips": []
+}

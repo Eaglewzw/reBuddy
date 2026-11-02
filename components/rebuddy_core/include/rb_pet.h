@@ -3,11 +3,12 @@
 #include <stdint.h>
 #include "rb_pet_config.h"
 
-typedef enum { RB_PET_NORMAL, RB_PET_FOLDED, RB_PET_RESTING, RB_PET_STOPPED } rb_pet_state_t;
-typedef enum { RB_POSE_IDLE, RB_POSE_FOLDED, RB_POSE_REST } rb_pet_pose_t;
+typedef enum { RB_PET_NORMAL=0, RB_PET_RESTING=2, RB_PET_STOPPED=3 } rb_pet_state_t;
+typedef enum { RB_POSE_IDLE=0, RB_POSE_REST=2 } rb_pet_pose_t;
+/* Retired IDs 4/5 stay reserved; later action IDs must not shift. */
 typedef enum { RB_ANIM_IDLE, RB_ANIM_PROBE, RB_ANIM_NUZZLE, RB_ANIM_TILT,
-    RB_ANIM_WITHDRAW, RB_ANIM_RECOVER, RB_ANIM_HAPPY, RB_ANIM_REST, RB_ANIM_WAKE, RB_ANIM_COUNT } rb_pet_action_t;
-typedef enum { RB_INPUT_TAP, RB_INPUT_STROKE, RB_INPUT_SWIPE, RB_INPUT_POKE,
+    RB_ANIM_RESERVED_4, RB_ANIM_RESERVED_5, RB_ANIM_HAPPY, RB_ANIM_REST, RB_ANIM_WAKE, RB_ANIM_COUNT } rb_pet_action_t;
+typedef enum { RB_INPUT_TAP, RB_INPUT_STROKE, RB_INPUT_SWIPE, RB_INPUT_RESERVED_3,
     RB_INPUT_IDLE, RB_INPUT_WAKE, RB_INPUT_RESET, RB_INPUT_SETTINGS } rb_pet_source_t;
 typedef struct {
     rb_pet_action_t action_id;
@@ -25,6 +26,8 @@ typedef struct {
     rb_pet_action_t action, pending;
     rb_pet_source_t pending_source;
     bool lazy, active_lazy, pending_valid, returning, estop_released;
+    bool daily_timing; /* Use compiled PC-plan timing; not motor enable. */
+    bool motion_clock; /* Execution feedback owns completion and phase. */
     bool suspended, resume_wait_release;
     uint64_t suspended_at;
     int direction, active_direction, pending_direction;
@@ -40,15 +43,13 @@ typedef struct {
     int raw_x,raw_y,x,y,start_x,start_y,previous_raw_x,previous_raw_y;
     uint64_t raw_changed, down_at, sampled, last_motion, last_gentle, release_at;
     float path, max_offset, speed, candidate_path;
-    unsigned fast_ms, moving_ms, candidate_ms, soothe_ms;
+    unsigned fast_ms, moving_ms, candidate_ms;
     unsigned claw_moving_ms;
     int16_t claw_region[4][2];
     struct { int x,y; uint64_t at; } positions[8];
     unsigned position_count;
     rb_valid_interval_t candidate[64];
     unsigned candidate_count;
-    uint64_t taps[3];
-    unsigned tap_count;
     rb_valid_interval_t happy_history[512];
     unsigned happy_head,happy_count,happy_ms;
     bool happy_latched;
@@ -59,7 +60,11 @@ typedef struct {
 } rb_pet_t;
 
 void rb_pet_init(rb_pet_t *p,uint64_t now);
+/* Boot presentation only: no sink event, enable, or claim of measured zero. */
+void rb_pet_init_sleep(rb_pet_t *p,uint64_t now);
 void rb_pet_set_sink(rb_pet_t *p,rb_pet_sink_t sink,void *context);
+void rb_pet_use_daily_timing(rb_pet_t *p,bool enabled);
+void rb_pet_follow_motion(rb_pet_t *p,unsigned request,float phase,bool completed);
 void rb_pet_input(rb_pet_t *p,bool down,int x,int y,uint64_t now);
 /* Convex claw polygon in screen coordinates, supplied by the displayed pose. */
 void rb_pet_set_claw_region(rb_pet_t *p,const int16_t points[4][2]);

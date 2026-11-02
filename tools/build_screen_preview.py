@@ -26,7 +26,7 @@ SOURCE = ROOT / 'assets/gifs/daily'
 OUT = ROOT / 'assets/animation'
 WIDTH, HEIGHT = 320, 240
 RAW_BYTES = WIDTH * HEIGHT * 2
-ACTIONS = ['IDLE', 'PROBE', 'NUZZLE', 'TILT', 'WITHDRAW', 'RECOVER', 'HAPPY', 'REST', 'WAKE']
+ACTIONS = ['IDLE', 'PROBE', 'NUZZLE', 'TILT', 'RESERVED_4', 'RESERVED_5', 'HAPPY', 'REST', 'WAKE']
 
 
 def sha(data):
@@ -197,14 +197,12 @@ def main():
         blobs.append(blob)
         offset += len(blob)
     by_id = {clip['id']: i for i, clip in enumerate(clips)}
-    choreography_mapping = [by_id[ACTIONS[i]] if i < 9 else 255 for i in range(45)]
+    choreography_mapping = [by_id.get(ACTIONS[i], 255) if i < 9 else 255 for i in range(45)]
     for record in dance['clips']:
         choreography_mapping[record['action_id']] = by_id[record['id']]
-    folded_index = len(clips)
-    clips.append(dict(id='FOLDED_HOLD', frames=[clips[by_id['WITHDRAW']]['frames'][-1]],
-                      at_ms=[0], duration_ms=1000, loop=True))
-    mapping = [[by_id[a] for a in ACTIONS] for _ in range(3)]
-    mapping[1][0] = folded_index
+    # Preserve numeric slots; retired daily events fall back to idle, while
+    # choreography rejects the same retired IDs with the 255 sentinel.
+    mapping = [[by_id.get(a, by_id['IDLE']) for a in ACTIONS] for _ in range(3)]
     mapping[2][0] = by_id['SLEEP']
     # Full GIF frames carry the room. This static resource is only a fallback.
     room_source = ROOT / 'assets/images/source/room/room.png'

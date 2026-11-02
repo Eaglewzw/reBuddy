@@ -1,0 +1,47 @@
+{
+  "date": "2026-11-02",
+  "request": "REST remains on screen instead of SLEEP",
+  "serial_log": "build/serial-diagnostics/passive-20261102T164625.log",
+  "serial_access": "passive read; no TX, reset or modem-control toggles",
+  "user_reported_state": "PROTECTIVE HOLD",
+  "observed": {
+    "CAN_started": true,
+    "CAN_healthy": true,
+    "arm_state": 4,
+    "one_snapshot_feedback_mask": "0x77",
+    "body_changes_per_second": 0
+  },
+  "conclusion": "REST-to-SLEEP is suspended by latched protective hold; exact original trigger is unavailable because monitor attached after transition and old firmware logs reason only on state change. One status feedback mask is not proof of the triggering axis.",
+  "possible_triggers": [
+    "arrival check exceeded 8000ms",
+    "estimated gravity + PD torque budget exceeded",
+    "pause request",
+    "UI heartbeat absent for more than 500ms"
+  ],
+  "changes": [
+    "retain original protective-hold measured/target/velocity snapshot before replacing targets",
+    "retain rejected torque estimates when budget triggered",
+    "log status and retained trigger every 30s from application task",
+    "log error changes even without state transitions; print outside control mutex",
+    "distinguish UI heartbeat timeout from pause request"
+  ],
+  "thresholds_changed": false,
+  "flashed": false,
+  "motion_commands_sent": false,
+  "root_cause_verified": false,
+  "tests": {
+    "controller_scenarios": 16,
+    "ctest_selected": 6,
+    "ctest_passed": 6
+  },
+  "builds": {
+    "build/reBuddy.bin": {
+      "bytes": 5525744,
+      "sha256": "c14cdcdc5ecf004bf7c619af690af48b3a9ce44e1804b0dbf837c2902e8c35de"
+    },
+    "build/daily-c5/reBuddy.bin": {
+      "bytes": 5525744,
+      "sha256": "303705f33395be5f9ea3aa5c7641db01ad0a976f32561b2009ace027a3c190d0"
+    }
+  }
+}

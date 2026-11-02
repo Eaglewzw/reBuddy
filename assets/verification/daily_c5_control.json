@@ -1,0 +1,82 @@
+{
+  "schema": "rebuddy.daily.c5.control.verification.v1",
+  "date": "2026-11-02",
+  "reference_project": "/home/verser/esp32/esp32c5_ui_console",
+  "native_execution_compiled": true,
+  "enable_at_boot": false,
+  "hardware_opened": false,
+  "flashed": false,
+  "hardware_accepted": false,
+  "tests": {
+    "ctest_selected": 31,
+    "passed": 31,
+    "controller_scenarios": 17,
+    "native_vs_pc_gravity_samples": 1602,
+    "gravity_max_difference_nm": 3.67e-06,
+    "screen_preview": "build/host/daily-boot-sleep.png",
+    "sleep_startup_regression": {
+      "selected": 6,
+      "passed": 6,
+      "includes": "boot sleep, body touch ignored, wake click, external completion, native OFF-to-WAKE-to-HOLD"
+    },
+    "lifecycle_regression": {
+      "selected": 6,
+      "passed": 6,
+      "full_screen_motor_cycle": true,
+      "displaced_wake_does_not_home_first": true,
+      "sleep_waits_for_disable_confirmation": true,
+      "idle_timeout_ms": 60000
+    },
+    "protective_hold_diagnostics": {
+      "selected": 6,
+      "passed": 6,
+      "rest_arrival_timeout_snapshot": true,
+      "torque_trigger_snapshot_survives_hold": true,
+      "ui_heartbeat_reason_distinct": true
+    },
+    "zero_tolerance_regression": {
+      "zero_tolerance_deg": 3,
+      "arrival_2_5_deg_passes": true,
+      "arrival_3_5_deg_protective_hold": true,
+      "controller_scenarios_passed": 17,
+      "export_tests_passed": 3
+    },
+    "prepush_regression": {
+      "total": 31,
+      "passed": 31,
+      "affected_suites_rerun": [
+        "rs_gravity_record",
+        "rs_zero_return",
+        "rs_daily_prepared"
+      ],
+      "note": "Initial system-Python dependency failures corrected by using configured RS Python; affected suites all passed. Tests use simulated motor I/O."
+    }
+  },
+  "build": {
+    "directory": "build/daily-c5",
+    "application_bytes": 5525744,
+    "control_enabled": true
+  },
+  "sha256": {
+    "components/rebuddy_arm/src/rb_daily_control.c": "17ce6f73ed7d6f329db16e156d809b8b93991c9f0d9da17bdaef3eea6b24c17a",
+    "components/rebuddy_arm/src/rb_arm_daily.c": "9690cb2fe77485c310ba9ee4e86fe5d4e7c367a13a8e30ac41018357b05a9e4f",
+    "components/rebuddy_arm/src/rb_arm.c": "c97d20f28623494b92743a16087f3ffb163898aad1c5195a20b9b3a2a7e81181",
+    "components/rebuddy_core/src/rb_daily_data.c": "7751cc0d7baf695bdc9a8f000c10818fd5584f1ead1f339d5545fef4f566c5a2",
+    "main/main.c": "5b01a84a25f4d0e0ad0d9bb42ec1d22342e770fc58f73c82a349196cd23713c2",
+    "main/pet_ui.c": "d132b15aee338d0e61da8f15374ea6795dca801c4373b4d1d48c906187e89e74",
+    "build/daily-c5/reBuddy.bin": "dcabe69867e27902862ac1696a0bc8285fa6a73953b151499bbba39f24bba18d",
+    "build/daily-control.sdkconfig": "a17b0ad78771ad883a5e0f297700d4d670467dcc3655f2d986d93a1688037853",
+    "components/rebuddy_core/src/rb_pet.c": "4c6f4e7e605b399ee933c71823bf19d7f5117b78d68196d503708e0ae9f6281f",
+    "components/rebuddy_core/include/rb_pet.h": "b2f67a2f2936e8d6bada1feaf65b96693fcfc1f006af22edddc8fbdb3d944d46",
+    "components/rebuddy_arm/src/rb_daily_screen.c": "ca88cf3839204d2983442ef7a6f1a3bef8e16949dbde27b413407ec44d5fbb57",
+    "components/rebuddy_arm/include/rb_daily_screen.h": "971872d64b509d6728920c80f57b10ca0e3f4b783f2a505b26dcfa7232d2edd4",
+    "build/reBuddy.bin": "3f3b6c8c4f62710c1d5f9379b141bcf56dcc08ac89c19783ccc355bca40abb76",
+    "components/rebuddy_arm/include/rb_daily_control.h": "a648ea7110a6cc93f50690441994f098c8f739adfc72ac4cbba9845cfa6e2b32",
+    "tests/host/daily_control_test.c": "f5bfad2fb8458c7e96920731dffe82ec9ca9691851f6576e4cb166a207f52b9d",
+    "tests/host/daily_control_test.py": "77a169234ca779565e6492a77951a88cec854441b3b1702c63468af9169e371d",
+    "tools/export_daily_c5.py": "bd78e57447b0ea8c2fe08ec2e0c3281785eea58074eb6ce19e6f8338f1b344c2"
+  },
+  "startup": "SLEEP; click wake arrow; enable/ramp; measured current pose directly to idle; verified arrival opens interaction",
+  "wake_gesture": "single click; no long press; HOME never enables",
+  "rest_sleep": "idle 60000ms -> REST -> verified zero -> request disable -> fresh disable confirmation -> SLEEP"
+}

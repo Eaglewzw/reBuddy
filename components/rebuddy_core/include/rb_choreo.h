@@ -20,7 +20,7 @@ typedef enum { RB_CHOREO_SLOW, RB_CHOREO_STANDARD, RB_CHOREO_FAST, RB_CHOREO_TEM
 /* IDs 1..6 match rb_pet_action_t; 7/8 remain exclusively rest/wake. */
 typedef enum {
     RB_CHOREO_PROBE=1, RB_CHOREO_NUZZLE=2, RB_CHOREO_TILT=3,
-    RB_CHOREO_WITHDRAW=4, RB_CHOREO_RECOVER=5, RB_CHOREO_HAPPY=6,
+    RB_CHOREO_RESERVED_4=4, RB_CHOREO_RESERVED_5=5, RB_CHOREO_HAPPY=6,
     RB_CHOREO_WAIT=15,
     /* Retired dance IDs 9..14 and 16..22 are reserved, never aliased. */
     RB_CHOREO_GROOVE_BOUNCE=23,
@@ -47,7 +47,7 @@ typedef enum {
     RB_CHOREO_START=43, RB_CHOREO_END=44
 } rb_choreo_action_id_t;
 typedef enum { RB_CHOREO_INTERACTION, RB_CHOREO_EMOTION, RB_CHOREO_PERFORMANCE, RB_CHOREO_CONTROL } rb_choreo_group_t;
-typedef enum { RB_CHOREO_POSE_IDLE, RB_CHOREO_POSE_FOLDED } rb_choreo_pose_t;
+typedef enum { RB_CHOREO_POSE_IDLE } rb_choreo_pose_t;
 typedef enum {
     RB_CHOREO_OK, RB_CHOREO_INVALID_ARGUMENT, RB_CHOREO_BAD_VERSION,
     RB_CHOREO_BAD_WORK_ID, RB_CHOREO_BAD_NAME, RB_CHOREO_BAD_TEMPO,

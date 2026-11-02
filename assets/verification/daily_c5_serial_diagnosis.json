@@ -1,0 +1,17 @@
+{
+  "schema": "rebuddy.daily.serial_diagnosis.v1",
+  "date": "2026-11-02",
+  "port": "/dev/ttyACM0",
+  "serial_log": "build/serial-diagnostics/passive-20261102T162227.log",
+  "observation": "state=1 planner=1 CAN_started=0 CAN_healthy=0 feedback=0x00 error=ESP_OK",
+  "cause": "Board runs STANDBY firmware; default sdkconfig had REBUDDY_ARM_DAILY_CONTROL disabled while dedicated build/daily-c5 enabled it.",
+  "local_fix": "Enabled daily control in root sdkconfig and sdkconfig.defaults, added explicit build-mode message, rebuilt normal build directory.",
+  "artifact": "build/reBuddy.bin",
+  "artifact_sha256": "07f9a281f56e3f840222a9614937ad6e48b3cb87bd4bed4320f4ad26ccb8646e",
+  "build_control_enabled": true,
+  "build_succeeded": true,
+  "flashed_this_turn": false,
+  "motor_commands_sent": false,
+  "device_reset": false,
+  "serial_access": "passive receive; no TX or DTR/RTS changes"
+}

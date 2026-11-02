@@ -1,0 +1,247 @@
+{
+  "schema": "rebuddy.daily.prepared.v1",
+  "hardware_accepted": false,
+  "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+  "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+  "idle_source": "record/gravity/presets/idle.json",
+  "idle_sha256": "1ba0e94a751b71178def8b96f643709e5266057309168ce0c73aa27a0501513c",
+  "idle_rad": [
+    -0.02854241178754498,
+    0.783538395283269,
+    1.1638101947073842,
+    -0.49324551224708557,
+    -0.05379759951257238,
+    -0.012223720568798337,
+    0.0010715288443344773
+  ],
+  "zero_rad": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0010715288443344773
+  ],
+  "screen_sync": false,
+  "actions": {
+    "PROBE": {
+      "source": "record/gravity/20261101T072951Z-1793518191706012636/probe.csv",
+      "source_sha256": "8b0555b2ef3590a0366b79b7c90949f4b8519fb1797e761239afc70c4820d751",
+      "samples": 1130,
+      "source_complete": false,
+      "recovered_interrupted": true,
+      "recorded_duration_s": 22.580004171000002,
+      "gripper_spread_deg": 0.026367264939959868,
+      "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+      "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+      "kept_source_seconds": [
+        1.260204066,
+        4.480304253
+      ],
+      "max_sample_fit_error_deg": 0.48927222864487707,
+      "entry": "ATTENTIVE",
+      "exit": "ATTENTIVE_ENABLED",
+      "generated_return": true,
+      "gripper": "idle opening",
+      "duration_s": 9.080454513723165,
+      "plan_file": "probe.json",
+      "plan_sha256": "86df420b255e224c25a243e68aacff1e6696c45476767f6bb6c745c32d0d72ec",
+      "preview_csv": "probe.csv",
+      "preview_sha256": "5caee535d1397de1ebe8db09c27e504289827b5655520b1dafa0f907ed6a39f1",
+      "stages": [
+        {
+          "name": "idle_to_recording",
+          "duration_s": 2.0
+        },
+        {
+          "name": "recorded_gesture",
+          "duration_s": 5.080454513723164
+        },
+        {
+          "name": "generated_return_to_idle",
+          "duration_s": 2.0
+        }
+      ],
+      "hardware_accepted": false
+    },
+    "NUZZLE": {
+      "source": "record/gravity/20261101T074356Z-1793519036406134122/nuzzle.csv",
+      "source_sha256": "25061845604494b9e55c6b60376641f504413231a44ea8a56a933cf030073ccc",
+      "samples": 1387,
+      "source_complete": true,
+      "recovered_interrupted": false,
+      "recorded_duration_s": 27.719121780000002,
+      "gripper_spread_deg": 0.026367261604906562,
+      "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+      "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+      "kept_source_seconds": [
+        2.740046602,
+        7.879945171
+      ],
+      "max_sample_fit_error_deg": 0.49829198173214345,
+      "entry": "ATTENTIVE",
+      "exit": "ATTENTIVE_ENABLED",
+      "generated_return": true,
+      "gripper": "idle opening",
+      "duration_s": 17.619217206456337,
+      "plan_file": "nuzzle.json",
+      "plan_sha256": "b35fad816b7b1212aaf937c9c4663b393866be7519710ee0d7b2bf2da319fc7c",
+      "preview_csv": "nuzzle.csv",
+      "preview_sha256": "be9d349e9b11bd96ee1390fd78c4d1785e394a328061a9c2cdb80de0a2d8c509",
+      "stages": [
+        {
+          "name": "idle_to_recording",
+          "duration_s": 2.0
+        },
+        {
+          "name": "recorded_gesture",
+          "duration_s": 13.619217206456337
+        },
+        {
+          "name": "generated_return_to_idle",
+          "duration_s": 2.0
+        }
+      ],
+      "hardware_accepted": false
+    },
+    "TILT": {
+      "source": "record/gravity/20261101T074356Z-1793519036406134122/tilt.csv",
+      "source_sha256": "cf6db5603d6592435b436948c185eecd801160174a23b04a48bc69cbe2eb4d9a",
+      "samples": 1090,
+      "source_complete": true,
+      "recovered_interrupted": false,
+      "recorded_duration_s": 21.781735719,
+      "gripper_spread_deg": 0.04833861279298226,
+      "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+      "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+      "kept_source_seconds": [
+        2.699939274,
+        6.639632508
+      ],
+      "max_sample_fit_error_deg": 0.4560965243149597,
+      "entry": "ATTENTIVE",
+      "exit": "ATTENTIVE_ENABLED",
+      "generated_return": true,
+      "gripper": "idle opening",
+      "duration_s": 21.721502038562292,
+      "plan_file": "tilt.json",
+      "plan_sha256": "3f2f52c3a230fdb07eb8a9f16ed8fc772eee3a5323e8f5c21bc6f5a618797d5a",
+      "preview_csv": "tilt.csv",
+      "preview_sha256": "833c7a380c1b8a288a25dd8e87fc778511d248477d3af5f6e516602703f9d0a0",
+      "stages": [
+        {
+          "name": "idle_to_recording",
+          "duration_s": 2.0
+        },
+        {
+          "name": "recorded_gesture",
+          "duration_s": 17.721502038562292
+        },
+        {
+          "name": "generated_return_to_idle",
+          "duration_s": 2.0
+        }
+      ],
+      "hardware_accepted": false
+    },
+    "HAPPY": {
+      "source": "record/gravity/20261101T080255Z-1793520175597405200/happy.csv",
+      "source_sha256": "15975818a663865f23e46780fcfcbb069eda62b22c60d92d6c4cd28d2febdb91",
+      "samples": 1366,
+      "source_complete": false,
+      "recovered_interrupted": true,
+      "recorded_duration_s": 27.299133712,
+      "gripper_spread_deg": 0.0241706721008198,
+      "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+      "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+      "return_policy": "C2 direct return immediately after clap; recorded return omitted",
+      "fitted_source_seconds": [
+        3.118881995,
+        4.559071321999999
+      ],
+      "kept_source_seconds": [
+        3.118881995,
+        9.819040965000001
+      ],
+      "max_sample_fit_error_deg": 0.33055845750759816,
+      "entry": "ATTENTIVE",
+      "exit": "ATTENTIVE_ENABLED",
+      "generated_return": true,
+      "gripper": "120 motor degrees, two 1.8-second open-close cycles",
+      "duration_s": 11.011150330254521,
+      "plan_file": "happy.json",
+      "plan_sha256": "d1a80f2da06f20276b291cb8bd77aae8aec37cfb2f0c50f8a9c1bd267b1d776d",
+      "preview_csv": "happy.csv",
+      "preview_sha256": "dfd4dab1c2834ee5b621f1497c38bee2b086f138ee29a34b8c48a51747170b29",
+      "stages": [
+        {
+          "name": "idle_to_recording",
+          "duration_s": 2.0
+        },
+        {
+          "name": "recorded_rise",
+          "duration_s": 3.615090761239299
+        },
+        {
+          "name": "gripper_open_close_twice",
+          "duration_s": 3.6
+        },
+        {
+          "name": "direct_return_to_idle",
+          "duration_s": 1.7960595690152215
+        }
+      ],
+      "hardware_accepted": false
+    },
+    "REST": {
+      "source": null,
+      "entry": "ATTENTIVE",
+      "exit": "ZERO_ENABLED",
+      "recording_required": false,
+      "duration_s": 4.36428823015269,
+      "plan_file": "rest.json",
+      "plan_sha256": "f10bcaf9714564f0fa683f089cc5daacb0c528423983b37863c7b9d915353fcc",
+      "preview_csv": "rest.csv",
+      "preview_sha256": "1335ff12540d035bc4e772578ce8c20191478a212cbc0d4fc31eefcbbac10f61",
+      "stages": [
+        {
+          "name": "rest",
+          "duration_s": 4.36428823015269
+        }
+      ],
+      "hardware_accepted": false
+    },
+    "WAKE": {
+      "source": null,
+      "entry": "ZERO_DISABLED",
+      "exit": "ATTENTIVE_ENABLED",
+      "recording_required": false,
+      "duration_s": 4.36428823015269,
+      "plan_file": "wake.json",
+      "plan_sha256": "196e816572a09d032ee3b5d896f622692ee3ebb04da209ace7e2a45b528f84d0",
+      "preview_csv": "wake.csv",
+      "preview_sha256": "4772ec27d6bdc6abc965ca5aa98e6207dffbd92577bbac1796bf2fc2fba0db9b",
+      "stages": [
+        {
+          "name": "wake",
+          "duration_s": 4.36428823015269
+        }
+      ],
+      "hardware_accepted": false
+    },
+    "IDLE": {
+      "source": null,
+      "recording_required": false,
+      "exit": "ATTENTIVE_ENABLED",
+      "duration_s": null
+    },
+    "SLEEP": {
+      "source": null,
+      "recording_required": false,
+      "entry": "ZERO_ENABLED",
+      "exit": "ZERO_DISABLED",
+      "duration_s": null
+    }
+  }
+}

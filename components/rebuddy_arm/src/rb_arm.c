@@ -25,7 +25,7 @@ static esp_err_t fail(esp_err_t error)
     return error;
 }
 
-esp_err_t rb_arm_init(bool monitor)
+static esp_err_t initialize(bool monitor,bool control)
 {
     if (state!=RB_ARM_UNINITIALIZED) return ESP_ERR_INVALID_STATE;
     state=RB_ARM_FAULT; /* No retries into partly initialized singletons. */
@@ -44,7 +44,7 @@ esp_err_t rb_arm_init(bool monitor)
     if (!pins) return fail(ESP_ERR_INVALID_STATE);
     const can_console_motor_bus_config_t bus={
         .tx_gpio=pins->tx_gpio, .rx_gpio=pins->rx_gpio, .controller_id=0,
-        .bitrate=1000000, .data_bitrate=0, .mode=CAN_CONSOLE_CAN_MODE_LISTEN_ONLY
+        .bitrate=1000000, .data_bitrate=0, .mode=control?CAN_CONSOLE_CAN_MODE_NORMAL:CAN_CONSOLE_CAN_MODE_LISTEN_ONLY
     };
     error=can_console_motor_add_bus(&bus,&channel);
     if (error!=ESP_OK) return fail(error);
@@ -61,15 +61,17 @@ esp_err_t rb_arm_init(bool monitor)
     error=can_console_arm_motion_start();
     if (error!=ESP_OK) return fail(error);
     planner_ready=true;
-    if (monitor) {
+    if (monitor || control) {
         error=can_console_motor_start_bus(channel);
         if (error!=ESP_OK) return fail(error);
         error=rb_board_can1_standby(false);
         if (error!=ESP_OK) return fail(error);
     }
-    state=monitor?RB_ARM_MONITORING:RB_ARM_STANDBY;
+    state=control?RB_ARM_CONTROL:monitor?RB_ARM_MONITORING:RB_ARM_STANDBY;
     return ESP_OK;
 }
+esp_err_t rb_arm_init(bool monitor) { return initialize(monitor,false); }
+esp_err_t rb_arm_init_control(void) { return initialize(false,true); }
 
 esp_err_t rb_arm_get_status(rb_arm_status_t *out)
 {
@@ -82,7 +84,7 @@ esp_err_t rb_arm_get_status(rb_arm_status_t *out)
         out->position_rad[i]=out->velocity_rad_s[i]=out->torque_nm[i]=NAN;
     if (state==RB_ARM_UNINITIALIZED) return ESP_ERR_INVALID_STATE;
     if (state==RB_ARM_FAULT) return failure;
-    if (state!=RB_ARM_MONITORING) return ESP_OK;
+    if (state!=RB_ARM_MONITORING && state!=RB_ARM_CONTROL) return ESP_OK;
     can_console_motor_bus_state_t bus;
     esp_err_t error=can_console_motor_get_bus_state(channel,100,&bus);
     if (error!=ESP_OK) { out->error=error;return error; }

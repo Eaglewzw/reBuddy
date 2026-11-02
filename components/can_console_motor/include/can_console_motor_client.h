@@ -18,6 +18,10 @@ extern "C" {
 /** Return the highest configured motor ID. ID zero remains the legacy slot. */
 uint8_t can_console_motor_max_id(void);
 
+/** Subscribe to RS type 24 telemetry using the existing vendor encoder.
+ * Does not enable, zero, or change run mode. host_id is the calibrated host. */
+esp_err_t can_console_motor_request_rs_report(uint8_t motor_id, uint8_t host_id);
+
 /** Copy one motor's public state without exposing manager or vendor internals. */
 esp_err_t can_console_motor_get_state(uint8_t motor_id,
                                       can_console_motor_state_t *state);

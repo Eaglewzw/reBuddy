@@ -52,12 +52,12 @@ int main(void)
     assert(p.state==RB_PET_RESTING && p.action==RB_ANIM_IDLE && events[RB_ANIM_WAKE]==0);
     rb_pet_wake(&p); assert(p.action==RB_ANIM_WAKE); stroke(4000); release(); tick(RB_MS_WAKE);
     assert(p.state==RB_PET_NORMAL && events[RB_ANIM_PROBE]==0 && events[RB_ANIM_HAPPY]==0);
-    init(); tap(); tap(); tap(); tick(RB_MS_PROBE+RB_MS_WITHDRAW+200);
-    assert(p.state==RB_PET_FOLDED && p.pose==RB_POSE_FOLDED && events[RB_ANIM_WITHDRAW]==1);
-    tap(); tap(); tick(1000); assert(events[RB_ANIM_WITHDRAW]==1);
-    input(true,130,110); tick(40); stroke(1600); tick((unsigned)(RB_MS_RECOVER*RB_PLAYBACK_DURATION_SCALE));
-    assert(events[RB_ANIM_RECOVER]==1 && p.state==RB_PET_NORMAL && events[RB_ANIM_HAPPY]==0);
-    stroke(5000); assert(events[RB_ANIM_HAPPY]==0); release();
+    /* Retired fold/unfold events never fire, including rapid repeated taps. */
+    init(); tap(); tap(); tap(); tick(2*RB_MS_PROBE+200);
+    assert(p.state==RB_PET_NORMAL && p.pose==RB_POSE_IDLE && p.action==RB_ANIM_IDLE);
+    assert(events[RB_ANIM_PROBE]==2 && events[RB_ANIM_RESERVED_4]==0 && events[RB_ANIM_RESERVED_5]==0);
+    input(true,130,110); tick(40); stroke(1600); release(); tick(RB_MS_NUZZLE_CYCLE);
+    assert(events[RB_ANIM_NUZZLE]>0 && events[RB_ANIM_HAPPY]==0 && p.state==RB_PET_NORMAL);
     init(); input(true,180,130); tick(40); claw_stroke(4500);
     assert(events[RB_ANIM_HAPPY]==1); claw_stroke(20000); assert(events[RB_ANIM_HAPPY]==1);
     release(); tick(18000); input(true,180,130); tick(40); claw_stroke(4500);
@@ -95,11 +95,13 @@ int main(void)
     /* Outside raw DOWN remains excluded even if moved inside during debounce. */
     init(); input(true,20,110); tick(20); input(true,130,110); tick(100);
     assert(!p.contact); release();
-    /* Recovery is reversible; a new tap restores the folded stable pose. */
-    init(); tap(); tap(); tap(); tick(RB_MS_PROBE+RB_MS_WITHDRAW+200); input(true,130,110); tick(40); stroke(1400);
-    assert(p.action==RB_ANIM_RECOVER); release(); tap(); tick(RB_MS_RECOVER+RB_MS_WITHDRAW+200);
-    assert(p.state==RB_PET_FOLDED && p.pose==RB_POSE_FOLDED && p.action==RB_ANIM_IDLE);
-    /* Wake cancels an in-progress rest from either stable origin. */
+    /* Stale retired requests are discarded without entering a removed state. */
+    init(); p.pending=RB_ANIM_RESERVED_4; p.pending_valid=true; tick(20);
+    assert(p.action==RB_ANIM_IDLE && !p.pending_valid && p.state==RB_PET_NORMAL);
+    p.pending=RB_ANIM_RESERVED_5; p.pending_valid=true; tick(20);
+    assert(p.action==RB_ANIM_IDLE && !p.pending_valid && p.state==RB_PET_NORMAL);
+    assert(events[RB_ANIM_RESERVED_4]==0 && events[RB_ANIM_RESERVED_5]==0);
+    /* Wake cancels an in-progress rest. */
     rb_pet_rest(&p); tick(1200); assert(p.action==RB_ANIM_REST);
     input(true,130,110); tick(40); assert(p.action==RB_ANIM_REST);
     rb_pet_wake(&p); assert(p.returning && p.return_duration>=1200);
@@ -138,8 +140,8 @@ int main(void)
         else if (t%5000<3500) input(true,130+(int)((t/20)%30)*2,110);
         else input(false,130,110);
         if (t && t%97000==0) { rb_pet_stop(&p,"soak"); assert(rb_pet_reset(&p,now)); }
-        tick(20); assert(p.happy_count<=512 && p.candidate_count<=64 && p.tap_count<3);
+        tick(20); assert(p.happy_count<=512 && p.candidate_count<=64 && p.state!=1 && events[4]==0 && events[5]==0);
     }
-    printf("PASS reference gestures, stable poses, recovery interruption, queued HAPPY cancellation, neutral speed, stationary grace, wake consumption, stop and 30min simulated soak; model=%zu bytes\n",sizeof(p));
+    printf("PASS reference gestures, stable poses, retired action rejection, queued HAPPY cancellation, neutral speed, stationary grace, wake consumption, stop and 30min simulated soak; model=%zu bytes\n",sizeof(p));
     return 0;
 }

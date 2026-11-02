@@ -3,6 +3,11 @@ include($ENV{IDF_PATH}/tools/cmake/project.cmake)
 idf_build_set_property(MINIMAL_BUILD ON)
 set(PROJECT_VER "0.2.0")
 project(reBuddy)
+if(CONFIG_REBUDDY_ARM_DAILY_CONTROL)
+    message(STATUS "reBuddy firmware: DAILY ARM CONTROL; boot SLEEP, click wake arrow to enable")
+else()
+    message(WARNING "reBuddy firmware: SCREEN ONLY; CAN motion is disabled. Enable CONFIG_REBUDDY_ARM_DAILY_CONTROL for physical daily actions.")
+endif()
 idf_build_get_property(rb_python PYTHON)
 add_custom_target(rebuddy_flash_budget ALL
     COMMAND "${rb_python}" "${CMAKE_CURRENT_SOURCE_DIR}/tools/check_flash_budget.py"

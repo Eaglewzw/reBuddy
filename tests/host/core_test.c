@@ -27,18 +27,18 @@ static void assert_gestures_cleared(void)
     assert(!pet.pending_valid && pet.pending==RB_ANIM_IDLE);
     assert(!pet.raw_down && !pet.contact && !pet.stroke && !pet.swiped && !pet.consumed);
     assert(!pet.candidate_count && !pet.candidate_ms && !pet.position_count);
-    assert(!pet.moving_ms && !pet.claw_moving_ms && !pet.fast_ms && !pet.soothe_ms);
-    assert(!pet.happy_head && !pet.happy_count && !pet.happy_ms && !pet.tap_count);
+    assert(!pet.moving_ms && !pet.claw_moving_ms && !pet.fast_ms);
+    assert(!pet.happy_head && !pet.happy_count && !pet.happy_ms);
     assert(!pet.path && !pet.max_offset && !pet.speed && !pet.candidate_path);
 }
 int main(void)
 {
     start_probe();
     uint64_t started=pet.started,next_blink=pet.next_blink,last_interaction=pet.last_interaction;
-    pet.pending=RB_ANIM_WITHDRAW; pet.pending_valid=true; pet.pending_source=RB_INPUT_POKE;
+    pet.pending=RB_ANIM_TILT; pet.pending_valid=true; pet.pending_source=RB_INPUT_SWIPE;
     pet.contact=pet.raw_down=pet.stroke=pet.swiped=pet.consumed=true;
-    pet.candidate_count=pet.candidate_ms=pet.position_count=pet.tap_count=2;
-    pet.moving_ms=pet.claw_moving_ms=pet.fast_ms=pet.soothe_ms=120;
+    pet.candidate_count=pet.candidate_ms=pet.position_count=2;
+    pet.moving_ms=pet.claw_moving_ms=pet.fast_ms=120;
     pet.happy_head=1; pet.happy_count=2; pet.happy_ms=120;
     pet.path=pet.max_offset=pet.speed=pet.candidate_path=10;
     pet.happy_latched=true; pet.happy_cooldown_until=12120;

@@ -1,0 +1,72 @@
+{
+  "metadata": {
+    "file": "/home/verser/esp32/reBuddy/record/trajectory-1.tch",
+    "sha256": "15bb8e9984d9326121afbd729b2f5dbdc9df114bec6dbdc74e21390f513e6ab0",
+    "samples": 537,
+    "duration_s": 13.87,
+    "calibration_id": 0,
+    "effective_speed": 0.11578278077560815,
+    "playback_s": 119.79328797501104,
+    "planned_peak_rad_s": 0.09069984107813749,
+    "planned_peak_rad_s2": 0.7999999999999999,
+    "reference_urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948"
+  },
+  "success": false,
+  "disable_confirmed": true,
+  "initial_rad": [
+    0.03715645149350166,
+    0.0014913611812517047,
+    0.0008096032543107867,
+    -0.01288542803376913,
+    -0.0386563315987587,
+    0.1346835196018219,
+    -0.002339315367862582
+  ],
+  "error": "following error 7.54 deg",
+  "status": "quarantined_after_observed_drop",
+  "date": "2026-10-31",
+  "operator_observation": "有突然下落",
+  "root_cause": "unresolved",
+  "motion_completed": false,
+  "subsequent_recordings_attempted": false,
+  "installed_motorbridge": "0.5.0",
+  "reference_motorbridge_requirement": ">=0.5.3,<1",
+  "log_files": [
+    {
+      "path": "build/record-review/20261031-161046-trajectory-1.json",
+      "sha256": "7cce395dbe2b9648fe4b40d2e6634428b9761715d240e68f1175a150509f2746"
+    },
+    {
+      "path": "build/record-review/20261031-161046-trajectory-1.jsonl",
+      "sha256": "054bf07c09fe9c10e3b234dd1eee0413b5ec48ef70421344b90ccebffbd74a55"
+    }
+  ],
+  "last_logged_sample": {
+    "phase": "play",
+    "t": 20.480097708001267,
+    "q": [
+      -0.05109008029103279,
+      0.09766343981027603,
+      0.12310196459293365,
+      0.019481563940644264,
+      0.0046402933076024055,
+      0.04947087913751602,
+      -0.0018791198963299394
+    ],
+    "target": [
+      -0.0533,
+      0.09954523120643254,
+      0.13082833503118693,
+      0.021003547942173986,
+      0.0069,
+      0.0491,
+      0.0
+    ],
+    "error_deg": 0.442688417066557
+  },
+  "limitations": [
+    "Failing feedback sample was not logged by the original script.",
+    "Disable confirmation does not establish mechanically safe support.",
+    "Temporal order between physical drop and disable is unknown."
+  ]
+}

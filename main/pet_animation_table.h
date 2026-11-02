@@ -12,4 +12,4 @@ extern const uint8_t rb_choreo_clip_map[45];
 #define RB_FRAME_X 0
 #define RB_FRAME_Y 0
 #define RB_FRAME_BYTES 153600u
-#define RB_FRAME_COUNT 511u
+#define RB_FRAME_COUNT 486u

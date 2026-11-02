@@ -1,0 +1,71 @@
+{
+  "status": "superseded_by_planned_rerecording",
+  "model": "RS",
+  "joint_motor_ids": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "gripper_motor_id": 7,
+  "operator_mapping": true,
+  "incident_report": "../assets/docs/RS_PLAYBACK_INCIDENT.md",
+  "clips": [
+    {
+      "file": "trajectory-1.tch",
+      "label": "待机",
+      "action_id": "IDLE",
+      "sha256": "15bb8e9984d9326121afbd729b2f5dbdc9df114bec6dbdc74e21390f513e6ab0",
+      "samples": 537,
+      "recorded_duration_s": 13.87,
+      "calibration_id": 0,
+      "offline_check": "passed",
+      "hardware_acceptance": "failed_drop",
+      "current_coordinate_compatibility": "requires_revalidation_after_20261031_163057_rezero"
+    },
+    {
+      "file": "trajectory-2.tch",
+      "label": "抬头看你",
+      "action_id": "PROBE",
+      "sha256": "cb5e417e820ae724c6e43bcb03af0e7fc9c63be73cf672c28c9be40d03aa3c7f",
+      "samples": 553,
+      "recorded_duration_s": 14.38,
+      "calibration_id": 0,
+      "offline_check": "passed",
+      "hardware_acceptance": "not_attempted",
+      "current_coordinate_compatibility": "requires_revalidation_after_20261031_163057_rezero"
+    },
+    {
+      "file": "trajectory-3.tch",
+      "label": "轻蹭",
+      "action_id": "NUZZLE",
+      "sha256": "6c2c2c059953dba4ace7aafd224d2459d27582b893b42575d73945252aef7049",
+      "samples": 507,
+      "recorded_duration_s": 12.969,
+      "calibration_id": 0,
+      "offline_check": "passed",
+      "hardware_acceptance": "not_attempted",
+      "current_coordinate_compatibility": "requires_revalidation_after_20261031_163057_rezero"
+    },
+    {
+      "file": "trajectory-4.tch",
+      "label": "疑惑歪头",
+      "action_id": "TILT",
+      "sha256": "b30f0a79f85cdd71df32f0990d0cc472ca8e05acbabcc6759388d07e3ac033c9",
+      "samples": 421,
+      "recorded_duration_s": 10.83,
+      "calibration_id": 0,
+      "offline_check": "passed",
+      "hardware_acceptance": "not_attempted",
+      "current_coordinate_compatibility": "requires_revalidation_after_20261031_163057_rezero"
+    }
+  ],
+  "current_calibration": {
+    "sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+    "completed_at": "2026-10-31T16:30:57.075378",
+    "evidence": "../assets/verification/rs_recalibration.json"
+  },
+  "note": "用户将重新录制；旧文件保留作诊断证据，不作为新试播输入。"
+}

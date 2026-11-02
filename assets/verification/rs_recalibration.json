@@ -1,0 +1,138 @@
+{
+  "status": "zero_readback_and_disabled_status_verified_motion_not_validated",
+  "date": "2026-10-31",
+  "calibration_path": "/home/verser/.cache/huggingface/lerobot/calibration/robots/rebot_b601_rs_follower/rebot_b601_rs_vr.json",
+  "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+  "calibration": {
+    "schema_version": 1,
+    "robot_type": "rebot_b601_rs_follower",
+    "robot_id": "rebot_b601_rs_vr",
+    "model_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+    "motors": {
+      "shoulder_pan": {
+        "id": 1,
+        "host_id": 253,
+        "model": "rs-06"
+      },
+      "shoulder_lift": {
+        "id": 2,
+        "host_id": 253,
+        "model": "rs-06"
+      },
+      "elbow_flex": {
+        "id": 3,
+        "host_id": 253,
+        "model": "rs-06"
+      },
+      "wrist_flex": {
+        "id": 4,
+        "host_id": 253,
+        "model": "rs-00"
+      },
+      "wrist_yaw": {
+        "id": 5,
+        "host_id": 253,
+        "model": "rs-00"
+      },
+      "wrist_roll": {
+        "id": 6,
+        "host_id": 253,
+        "model": "rs-00"
+      },
+      "gripper": {
+        "id": 7,
+        "host_id": 253,
+        "model": "rs-00"
+      }
+    },
+    "status": "complete",
+    "completed_at": "2026-10-31T16:30:57.075378",
+    "zeroed_joints": [
+      "shoulder_pan",
+      "shoulder_lift",
+      "elbow_flex",
+      "wrist_flex",
+      "wrist_yaw",
+      "wrist_roll",
+      "gripper"
+    ],
+    "positions_deg": {
+      "shoulder_pan": -0.004882826531932077,
+      "shoulder_lift": 0.0024414132659660386,
+      "elbow_flex": -0.0024414132659660386,
+      "wrist_flex": 0.015381586010868715,
+      "wrist_yaw": -0.008789087757477738,
+      "wrist_roll": -0.006591815818108304,
+      "gripper": 0.0
+    },
+    "gripper_closed_deg": 0.0,
+    "gripper_open_deg": null
+  },
+  "calibration_log_sha256": "6e2e7f4134c3f2256cca24c431530fd8afd608f406b291fff90d0a7b8802e53f",
+  "probe_path": "build/record-review/20261031-163234-trajectory-1.json",
+  "probe_sha256": "2117afbf793b7a23c156f995758d6024805abf9b20cb2a559bf58e8549b9a9f6",
+  "probe": {
+    "metadata": {
+      "file": "/home/verser/esp32/reBuddy/record/trajectory-1.tch",
+      "sha256": "15bb8e9984d9326121afbd729b2f5dbdc9df114bec6dbdc74e21390f513e6ab0",
+      "samples": 537,
+      "duration_s": 13.87,
+      "calibration_id": 0,
+      "effective_speed": 0.11578278077560815,
+      "playback_s": 119.79328797501104,
+      "planned_peak_rad_s": 0.09069984107813749,
+      "planned_peak_rad_s2": 0.7999999999999999
+    },
+    "success": true,
+    "disable_confirmed": false,
+    "events": [],
+    "initial_rad": [
+      -4.262394577381201e-05,
+      4.261069989297539e-05,
+      -4.261069989297539e-05,
+      7.672310312045738e-05,
+      -7.667541649425402e-05,
+      0.0,
+      0.0
+    ],
+    "motor_status": {
+      "1": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "2": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "3": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "4": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "5": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "6": {
+        "mode": 0,
+        "fault_bits": 0
+      },
+      "7": {
+        "mode": 0,
+        "fault_bits": 0
+      }
+    }
+  },
+  "runtime": {
+    "python": "/home/verser/Python/lerobot/.venv/bin/python",
+    "motorbridge": "0.5.3"
+  },
+  "limitations": [
+    "No enabled-motion validation; drop cause and mechanically justified stopping remain unresolved.",
+    "Four previous recordings predate these new zero writes; coordinate compatibility must be revalidated.",
+    "Gripper open range remains uncalibrated."
+  ]
+}

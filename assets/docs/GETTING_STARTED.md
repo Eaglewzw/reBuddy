@@ -6,20 +6,20 @@
 
 ```bash
 source /path/to/esp-idf/export.sh
-idf.py -B build/firmware build
+idf.py -B build build
 # 由操作者选择实际设备并执行：
-idf.py -B build/firmware -p /dev/ttyACM0 flash monitor
+idf.py -B build -p /dev/ttyACM0 flash monitor
 ```
 
-目标与默认配置见 `sdkconfig.defaults`。已有 `sdkconfig` 不会被 defaults 自动覆盖，需要通过 menuconfig 更新；本版 `CONFIG_ESP_LCD_TOUCH_MAX_BUTTONS=0`。串口不固定为 `/dev/ttyACM0`，请按实际连接选择。
+默认构建现在启用 `CONFIG_REBUDDY_ARM_DAILY_CONTROL=y`，上电 SLEEP 不使能，点击唤醒才开始机械动作。构建输出应有 `DAILY ARM CONTROL`；若出现 `SCREEN ONLY`，该镜像只播放屏幕。目标与默认配置见 `sdkconfig.defaults`。已有旧 `sdkconfig` 不会被 defaults 自动覆盖，需要通过 menuconfig 开启该选项；本版 `CONFIG_ESP_LCD_TOUCH_MAX_BUTTONS=0`。串口不固定为 `/dev/ttyACM0`，请按实际连接选择。
 
 ## 体验操作
 
 1. 角色识别区域为 x=80～239、y=40～199；轻点并松手探头。
 2. 缓慢抚摸身体可轻蹭；在脸下方的手爪轻柔来回滑动，累计约 0.6 秒有效移动即可请求开心回应。若正在轻蹭，会先平滑结束当前动作；按住不动、摸头或摸眼睛不累计开心。手爪区域随显示姿态变化。开心结束后有 15 秒冷却，需松手至少 2 秒并等待冷却结束才可再次累计。[区域示意](../images/previews/claw-petting-guide.svg)
-3. 1.2 秒内轻点三次收拢，再累计约 1.2 秒有效抚摸展开。展开后先松手再进行下一次互动。
+3. 连续轻点仍请求探头，不进入收拢状态；最多保留一个待处理请求。
 4. 快划触发歪头，同一接触只触发一次；松手后可开始新手势。
-5. 无操作 60 秒或设置选择休息后持续睡眠，呼吸和 Z 循环；只有长按左下角恢复按钮才唤醒。
+5. 无操作 60 秒或设置选择休息后持续睡眠，呼吸和 Z 循环；点击左下角旋转箭头唤醒；上电也从熟睡画面开始。
 6. 左下暂停后再次点击继续；右下设置切换活泼／慵懒、进入休息或打开“编排”。点击齿轮或菜单外区域关闭设置。
 
 ## 编舞体验

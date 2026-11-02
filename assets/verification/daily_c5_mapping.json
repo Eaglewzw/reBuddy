@@ -1,0 +1,282 @@
+{
+  "schema": "rebuddy.daily.c5.mapping.v1",
+  "source_manifest_sha256": "ddfe27c3b7b3cbaaf8c60762131b6f20219c483d59a0ba5e5c042be9245b3466",
+  "data_sha256": "7751cc0d7baf695bdc9a8f000c10818fd5584f1ead1f339d5545fef4f566c5a2",
+  "generator_sha256": "bd78e57447b0ea8c2fe08ec2e0c3281785eea58074eb6ce19e6f8338f1b344c2",
+  "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+  "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+  "status": "native_CAN_execution_opt_in; boot_SLEEP_click_arrow_to_WAKE; hardware_not_tested",
+  "native_execution_available": true,
+  "hardware_accepted": false,
+  "motor_output_enabled": false,
+  "torque_budget_nm": [
+    18.0,
+    18.0,
+    18.0,
+    4.5,
+    4.5,
+    4.5,
+    1.5
+  ],
+  "actions": [
+    {
+      "id": "IDLE",
+      "pet_id": 0,
+      "gif_index": 0,
+      "gif": "01_待机眨眼.gif",
+      "gif_sha256": "683794423745d9e89729d449d0ab043c9770ae63ff8a1258ace69033904c3c82",
+      "motion_duration_s": 0.0,
+      "loop": true,
+      "end_state": "ATTENTIVE_ENABLED",
+      "stages": [],
+      "sync": [],
+      "plan_sha256": null,
+      "pieces": 0
+    },
+    {
+      "id": "PROBE",
+      "pet_id": 1,
+      "gif_index": 1,
+      "gif": "02_抬头看你.gif",
+      "gif_sha256": "36f10f6624531f9239d979263e8e6e81547c916388baa95c88eb2f99058c4077",
+      "motion_duration_s": 9.080454513723165,
+      "loop": false,
+      "end_state": "ATTENTIVE_ENABLED",
+      "stages": [
+        {
+          "name": "idle_to_recording",
+          "start_s": 0.0,
+          "duration_s": 2.0
+        },
+        {
+          "name": "recorded_gesture",
+          "start_s": 2.0,
+          "duration_s": 5.080454513723164
+        },
+        {
+          "name": "generated_return_to_idle",
+          "start_s": 7.080454513723164,
+          "duration_s": 2.0
+        }
+      ],
+      "sync": [
+        {
+          "motion_s": 0.0,
+          "gif_ms": 0.0
+        },
+        {
+          "motion_s": 9.080454513723165,
+          "gif_ms": 5000.0
+        }
+      ],
+      "plan_sha256": "86df420b255e224c25a243e68aacff1e6696c45476767f6bb6c745c32d0d72ec",
+      "pieces": 18
+    },
+    {
+      "id": "NUZZLE",
+      "pet_id": 2,
+      "gif_index": 2,
+      "gif": "03_轻蹭.gif",
+      "gif_sha256": "d981470523426d5ecdc68eface44d0eecc2d4e429a6b0d87040d4cd4f72d21bf",
+      "motion_duration_s": 17.619217206456337,
+      "loop": false,
+      "end_state": "ATTENTIVE_ENABLED",
+      "stages": [
+        {
+          "name": "idle_to_recording",
+          "start_s": 0.0,
+          "duration_s": 2.0
+        },
+        {
+          "name": "recorded_gesture",
+          "start_s": 2.0,
+          "duration_s": 13.619217206456337
+        },
+        {
+          "name": "generated_return_to_idle",
+          "start_s": 15.619217206456337,
+          "duration_s": 2.0
+        }
+      ],
+      "sync": [
+        {
+          "motion_s": 0.0,
+          "gif_ms": 0.0
+        },
+        {
+          "motion_s": 17.619217206456337,
+          "gif_ms": 6000.0
+        }
+      ],
+      "plan_sha256": "b35fad816b7b1212aaf937c9c4663b393866be7519710ee0d7b2bf2da319fc7c",
+      "pieces": 29
+    },
+    {
+      "id": "TILT",
+      "pet_id": 3,
+      "gif_index": 3,
+      "gif": "04_疑惑歪头.gif",
+      "gif_sha256": "73a5555bf1c186794a29de9853f68cee64975f90758b4560c38f8013ec78da09",
+      "motion_duration_s": 21.721502038562292,
+      "loop": false,
+      "end_state": "ATTENTIVE_ENABLED",
+      "stages": [
+        {
+          "name": "idle_to_recording",
+          "start_s": 0.0,
+          "duration_s": 2.0
+        },
+        {
+          "name": "recorded_gesture",
+          "start_s": 2.0,
+          "duration_s": 17.721502038562292
+        },
+        {
+          "name": "generated_return_to_idle",
+          "start_s": 19.721502038562292,
+          "duration_s": 2.0
+        }
+      ],
+      "sync": [
+        {
+          "motion_s": 0.0,
+          "gif_ms": 0.0
+        },
+        {
+          "motion_s": 21.721502038562292,
+          "gif_ms": 5000.0
+        }
+      ],
+      "plan_sha256": "3f2f52c3a230fdb07eb8a9f16ed8fc772eee3a5323e8f5c21bc6f5a618797d5a",
+      "pieces": 44
+    },
+    {
+      "id": "HAPPY",
+      "pet_id": 6,
+      "gif_index": 4,
+      "gif": "05_开心回应.gif",
+      "gif_sha256": "c1ac445e084d65aab2ec078193ab15dd24581d7a69f0463bc0678d97ba40c78d",
+      "motion_duration_s": 11.011150330254521,
+      "loop": false,
+      "end_state": "ATTENTIVE_ENABLED",
+      "stages": [
+        {
+          "name": "idle_to_recording",
+          "start_s": 0.0,
+          "duration_s": 2.0
+        },
+        {
+          "name": "recorded_rise",
+          "start_s": 2.0,
+          "duration_s": 3.615090761239299
+        },
+        {
+          "name": "gripper_open_close_twice",
+          "start_s": 5.6150907612392995,
+          "duration_s": 3.6
+        },
+        {
+          "name": "direct_return_to_idle",
+          "start_s": 9.2150907612393,
+          "duration_s": 1.7960595690152215
+        }
+      ],
+      "sync": [
+        {
+          "motion_s": 0.0,
+          "gif_ms": 0.0
+        },
+        {
+          "motion_s": 2.0,
+          "gif_ms": 0.0
+        },
+        {
+          "motion_s": 5.6150907612392995,
+          "gif_ms": 2000.0
+        },
+        {
+          "motion_s": 9.2150907612393,
+          "gif_ms": 6000.0
+        },
+        {
+          "motion_s": 11.011150330254521,
+          "gif_ms": 8000.0
+        }
+      ],
+      "plan_sha256": "d1a80f2da06f20276b291cb8bd77aae8aec37cfb2f0c50f8a9c1bd267b1d776d",
+      "pieces": 19
+    },
+    {
+      "id": "REST",
+      "pet_id": 7,
+      "gif_index": 5,
+      "gif": "06_慢慢入睡.gif",
+      "gif_sha256": "bb564b8201a70c388852240c74ba883dcfb4e7e30fc9851c68be380aff96ab40",
+      "motion_duration_s": 4.36428823015269,
+      "loop": false,
+      "end_state": "ZERO_ENABLED",
+      "stages": [
+        {
+          "name": "rest",
+          "start_s": 0.0,
+          "duration_s": 4.36428823015269
+        }
+      ],
+      "sync": [
+        {
+          "motion_s": 0.0,
+          "gif_ms": 0.0
+        },
+        {
+          "motion_s": 4.36428823015269,
+          "gif_ms": 7000.0
+        }
+      ],
+      "plan_sha256": "f10bcaf9714564f0fa683f089cc5daacb0c528423983b37863c7b9d915353fcc",
+      "pieces": 1
+    },
+    {
+      "id": "SLEEP",
+      "pet_id": 9,
+      "gif_index": 6,
+      "gif": "07_熟睡呼吸与Z.gif",
+      "gif_sha256": "10e726f9364c48790f1b2ef3b27faa7fd8e955a667c0cc1ead56494d4e38cc5b",
+      "motion_duration_s": 0.0,
+      "loop": true,
+      "end_state": "ZERO_DISABLED",
+      "stages": [],
+      "sync": [],
+      "plan_sha256": null,
+      "pieces": 0
+    },
+    {
+      "id": "WAKE",
+      "pet_id": 8,
+      "gif_index": 7,
+      "gif": "08_迷糊唤醒.gif",
+      "gif_sha256": "24077ea623ae9b0d76b0c3001957755cf524a8fbb5e76b9f209aca116ce9f8a9",
+      "motion_duration_s": 4.36428823015269,
+      "loop": false,
+      "end_state": "ATTENTIVE_ENABLED",
+      "stages": [
+        {
+          "name": "wake",
+          "start_s": 0.0,
+          "duration_s": 4.36428823015269
+        }
+      ],
+      "sync": [
+        {
+          "motion_s": 0.0,
+          "gif_ms": 0.0
+        },
+        {
+          "motion_s": 4.36428823015269,
+          "gif_ms": 5500.0
+        }
+      ],
+      "plan_sha256": "196e816572a09d032ee3b5d896f622692ee3ebb04da209ace7e2a45b528f84d0",
+      "pieces": 1
+    }
+  ]
+}

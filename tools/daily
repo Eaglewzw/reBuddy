@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+script_dir="$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)"
+interpreter="${REBUDDY_PYTHON:-$HOME/Python/lerobot/.venv/bin/python}"
+if [[ ! -x "$interpreter" ]]; then
+    echo "找不到 lerobot Python：$interpreter" >&2
+    echo "请将 REBUDDY_PYTHON 指向装有 motorbridge >=0.5.3,<1 的 Python。" >&2
+    exit 2
+fi
+export PYTHONDONTWRITEBYTECODE=1
+exec "$interpreter" "$script_dir/daily_actions.py" "$@"
