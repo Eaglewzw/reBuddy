@@ -20,6 +20,19 @@ static rb_pet_t pet;
 #ifdef CONFIG_REBUDDY_ARM_DAILY_CONTROL
 static bool arm_linked;
 static void daily_action(void *,const rb_pet_event_t *);
+static void enter_key_worker(void *unused)
+{
+    (void)unused;rb_enter_key_t key={0};
+    for(;;) {
+        bool pressed=false;
+        esp_err_t e=rb_board_read_enter(&pressed);
+        if(rb_enter_key_update(&key,pressed,e==ESP_OK,rb_platform_now_ms()))
+            rb_arm_daily_home();
+        /* No LVGL access or motor I/O here. The existing serialized controller
+         * handles HOME; input polling cannot block its 20ms control cycle. */
+        vTaskDelay(pdMS_TO_TICKS(20));
+    }
+}
 static void reset_sleep_screen(void)
 {
     unsigned requests=pet.requests;
@@ -73,10 +86,10 @@ static void arm_log(void)
     rb_dc_status_t daily;
     if(rb_arm_daily_status(&daily)==ESP_OK) {
         const rb_daily_action_t *action=rb_daily_find(daily.action);
-        ESP_LOGI("rb_daily","snapshot state=%s action=%s request=%u completed=%u enabled=%d disable_confirmed=%d motor=%u detail=%s",
+        ESP_LOGI("rb_daily","snapshot state=%s action=%s request=%u completed=%u enabled=%d disable_confirmed=%d motor=%u detail=%s stop_detail=%s",
             rb_daily_control_state_name(daily.state),action?action->name:"unknown",
             daily.request_id,daily.completed_id,daily.enabled,daily.disable_confirmed,
-            daily.bad_motor,daily.error?daily.error:"ok");
+            daily.bad_motor,daily.error?daily.error:"ok",daily.stop_error?daily.stop_error:"none");
         if(daily.error && daily.hold.valid) {
             const rb_dc_hold_snapshot_t *h=&daily.hold;
             ESP_LOGW("rb_daily","hold trigger at=%llu ms from=%s torque_checked=%d; following values are latched, not live",
@@ -200,6 +213,13 @@ void app_main(void)
     rb_ui_create(&pet);
     lv_timer_create(update,10,NULL); lv_timer_create(animation_log,5000,NULL);
     rb_board_display_unlock();
+#ifdef CONFIG_REBUDDY_ARM_DAILY_CONTROL
+    if(arm_error==ESP_OK) {
+        if(xTaskCreate(enter_key_worker,"enter_home",3072,NULL,2,NULL)!=pdPASS)
+            ESP_LOGE("rb_input","ENTER input task unavailable; screen HOME remains available");
+        else ESP_LOGI("rb_input","Physical ENTER: verified zero return then disable, same as HOME; does not wake");
+    }
+#endif
     ESP_LOGI("reBuddy","Screen starts asleep; click wake arrow to begin WAKE; motor output only in control builds");
     for (;;) { vTaskDelay(pdMS_TO_TICKS(30000)); rb_memory_log(); arm_log(); }
 }

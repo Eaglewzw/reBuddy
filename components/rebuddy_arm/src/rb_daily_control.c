@@ -2,6 +2,7 @@
  * as esp32c5_ui_console. No RS protocol encoding, register-position decoder,
  * second CAN driver, zero calibration write, or alternate motor control loop. */
 #include "rb_daily_control.h"
+#include "rb_recovery_policy.h"
 #include "can_console_motor_runtime.h"
 #include <math.h>
 #include <string.h>
@@ -13,6 +14,7 @@ static void state(rb_daily_control_t *c,rb_dc_state_t s)
 { c->status.state=s;c->changed=c->now;c->still_since=0;c->elapsed=0; }
 static void disable(rb_daily_control_t *c,const char *reason,unsigned motor)
 {
+    if(reason)c->status.stop_error=reason;
     if (reason && !c->status.error) { c->status.error=reason;c->status.bad_motor=motor; }
     /* Precheck has not changed modes or enabled anything: do not disable
      * motors that may belong to a different physical controller. */
@@ -38,11 +40,19 @@ static bool feedback(rb_daily_control_t *c)
             (int64_t)c->now*1000-m->last_feedback_us>100000 ||
             !isfinite(m->position) || !isfinite(m->velocity) || !isfinite(m->torque) ||
             !isfinite(m->mos_temperature)) { valid=false;c->status.bad_motor=j+1;continue; }
+        if(m->last_feedback_us<c->previous_feedback[j]) {valid=false;c->status.bad_motor=j+1;continue;}
         if(m->last_feedback_us!=c->previous_feedback[j]) {
-            float dt=(m->last_feedback_us-c->previous_feedback[j])/1e6f;
-            if(c->previous_feedback[j] && dt>0 && dt<=.1f)
-                c->estimated_v[j]+=dt/(.04f+dt)*((m->position-c->previous_q[j])/dt-c->estimated_v[j]);
-            else c->estimated_v[j]=m->velocity;
+            /* Use controller sampling time, not the spacing between asynchronous
+             * status/active-report frames. Accumulate sub-10ms samples. */
+            float dt=(c->now-c->previous_sample_ms[j])/1000.f;
+            if(!c->previous_sample_ms[j])c->estimated_v[j]=0;
+            else if(dt<.01f)continue;
+            else if(dt>.1f) {
+                if(c->status.state==RB_DC_PRECHECK)c->estimated_v[j]=0;
+                else {valid=false;c->status.bad_motor=j+1;continue;}
+            }
+            else c->estimated_v[j]=rb_filtered_velocity(c->estimated_v[j],m->position-c->previous_q[j],dt);
+            c->previous_sample_ms[j]=c->now;
             c->previous_feedback[j]=m->last_feedback_us;c->previous_q[j]=m->position;
         }
     }
@@ -79,19 +89,24 @@ static bool reference_ready(rb_daily_control_t *c)
     }
     return true;
 }
-static void hold(rb_daily_control_t *c,const char *reason,const float *attempted_target)
+static void hold(rb_daily_control_t *c,const char *reason,const float *attempted_target,bool torque_checked)
 {
     rb_dc_hold_snapshot_t *h=&c->status.hold;
-    h->valid=true;h->torque_checked=attempted_target!=NULL;
+    h->valid=true;h->torque_checked=torque_checked;
     h->source_state=c->status.state;h->at_ms=c->now;
     for(unsigned j=0;j<7;++j) {
         h->measured[j]=c->motors[j].position;
         h->target[j]=attempted_target?attempted_target[j]:c->target[j];
         h->velocity[j]=c->estimated_v[j];
-        h->estimated_torque[j]=attempted_target?c->estimated_torque[j]:0;
+        h->estimated_torque[j]=torque_checked?c->estimated_torque[j]:0;
     }
-    for(unsigned j=0;j<7;++j)c->target[j]=c->motors[j].position;
-    c->status.error=reason;state(c,RB_DC_PROTECTIVE_HOLD);
+    c->home_requested=false;c->pause_requested=false;c->recovery_at=c->now;
+    c->status.error=reason;state(c,RB_DC_BRAKING);
+}
+static bool recoverable(const rb_daily_control_t *c,float gain)
+{
+    return gain>=1 && c->status.enabled && c->status.state!=RB_DC_RAMP && c->status.state!=RB_DC_PROTECTIVE_HOLD &&
+        c->status.state!=RB_DC_BRAKING && c->status.state!=RB_DC_HOLD_RAMP;
 }
 /* Budget rejection is a checked hold, never silently saturated feedforward. */
 static bool send_target(rb_daily_control_t *c,const float q[7],const float v[7],float gain,float next)
@@ -103,8 +118,16 @@ static bool send_target(rb_daily_control_t *c,const float q[7],const float v[7],
     for(unsigned j=0;j<7;++j) {
         if(!isfinite(q[j]) || !isfinite(v[j]) || q[j]<c->lower[j]-1e-5f || q[j]>c->upper[j]+1e-5f ||
             fabsf(g[j])>rb_daily_policy.torque_budget_nm[j]) {disable(c,"invalid target or gravity budget",j+1);return false;}
-        float limit=(j==6?10.8f:5.f)*RAD;
-        if(fabsf(q[j]-c->motors[j].position)>limit) {disable(c,"following error",j+1);return false;}
+        const rb_daily_action_t *plan=rb_daily_find(c->status.action);
+        bool clap=c->status.action==RB_DAILY_HAPPY && c->status.state==RB_DC_PLAY && plan->sync_count>=4 &&
+            next>=plan->sync[2].motion_s && next<=plan->sync[3].motion_s;
+        float limit=(j==6 && clap?10.8f:5.f)*RAD;
+        if(fabsf(q[j]-c->motors[j].position)>limit) {
+            c->status.bad_motor=j+1;
+            if(recoverable(c,gain))hold(c,"following error: protective braking",q,false);
+            else disable(c,"following error",j+1);
+            return false;
+        }
         float estimate=gain*(g[j]+rb_daily_policy.kp[j]*(q[j]-c->motors[j].position)+
                             rb_daily_policy.kd[j]*(v[j]-c->estimated_v[j]));
         c->estimated_torque[j]=estimate;
@@ -113,8 +136,8 @@ static bool send_target(rb_daily_control_t *c,const float q[7],const float v[7],
         }
     }
     if(exceeded) {
-        if(gain>=1 && c->status.state!=RB_DC_PROTECTIVE_HOLD && c->status.state!=RB_DC_HOME && c->status.state!=RB_DC_HOME_SETTLE)
-            hold(c,"torque budget: protective hold",q);
+        if(recoverable(c,gain))
+            hold(c,"torque budget: protective braking",q,true);
         else disable(c,"hold/home torque budget",0);
         return false;
     }
@@ -131,6 +154,51 @@ static bool send_target(rb_daily_control_t *c,const float q[7],const float v[7],
     if(e!=ESP_OK) {disable(c,"reference rejected",0);return false;}
     c->pending=true;c->sent=c->now;c->queued_elapsed=next;
     memcpy(c->target,q,sizeof(c->target));return true;
+}
+static void recovery_tick(rb_daily_control_t *c)
+{
+    float actual[6],g[7]={0};
+    for(unsigned j=0;j<6;++j)actual[j]=c->motors[j].position;
+    if(can_console_arm_gravity_compute(&c->gravity,actual,g)!=ESP_OK) {disable(c,"recovery gravity failed",0);return;}
+    bool ramp=c->status.state==RB_DC_HOLD_RAMP,still=true;
+    /* elapsed advances only after reference delivery: do not report HOLD until
+     * the final full-gain command has actually left the transmit queue. */
+    if(ramp && c->elapsed>=.5f) {
+        memcpy(c->target,c->anchor,sizeof(c->target));state(c,RB_DC_PROTECTIVE_HOLD);return;
+    }
+    float gain=ramp?fminf(1,(c->elapsed+PERIOD)/.5f):0;
+    can_console_motor_target_t targets[7];
+    for(unsigned j=0;j<7;++j) {
+        float measured=c->motors[j].position,velocity=c->estimated_v[j];
+        if(!isfinite(g[j]) || fabsf(g[j])>rb_daily_policy.torque_budget_nm[j]) {disable(c,"recovery gravity exceeds budget",j+1);return;}
+        float kp=rb_daily_policy.kp[j]*gain;
+        float kd=ramp?c->brake_kd[j]+gain*(rb_daily_policy.kd[j]-c->brake_kd[j]):
+            rb_recovery_kd(g[j],velocity,rb_daily_policy.kd[j],rb_daily_policy.torque_budget_nm[j]);
+        if(!ramp)c->brake_kd[j]=kd;
+        float q=ramp?c->anchor[j]:measured;
+        float estimate=g[j]+kp*(q-measured)-kd*velocity;
+        if(!isfinite(estimate) || fabsf(estimate)>rb_daily_policy.torque_budget_nm[j] ||
+            (ramp && fabsf(q-measured)>5*RAD)) {disable(c,"recovery hold cannot meet budget or tracking",j+1);return;}
+        targets[j]=(can_console_motor_target_t){.motor_id=j+1,.mode=MOTOR_MODE_MIT,
+            .value={.position=q,.velocity=0,.torque=g[j]}};
+        if(can_console_motor_set_gains(j+1,kp,kd)!=ESP_OK) {disable(c,"recovery gain update failed",j+1);return;}
+        still &= fabsf(velocity)<=RAD;
+    }
+    esp_err_t e=can_console_motor_submit_reference(targets,7,!c->owned,&c->sequence);
+    if(e==ESP_ERR_TIMEOUT) {if(c->now-c->sent>100)disable(c,"recovery reference queue timeout",0);return;}
+    if(e!=ESP_OK) {disable(c,"recovery reference rejected",0);return;}
+    c->pending=true;c->sent=c->now;c->queued_elapsed=c->elapsed+PERIOD;
+    if(!ramp) {
+        if(!still)c->still_since=0;
+        else if(!c->still_since)c->still_since=c->now;
+        if(c->still_since && c->now-c->still_since>=500) {
+            for(unsigned j=0;j<7;++j) {
+                c->anchor[j]=c->motors[j].position;
+                c->lower[j]=fminf(bounds_lo[j],c->anchor[j]);c->upper[j]=fmaxf(bounds_hi[j],c->anchor[j]);
+            }
+            state(c,RB_DC_HOLD_RAMP);c->queued_elapsed=0;
+        } else if(c->now-c->recovery_at>5000)disable(c,"recovery did not stop within 5s",0);
+    }
 }
 static void move(rb_daily_control_t *c,const float to[7],bool home)
 {
@@ -186,15 +254,26 @@ esp_err_t rb_daily_control_request(rb_daily_control_t *c,unsigned action,unsigne
     bool retry=s==RB_DC_FAULT && !c->status.enabled && !c->owned;
     if(s!=RB_DC_OFF && s!=RB_DC_HOLD && s!=RB_DC_ZERO_HOLD && !retry)return ESP_ERR_INVALID_STATE;
     if(action==RB_DAILY_SLEEP && s!=RB_DC_ZERO_HOLD)return ESP_ERR_INVALID_STATE;
-    c->status.action=action;c->status.request_id=id;c->status.phase=0;c->status.error=NULL;c->status.bad_motor=0;
+    c->status.action=action;c->status.request_id=id;c->status.phase=0;c->status.error=NULL;c->status.stop_error=NULL;c->status.bad_motor=0;
     memset(&c->status.hold,0,sizeof(c->status.hold));
     c->home_requested=c->pause_requested=false;c->ui_at=c->now;
     if(action==RB_DAILY_SLEEP)disable(c,NULL,0);
-    else if(s==RB_DC_OFF || retry) {c->status.disable_confirmed=false;state(c,RB_DC_PRECHECK);}
+    else if(s==RB_DC_OFF || retry) {
+        memset(c->previous_feedback,0,sizeof(c->previous_feedback));
+        memset(c->previous_sample_ms,0,sizeof(c->previous_sample_ms));
+        memset(c->estimated_v,0,sizeof(c->estimated_v));
+        c->status.disable_confirmed=false;state(c,RB_DC_PRECHECK);
+    }
     else {state(c,RB_DC_ENTRY);c->duration=0;} /* plan from next fresh sample */
     return ESP_OK;
 }
-void rb_daily_control_home(rb_daily_control_t *c) { if(c)c->home_requested=true; }
+void rb_daily_control_home(rb_daily_control_t *c)
+{
+    if(!c || c->status.state==RB_DC_OFF || c->status.state==RB_DC_FAULT ||
+       c->status.state==RB_DC_HOME || c->status.state==RB_DC_HOME_SETTLE ||
+       c->status.state==RB_DC_DISABLING)return;
+    c->home_requested=true;
+}
 void rb_daily_control_pause(rb_daily_control_t *c) { if(c)c->pause_requested=true; }
 void rb_daily_control_heartbeat(rb_daily_control_t *c,uint64_t now) {c->ui_at=now;}
 void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
@@ -220,7 +299,10 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
                 state(c,c->status.error?RB_DC_FAULT:RB_DC_OFF);
             }
         }
-        if(now-c->changed>4000 && !c->status.disable_confirmed)c->status.error="disable unconfirmed: use independent stop";
+        if(now-c->changed>4000 && !c->status.disable_confirmed) {
+            c->status.stop_error="disable unconfirmed: use independent stop";
+            if(!c->status.error)c->status.error=c->status.stop_error;
+        }
         return;
     }
     if(!bus) {disable(c,"CAN offline",0);return;}
@@ -238,9 +320,12 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
     if(!check_feedback(c,running))return;
     for(unsigned j=0;j<7;++j)if(c->motors[j].mos_temperature>=100) {
         if(!c->status.enabled){disable(c,"temperature before enable",j+1);return;}
-        if(c->status.state!=RB_DC_HOME && c->status.state!=RB_DC_HOME_SETTLE)c->home_requested=true;
+        if(c->status.state!=RB_DC_HOME && c->status.state!=RB_DC_HOME_SETTLE &&
+            c->status.state!=RB_DC_BRAKING && c->status.state!=RB_DC_HOLD_RAMP &&
+            c->status.state!=RB_DC_PROTECTIVE_HOLD)c->home_requested=true;
     }
     if(!reference_ready(c))return;
+    if(c->status.state==RB_DC_BRAKING || c->status.state==RB_DC_HOLD_RAMP) {recovery_tick(c);return;}
     if(c->home_requested && c->status.enabled && c->status.state!=RB_DC_RAMP) {
         float zero[7]={0};zero[6]=c->motors[6].position;
         c->home_requested=false;c->pause_requested=false;c->status.error=NULL;
@@ -249,7 +334,7 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
               (c->pause_requested || now-c->ui_at>500) && c->status.state!=RB_DC_PROTECTIVE_HOLD) {
         bool requested=c->pause_requested;c->pause_requested=false;
         if(c->status.state==RB_DC_RAMP) {disable(c,"startup cancelled",0);return;}
-        hold(c,requested?"pause requested: HOME to exit":"UI heartbeat timeout: HOME to exit",NULL);
+        hold(c,requested?"pause requested: HOME to exit":"UI heartbeat timeout: HOME to exit",NULL,false);
     }
     float q[7],v[7]={0},a[7];
     switch(c->status.state) {
@@ -345,7 +430,7 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
                 c->status.completed_id=c->status.request_id;c->status.phase=1;
                 state(c,c->status.action==RB_DAILY_REST?RB_DC_ZERO_HOLD:RB_DC_HOLD);
             }
-        } else if(now-c->changed>8000) {hold(c,"arrival timeout: HOME to exit",NULL);break;}
+        } else if(now-c->changed>8000) {hold(c,"arrival timeout: HOME to exit",NULL,false);break;}
         (void)send_target(c,c->target,v,1,c->elapsed);break;
     }
     case RB_DC_HOLD: case RB_DC_ZERO_HOLD: case RB_DC_PROTECTIVE_HOLD:
@@ -356,6 +441,6 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
 const char *rb_daily_control_state_name(rb_dc_state_t s)
 {
     static const char *names[]={"OFF","CHECK","MODE","ENABLE","RAMP","APPROACH","SETTLE",
-        "PLAY","SETTLE","IDLE HOLD","ZERO HOLD","PROTECTIVE HOLD","HOME","HOME SETTLE","DISABLING","FAULT"};
-    return s<=RB_DC_FAULT?names[s]:"UNKNOWN";
+        "PLAY","SETTLE","IDLE HOLD","ZERO HOLD","PROTECTIVE HOLD","HOME","HOME SETTLE","DISABLING","FAULT","BRAKING","HOLD RAMP"};
+    return s<=RB_DC_HOLD_RAMP?names[s]:"UNKNOWN";
 }

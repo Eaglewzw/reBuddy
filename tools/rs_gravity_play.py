@@ -20,6 +20,7 @@ from rs_gravity_record import (
 )
 from rs_record_playback import LOWER, UPPER, MEASUREMENT_TOLERANCE_RAD
 from rs_probe_trial import Curve, VMAX, AMAX
+from rs_recovery_policy import RecoverableControlError, FollowingError, damping_gain, filtered_velocity
 
 KP = np.array([50., 50., 50., 30., 50., 50., 5.])
 KD = np.array([3., 5., 5., 3., 4., 4., .3])
@@ -34,11 +35,10 @@ class PlaybackInterrupted(RuntimeError):
     """Operator interruption, distinct from control/feedback faults."""
 
 
-class TorqueBudgetExceeded(RuntimeError):
+class TorqueBudgetExceeded(RecoverableControlError):
     def __init__(self, details):
-        self.details=details
         super().__init__('estimated gravity + PD torque exceeds budget: '+
-                         json.dumps(details,ensure_ascii=False))
+                         json.dumps(details,ensure_ascii=False),details)
 
 
 def load_clip(path, identity, *, recover_interrupted=False):
@@ -184,20 +184,27 @@ class Controller:
         self.velocity_limit = np.r_[np.full(6,VMAX),gripper_velocity_limit]
         self.following_limit = np.full(7,FOLLOW_TOLERANCE)
 
+    def observe(self,q,stamp):
+        q=vector(q)
+        if np.any(q<LOWER-MEASUREMENT_TOLERANCE_RAD) or np.any(q>UPPER+MEASUREMENT_TOLERANCE_RAD):
+            raise RuntimeError('feedback/target outside joint bounds')
+        if self.previous is not None:
+            dt=(stamp-self.previous_ns)/1e9
+            if not 0<dt<=MAX_GAP:raise RuntimeError('feedback interval exceeded 100 ms')
+            if dt<.01:return q
+            self.velocity=filtered_velocity(self.velocity,q-self.previous,dt)
+        self.previous,self.previous_ns=q.copy(),stamp
+        return q
+
     def command(self, q, stamp, target, velocity, gain=1.):
         q, target, velocity = vector(q), vector(target), vector(velocity)
         if (np.any(q < LOWER - MEASUREMENT_TOLERANCE_RAD) or np.any(q > UPPER + MEASUREMENT_TOLERANCE_RAD)
                 or np.any(target < self.target_lower)
                 or np.any(target > self.target_upper)):
             raise RuntimeError('feedback/target outside joint bounds')
-        if self.previous is not None:
-            dt = (stamp - self.previous_ns) / 1e9
-            if not 0 < dt <= MAX_GAP:
-                raise RuntimeError('feedback interval exceeded 100 ms')
-            self.velocity += dt / (.04 + dt) * ((q - self.previous) / dt - self.velocity)
-        self.previous, self.previous_ns = q.copy(), stamp
+        self.observe(q,stamp)
         if np.any(abs(target - q) > self.following_limit):
-            raise RuntimeError('following error exceeds limits: error_deg=' +
+            raise FollowingError('following error exceeds limits: error_deg=' +
                                str(np.degrees(target-q).round(3).tolist()) +
                                ', limits_deg=' + str(np.degrees(self.following_limit).round(3).tolist()))
         if np.any(abs(velocity) > self.velocity_limit + 1e-8):
@@ -219,6 +226,20 @@ class Controller:
         return dict(target_rad=target.tolist(), velocity_rad_s=velocity.tolist(),
                     kp=kp.tolist(), kd=kd.tolist(), feedforward_nm=ff.tolist(),
                     estimated_torque_nm=estimated.tolist(), actual_rad=q.tolist())
+
+    def recovery_command(self,q,stamp,anchor=None,gain=0.,brake_kd=None):
+        q=self.observe(q,stamp)
+        g=np.r_[vector(self.gravity(q[:6]),6),0.]
+        if np.any(abs(g)>CAPS):raise RuntimeError('recovery gravity exceeds budget')
+        kp=KP*gain
+        kd=damping_gain(g,self.velocity,KD,CAPS) if anchor is None else brake_kd+gain*(KD-brake_kd)
+        target=q.copy() if anchor is None else vector(anchor)
+        estimated=g+kp*(target-q)-kd*self.velocity
+        if (not 0<=gain<=1 or not np.all(np.isfinite(estimated)) or np.any(abs(estimated)>CAPS) or
+                (anchor is not None and np.any(abs(target-q)>FOLLOW_TOLERANCE))):
+            raise RuntimeError('recovery hold cannot meet budget or tracking')
+        return dict(target_rad=target.tolist(),velocity_rad_s=[0.]*7,kp=kp.tolist(),kd=kd.tolist(),
+                    feedforward_nm=g.tolist(),estimated_torque_nm=estimated.tolist(),actual_rad=q.tolist())
 
 
 def play(curve, gravity, report, args, *, backend_factory=None, zero_return_factory=None):

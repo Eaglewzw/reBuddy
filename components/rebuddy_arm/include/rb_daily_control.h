@@ -6,7 +6,7 @@
 typedef enum { RB_DC_OFF, RB_DC_PRECHECK, RB_DC_MODE, RB_DC_ENABLE, RB_DC_RAMP,
     RB_DC_ENTRY, RB_DC_ENTRY_SETTLE, RB_DC_PLAY, RB_DC_SETTLE, RB_DC_HOLD,
     RB_DC_ZERO_HOLD, RB_DC_PROTECTIVE_HOLD, RB_DC_HOME, RB_DC_HOME_SETTLE,
-    RB_DC_DISABLING, RB_DC_FAULT } rb_dc_state_t;
+    RB_DC_DISABLING, RB_DC_FAULT, RB_DC_BRAKING, RB_DC_HOLD_RAMP } rb_dc_state_t;
 typedef struct {
     bool valid,torque_checked;
     rb_dc_state_t source_state;
@@ -19,6 +19,7 @@ typedef struct {
     float phase;
     bool enabled,disable_confirmed;
     const char *error;
+    const char *stop_error;
     unsigned bad_motor;
     /* Latched before protective hold replaces the failed target with measured
      * position. Reading it later must not erase the original arrival error. */
@@ -36,6 +37,8 @@ typedef struct {
     float anchor[7],target[7],from[7],to[7],lower[7],upper[7];
     float previous_q[7],estimated_v[7];
     float estimated_torque[7];
+    float brake_kd[7];
+    uint64_t recovery_at,previous_sample_ms[7];
     int64_t previous_feedback[7];
 } rb_daily_control_t;
 esp_err_t rb_daily_control_init(rb_daily_control_t *c,int channel);

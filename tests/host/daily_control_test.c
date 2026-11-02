@@ -10,6 +10,7 @@ static uint64_t now;
 static unsigned enables,disables,references,reports;
 static bool stale,stall_tx,fail_tx,ignore_disable,fault_bus;
 static float tracking_bias[7];
+static int feedback_skew_us;
 static can_console_motor_target_t queued[7];
 static uint32_t serial;
 int64_t esp_timer_get_time(void){return now*1000;}
@@ -53,7 +54,7 @@ static rb_daily_control_t c;
 static void tick(bool ui)
 {
     now+=20;
-    if(!stale)for(unsigned j=0;j<7;++j)motors[j].last_feedback_us=now*1000;
+    if(!stale)for(unsigned j=0;j<7;++j)motors[j].last_feedback_us=now*1000-feedback_skew_us;
     if(ui)rb_daily_control_heartbeat(&c,now);
     rb_daily_control_tick(&c,now);
 }
@@ -138,7 +139,73 @@ int main(int argc,char **argv)
         assert(rb_daily_control_request(&c,RB_DAILY_IDLE,1)==ESP_OK);until(RB_DC_FAULT,20);assert(!enables && !disables);return 0;
     }
     idle();
-    if(!strcmp(argv[1],"all_actions")) {
+    if(!strcmp(argv[1],"home_request_idempotent")) {
+        rb_daily_control_home(&c);until(RB_DC_HOME,10);
+        uint64_t began=c.changed;
+        for(unsigned i=0;i<20;++i) {
+            rb_daily_control_home(&c);tick(true);
+            assert(c.status.state==RB_DC_HOME && c.changed==began);
+        }
+        until(RB_DC_OFF,1500);assert(c.status.disable_confirmed && enables==1);
+        rb_daily_control_home(&c);
+        for(unsigned i=0;i<20;++i)tick(true);
+        assert(c.status.state==RB_DC_OFF && !c.home_requested && enables==1);
+    } else if(!strcmp(argv[1],"feedback_frame_spacing")) {
+        assert(rb_daily_control_request(&c,RB_DAILY_PROBE,2)==ESP_OK);until(RB_DC_PLAY,1000);
+        for(unsigned i=0;i<80;++i) {
+            float before=c.estimated_v[1],q=c.previous_q[1];
+            feedback_skew_us=i%2?19000:0;tick(true);
+            float expected=before+.02f/.06f*((c.previous_q[1]-q)/.02f-before);
+            assert(fabsf(c.estimated_v[1]-expected)<1e-6f && !disables);
+        }
+    } else if(!strcmp(argv[1],"hold_ramp_delivery")) {
+        rb_daily_control_pause(&c);until(RB_DC_HOLD_RAMP,100);
+        for(unsigned i=0;i<50 && motors[0].kp<rb_daily_policy.kp[0];++i)tick(true);
+        assert(c.status.state==RB_DC_HOLD_RAMP && c.pending);
+        stall_tx=true;
+        for(unsigned i=0;i<3;++i){tick(true);assert(c.status.state==RB_DC_HOLD_RAMP);}
+        stall_tx=false;until(RB_DC_PROTECTIVE_HOLD,10);assert(!disables);
+    } else if(!strcmp(argv[1],"home_budget")) {
+        rb_daily_control_home(&c);until(RB_DC_HOME,10);
+        c.estimated_v[6]=-10.f;until(RB_DC_BRAKING,10);
+        assert(c.status.hold.source_state==RB_DC_HOME && !disables);
+        for(unsigned i=0;i<15;++i) {
+            tick(true);
+            assert(c.status.state==RB_DC_BRAKING && !disables);
+            float q[6],g[6];for(unsigned j=0;j<6;++j)q[j]=c.motors[j].position;
+            assert(can_console_arm_gravity_compute(&c.gravity,q,g)==ESP_OK);
+            for(unsigned j=0;j<7;++j) {
+                assert(motors[j].kp==0 && motors[j].kd>=0 && motors[j].kd<=rb_daily_policy.kd[j]);
+                float ff=j<6?g[j]:0;
+                assert(fabsf(queued[j].value.torque-ff)<1e-5f);
+                assert(fabsf(ff-motors[j].kd*c.estimated_v[j])<=rb_daily_policy.torque_budget_nm[j]+1e-5f);
+            }
+        }
+        until(RB_DC_PROTECTIVE_HOLD,150);assert(!disables && c.status.enabled);
+        for(unsigned i=0;i<20;++i)tick(true);
+        assert(c.status.state==RB_DC_PROTECTIVE_HOLD);
+        rb_daily_control_home(&c);until(RB_DC_OFF,1500);
+    } else if(!strcmp(argv[1],"following_recovery")) {
+        c.target[0]+=.11f;until(RB_DC_BRAKING,10);
+        assert(strstr(c.status.error,"following") && c.status.bad_motor==1 && !disables);
+        until(RB_DC_PROTECTIVE_HOLD,150);assert(!disables);
+    } else if(!strcmp(argv[1],"recovery_stale")) {
+        rb_daily_control_pause(&c);until(RB_DC_BRAKING,10);
+        stale=true;until(RB_DC_DISABLING,20);
+        assert(strstr(c.status.error,"pause requested") && strstr(c.status.stop_error,"stale"));
+    } else if(!strcmp(argv[1],"recovery_timeout")) {
+        rb_daily_control_pause(&c);until(RB_DC_BRAKING,10);
+        for(unsigned i=0;i<270 && c.status.state!=RB_DC_DISABLING;++i) {
+            c.estimated_v[6]=.1f;tick(true);
+        }
+        assert(c.status.state==RB_DC_DISABLING && strstr(c.status.stop_error,"within 5s"));
+    } else if(!strcmp(argv[1],"home_arrival_timeout")) {
+        rb_daily_control_home(&c);until(RB_DC_HOME_SETTLE,1500);
+        tracking_bias[1]=3.5f*.01745329252f;until(RB_DC_BRAKING,450);
+        assert(c.status.hold.source_state==RB_DC_HOME_SETTLE && !disables);
+        tracking_bias[1]=0;until(RB_DC_PROTECTIVE_HOLD,150);
+        assert(!disables && !c.status.disable_confirmed);
+    } else if(!strcmp(argv[1],"all_actions")) {
         unsigned ids[]={RB_DAILY_PROBE,RB_DAILY_NUZZLE,RB_DAILY_TILT,RB_DAILY_HAPPY};
         for(unsigned i=0;i<4;++i) {
             assert(rb_daily_control_request(&c,ids[i],i+2)==ESP_OK);
@@ -165,17 +232,19 @@ int main(int argc,char **argv)
         motors[3].position=NAN;until(RB_DC_DISABLING,5);
     } else if(!strcmp(argv[1],"ui_loss")) {
         for(unsigned i=0;i<30;++i)tick(false);
+        assert(c.status.state==RB_DC_BRAKING && !disables);
+        until(RB_DC_PROTECTIVE_HOLD,150);
         assert(c.status.state==RB_DC_PROTECTIVE_HOLD && c.status.enabled && !disables);
         assert(strstr(c.status.error,"UI heartbeat timeout") && c.status.hold.valid);
         assert(rb_daily_control_request(&c,RB_DAILY_HAPPY,3)==ESP_ERR_INVALID_STATE);
         rb_daily_control_home(&c);until(RB_DC_OFF,1500);
     } else if(!strcmp(argv[1],"budget")) {
         c.estimated_v[6]=-10.f;
-        until(RB_DC_PROTECTIVE_HOLD,10);assert(!disables);
+        until(RB_DC_BRAKING,10);assert(!disables);
         rb_dc_hold_snapshot_t trigger=c.status.hold;
         assert(trigger.valid && trigger.torque_checked && c.status.bad_motor==7);
         assert(fabsf(trigger.estimated_torque[6])>rb_daily_policy.torque_budget_nm[6]);
-        for(unsigned i=0;i<10;++i)tick(true);
+        until(RB_DC_PROTECTIVE_HOLD,150);
         assert(c.status.enabled);
         assert(memcmp(&trigger,&c.status.hold,sizeof(trigger))==0);
         rb_daily_control_home(&c);until(RB_DC_OFF,1500);
@@ -193,7 +262,7 @@ int main(int argc,char **argv)
         assert(rb_daily_control_request(&c,RB_DAILY_REST,2)==ESP_OK);
         until(RB_DC_SETTLE,1500);
         tracking_bias[1]=3.5f*.01745329252f;
-        until(RB_DC_PROTECTIVE_HOLD,450);
+        until(RB_DC_BRAKING,450);
         rb_dc_hold_snapshot_t trigger=c.status.hold;
         assert(strstr(c.status.error,"arrival timeout"));
         assert(trigger.valid && !trigger.torque_checked && trigger.source_state==RB_DC_SETTLE);
@@ -202,6 +271,7 @@ int main(int argc,char **argv)
         assert(c.status.completed_id!=2 && !disables && c.status.enabled);
         assert(rb_daily_control_request(&c,RB_DAILY_SLEEP,3)==ESP_ERR_INVALID_STATE);
         tracking_bias[1]=0;
+        until(RB_DC_PROTECTIVE_HOLD,150);
         for(unsigned i=0;i<30;++i)tick(true);
         assert(memcmp(&trigger,&c.status.hold,sizeof(trigger))==0);
         assert(c.status.state==RB_DC_PROTECTIVE_HOLD && !disables);

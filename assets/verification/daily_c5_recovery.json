@@ -1,0 +1,103 @@
+{
+  "date": "2026-11-02",
+  "hardware_accepted": false,
+  "flashed": false,
+  "motor_io": false,
+  "scope": "C5 daily executor and Python daily playback; VR homing remains reused, not a complete port",
+  "states": [
+    "BRAKING",
+    "HOLD RAMP",
+    "PROTECTIVE HOLD"
+  ],
+  "recoverable": [
+    "ordinary motion and C5 HOME estimated torque rejection",
+    "following error with otherwise healthy feedback",
+    "arrival timeout",
+    "C5 pause or UI heartbeat loss after full startup"
+  ],
+  "recovery": {
+    "braking_kp": 0,
+    "gravity": "continuous full model feedforward, never faded during recovery",
+    "kd": "bounded by unchanged per-axis estimate budget; no normal-command saturation",
+    "stable_velocity_deg_s": 1,
+    "stable_time_s": 0.5,
+    "braking_timeout_s": 5,
+    "position_gain_ramp_s": 0.5,
+    "fixed_hold_anchor_after_braking": true,
+    "hold_requires_native_final_reference_delivery": true,
+    "automatic_action_resume": false,
+    "automatic_thermal_home_retry_after_failed_home": false
+  },
+  "limits": {
+    "torque_nm": [
+      18,
+      18,
+      18,
+      4.5,
+      4.5,
+      4.5,
+      1.5
+    ],
+    "daily_zero_tolerance_deg": 3,
+    "idle_tolerance_deg": 1,
+    "gripper_arrival_tolerance_deg": 3,
+    "arrival_timeout_s": 8,
+    "following_arm_deg": 5,
+    "following_gripper_deg": 5,
+    "following_gripper_happy_clap_deg": 10.8,
+    "feedback_deadline_ms": 100,
+    "filter_tau_ms": 40,
+    "filter_min_sample_ms": 10
+  },
+  "still_requests_disable": [
+    "nonfinite/stale feedback",
+    "CAN or command delivery failure",
+    "motor hardware fault or enable/mode loss",
+    "control deadline exceeded",
+    "gravity alone exceeds budget",
+    "startup partial-gain failure",
+    "braking timeout or failure to establish/maintain hold"
+  ],
+  "remaining_differences": [
+    "C5 status-frame and Python mechPos feedback have different resolution and arrival timing",
+    "Python exit homing still uses the VR dispatcher and its internal policies; C5 HOME uses the native executor",
+    "Damping is budgeted feedback control, not a guaranteed stop-distance or acceleration bound",
+    "Offline tests do not validate real plant, payload or mechanical stopping behavior"
+  ],
+  "tests": {
+    "ctest_total_passed": 32,
+    "affected_final_rerun_passed": 4,
+    "additional_zero_override_test_passed": true,
+    "C_Python_parity_tests": 4,
+    "random_budget_samples": 1000,
+    "native_scenarios": 24,
+    "CAN_opened": false
+  },
+  "source_sha256": {
+    "components/rebuddy_arm/src/rb_daily_control.c": "1819f9b0731b116daf8c15faf4ff8edaeb80e5f320b7173e030fa6cedf447b62",
+    "components/rebuddy_arm/include/rb_daily_control.h": "d43be1b93210ae1758533a83f4eb1889813ba7728dfdc2dcada11664c18f401f",
+    "components/rebuddy_arm/include/rb_recovery_policy.h": "237983015fb82b534e2dad2bbded2dc3e4abf0e1df38e990b0d6113a8aea39a8",
+    "components/rebuddy_arm/src/rb_arm_daily.c": "49ca3c4544eb9f1891af77a22275cd9f1a49ab57aaa15cc2da1577572be16439",
+    "main/main.c": "4ca831db22a9c99b6a049b5bb5e4ba83b3f36990261f24902e0af3c17c6e35b7",
+    "tools/rs_daily_session.py": "6e7259696dce7962629ae80dfaeefc7c139130b15327b8db1e7b2afdacf6aaf4",
+    "tools/rs_gravity_play.py": "3b2b748a538f18478e2c86970d96e75e7931d8583536f45b4987bcb3a38762d1",
+    "tools/rs_recovery_policy.py": "6506a196982eab1ab69c10dcc24221adfe55ebcdfc2fd77995aa9d9424bfe81e",
+    "tools/rs_zero_return.py": "cc90fed29abce36865e6a8170ce4157c54c1a3771a739505822d3d740ab58093",
+    "tests/host/daily_control_test.c": "893e91101c824dda135c8963da0e39d32c1ebb63f8ce251198f3014e58eef2f9",
+    "tests/host/daily_control_test.py": "641acca618e45139b88384e4c8af8eaafd07a45876e74942cc000386f1e6b8b8",
+    "tests/host/daily_recovery_parity_test.py": "172b3e14df2d660411655eaf8edcd7b454a45550069923651759617d9e5a562a",
+    "tests/host/rs_daily_prepared_test.py": "756b665bdc9e21ee8546fb33d372b2aac20f0c01413d48dabbe9a726e1554ba3",
+    "tests/host/rs_zero_return_test.py": "e0f058c8057f70f12c14cd86ad8adf23e788b4cc2f35af1a7aee9de0660256f2"
+  },
+  "control_task_logging": "nonblocking latest-status queue; separate priority-1 logger; original trigger preserved",
+  "builds": {
+    "build/reBuddy.bin": {
+      "bytes": 5534432,
+      "sha256": "cb69ae7ef836d8fbed2d2bd74a19cbbcaf393f540cfb0f6f3a0ddb42557e3a77"
+    },
+    "build/daily-c5/reBuddy.bin": {
+      "bytes": 5534432,
+      "sha256": "33725502abcad411291f7ad3000ddde30094a06b33efad0e62e3aa1d47bb1633"
+    }
+  }
+}

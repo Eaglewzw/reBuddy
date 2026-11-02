@@ -19,6 +19,7 @@ enum {
     SDA = 23, SCL = 24, LCD_CLK = 8, LCD_MOSI = 10, LCD_CS = 7, LCD_DC = 25,
     TOUCH_INT = 0, PCA_ADDRESS = 0x21,
     LCD_RESET = 1u << 0, TOUCH_RESET = 1u << 1, BACKLIGHT = 1u << 5,
+    ENTER_KEY = 1u << 6,
     CAN_STANDBY = (1u << 8) | (1u << 9), LEDS_OFF = 7u << 10,
     OUTPUTS = LCD_RESET | TOUCH_RESET | BACKLIGHT | CAN_STANDBY | LEDS_OFF
 };
@@ -84,6 +85,17 @@ static esp_err_t set_output(uint16_t mask, bool high)
     return err;
 }
 static void delay_ms(uint32_t ms) { vTaskDelay(pdMS_TO_TICKS(ms)); }
+
+esp_err_t rb_board_read_enter(bool *pressed)
+{
+    if(!pressed)return ESP_ERR_INVALID_ARG;
+    *pressed=false;
+    if(!ready)return ESP_ERR_INVALID_STATE;
+    uint8_t reg=0,inputs[2];
+    esp_err_t error=i2c_master_transmit_receive(pca,&reg,1,inputs,sizeof(inputs),20);
+    if(error==ESP_OK)*pressed=(inputs[0]&ENTER_KEY)==0;
+    return error;
+}
 
 esp_err_t rb_board_can1_standby(bool standby)
 {
@@ -238,7 +250,7 @@ esp_err_t rb_board_init(void)
     lvgl_port_unlock();
     ESP_RETURN_ON_FALSE(pointer, ESP_ERR_NO_MEM, TAG, "Touch pointer");
     ESP_RETURN_ON_ERROR(set_output(BACKLIGHT, true), TAG, "Backlight");
-    ESP_LOGI(TAG, "Touch-only board ready: 320x240, GT911, PCA9535 outputs only; no key/GPIO-stop input; CAN in standby");
+    ESP_LOGI(TAG, "Board ready: 320x240, GT911, PCA9535 ENTER=P0.6 active-low; CAN in standby");
     ESP_LOGI(TAG, "Display: %dMHz SPI, 2x320x40 RGB565 DMA buffers, 10ms refresh polling / 20ms input",
              CONFIG_REBUDDY_LCD_SPI_MHZ);
     ready=true;

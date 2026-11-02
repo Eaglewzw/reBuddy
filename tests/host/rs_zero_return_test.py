@@ -44,10 +44,15 @@ class Tests(unittest.TestCase):
             self.assertEqual(fast.args.exit_zero_speed_rad_s,1.)
             self.assertEqual(fast.args.exit_zero_acceleration_rad_s2,2.)
             self.assertEqual(fast.args.exit_zero_tolerance_deg,default.args.exit_zero_tolerance_deg)
+            daily=zero.ZeroReturn(None,gravity,metadata,args,journal,config_path=config,
+                                 exit_tolerance_deg=3.,exit_speed_rad_s=1.,exit_acceleration_rad_s2=2.)
+            self.assertEqual(daily.args.exit_zero_tolerance_deg,3.)
+            self.assertEqual(default.args.exit_zero_tolerance_deg,2.)
             np.testing.assert_allclose(fast.robot.velocity_limit_rad_s,np.ones(6))
             self.assertEqual(rows[-1]['motion_options']['exit_zero_speed_rad_s'],1.)
             for kwargs in (dict(exit_speed_rad_s=1.01),dict(exit_acceleration_rad_s2=2.01),
-                           dict(exit_speed_rad_s=float('nan')),dict(exit_acceleration_rad_s2=0.)):
+                           dict(exit_speed_rad_s=float('nan')),dict(exit_acceleration_rad_s2=0.),
+                           dict(exit_tolerance_deg=0.),dict(exit_tolerance_deg=3.1)):
                 with self.assertRaisesRegex(ValueError,'override'):
                     zero.ZeroReturn(None,gravity,metadata,args,journal,config_path=config,**kwargs)
 

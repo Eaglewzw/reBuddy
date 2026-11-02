@@ -89,7 +89,7 @@ class _IO:
 
 class ZeroReturn:
     def __init__(self, backend, gravity, metadata, args, journal, *, config_path=DEFAULT_CONFIG,
-                 exit_speed_rad_s=None,exit_acceleration_rad_s2=None):
+                 exit_speed_rad_s=None,exit_acceleration_rad_s2=None,exit_tolerance_deg=None):
         self.backend, self.gravity, self.journal = backend, gravity, journal
         self.config_path = Path(config_path)
         data = yaml.safe_load(self.config_path.read_text())
@@ -104,6 +104,10 @@ class ZeroReturn:
         keys = ('exit_zero_tolerance_deg', 'exit_zero_speed_rad_s', 'exit_zero_acceleration_rad_s2',
                 'initial_move_tolerance_deg', 'initial_move_timeout', 'initial_stall_timeout')
         options = {k: startup[k] for k in keys}
+        if exit_tolerance_deg is not None:
+            if not math.isfinite(exit_tolerance_deg) or not 0<exit_tolerance_deg<=3:
+                raise ValueError('invalid zero-return tolerance override')
+            options['exit_zero_tolerance_deg']=exit_tolerance_deg
         options.update({k: motion[k] for k in ('max_joint_speed_rad_s', 'max_joint_acceleration_rad_s2',
                                                'wrist_speed_rad_s', 'wrist_acceleration_rad_s2',
                                                'max_relative_target_deg', 'wrist_relative_target_deg')})
@@ -182,6 +186,7 @@ class ZeroReturn:
 
 
 def prepare_zero_return(backend, gravity, metadata, args, journal, *,
-                        exit_speed_rad_s=None,exit_acceleration_rad_s2=None):
+                        exit_speed_rad_s=None,exit_acceleration_rad_s2=None,exit_tolerance_deg=None):
     return ZeroReturn(backend, gravity, metadata, args, journal,
-                      exit_speed_rad_s=exit_speed_rad_s,exit_acceleration_rad_s2=exit_acceleration_rad_s2)
+                      exit_speed_rad_s=exit_speed_rad_s,exit_acceleration_rad_s2=exit_acceleration_rad_s2,
+                      exit_tolerance_deg=exit_tolerance_deg)

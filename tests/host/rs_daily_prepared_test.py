@@ -19,6 +19,7 @@ import rs_daily_session as runtime
 import rs_gravity_play as playback
 from rs_gravity_play import Controller,TorqueBudgetExceeded,load_clip
 from rs_gravity_record import DEFAULT_CALIBRATION,DEFAULT_URDF
+from rs_recovery_policy import ArrivalTimeout, FollowingError
 
 
 class Tests(unittest.TestCase):
@@ -308,7 +309,7 @@ class Tests(unittest.TestCase):
         with patch.object(runtime,'prepare_zero_return') as factory:
             result=runtime.prepare_daily_zero_return('backend','gravity','identity','args','journal')
             factory.assert_called_once_with('backend','gravity','identity','args','journal',
-                                           exit_speed_rad_s=1.,exit_acceleration_rad_s2=2.)
+                                        exit_speed_rad_s=1.,exit_acceleration_rad_s2=2.,exit_tolerance_deg=3.)
             self.assertIs(result,factory.return_value)
 
     def simulate(self,mode='normal'):
@@ -373,7 +374,9 @@ class Tests(unittest.TestCase):
                 self.assertIsNone(session.backend)
             elif mode.startswith('protective'):
                 session.execute('WAKE')
-                error=TorqueBudgetExceeded([dict(motor_id=7,estimated_nm=1.6,budget_nm=1.5)])
+                error=(ArrivalTimeout('arrival timeout') if mode=='protective_arrival' else
+                       FollowingError('following error') if mode=='protective_following' else
+                       TorqueBudgetExceeded([dict(motor_id=7,estimated_nm=1.6,budget_nm=1.5)]))
                 if mode=='protective_ramp':
                     session.last_gain=.5
                     with self.assertRaises(TorqueBudgetExceeded):session.enter_protective_hold(error,'WAKE')
@@ -408,7 +411,7 @@ class Tests(unittest.TestCase):
                 else:
                     session.request_stop();session.home_and_exit()
                 session.disconnect()
-                self.assertEqual(events,['enable','home','disable','close'] if mode=='protective' else ['enable','disable','close'])
+                self.assertEqual(events,['enable','home','disable','close'] if mode in ('protective','protective_arrival','protective_following') else ['enable','disable','close'])
         return rows
 
     def test_rest_holds_sleep_disables_wake_reenables_and_quit_homes(self):self.simulate()
@@ -418,6 +421,8 @@ class Tests(unittest.TestCase):
     def test_idle_hold_does_not_discard_next_action(self):self.simulate('idle_command')
     def test_logging_failure_cannot_skip_disable(self):self.simulate('log_failure')
     def test_budget_fault_latches_current_position_and_quit_homes(self):self.simulate('protective')
+    def test_arrival_timeout_brakes_then_holds(self):self.simulate('protective_arrival')
+    def test_following_error_brakes_then_holds(self):self.simulate('protective_following')
     def test_hold_budget_failure_is_not_reanchored(self):self.simulate('protective_failure')
     def test_hold_feedback_failure_propagates(self):self.simulate('protective_feedback')
     def test_partial_gain_ramp_cannot_enter_protective_hold(self):self.simulate('protective_ramp')
@@ -436,7 +441,7 @@ class Tests(unittest.TestCase):
                 def enable(self,q):events.append('enable')
                 def send(self,c):
                     self.q=np.array(c['target_rad'])
-                    if injected[0]:
+                    if injected[0] and not sent_hold[0]:
                         sent_hold[0]=True
                         self_outer.assertNotIn('disable',events)
                         commands.put('quit')
@@ -456,6 +461,9 @@ class Tests(unittest.TestCase):
                         injected[0]=True;raise error
                     return command(*a,**kw)
                 session.controller.command=reject_once
+                if failure=='budget':
+                    def failed_recovery(*a,**kw):raise error
+                    session.controller.recovery_command=failed_recovery
             with tempfile.TemporaryDirectory() as tmp,patch.object(runtime,'ROOT',Path(tmp)), \
                     patch.object(runtime,'load_bundle',return_value=(self.manifest,self.plans,self.gravity,self.identity)), \
                     patch.object(runtime.Session,'_execute_action',execute), \

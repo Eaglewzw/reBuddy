@@ -14,7 +14,7 @@ python3 tools/render_previews.py build/host build/ui-preview
 | --- | --- |
 | reference_behavior | 触摸去抖、轻点、抚摸、快划、退役动作拒绝、手爪限定开心、冷却和中断、持续睡眠、停止恢复、30 分钟模拟 |
 | ui_rgb565 | 真实 LVGL 指针事件、左右下角入口、菜单开合、手爪／身体／眼睛区别、睡眠呼吸和 Z、唤醒、输入取消、边界和稳定堆内存 |
-| board_input | 全屏触摸映射、主触点 ID、丢失和故障取消 |
+| board_input | 全屏触摸映射、主触点 ID、故障取消；实体 ENTER 去抖、长按单次触发、上电按住与I²C故障隔离 |
 | behavior_config | 当前 JSON 与生成参数头一致 |
 | animation_resources | 当前 GIF 解码到 RGB565 的逐帧对应、帧去重与校验、原始 120/130 ms 时间轴、动作映射、手爪触摸区域及房间资源 |
 | project_assets | 当前 8 个日常 GIF、10 个选定舞蹈 GIF、三个独立表情 GIF 资源校验、必要源素材与文档链接完整 |
@@ -25,9 +25,9 @@ python3 tools/render_previews.py build/host build/ui-preview
 | daily_suspend | 编辑期间冻结动作和入睡计时、清除旧手势、恢复睡眠与停止状态、急停优先 |
 | choreography_ui | 真实 LVGL 触摸编辑、排序与容量、缺失素材条目与示例禁用、保存失败、停止与完成、故障、与日常模式隔离 |
 
-带 LVGL、RS Python 和本地模型/标定时共 31 项。普通离线 Python 检查需要 Pillow、NumPy、SciPy、PyYAML。通过 `-DREBUDDY_RS_PYTHON=/path/to/rs/python` 指定已安装 VR 参考包和 Pinocchio 的解释器；模型相关检查还需要该机械臂的本地 URDF 与标定。未配置此环境时不注册三项本地模型/动作包测试，其余测试中依赖 VR 的用例会明确跳过。UI 测试输出实际 PPM 截图，转换后的 `build/ui-preview/contact-sheet.png` 和 `choreography.png` 用于布局检查。图片生成和模拟测试不能代替实屏动画效果、触摸手感或硬件连续运行验收。
+带 LVGL、RS Python 和本地模型/标定时共 32 项。普通离线 Python 检查需要 Pillow、NumPy、SciPy、PyYAML。通过 `-DREBUDDY_RS_PYTHON=/path/to/rs/python` 指定已安装 VR 参考包和 Pinocchio 的解释器；模型相关检查还需要该机械臂的本地 URDF 与标定。未配置此环境时不注册三项本地模型/动作包测试，其余测试中依赖 VR 的用例会明确跳过。UI 测试输出实际 PPM 截图，转换后的 `build/ui-preview/contact-sheet.png` 和 `choreography.png` 用于布局检查。图片生成和模拟测试不能代替实屏动画效果、触摸手感或硬件连续运行验收。
 
-`daily_control` 覆盖 C5 原生执行器的17个离线场景，包括 SLEEP → WAKE → IDLE → REST → SLEEP、失能确认、保护保持证据保留、回零3°容差及故障路径。`daily_c5_export` 比较 C 与 PC 轨迹，`daily_gravity` 比较原生重力模型与 Pinocchio，`rs_daily_prepared` 检查八项动作包和会话电源状态。
+`daily_control` 覆盖 C5 原生执行器的25个离线场景，包括 SLEEP → WAKE → IDLE → REST → SLEEP、失能确认、保护保持证据保留、回零3°容差及故障路径。`daily_recovery_parity` 比较 C/Python 的阻尼预算、量化反馈滤波和恢复过程；`daily_c5_export` 比较 C 与 PC 轨迹，`daily_gravity` 比较原生重力模型与 Pinocchio，`rs_daily_prepared` 检查八项动作包和会话电源状态。
 
 最新整理验证见 [current.json](../verification/current.json)，实机记录使用 [ACCEPTANCE.md](ACCEPTANCE.md)。代码仓库只保留当前验证摘要，构建和测试日志输出到被忽略的 `build/`。
 

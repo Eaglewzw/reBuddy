@@ -13,13 +13,15 @@ from rs_gravity_record import (Journal, JournalError, TemperatureReturnRequested
                                CAPS, MAX_GAP, PERIOD, ROOT, digest, read_commands)
 from rs_gravity_play import Controller, PlaybackBackend, TorqueBudgetExceeded, prepare_entry
 from rs_zero_return import prepare_zero_return
+from rs_recovery_policy import RecoverableControlError, ArrivalTimeout
+from rs_record_playback import LOWER, UPPER
 
 GRIPPER_SETTLE_TOLERANCE = math.radians(3.)
 
 
 def prepare_daily_zero_return(backend,gravity,identity,args,journal):
     return prepare_zero_return(backend,gravity,identity,args,journal,
-                               exit_speed_rad_s=1.,exit_acceleration_rad_s2=2.)
+                               exit_speed_rad_s=1.,exit_acceleration_rad_s2=2.,exit_tolerance_deg=3.)
 
 
 class StopRequested(RuntimeError):
@@ -63,8 +65,10 @@ class Session:
             if digest(path)!=self.identity[key]:raise RuntimeError('calibration/model changed')
         self.next_identity=now+1.
 
-    def tick(self,target,velocity=None,gain=1.,label='hold',busy=True,capture_hold=False):
-        self.check_stop(busy)
+    def tick(self,target,velocity=None,gain=1.,label='hold',busy=True,capture_hold=False,recovery=None):
+        try:self.check_stop(busy)
+        except StopRequested:
+            if recovery is None or self.stop=='abort':raise
         now=time.monotonic()
         if self.last_tick is not None and now-self.last_tick>MAX_GAP:
             raise RuntimeError('daily control deadline exceeded 100 ms')
@@ -77,7 +81,8 @@ class Session:
             target=q.copy();velocity=np.zeros(7)
         requested_velocity=np.zeros(7) if velocity is None else velocity
         try:
-            command=self.controller.command(q,end,target,requested_velocity,gain)
+            command=(self.controller.command(q,end,target,requested_velocity,gain) if recovery is None else
+                     self.controller.recovery_command(q,end,**recovery))
         except RuntimeError as error:
             # Persist the rejected sample, not only the previous successful send.
             # A logging failure must not replace the original control fault.
@@ -136,7 +141,7 @@ class Session:
                     outside=np.flatnonzero(abs(q-goal)>limits)
                     detail=', '.join(f'J{i+1}偏差 {math.degrees(q[i]-goal[i]):+.3f}°（允许 ±{math.degrees(limits[i]):g}°）' for i in outside)
                     speed=math.degrees(float(np.max(abs(self.controller.velocity))))
-                    raise RuntimeError(f'{label}未到位：{detail or "位置已在容差内，但尚未稳定"}；'
+                    raise ArrivalTimeout(f'{label}未到位：{detail or "位置已在容差内，但尚未稳定"}；'
                                        f'最大估算速度 {speed:.3f}°/s（需≤1°/s持续0.5秒）')
                 break
             deadline=max(deadline+PERIOD,time.monotonic());time.sleep(max(0,deadline-time.monotonic()))
@@ -174,7 +179,7 @@ class Session:
         # Gripper closure repeatability is separate from six-axis pose accuracy.
         # Do not change commanded opening, encoder zero, or moving follow limits.
         tolerance=np.r_[np.full(6,arm_tolerance),GRIPPER_SETTLE_TOLERANCE]
-        self.segment('settle_'+state,target=target,duration=5.,tolerance=tolerance)
+        self.segment('settle_'+state,target=target,duration=8.,tolerance=tolerance)
         self.state=state;self.event('state',state=state)
 
     def execute_plan(self,action,state):
@@ -195,37 +200,53 @@ class Session:
             return
         try:
             self._execute_action(action)
-        except TorqueBudgetExceeded as error:
+        except RecoverableControlError as error:
             self.enter_protective_hold(error,action)
 
     def enter_protective_hold(self,error,action):
-        # Only software PD-budget rejection after full gain ramp is recoverable.
-        # A failed hold must propagate; never repeatedly re-anchor to a drifting arm.
-        if (not self.enabled or self.state=='PROTECTIVE_HOLD' or self.homing
+        # Healthy-feedback recovery is one bounded brake, then a fixed anchor.
+        # Never repeatedly re-anchor a failed hold or reuse a rejected target.
+        if (not self.enabled or self.state in ('BRAKING','HOLD_RAMP','PROTECTIVE_HOLD') or self.homing
                 or getattr(self,'last_gain',0.)<1. or self.last_command is None):
             raise error
         interrupted_state=self.state
         self.event('protective_hold_requested',action=action,interrupted_state=interrupted_state,
                    details=error.details)
         try:
-            anchor=self.tick(None,label='protective_hold_entry',busy=False,capture_hold=True)
+            self.state='BRAKING';started=time.monotonic();stable=None
+            while True:
+                q=self.tick(None,label='protective_braking',recovery={})
+                still=np.max(abs(self.controller.velocity))<=math.radians(1.)
+                stable=(stable if stable is not None else time.monotonic()) if still else None
+                if stable is not None and time.monotonic()-stable>=.5:break
+                if time.monotonic()-started>5.:raise RuntimeError('recovery did not stop within 5s')
+                time.sleep(PERIOD)
+            anchor=q.copy();brake_kd=np.array(self.last_command['kd'])
+            self.controller.target_lower=np.minimum(LOWER,anchor)-1e-8
+            self.controller.target_upper=np.maximum(UPPER,anchor)+1e-8
+            self.state='HOLD_RAMP';started=time.monotonic()
+            while True:
+                gain=min(1.,(time.monotonic()-started)/.5)
+                self.tick(anchor,label='protective_hold_ramp',recovery=dict(anchor=anchor,gain=gain,brake_kd=brake_kd))
+                if gain>=1:break
+                time.sleep(PERIOD)
         except Exception as hold_error:
             try:self.event('protective_hold_failed',error=str(hold_error))
             except Exception:pass
             raise
         self.target=anchor.copy();self.state='PROTECTIVE_HOLD'
         stop=dict(action=action,interrupted_state=interrupted_state,target_rad=anchor.tolist(),
-                  details=error.details)
+                  reason=str(error),details=error.details)
         self.protective_stops.append(stop)
-        self.event('action_aborted',action=action,reason='torque_budget_protective_hold')
+        self.event('action_aborted',action=action,reason=str(error))
         self.event('protective_hold_entered',**stop)
-        print('估算力矩超预算：当前动作已中止，已接入当前位置保护保持，电机继续使能。'
+        print('当前动作已中止：已完成阻尼减速并进入位置保护保持，电机继续使能。'
               '输入 status 查看；quit 或 Ctrl+C 回零退出。',flush=True)
 
     def hold_tick(self):
         try:
             self.tick(self.target,label='protective_hold' if self.state=='PROTECTIVE_HOLD' else 'hold',busy=False)
-        except TorqueBudgetExceeded as error:
+        except RecoverableControlError as error:
             self.enter_protective_hold(error,'hold')
 
     def _execute_action(self,action):
@@ -244,7 +265,7 @@ class Session:
                 # Verify a disabled arm really is at zero; never enable just to sleep.
                 self.backend=self.backend_factory()
                 q,_,_=self.backend.read()
-                if np.max(abs(q[:6]))>math.radians(2.):raise ValueError('当前未在零位；先执行入睡')
+                if np.max(abs(q[:6]))>math.radians(3.):raise ValueError('当前未在零位；先执行入睡')
                 self.disconnect()
             self.state='SLEEP'
         elif action in self.plans:

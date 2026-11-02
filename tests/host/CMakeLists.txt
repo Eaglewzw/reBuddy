@@ -91,6 +91,7 @@ add_test(NAME flash_budget COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST
 add_test(NAME dance_cavities COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/dance_cavity_test.py")
 add_test(NAME arm_adapter COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/arm_adapter_test.py")
 add_test(NAME daily_control COMMAND "${Python3_EXECUTABLE}" -B "${CMAKE_CURRENT_LIST_DIR}/daily_control_test.py")
+add_test(NAME daily_recovery_parity COMMAND "${Python3_EXECUTABLE}" -B "${CMAKE_CURRENT_LIST_DIR}/daily_recovery_parity_test.py")
 add_test(NAME arm_component_snapshot COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/arm_components_test.py")
 add_test(NAME arm_vendor_joint_path COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/arm_vendor_test_joint_path.py")
 add_test(NAME arm_vendor_teach COMMAND "${Python3_EXECUTABLE}" "${CMAKE_CURRENT_LIST_DIR}/arm_vendor_test_teach.py")

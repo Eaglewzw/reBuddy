@@ -4,6 +4,28 @@
 #include <stdio.h>
 int main(void)
 {
+    rb_enter_key_t key={0};
+    /* Held at boot is not a new press. */
+    assert(!rb_enter_key_update(&key,true,true,0));
+    assert(!rb_enter_key_update(&key,true,true,100));
+    assert(!rb_enter_key_update(&key,false,true,120));
+    assert(!rb_enter_key_update(&key,false,true,160));
+    /* Short bounce cannot trigger HOME. */
+    assert(!rb_enter_key_update(&key,true,true,180));
+    assert(!rb_enter_key_update(&key,false,true,190));
+    assert(!rb_enter_key_update(&key,true,true,200));
+    assert(!rb_enter_key_update(&key,true,true,220));
+    assert(rb_enter_key_update(&key,true,true,240));
+    for(unsigned t=260;t<1000;t+=20)assert(!rb_enter_key_update(&key,true,true,t));
+    /* I2C failure and recovery while held cannot generate a phantom press. */
+    assert(!rb_enter_key_update(&key,false,false,1000));
+    assert(!rb_enter_key_update(&key,true,true,1020));
+    assert(!rb_enter_key_update(&key,true,true,1060));
+    assert(!rb_enter_key_update(&key,false,true,1080));
+    assert(!rb_enter_key_update(&key,false,true,1120));
+    assert(!rb_enter_key_update(&key,true,true,1140));
+    assert(rb_enter_key_update(&key,true,true,1180));
+    assert(!rb_enter_key_update(&key,true,true,1200));
     rb_primary_touch_t primary={0};
     const uint8_t one[]={4}, two[]={8,4}, remaining[]={8};
     assert(rb_primary_touch_select(&primary,one,1,true)==0);
@@ -25,5 +47,5 @@ int main(void)
         assert(x >= 0 && x < 320 && y >= 0 && y < 240);
         assert(rx == (unsigned)(239 - y) && ry == (unsigned)x);
     }
-    puts("PASS touch coordinate mapping, primary-contact tracking and error cancellation");
+    puts("PASS touch mapping/tracking and physical ENTER debounce, hold, boot and I2C-error handling");
 }
