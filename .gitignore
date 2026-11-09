@@ -12,4 +12,5 @@ __pycache__/
 
 # Local motor telemetry and superseded action bundles.
 /record/gravity/**/*.jsonl
+/record/dance/**/*.jsonl
 /record/daily_ready_history/

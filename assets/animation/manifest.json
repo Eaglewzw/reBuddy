@@ -15,7 +15,7 @@
   "source": "assets/gifs/daily/manifest.json",
   "source_sha256": "4a718a892894fa2999005f54dcb22bb6f69ac8701a8a8a477118c8244c824074",
   "dance_source": "assets/gifs/dance/manifest.json",
-  "dance_source_sha256": "af5ba1b5b4ce12742709d1cd78fc081290abc972d0cca420beb6efcdec1aba3c",
+  "dance_source_sha256": "7f7abff7861b2ddc0669cce5708f61ec0a110ecd243fe794837aec39d6928500",
   "dance_cavity_source": "assets/config/dance_cavity_seeds.json",
   "dance_cavity_sha256": "08ff0b0e01f447ff853e6d2f59a60055b168445865afcbd7459fc7952e92532e",
   "dance_conversion": "Original source GIFs preserved. Current runtime palette, sampling, neutral connections and bounded compression are defined by tools/build_screen_preview.py and assets/animation/manifest.json; see assets/docs/DANCE_OPTIMIZATION.md.",
@@ -350,7 +350,7 @@
     "assets/gifs/dance/02_lift.gif",
     "assets/gifs/dance/03_dip.gif",
     "assets/gifs/dance/04_reach.gif",
-    "assets/gifs/dance/05_base_turn_complete_drawings.gif",
+    "assets/gifs/dance/05_base_turn.gif",
     "assets/gifs/dance/06_sway.gif",
     "assets/gifs/dance/07_elbow.gif",
     "assets/gifs/dance/08_wrist.gif",
@@ -15297,7 +15297,7 @@
     },
     {
       "id": "DANCE_BASE_TURN",
-      "source_gif": "assets/gifs/dance/05_base_turn_complete_drawings.gif",
+      "source_gif": "assets/gifs/dance/05_base_turn.gif",
       "source_sha256": "4ca376aa1e355b85fc1063d59c8efb43d82f4398bd0827170e39a25490109135",
       "frames": [
         109,

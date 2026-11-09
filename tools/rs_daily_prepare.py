@@ -8,7 +8,7 @@ import numpy as np
 
 from rs_gravity_record import ROOT, CAPS, PERIOD, digest, load_idle_pose, preflight
 from rs_gravity_play import load_clip, prepare_entry
-from rs_probe_trial import Curve
+from rs_motion import Curve
 from rs_record_playback import LOWER, UPPER
 
 BUNDLE = ROOT/'record/daily_ready'

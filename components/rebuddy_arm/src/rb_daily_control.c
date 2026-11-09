@@ -116,8 +116,14 @@ static bool send_target(rb_daily_control_t *c,const float q[7],const float v[7],
     if(can_console_arm_gravity_compute(&c->gravity,actual,g)!=ESP_OK) {disable(c,"gravity calculation failed",0);return false;}
     bool exceeded=false;
     for(unsigned j=0;j<7;++j) {
-        if(!isfinite(q[j]) || !isfinite(v[j]) || q[j]<c->lower[j]-1e-5f || q[j]>c->upper[j]+1e-5f ||
-            fabsf(g[j])>rb_daily_policy.torque_budget_nm[j]) {disable(c,"invalid target or gravity budget",j+1);return false;}
+        if(!isfinite(g[j]) || fabsf(g[j])>rb_daily_policy.torque_budget_nm[j]) {
+            disable(c,"invalid gravity or gravity budget",j+1);return false;
+        }
+        if(!isfinite(q[j]) || !isfinite(v[j]) || q[j]<c->lower[j]-1e-5f || q[j]>c->upper[j]+1e-5f) {
+            if(recoverable(c,gain))hold(c,"invalid target: protective braking",NULL,false);
+            else disable(c,"invalid target",j+1);
+            return false;
+        }
         const rb_daily_action_t *plan=rb_daily_find(c->status.action);
         bool clap=c->status.action==RB_DAILY_HAPPY && c->status.state==RB_DC_PLAY && plan->sync_count>=4 &&
             next>=plan->sync[2].motion_s && next<=plan->sync[3].motion_s;
@@ -326,6 +332,11 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
     }
     if(!reference_ready(c))return;
     if(c->status.state==RB_DC_BRAKING || c->status.state==RB_DC_HOLD_RAMP) {recovery_tick(c);return;}
+    /* An explicit protective stop takes precedence over HOME as well as PLAY. */
+    if(c->pause_requested && recoverable(c,1.)) {
+        hold(c,"pause requested: HOME to exit",NULL,false);
+        recovery_tick(c);return;
+    }
     if(c->home_requested && c->status.enabled && c->status.state!=RB_DC_RAMP) {
         float zero[7]={0};zero[6]=c->motors[6].position;
         c->home_requested=false;c->pause_requested=false;c->status.error=NULL;
@@ -417,7 +428,7 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
         const rb_daily_action_t *plan=rb_daily_find(c->status.action);
         if(c->elapsed>=plan->duration_s) {state(c,RB_DC_SETTLE);break;}
         float t=fminf(plan->duration_s,c->elapsed+PERIOD);
-        if(!rb_daily_sample(plan->id,t,q,v,a)){disable(c,"plan evaluation failed",0);break;}
+        if(!rb_daily_sample(plan->id,t,q,v,a)){hold(c,"plan evaluation failed: protective braking",NULL,false);break;}
         (void)send_target(c,q,v,1,t);break;
     }
     case RB_DC_ENTRY_SETTLE: case RB_DC_SETTLE: case RB_DC_HOME_SETTLE: {

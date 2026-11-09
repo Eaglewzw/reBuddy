@@ -6,6 +6,7 @@ import argparse
 import csv
 import json
 import math
+import queue
 from pathlib import Path
 import signal
 import sys
@@ -16,10 +17,10 @@ import numpy as np
 
 from rs_gravity_record import (
     ROOT, DEFAULT_CALIBRATION, DEFAULT_URDF, CAPS, MAX_GAP, PERIOD,
-    Journal, LiveBackend, digest, preflight, vector,
+    Journal, LiveBackend, digest, preflight, vector, read_commands,
 )
 from rs_record_playback import LOWER, UPPER, MEASUREMENT_TOLERANCE_RAD
-from rs_probe_trial import Curve, VMAX, AMAX
+from rs_motion import Curve, VMAX, AMAX
 from rs_recovery_policy import RecoverableControlError, FollowingError, damping_gain, filtered_velocity
 
 KP = np.array([50., 50., 50., 30., 50., 50., 5.])
@@ -41,7 +42,7 @@ class TorqueBudgetExceeded(RecoverableControlError):
                          json.dumps(details,ensure_ascii=False),details)
 
 
-def load_clip(path, identity, *, recover_interrupted=False):
+def load_clip(path, identity, *, recover_interrupted=False, recover_endpoint_failure=False):
     path = Path(path).resolve()
     if path.suffix.lower() != '.csv':
         raise ValueError('需要录制生成的 CSV；不接受 TCH 或 pose idle 的 JSON 预设')
@@ -63,7 +64,14 @@ def load_clip(path, identity, *, recover_interrupted=False):
     recovered = (recover_interrupted and len(clips) == 1 and clips[0].get('end_reason') == 'signal_2'
                  and summary.get('reason') in ('zero_return_failed', 'signal_2')
                  and not summary.get('logging_errors'))
-    if not complete and not recovered:
+    endpoint_recovery = (recover_endpoint_failure and len(clips) == 1
+                         and clips[0].get('end_reason') == 'protective_stop'
+                         and clips[0].get('auto_return') is True
+                         and summary.get('reason') == 'fault'
+                         and not summary.get('logging_errors')
+                         and len(summary.get('errors', [])) == 1
+                         and summary['errors'][0].startswith('RuntimeError: 自动回位未通过首尾检查：'))
+    if not complete and not recovered and not endpoint_recovery:
         raise ValueError('需要通过 stop 完整结束的录制片段；不能播放中断片段')
     clip = clips[0]
     if digest(path) != clip.get('sha256'):
@@ -97,6 +105,7 @@ def load_clip(path, identity, *, recover_interrupted=False):
     q[:, 6] = q[0, 6]
     return t, q, dict(source=str(path), source_sha256=digest(path), samples=len(rows),
                      source_complete=complete, recovered_interrupted=bool(recovered),
+                     recovered_endpoint_failure=bool(endpoint_recovery),
                      recorded_duration_s=float(t[-1]), gripper_spread_deg=math.degrees(spread),
                      calibration_sha256=identity['calibration_sha256'], urdf_sha256=identity['urdf_sha256'])
 
@@ -126,7 +135,7 @@ def prepare(path, calibration, urdf, speed):
                   kp=KP.tolist(), kd=KD.tolist(), torque_budget_nm=CAPS.tolist(),
                   gripper='hold measured opening at playback startup; no gripper trajectory',
                   entry_policy='plan from measured current pose to clip start, settle, then play',
-                  exit_policy='first Ctrl+C: verified zero return then disable; completion/SIGTERM/fault or second Ctrl+C: disable',
+                  exit_policy='CLI: completion/stop/fault after full gravity tries latched hold; explicit home/quit returns to zero; release disables; unavailable hold falls back to support',
                   path_validation='joint and dynamic bounds only; no collision verification')
     return curve, gravity, report
 
@@ -242,7 +251,7 @@ class Controller:
                     feedforward_nm=g.tolist(),estimated_torque_nm=estimated.tolist(),actual_rad=q.tolist())
 
 
-def play(curve, gravity, report, args, *, backend_factory=None, zero_return_factory=None):
+def play(curve, gravity, report, args, *, backend_factory=None, zero_return_factory=None, commands=None):
     if args.supported is not True:
         raise ValueError('播放需要 --supported：失能后由独立支撑承重')
     folder = args.log_dir / f'gravity-play-{time.time_ns()}'
@@ -265,6 +274,12 @@ def play(curve, gravity, report, args, *, backend_factory=None, zero_return_fact
     last_kp, last_kd = np.zeros(6), np.zeros(6)
     handlers = {}
     cancel = [None]
+    protective = getattr(args, 'protective_hold', False)
+    # Import before enable; the recovery module also reuses this controller.
+    from rs_protective_stop import maintain_hold
+    if protective and commands is None:
+        commands = queue.Queue()
+        threading.Thread(target=read_commands, args=(commands,), daemon=True).start()
 
     def request_stop(number, _frame):
         if number == signal.SIGINT and cancel[0] is None and not returning:
@@ -273,6 +288,13 @@ def play(curve, gravity, report, args, *, backend_factory=None, zero_return_fact
             cancel[0] = 'abort'
 
     def check_cancel():
+        if protective:
+            try:
+                word = commands.get_nowait().strip().lower()
+            except queue.Empty:
+                word = ''
+            if word in ('stop', 'estop', 'pause', 'quit', 'home', 'eof', 'release'):
+                cancel[0] = 'hold'
         if cancel[0] is not None:
             raise PlaybackInterrupted('operator stop')
 
@@ -367,7 +389,8 @@ def play(curve, gravity, report, args, *, backend_factory=None, zero_return_fact
                 deadline = max(deadline + PERIOD, time.monotonic())
                 time.sleep(max(0., deadline - time.monotonic()))
 
-        print('正在建立位置保持与重力补偿；首次 Ctrl+C 回零后退出，回零中再次 Ctrl+C 中止并失能。', flush=True)
+        print('正在建立位置保持与重力补偿；stop / Ctrl+C 制动保持。' if protective else
+              '正在建立位置保持与重力补偿；首次 Ctrl+C 回零后退出，回零中再次 Ctrl+C 中止并失能。', flush=True)
         segment('startup', lambda _: (initial, np.zeros(7)), 1.5, ramp=True)
         print(f'正在从当前姿态平滑移动到录制起点，预计 {entry.duration:.1f} 秒；夹爪保持当前开度。', flush=True)
         segment('approach', entry.at, entry.duration)
@@ -379,8 +402,11 @@ def play(curve, gravity, report, args, *, backend_factory=None, zero_return_fact
             q[6], velocity[6] = initial[6], 0.
             return q, velocity
         endpoint, _ = playback_at(curve.duration)
-        print(f'播放一次，预计 {curve.duration:.1f} 秒；结束后失能，由支撑承重。', flush=True)
+        print(f'播放一次，预计 {curve.duration:.1f} 秒；' +
+              ('结束后保持力矩，等待 home/quit 回零退出。' if protective else '结束后失能，由支撑承重。'), flush=True)
+        controller.velocity_limit[:6] = getattr(curve, 'velocity_limit', VMAX)
         segment('play', playback_at, curve.duration)
+        controller.velocity_limit[:6] = VMAX
         segment('settle', lambda _: (endpoint, np.zeros(7)), 1.)
         actual, _, _ = backend.read()
         if np.max(abs(actual - endpoint)) > ARRIVAL_TOLERANCE:
@@ -389,7 +415,7 @@ def play(curve, gravity, report, args, *, backend_factory=None, zero_return_fact
         result['success'] = True
         result['reason'] = 'completed'
     except PlaybackInterrupted as error:
-        if enable_completed and cancel[0] == 'sigint':
+        if enable_completed and cancel[0] == 'sigint' and not protective:
             returning = True
             result['zero_return_requested'] = True
             result['reason'] = f'signal_{signal.SIGINT}'
@@ -418,6 +444,37 @@ def play(curve, gravity, report, args, *, backend_factory=None, zero_return_fact
         result['errors'].append(f'{type(error).__name__}: {error}')
         result['reason'] = 'fault'
     finally:
+        if protective and enable_completed and last_gain >= 1. and not result['zero_return_completed']:
+            result['protective_hold_requested'] = True
+            try:
+                choice = maintain_hold(backend, gravity, commands, cancel, journal, verify_identity)
+                result['protective_hold_exit'] = choice
+                if choice == 'home':
+                    cancel[0] = None
+                    returning = True
+                    backend.returning_to_zero = True
+                    result['zero_return_requested'] = True
+                    print('收到回零命令，正在回零；故障时尝试重新保持。', flush=True)
+                    result['zero_return_completed'] = bool(zero_return.run(
+                        lambda: cancel[0] is not None, initial_gravity_gain=1.,
+                        initial_kp=KP[:6], initial_kd=KD[:6]))
+                    if not result['zero_return_completed']:
+                        raise RuntimeError('explicit home interrupted/not verified')
+            except BaseException as hold_error:
+                result['errors'].append(f'protective hold/home: {hold_error}')
+                # A failed home must not silently release a loaded arm. If
+                # feedback permits, remain holding until explicit release/home.
+                if returning:
+                    backend.returning_to_zero = False
+                    try:
+                        # Do not resume a failed home automatically.
+                        while maintain_hold(backend, gravity, commands, cancel, journal, verify_identity) != 'release':
+                            print('本次回零失败；请承托机械臂后输入 release 明确失能。', flush=True)
+                    except BaseException as recovery_error:
+                        result['errors'].append(f'hold unavailable: {recovery_error}')
+                print(f'播放保护流程结束：{hold_error}；若无法保持，由支撑承重。', flush=True)
+            finally:
+                backend.returning_to_zero = False
         if backend is not None:
             if result['enable_requested']:
                 result['disable_requested'] = True
@@ -453,6 +510,7 @@ def main(argv=None):
     parser.add_argument('--calibration', type=Path, default=DEFAULT_CALIBRATION)
     parser.add_argument('--urdf', type=Path, default=DEFAULT_URDF)
     parser.add_argument('--log-dir', type=Path, default=ROOT / 'build/record-review')
+    parser.set_defaults(protective_hold=True)
     args = parser.parse_args(argv)
     try:
         if args.mode == 'play' and (not args.supported or not sys.stdin.isatty()):

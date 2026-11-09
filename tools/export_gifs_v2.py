@@ -126,7 +126,7 @@ def main():
     out=args.output.resolve();gif_root=ROOT/'assets/gifs'
     if (out==gif_root or gif_root in out.parents) and out!=gif_root/'daily':
         raise SystemExit('Daily exports belong in assets/gifs/daily; refusing to overwrite other GIF categories')
-    protected=[ROOT/'assets/animation/frames.bin',ROOT/'assets/animation/manifest.json',ROOT/'main/pet_animation_table.c',ROOT/'main/pet_animation_table.h']
+    protected=[ROOT/'assets/animation/frames.bin',ROOT/'assets/animation/manifest.json',ROOT/'main/generated/pet_animation_table.c',ROOT/'main/generated/pet_animation_table.h']
     before={str(p.relative_to(ROOT)):sha(p) for p in protected if p.is_file()}
     cfg=json.loads((DESIGN/'timing.json').read_text());out.mkdir(parents=True,exist_ok=True)
     room=Image.open(ROOT/'assets/images/source/room/room.png').convert('RGB').resize((320,240),RESAMPLE.LANCZOS)

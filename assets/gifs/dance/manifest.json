@@ -2467,7 +2467,7 @@
       "id": "DANCE_BASE_TURN",
       "action_id": 37,
       "name": "底盘回转",
-      "file": "05_base_turn_complete_drawings.gif",
+      "file": "05_base_turn.gif",
       "sha256": "4ca376aa1e355b85fc1063d59c8efb43d82f4398bd0827170e39a25490109135",
       "size": [
         640,

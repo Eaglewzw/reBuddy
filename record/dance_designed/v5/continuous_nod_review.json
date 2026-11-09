@@ -1,0 +1,43 @@
+{
+  "schema": "rebuddy.continuous_nod_review.v1",
+  "hardware_accepted": false,
+  "method": "4001 evenly spaced samples; quiet means all six arm axes under0.4deg/s in middle80%; spline knot velocities evaluated directly",
+  "versions": [
+    {
+      "version": "v4",
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v4/01_nod.json",
+      "sha256": "86a866499c4ebdf099edc62bb0bce398e427c9ec8be667b77219249e71b012df",
+      "duration_s": 8.0,
+      "beats": 8,
+      "bpm": 60.0,
+      "planned_hold_seconds": 1.25,
+      "inner_quiet_fraction": 0.1522350734604564,
+      "longest_inner_quiet_s": 0.334,
+      "wrist_min_delta_deg": -14.0,
+      "wrist_max_delta_deg": 3.999999999999999,
+      "interior_knot_max_axis_speed_deg_s": []
+    },
+    {
+      "version": "v5",
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v5/01_nod.json",
+      "sha256": "b2b76382fccc2a43959719d0e433c547b9e7a4bc9074b5d1ea599952654dd702",
+      "duration_s": 8.0,
+      "beats": 8,
+      "bpm": 60.0,
+      "planned_hold_seconds": 0,
+      "inner_quiet_fraction": 0.02000625195373554,
+      "longest_inner_quiet_s": 0.064,
+      "wrist_min_delta_deg": -13.999983764308343,
+      "wrist_max_delta_deg": 3.9608311520612878,
+      "interior_knot_max_axis_speed_deg_s": [
+        7.631756178505103,
+        14.54764130915535,
+        7.550799957995662,
+        4.583748470247667,
+        11.496019873889962,
+        1.8182812928764496
+      ]
+    }
+  ],
+  "conclusion": "01 only: one global quintic spline replaces discrete movements/holds; duration and wrist amplitude envelope retained. Internal nodes have nonzero velocity; full phrase begins and ends at zero velocity/acceleration. Other v5 paths unchanged."
+}

@@ -65,7 +65,8 @@ class Session:
             if digest(path)!=self.identity[key]:raise RuntimeError('calibration/model changed')
         self.next_identity=now+1.
 
-    def tick(self,target,velocity=None,gain=1.,label='hold',busy=True,capture_hold=False,recovery=None):
+    def tick(self,target,velocity=None,gain=1.,label='hold',busy=True,capture_hold=False,recovery=None,
+             target_sampler=None):
         try:self.check_stop(busy)
         except StopRequested:
             if recovery is None or self.stop=='abort':raise
@@ -75,6 +76,12 @@ class Session:
         self.last_tick=now
         self.backend.heartbeat()
         q,begin,end=self.backend.read()
+        # CAN reads take about 14 ms on this setup. Evaluate moving targets
+        # after the read, against the same wall clock as the imminent send,
+        # rather than sending the pose calculated before blocking on feedback.
+        if target_sampler is not None:
+            target,velocity,gain=target_sampler()
+        target_sample_ns=time.monotonic_ns()
         if capture_hold:
             # Anchor once to this newly verified sample, not the rejected goal.
             # Keep the velocity estimator intact: damping must account for motion.
@@ -96,7 +103,8 @@ class Session:
         if failures:raise JournalError('; '.join(failures))
         if time.monotonic_ns()-begin>100_000_000:raise RuntimeError('daily feedback expired before send')
         self.backend.send(command);self.last_command=command;self.last_gain=gain;self.last=q
-        self.event('command',phase=label,**command)
+        self.event('command',phase=label,target_sample_ns=target_sample_ns,feedback_begin_ns=begin,
+                   feedback_end_ns=end,**command)
         return q
 
     def segment(self,label,curve=None,target=None,duration=None,ramp=False,tolerance=None):
@@ -108,8 +116,11 @@ class Session:
             if curve is not None:
                 if hasattr(curve,'velocity_limit'):
                     self.controller.velocity_limit[:6]=curve.velocity_limit
+                if hasattr(curve,'gripper_velocity_limit'):
+                    self.controller.velocity_limit[6]=curve.gripper_velocity_limit
                 if hasattr(curve,'gripper_following_limit'):
-                    self.controller.velocity_limit[6]=curve.peak_velocity
+                    if not hasattr(curve,'gripper_velocity_limit'):
+                        self.controller.velocity_limit[6]=curve.peak_velocity
                     self.controller.following_limit[6]=curve.gripper_following_limit
                 if getattr(curve,'j1_peak_velocity',0.)>0:
                     self.controller.velocity_limit[0]=max(old_velocity[0],curve.j1_peak_velocity)
@@ -128,10 +139,18 @@ class Session:
         started=time.monotonic();deadline=started;stable=None
         self.event('segment_start',phase=label,duration_s=duration,
                    arrival_tolerance_deg=None if limits is None else np.degrees(limits).tolist())
-        while True:
+        def sample_after_feedback():
+            nonlocal elapsed,goal,velocity
             elapsed=min(time.monotonic()-started,duration)
-            goal,velocity=curve.at(elapsed) if curve is not None else (target,np.zeros(7))
-            q=self.tick(goal,velocity,min(1.,elapsed/1.5) if ramp else 1.,label)
+            goal,velocity=curve.at(elapsed)
+            return goal,velocity,min(1.,elapsed/1.5) if ramp else 1.
+        while True:
+            if curve is not None:
+                q=self.tick(None,label=label,target_sampler=sample_after_feedback)
+            else:
+                elapsed=min(time.monotonic()-started,duration)
+                goal,velocity=target,np.zeros(7)
+                q=self.tick(goal,velocity,min(1.,elapsed/1.5) if ramp else 1.,label)
             if tolerance is not None:
                 settled=np.all(abs(q-goal)<=limits) and np.max(abs(self.controller.velocity))<=math.radians(1.)
                 stable=(stable if stable is not None else time.monotonic()) if settled else None

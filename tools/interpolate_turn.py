@@ -44,7 +44,7 @@ def morph(a, b, fractions):
 def generate():
     folder = ROOT/'assets/gifs/dance'
     neutral = load(folder/'01_nod.gif')[0]
-    turn = load(folder/'05_base_turn_complete_drawings.gif')
+    turn = load(folder/'05_base_turn.gif')
     # The imported sequence starts facing away from the shared neutral.
     # Its midpoint is the closest matching orientation. Rotate the cycle.
     start = len(turn)//2

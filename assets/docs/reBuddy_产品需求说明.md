@@ -47,7 +47,7 @@ reBuddy 是基于 ESP32-C5 和 reBot RS 的机械臂桌宠。屏幕中的角色�
 
 当前已接入轻点、慢抚、快划、三连点、摸爪开心、安抚、自动入睡和左下角长按唤醒。暂停／恢复在左下角，设置在右下角。活泼／慵懒已有入口，但当前时长倍率都为 1.0，不能宣称已具备明显性格差异。
 
-main/main.c 目前仅记录 Mock 动作事件，CAN 保持待机，无实体电机后端和编舞功能。仓库验证记录包含主机测试和构建结果，hardware_tested 为 false；它不能代替真实机械臂和屏幕验收。
+main/app/main.c 目前仅记录 Mock 动作事件，CAN 保持待机，无实体电机后端和编舞功能。仓库验证记录包含主机测试和构建结果，hardware_tested 为 false；它不能代替真实机械臂和屏幕验收。
 
 ## 3 日常互动和自主行为
 
@@ -157,7 +157,7 @@ WAIT 停留积木保持当前姿态，允许低干扰的面部动画；停止改
 
 序列持久化可使用 NVS 或已有配置存储。保存只由用户操作触发，不在每次拖动或预览时写 Flash。需要版本字段、边界校验和可恢复写入，写入失败保留上一次有效作品。读取遇到未知动作、损坏数据或不兼容版本时提示并禁止播放，不能静默替换为另一个动作。
 
-推荐接入位置：components/rebuddy_core/ 维护行为与模式协调；main/pet_ui.c 接入页面；新增独立的编舞序列模块和实体后端适配模块；main/main.c 将 Mock 接口扩展为可切换后端。具体文件组织由本地代码结构决定，名称不作强制要求。
+推荐接入位置：components/rebuddy_core/ 维护行为与模式协调；main/ui/pet_ui.c 接入页面；新增独立的编舞序列模块和实体后端适配模块；main/app/main.c 将 Mock 接口扩展为可切换后端。具体文件组织由本地代码结构决定，名称不作强制要求。
 
 继续复用 assets/gifs/daily/、assets/animation/ 和现有资源生成工具。新增六类动作需要新增或明确复用对应动画；缺失素材时可保留禁用卡片或标注占位预览，不能把旧 GIF 改名后当作新动作完成。优先不重新生成已有角色与小屋素材。
 
@@ -185,4 +185,4 @@ WAIT 停留积木保持当前姿态，允许低干扰的面部动画；停止改
 
 给本地 Codex 的执行说明：先读取仓库 AGENTS.md（若存在）、README、assets/docs/PROJECT.md、当前行为配置和实现；列出与本文目标的差异后增量开发。本文中用户新确认的实体联动和编舞目标优先于仓库旧文档的纯屏幕阶段范围，但不得把尚未完成的新目标写成已实现事实。保持现有功能可运行，补充模式互斥、序列校验、存储恢复和停止相关测试。交付时分别列出已完成、仅 Mock、待素材、待标定和待实机验收项。
 
-来源索引：README.md；assets/gifs/daily/README.md；assets/docs/PROJECT.md；assets/config/behavior_defaults.json；components/rebuddy_core/src/rb_pet.c；main/pet_ui.c；main/main.c；assets/verification/current.json。上述路径均相对于 reBuddy 仓库。原始 GIF 与图片继续从仓库获取，本文件不替换素材。
+来源索引：README.md；assets/gifs/daily/README.md；assets/docs/PROJECT.md；assets/config/behavior_defaults.json；components/rebuddy_core/src/rb_pet.c；main/ui/pet_ui.c；main/app/main.c；assets/verification/current.json。上述路径均相对于 reBuddy 仓库。原始 GIF 与图片继续从仓库获取，本文件不替换素材。

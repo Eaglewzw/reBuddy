@@ -37,15 +37,15 @@ int main(void)
     assert(rb_primary_touch_select(&primary,NULL,0,false)==-2);
     assert(rb_primary_touch_select(&primary,remaining,1,true)==-2);
     int16_t x, y;
-    assert(rb_touch_map(0, 0, &x, &y) && x == 0 && y == 239);
-    assert(rb_touch_map(239, 319, &x, &y) && x == 319 && y == 0);
+    assert(rb_touch_map(0, 0, &x, &y) && x == 319 && y == 0);
+    assert(rb_touch_map(239, 319, &x, &y) && x == 0 && y == 239);
     assert(!rb_touch_map(240, 100, &x, &y));
     assert(!rb_touch_map(0, 320, &x, &y));
     assert(!rb_touch_map(0, 0, NULL, &y));
     for (unsigned rx = 0; rx < 240; ++rx) for (unsigned ry = 0; ry < 320; ++ry) {
         assert(rb_touch_map(rx, ry, &x, &y));
         assert(x >= 0 && x < 320 && y >= 0 && y < 240);
-        assert(rx == (unsigned)(239 - y) && ry == (unsigned)x);
+        assert(rx == (unsigned)y && ry == (unsigned)(319 - x));
     }
     puts("PASS touch mapping/tracking and physical ENTER debounce, hold, boot and I2C-error handling");
 }

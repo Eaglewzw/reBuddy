@@ -3,7 +3,8 @@
 #include <stdbool.h>
 #include <stdint.h>
 
-/* Native GT911 portrait coordinates -> fixed 320x240 landscape. */
+/* Native GT911 portrait -> 320x240 landscape, rotated 180deg from the
+ * original board orientation: x=319-raw_y, y=raw_x. */
 bool rb_touch_map(uint16_t raw_x, uint16_t raw_y, int16_t *x, int16_t *y);
 typedef struct { bool active, blocked; uint8_t id; } rb_primary_touch_t;
 /* Index of original contact; -1 released, -2 cancelled until all contacts lift. */

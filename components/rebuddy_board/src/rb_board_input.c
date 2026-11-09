@@ -17,8 +17,8 @@ bool rb_enter_key_update(rb_enter_key_t *key,bool pressed,bool valid,uint64_t no
 bool rb_touch_map(uint16_t raw_x, uint16_t raw_y, int16_t *x, int16_t *y)
 {
     if (!x || !y || raw_x >= 240 || raw_y >= 320) return false;
-    *x = (int16_t)raw_y;
-    *y = (int16_t)(239 - raw_x);
+    *x = (int16_t)(319 - raw_y);
+    *y = (int16_t)raw_x;
     return true;
 }
 

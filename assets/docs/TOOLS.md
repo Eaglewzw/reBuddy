@@ -22,3 +22,5 @@
 `tools/daily` 提供中文日常动作命令终端，支持列表、离线设计检查、只读电机回读与明确拒绝未验收的播放请求。使用方法和当前限制见 [日常动作终端](DAILY_COMMANDS.md)。
 
 `tools/record_daily` 提供本地 RS 重力补偿拖动录制：默认离线检查，`mock` 验证数据导出，`record --supported` 进入实机交互录制。操作、输出和停机行为见 [重力补偿录制](GRAVITY_RECORDING.md)。
+
+`tools/record_dance --supported` 提供基础舞蹈编号录制，独立保存到 `record/dance`，检查统一首尾姿态；录制 01～08、10，09 夹爪开合留待程序生成，开场和收尾无需录制。`--check` 离线检查，`--list` 显示菜单。见 [舞蹈录制](DANCE_RECORDING.md)。

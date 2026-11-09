@@ -26,6 +26,19 @@ class Gravity:
 
 
 class Tests(unittest.TestCase):
+    def test_failed_startup_preserves_observer_before_close_without_enable(self):
+        import rs_record_playback
+        import rs_feedback_audit
+        with patch.object(rs_record_playback,'Hardware') as hardware, \
+                patch.object(rs_feedback_audit,'Monitor') as monitor:
+            hardware.return_value.reports.side_effect=RuntimeError('missing reports')
+            with self.assertRaisesRegex(RuntimeError,'missing reports'):
+                m.LiveBackend('can0',None,supported=True)
+            monitor.return_value.drain.assert_called_once_with()
+            monitor.return_value.close.assert_called_once_with()
+            hardware.return_value.enable_supported_trial.assert_not_called()
+            hardware.return_value.close.assert_called_once_with()
+
     def test_journal_failure_latches_without_growing_queue_during_return(self):
         for allow in (False,True):
             j=object.__new__(m.Journal)

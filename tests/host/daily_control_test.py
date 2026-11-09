@@ -18,6 +18,7 @@ with tempfile.TemporaryDirectory() as tmp:
     for scenario in ['screen_lifecycle','boot_wake','stale_start','already_enabled','all_actions','tx_stall','tx_failed','stale_running','bus_off',
                      'fault','nan','ui_loss','budget','rest_arrival_tolerance','rest_arrival_timeout','temperature','disable_unconfirmed',
                      'home_budget','following_recovery','recovery_stale','recovery_timeout','home_arrival_timeout',
-                     'feedback_frame_spacing','hold_ramp_delivery','home_request_idempotent']:
+                     'feedback_frame_spacing','hold_ramp_delivery','home_request_idempotent',
+                     'pause_home','invalid_target_hold']:
         subprocess.run([str(binary),scenario],check=True)
 print('PASS native executor lifecycle, shared seven-axis delivery, measured arrival, fault/stop paths')

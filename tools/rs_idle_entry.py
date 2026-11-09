@@ -13,7 +13,10 @@ from rs_gravity_record import CAPS, Control, vector
 
 
 class IdleEntry:
-    def __init__(self, gravity, initial, pose, *, from_teaching=None, via_zero=False, zero_tolerance_deg=2.):
+    def __init__(self, gravity, initial, pose, *, from_teaching=None, via_zero=False, zero_tolerance_deg=2., settle_s=.5):
+        if not math.isfinite(settle_s) or not .5 <= settle_s <= 2.:
+            raise ValueError('invalid idle settle duration')
+        self.settle_s = settle_s
         self.initial = vector(initial).copy()
         self.target = vector(pose['q_rad']).copy()
         if via_zero and from_teaching is not None:
@@ -93,7 +96,7 @@ class IdleEntry:
                     and np.max(abs(self.position.velocity)) <= math.radians(1.)):
                 if self.stable_since is None:
                     self.stable_since = stamp
-                if stamp - self.stable_since >= 500_000_000:
+                if stamp - self.stable_since >= self.settle_s * 1e9:
                     if self.idle_curve is not None:
                         self.zero_completed=True
                         self.curve=self.idle_curve;self.idle_curve=None

@@ -70,6 +70,10 @@ def vector(value, size=7):
 
 def load_idle_pose(path, metadata):
     pose = json.loads(path.read_text())
+    return validate_idle_pose(pose, metadata)
+
+
+def validate_idle_pose(pose, metadata):
     if pose.get('schema') != 'rebuddy.idle_pose.v1' or pose.get('name') != 'ATTENTIVE':
         raise ValueError('待机预设格式不匹配')
     for key in ('calibration_sha256', 'urdf_sha256', 'mock'):
@@ -337,6 +341,12 @@ class LiveBackend:
             self.hw = Hardware(port)
             self.hw.reports()
         except BaseException:
+            # Preserve raw replies even when startup never reaches read().
+            # A diagnostic failure must not hide the original startup error.
+            try:
+                self.monitor.drain()
+            except Exception as error:
+                print(f'启动诊断日志读取失败：{error}', file=sys.stderr)
             self.close()
             raise
         self.mode = 0
@@ -484,6 +494,8 @@ def export_clips(folder):
             clips[row['clip']]['samples'].append(row)
         elif row['event'] == 'clip_end':
             clips[row['clip']]['end_reason'] = row['reason']
+        elif row['event'] == 'dance_exit_verified' and row.get('clip') in clips:
+            clips[row['clip']]['exit_verified'] = row['measured_pose']
         elif row['event'] == 'clip_manual_end' and row.get('clip') in clips:
             clips[row['clip']].update(manual_end_ns=row['monotonic_ns'],
                                      manual_end_rad=row['q_rad'],auto_return=True)
@@ -517,6 +529,7 @@ def read_commands(commands):
 
 def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_return_factory=None, idle_entry_factory=None):
     live = args.mode == 'record'
+    profile = getattr(args, 'recording_profile', None)
     if live and not args.supported:
         raise ValueError('record 需要 --supported：已安装可靠防坠支撑，退出/故障会失能')
     if not math.isfinite(args.seconds) or (args.seconds < 0 if live else not 0 < args.seconds <= 600):
@@ -529,12 +542,20 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
                     session_limit_s=args.seconds or None,
                     temperature_exit_c=TEMPERATURE_RETURN_C,
                     startup_policy='saved idle: verified arm zero, then seven-axis idle, then gravity teaching; --manual-start skips automatic startup',
-                    exit_policy='quit, EOF, first SIGINT/SIGTERM, storage failure, explicit session timeout or temperature-only exit: return arm J1-J6 to calibrated zero, keep gripper opening, verify then disable; '
-                                'repeated termination signal/control fault or failed zero return: disable onto installed support')
+                    exit_policy='normal quit/EOF/first signal/session timeout or temperature exit: checked zero return then disable; '
+                                'running faults and estop/pause: try checked braking and latched torque hold, explicit home/quit or release only; '
+                                'partial startup, unavailable feedback, failed hold or lost process: disable onto installed support')
+    if profile is not None:
+        metadata['recording_profile'] = profile.metadata()
+    if getattr(args, 'startup_pose', None) is not None:
+        metadata['startup_pose'] = validate_idle_pose(args.startup_pose, metadata)
     (folder / 'metadata.json').write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + '\n')
     pose_path = args.output / 'presets' / ('idle.json' if live else 'idle.mock.json')
     idle_pose = None
-    if pose_path.exists():
+    if getattr(args, 'startup_pose', None) is not None:
+        idle_pose = validate_idle_pose(args.startup_pose, metadata)
+        print('已载入 Daily 统一待机姿态。', flush=True)
+    elif pose_path.exists():
         try:
             idle_pose = load_idle_pose(pose_path, metadata)
             print(f'已载入待机预设：{pose_path}', flush=True)
@@ -571,6 +592,9 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
         if live:
             threading.Thread(target=read_commands, args=(commands,), daemon=True).start()
     try:
+        # Import recovery before enabling: no model/module loading during a fault.
+        from rs_protective_stop import maintain_hold, ProtectiveStopRequested
+        from rs_gravity_play import KP, KD
         if threading.current_thread() is threading.main_thread():
             def request_stop(number, frame):
                 if zero_return_active[0] or stop[0] in graceful_exits or stop[0] == 'zero_return_abort':
@@ -641,7 +665,8 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
             if idle_entry is not None:
                 print(f'即将先回机械零位（J1～J6），再到已保存的七轴待机姿态（运动约 {idle_entry.planned_approach_s:.1f} 秒）；请等提示“可拖动录制”后再拖动。', flush=True)
             else:
-                print('重力补偿启动中（1.5秒渐入），保持支撑。就绪后 pose idle / start 名称 / stop / status；quit 或 Ctrl+C 回零后退出。', flush=True)
+                print('重力补偿启动中，保持支撑，等待就绪。' if profile else
+                      '重力补偿启动中（1.5秒渐入），保持支撑。就绪后 pose idle / start 名称 / stop / status；quit 或 Ctrl+C 回零后退出。', flush=True)
         while not stop[0]:
             tick = time.monotonic()
             if tick - previous > MAX_GAP:
@@ -703,7 +728,7 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
                     if not returning_clip:
                         result['idle_entry_completed'] = True
                         journal.put(dict(event='idle_entry_completed', monotonic_ns=read_end))
-            if ready:
+            if ready or returning_clip:
                 history.append((read_end, q.copy()))
                 while history and read_end - history[0][0] > 1_000_000_000:
                     history.popleft()
@@ -717,11 +742,14 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
                 pending_pose = None
                 journal.put(dict(event='idle_pose_saved', path=str(pose_path), pose=idle_pose))
                 print(f'待机预设已保存：{pose_path}；补偿继续，保存不会自动锁定或移动机械臂。', flush=True)
-            if not ready and (idle_entry.done if idle_entry is not None else elapsed >= 1.5):
+            if not ready and not returning_clip and (idle_entry.done if idle_entry is not None else elapsed >= 1.5):
                 ready = True
                 if ready_since is None:
                     ready_since = tick
-                if idle_entry is not None:
+                if profile is not None:
+                    print('已恢复重力补偿，可输入下一动作编号。' if clips.used else
+                          profile.help(idle_pose is not None), flush=True)
+                elif idle_entry is not None:
                     print('待机已到位，已切换为重力补偿，可拖动录制。输入 start 名称；quit 或 Ctrl+C 回零退出。', flush=True)
                 else:
                     print(('就绪。已载入待机预设；摆回待机后输入 start idle / start probe。'
@@ -736,11 +764,24 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
                                  read_start_ns=read_start,read_end_ns=read_end,clip=clips.active,
                                  q_rad=q.tolist(),dq_est_rad_s=idle_entry.position.velocity.tolist(),
                                  feedforward_nm=command['feedforward_nm']))
-                if idle_entry.done:
+                # Dance capture ends while position control still holds the
+                # verified endpoint. Teaching release can drift; exclude it.
+                if idle_entry.done or (profile is not None and idle_entry.phase == 'release'):
+                    if profile is not None:
+                        try:
+                            verified = profile.validate_end(clips.anchor, q, history, metadata, folder)
+                        except ValueError as error:
+                            # A failed automatic return is a control failure,
+                            # not a rejected terminal command: enter hold.
+                            raise RuntimeError(f'自动回位未通过首尾检查：{error}') from error
+                        journal.put(dict(event='dance_exit_verified', clip=clips.active,
+                                         monotonic_ns=read_end, measured_pose=verified))
                     clips.stop(read_end,q=q)
                     returning_clip=False
+                    ready=idle_entry.done
                     history.clear()
-                    print('已自动补回待机，片段完整结束；重力补偿继续，可录制下一动作。',flush=True)
+                    print('已自动补回待机，片段完整结束；正在恢复重力补偿。' if not ready else
+                          '已自动补回待机，片段完整结束；重力补偿继续，可录制下一动作。',flush=True)
             elif not automatic:
                 journal.put(dict(event='sample', monotonic_ns=read_end, read_start_ns=read_start,
                                  read_end_ns=read_end, clip=clips.active, **command))
@@ -750,16 +791,21 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
             except queue.Empty:
                 line = ''
             if line:
-                parts = line.split()
                 try:
+                    if profile is not None:
+                        line = profile.command(line, clips.used)
+                    parts = line.split()
                     if parts[0] == 'start' and len(parts) == 2:
                         if not ready:
                             raise ValueError('请等待自动待机与重力补偿切换完成，提示就绪后再输入 start')
                         if pending_pose is not None:
                             raise ValueError('正在保存待机预设，请稍后重试')
-                        anchor = clip_anchor(parts[1], idle_pose, q)
+                        anchor = (profile.anchor(parts[1], idle_pose, q, history, metadata, folder)
+                                  if profile else clip_anchor(parts[1], idle_pose, q))
                         clips.start(parts[1], read_end, anchor)
                         print(f'开始片段：{parts[1]}', flush=True)
+                    elif line in ('pause', 'estop'):
+                        raise ProtectiveStopRequested('operator requested protective hold')
                     elif line in ('pose idle', 'pose idle replace'):
                         if not ready or clips.active or pending_pose is not None:
                             raise ValueError('请等待就绪、结束当前片段并等待预设保存完成后再设置')
@@ -776,7 +822,11 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
                         elif live and clips.anchor and clips.anchor['exit_idle']:
                             # Imports were prepared before enable. Curve setup
                             # is bounded; gravity path checks run on later ticks.
-                            idle_entry = idle_entry_factory(gravity,q,clips.anchor['idle_pose'],from_teaching=control)
+                            try:
+                                options = dict(settle_s=1.1) if profile is not None else {}
+                                idle_entry = idle_entry_factory(gravity,q,clips.anchor['idle_pose'],from_teaching=control,**options)
+                            except ValueError as error:
+                                raise RuntimeError(f'自动回位规划失败：{error}') from error
                             journal.put(dict(event='clip_manual_end',clip=clips.active,monotonic_ns=read_end,
                                              q_rad=q.tolist(),return_duration_s=idle_entry.curve.duration))
                             returning_clip=True
@@ -784,6 +834,10 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
                             history.clear()
                             print('手动段已结束，正在接入位置保持并自动补回待机；请停止拖动并让出回位路径。回位将录入当前片段。',flush=True)
                         else:
+                            if profile is not None:
+                                verified = profile.validate_end(clips.anchor, q, history, metadata, folder)
+                                journal.put(dict(event='dance_exit_verified', clip=clips.active,
+                                                 monotonic_ns=read_end, measured_pose=verified))
                             clips.stop(read_end, q=q)
                             print('片段已结束，重力补偿继续。', flush=True)
                     elif line in ('quit', 'eof'):
@@ -795,11 +849,14 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
                         else:
                             print('尚无当前标定下的待机预设；使用 pose idle 设置。', flush=True)
                     else:
-                        print('命令：pose idle / pose idle replace / start 名称 / stop / status / quit（六轴回零后退出）', flush=True)
+                        print(profile.help(idle_pose is not None) if profile else
+                              '命令：pose idle / start 名称 / stop / estop（保持）/ status / quit（回零退出）', flush=True)
                 except ValueError as error:
                     print(str(error), flush=True)
             deadline = max(deadline + PERIOD, time.monotonic())
             time.sleep(max(0., deadline - time.monotonic()))
+        if live and stop[0] == 'logging_error' and last_gravity_gain >= 1.:
+            raise JournalError('recording storage failed: protective hold requested')
         if live and stop[0] in graceful_exits:
             # Close capture before any exit motion; quit is not an operator_stop
             # for an unfinished clip and must not make that clip replayable.
@@ -825,12 +882,40 @@ def run(args, gravity, metadata, *, backend_factory=None, commands=None, zero_re
         result['reason'] = stop[0]
     except BaseException as error:
         result['errors'].append(f'{type(error).__name__}: {error}')
-        result['reason'] = 'zero_return_failed' if result['zero_return_requested'] else 'fault'
+        result['reason'] = ('zero_return_failed' if result['zero_return_requested'] else
+                            'logging_error' if stop[0] == 'logging_error' else 'fault')
         if result['zero_return_requested']:
             try:
                 journal.put(dict(event='zero_return_failed', detail=str(error), monotonic_ns=time.monotonic_ns()))
             except Exception:
                 pass  # Cleanup must still run if logging itself has failed.
+        # A complete enable and full gravity compensation are required. Partial
+        # startup, corrupt feedback and an unachievable hold still fail closed.
+        if live and backend is not None and last_gravity_gain >= 1.:
+            result['protective_hold_requested'] = True
+            try:
+                clips.stop(time.monotonic_ns(), reason='protective_stop')
+                def verify_hold_identity():
+                    if digest(args.calibration) != metadata['calibration_sha256']:
+                        raise RuntimeError('calibration changed; cannot hold with old model')
+                choice = maintain_hold(backend, gravity, commands, stop, journal, verify_hold_identity)
+                result['protective_hold_exit'] = choice
+                if choice == 'home':
+                    stop[0] = None
+                    zero_return_active[0] = True
+                    result['zero_return_requested'] = True
+                    backend.returning_to_zero = True
+                    try:
+                        result['zero_return_completed'] = bool(zero_return.run(
+                            lambda: stop[0] is not None, initial_gravity_gain=1.,
+                            initial_kp=KP[:6], initial_kd=KD[:6]))
+                        if not result['zero_return_completed']:
+                            raise RuntimeError('explicit protective-stop home failed')
+                    finally:
+                        backend.returning_to_zero = False
+            except BaseException as hold_error:
+                result['errors'].append(f'无法保持力矩：{hold_error}')
+                print(f'无法可靠保持力矩：{hold_error}；将尝试失能，由固定支撑承接。', flush=True)
     finally:
         # Hardware cleanup precedes any export, join or potentially blocking file I/O.
         if backend is not None:

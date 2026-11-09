@@ -75,6 +75,25 @@
       "ctest_selected": 4,
       "ctest_passed": 4,
       "device_button_tested": false
+    },
+    "display_rotation": {
+      "date": "2026-11-03",
+      "relative_degrees": 180,
+      "panel": {
+        "swap_xy": true,
+        "mirror_x": false,
+        "mirror_y": true
+      },
+      "touch_mapping": [
+        "319 - raw_y",
+        "raw_x"
+      ],
+      "board_input_test_passed": true,
+      "mapped_coordinates_checked": 76800,
+      "firmware_build": "build",
+      "build_passed": true,
+      "flashed": false,
+      "hardware_verified": false
     }
   },
   "build": {
@@ -96,7 +115,7 @@
     "components/rebuddy_core/include/rb_pet.h": "b2f67a2f2936e8d6bada1feaf65b96693fcfc1f006af22edddc8fbdb3d944d46",
     "components/rebuddy_arm/src/rb_daily_screen.c": "ca88cf3839204d2983442ef7a6f1a3bef8e16949dbde27b413407ec44d5fbb57",
     "components/rebuddy_arm/include/rb_daily_screen.h": "971872d64b509d6728920c80f57b10ca0e3f4b783f2a505b26dcfa7232d2edd4",
-    "build/reBuddy.bin": "cb69ae7ef836d8fbed2d2bd74a19cbbcaf393f540cfb0f6f3a0ddb42557e3a77",
+    "build/reBuddy.bin": "d24e77277179a7adf360bce5aa1a96faab51dae28a224bf857cef74cfd3be1de",
     "components/rebuddy_arm/include/rb_daily_control.h": "d43be1b93210ae1758533a83f4eb1889813ba7728dfdc2dcada11664c18f401f",
     "tests/host/daily_control_test.c": "893e91101c824dda135c8963da0e39d32c1ebb63f8ce251198f3014e58eef2f9",
     "tests/host/daily_control_test.py": "641acca618e45139b88384e4c8af8eaafd07a45876e74942cc000386f1e6b8b8",
@@ -109,11 +128,11 @@
     "tests/host/daily_recovery_parity_test.py": "172b3e14df2d660411655eaf8edcd7b454a45550069923651759617d9e5a562a",
     "tests/host/rs_daily_prepared_test.py": "756b665bdc9e21ee8546fb33d372b2aac20f0c01413d48dabbe9a726e1554ba3",
     "tests/host/rs_zero_return_test.py": "e0f058c8057f70f12c14cd86ad8adf23e788b4cc2f35af1a7aee9de0660256f2",
-    "components/rebuddy_board/src/rb_board.c": "67e291b189e4805b74530be9d459b003f4dc461a19c491af543dbfeac950ec38",
-    "components/rebuddy_board/src/rb_board_input.c": "693327a0a98c1d8e94f7c84051cbb146ae07de099903d45420486d9440b088c0",
+    "components/rebuddy_board/src/rb_board.c": "c42f1df6145c4292b62cb8c8844615d8b3d3604f766f34e63fafd0a5f31dd7c0",
+    "components/rebuddy_board/src/rb_board_input.c": "538d67c2883462dc494deed6d328a33820348d4e3d2e631e2db50eaf884bbb23",
     "components/rebuddy_board/include/rb_board.h": "02d14199aaebb877eee8ea652528158f66b852c786d06027643a50fab5b3cf59",
-    "components/rebuddy_board/include/rb_board_input.h": "8b7490e4eb86aa323274b315e5ac7d01f51545466a47ea2a65c84199035a417e",
-    "tests/host/board_input_test.c": "88f1b7fead5fe848fe4d8ff21027a76dee8fc3827ad837b8944132d41b2929e0"
+    "components/rebuddy_board/include/rb_board_input.h": "ff6c1ca3eb795d8280224d41e50a5efe61e3cc2dcdd56dcda27aa067dea24382",
+    "tests/host/board_input_test.c": "698db9464453d209fb0f0d776a9df5d7a4fac86c8116ab0a92f21a56be2a7cc5"
   },
   "startup": "SLEEP; click wake arrow; enable/ramp; measured current pose directly to idle; verified arrival opens interaction",
   "wake_gesture": "single click; no long press; HOME never enables",

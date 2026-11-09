@@ -47,7 +47,7 @@ python3 tools/build_room_font.py
 ```
 
 
-编舞的步数、停留范围和时间步长定义在 `components/rebuddy_core/include/rb_choreo.h`，动作目录与预览节奏在对应的 `src/rb_choreo.c`。作品存储使用 `main/choreo_store.c`；只在用户保存时写入 NVS，每个槽位保留两份校验记录。不应为初始化失败而直接擦除 NVS，避免丢失已保存作品。
+编舞的步数、停留范围和时间步长定义在 `components/rebuddy_core/include/rb_choreo.h`，动作目录与预览节奏在对应的 `src/rb_choreo.c`。作品存储使用 `main/storage/choreo_store.c`；只在用户保存时写入 NVS，每个槽位保留两份校验记录。不应为初始化失败而直接擦除 NVS，避免丢失已保存作品。
 
 日常行为参数在 `assets/config/behavior_defaults.json`。当前全局时长倍率与两种风格倍率均为 `1.0`，保留新版 GIF 的平均 8 FPS 与动作总时长；活泼和慵懒暂时不改变动画速度。开心回应为 8 秒，其他时长见 [当前 GIF](../gifs/daily/README.md)。触摸识别时限与暂停响应独立。编舞页的慢／标准／快是另外的屏幕预览参数，不修改日常风格倍率。
 

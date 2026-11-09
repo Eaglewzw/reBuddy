@@ -1,0 +1,441 @@
+{
+  "schema": "rebuddy.dance_comparison.v1",
+  "v2_manifest_sha256": "064b8164eb8941356554fb9670eafb7945b9429c1326b7ea89b116b2de8577cc",
+  "v3_manifest_sha256": "d35f2ca39154dd56736d5e1784f2bc14943f3051b61d9766b4dbaec27f29c522",
+  "method": "2001 samples/action; quiet means all six arm axes below 0.4deg/s in middle 80%",
+  "actions": [
+    {
+      "number": 2,
+      "name": "抬臂舒展",
+      "v2": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v2/02_lift.json",
+        "sha256": "63cb51e4ac0342f7424790bcaf7678922ad37c549fc4aa9c5693d05f9723e0fe",
+        "duration_s": 8.0,
+        "bpm": 60.0,
+        "joint_range_deg": [
+          0.0,
+          7.999999999999998,
+          12.000000000000004,
+          7.999999999999998,
+          6.000000000000001,
+          0.0
+        ],
+        "inner_quiet_fraction": 0.2595372107567229,
+        "longest_inner_quiet_s": 1.176,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": null,
+        "tool_xyz_max_m": null
+      },
+      "v3": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/02_lift.json",
+        "sha256": "550530de2306f587714dca8b7d158069d0170e74987b427a7a0051bb95e5fde0",
+        "duration_s": 10.0,
+        "bpm": 48.0,
+        "joint_range_deg": [
+          20.318957203186823,
+          16.00134247337758,
+          24.1957663741653,
+          29.39848992934224,
+          17.896593139738485,
+          9.93923337957349e-16
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [
+          10.912698409478898,
+          9.639026899845561,
+          7.264190093496562,
+          7.882594385655345
+        ],
+        "tool_xyz_min_m": [
+          0.10927547706859214,
+          -0.0695528530313399,
+          0.4311170807224296
+        ],
+        "tool_xyz_max_m": [
+          0.325246279080507,
+          0.048565152228775166,
+          0.6859321376265585
+        ]
+      }
+    },
+    {
+      "number": 3,
+      "name": "深蹲回升",
+      "v2": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v2/03_dip.json",
+        "sha256": "450cc47a0c4f84fa62a1e85b4204602c2f2c18079f3417bd9b63b0a432156755",
+        "duration_s": 8.0,
+        "bpm": 60.0,
+        "joint_range_deg": [
+          0.0,
+          10.000000000000002,
+          12.000000000000004,
+          5.0000000000000036,
+          0.0,
+          0.0
+        ],
+        "inner_quiet_fraction": 0.24265165728580362,
+        "longest_inner_quiet_s": 0.704,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": null,
+        "tool_xyz_max_m": null
+      },
+      "v3": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/03_dip.json",
+        "sha256": "58ecbdb6c8c6f786d1a41fd756f19ad7cfd9176ba6d2cfdefabdaca451343fa7",
+        "duration_s": 10.0,
+        "bpm": 48.0,
+        "joint_range_deg": [
+          12.149358029717545,
+          23.136083445787033,
+          29.15714056016969,
+          17.18196549048108,
+          10.612748044540725,
+          9.93923337957349e-16
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [
+          2.378859995304431,
+          3.060858635424956,
+          5.307406077541463,
+          9.178645624792177
+        ],
+        "tool_xyz_min_m": [
+          0.2234623513131878,
+          -0.02566685536958982,
+          0.2660100450963313
+        ],
+        "tool_xyz_max_m": [
+          0.3925535939382557,
+          0.04171452288191437,
+          0.5443875168061127
+        ]
+      }
+    },
+    {
+      "number": 4,
+      "name": "前探伸展",
+      "v2": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v2/04_reach.json",
+        "sha256": "17c52a383e16a225f818dbdb8a6477afbed58aad5b22dae924f0b19588c9cbf1",
+        "duration_s": 8.0,
+        "bpm": 60.0,
+        "joint_range_deg": [
+          0.0,
+          10.000000000000002,
+          4.999999999999995,
+          10.000000000000002,
+          7.0,
+          0.0
+        ],
+        "inner_quiet_fraction": 0.267667292057536,
+        "longest_inner_quiet_s": 1.156,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": null,
+        "tool_xyz_max_m": null
+      },
+      "v3": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/04_reach.json",
+        "sha256": "8b1d7a3df128707cd58e3bc9fca929b1e537fdd827fa8f81fb0d5286c6ed61b7",
+        "duration_s": 10.0,
+        "bpm": 48.0,
+        "joint_range_deg": [
+          24.969212992695585,
+          25.45707563100699,
+          16.07255479920266,
+          23.03419477098213,
+          27.850009271512143,
+          9.93923337957349e-16
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [
+          10.716011562090308,
+          7.663625439594024,
+          7.538898279962837,
+          7.426842579626027
+        ],
+        "tool_xyz_min_m": [
+          0.32524627908050696,
+          -0.13375733280892266,
+          0.236572363221545
+        ],
+        "tool_xyz_max_m": [
+          0.4400637273061695,
+          0.14174239479981493,
+          0.43114417154688706
+        ]
+      }
+    },
+    {
+      "number": 5,
+      "name": "底盘回转",
+      "v2": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v2/05_base_turn.json",
+        "sha256": "7a6492219c21553f4b1a82e25506a922a89bfe400bc7b9b4d9eb60b1d04d6c0d",
+        "duration_s": 8.0,
+        "bpm": 60.0,
+        "joint_range_deg": [
+          44.0,
+          0.0,
+          0.0,
+          0.0,
+          18.0,
+          6.000000000000001
+        ],
+        "inner_quiet_fraction": 0.23764853033145716,
+        "longest_inner_quiet_s": 0.632,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": null,
+        "tool_xyz_max_m": null
+      },
+      "v3": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/05_base_turn.json",
+        "sha256": "9d54f90e4668ed438724533cd8e3fcba0cfee1b29eaf00cc7a0e553512e83c84",
+        "duration_s": 10.0,
+        "bpm": 48.0,
+        "joint_range_deg": [
+          72.82522359214309,
+          12.316939489081202,
+          15.730063875510151,
+          3.81666561775622e-14,
+          33.257123414120564,
+          21.3793408412143
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [
+          19.836373599683867,
+          8.197972945710687,
+          30.214820515491095,
+          8.197972945710681,
+          19.836373599683863
+        ],
+        "tool_xyz_min_m": [
+          0.2151203719235355,
+          -0.10129291393230586,
+          0.3753255850039306
+        ],
+        "tool_xyz_max_m": [
+          0.3493209285450126,
+          0.10394618998896737,
+          0.5584588010791219
+        ]
+      }
+    },
+    {
+      "number": 6,
+      "name": "大幅摇摆",
+      "v2": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v2/06_sway.json",
+        "sha256": "b17e6205aeb2a0180f80e547844212920c9a592dbd1e19ef1172edf22cb4ba74",
+        "duration_s": 8.0,
+        "bpm": 60.0,
+        "joint_range_deg": [
+          22.96602909468334,
+          5.729779402196811,
+          7.162224252746012,
+          6.561722598480956,
+          11.48301454734167,
+          11.48301454734167
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": null,
+        "tool_xyz_max_m": null
+      },
+      "v3": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/06_sway.json",
+        "sha256": "57e9abc3e46aaab77ca90740da234086044fab880a6b3d04a8a66af3cc72d140",
+        "duration_s": 10.0,
+        "bpm": 48.0,
+        "joint_range_deg": [
+          57.41507273670835,
+          17.18933820659043,
+          22.919117608787243,
+          25.856785332771015,
+          26.246890393923817,
+          22.624687166174635
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": [
+          0.2522644271056099,
+          -0.19823354901474805,
+          0.3775641527500824
+        ],
+        "tool_xyz_max_m": [
+          0.3497188029454859,
+          0.18948902707520282,
+          0.49701067271342814
+        ]
+      }
+    },
+    {
+      "number": 7,
+      "name": "折肘展开",
+      "v2": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v2/07_elbow.json",
+        "sha256": "f4f3ade2de135bf2eec5892e34463f165ea066bcb82466b1d55ba12a2074247b",
+        "duration_s": 8.0,
+        "bpm": 60.0,
+        "joint_range_deg": [
+          0.0,
+          7.999999999999998,
+          22.000000000000007,
+          15.999999999999996,
+          0.0,
+          0.0
+        ],
+        "inner_quiet_fraction": 0.2939337085678549,
+        "longest_inner_quiet_s": 0.924,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": null,
+        "tool_xyz_max_m": null
+      },
+      "v3": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/07_elbow.json",
+        "sha256": "a015c21a69fc940b62e503c616bcd704800fc3bf2ff8012a52659ab15055227b",
+        "duration_s": 10.0,
+        "bpm": 48.0,
+        "joint_range_deg": [
+          21.31292775511862,
+          20.576097580225788,
+          47.70452759425063,
+          43.09771354088978,
+          16.379346571207797,
+          9.93923337957349e-16
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [
+          13.812165487590173,
+          8.17939658246598,
+          20.08233015872183,
+          3.7449154108229643,
+          12.05184754636137
+        ],
+        "tool_xyz_min_m": [
+          0.1656946501139746,
+          -0.09705020543253379,
+          0.28030843648521414
+        ],
+        "tool_xyz_max_m": [
+          0.3854123997473411,
+          0.05429026864767826,
+          0.5479316970247611
+        ]
+      }
+    },
+    {
+      "number": 8,
+      "name": "抬头俯看",
+      "v2": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v2/08_wrist.json",
+        "sha256": "b4ce5d859edc87e8692a22b1b55a1bea5e6d375a673960a7cd59b87b5fe1c05f",
+        "duration_s": 8.0,
+        "bpm": 60.0,
+        "joint_range_deg": [
+          0.0,
+          0.0,
+          0.0,
+          29.999999999999996,
+          10.0,
+          8.0
+        ],
+        "inner_quiet_fraction": 0.31894934333958724,
+        "longest_inner_quiet_s": 0.892,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": null,
+        "tool_xyz_max_m": null
+      },
+      "v3": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/08_wrist.json",
+        "sha256": "14a42c42a0aab32fe4633ec0a2ede2738ef5419147fc7ba31be42562e377e93e",
+        "duration_s": 10.0,
+        "bpm": 48.0,
+        "joint_range_deg": [
+          2.1866313435061676e-15,
+          11.268107295426452,
+          11.53360735596153,
+          52.541545816827664,
+          29.626298687516766,
+          25.31294016938176
+        ],
+        "inner_quiet_fraction": 0.0025015634771732333,
+        "longest_inner_quiet_s": 0.02,
+        "interior_knot_max_axis_speed_deg_s": [
+          14.420579422864426,
+          6.732033495151173,
+          21.19207036513356,
+          6.176282318230164,
+          14.272275823865606
+        ],
+        "tool_xyz_min_m": [
+          0.2279787404711909,
+          -0.056318778232881006,
+          0.24553318720178896
+        ],
+        "tool_xyz_max_m": [
+          0.3335550665519631,
+          0.0488836724309461,
+          0.6290768870057913
+        ]
+      }
+    },
+    {
+      "number": 10,
+      "name": "大幅波浪",
+      "v2": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v2/10_wave.json",
+        "sha256": "5390ab1feeb27e7d35b46a0df76962a3c745863fd635ced750ccfc56f830f567",
+        "duration_s": 8.0,
+        "bpm": 60.0,
+        "joint_range_deg": [
+          8.202153248101192,
+          9.842583897721427,
+          13.903742024885423,
+          18.538322699847235,
+          7.162224252746015,
+          8.594669103295217
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": null,
+        "tool_xyz_max_m": null
+      },
+      "v3": {
+        "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/10_wave.json",
+        "sha256": "6e4c95798b8e823d05aa934fbc3def1714c8b9be4d06959ba37b454c4755b308",
+        "duration_s": 10.0,
+        "bpm": 48.0,
+        "joint_range_deg": [
+          25.856785332771008,
+          26.24689039392381,
+          35.875020098814815,
+          37.78999178442106,
+          17.18933820659044,
+          21.48667275823804
+        ],
+        "inner_quiet_fraction": 0.0,
+        "longest_inner_quiet_s": 0.0,
+        "interior_knot_max_axis_speed_deg_s": [],
+        "tool_xyz_min_m": [
+          0.2676734326037835,
+          -0.07295228339147425,
+          0.17978309092058095
+        ],
+        "tool_xyz_max_m": [
+          0.35629930572880697,
+          0.056437610368047654,
+          0.551263783937277
+        ]
+      }
+    }
+  ]
+}

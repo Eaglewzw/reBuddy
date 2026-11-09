@@ -226,14 +226,25 @@ class Hardware:
         return q
 
     def reports(self):
+        # Discard cached states before requesting a new startup observation.
+        self.drain()
+        self.states.clear()
         self.report_enabled=True
         for m in self.motors:m.robstride_set_active_report(True)
         deadline=time.monotonic()+1
         while time.monotonic()<deadline:
             self.drain()
-            if len(self.states)==7:return
+            now=time.monotonic()
+            missing=[mid for mid in range(1,8)
+                     if mid not in self.states or now-self.states[mid][0]>.15]
+            if not missing:return
             time.sleep(.01)
-        raise RuntimeError('missing fresh seven-motor status reports; no enable')
+        now=time.monotonic()
+        missing=[mid for mid in range(1,8)
+                 if mid not in self.states or now-self.states[mid][0]>.15]
+        raise RuntimeError('未收到完整的新电机状态；缺失电机 ID：' +
+                           ', '.join(map(str,missing)) +
+                           '。未使能。请检查电源、CAN 接线、接口和波特率。')
 
     def stop_reports(self):
         # Periodic type-24 reports are needed for disabled startup checks only.

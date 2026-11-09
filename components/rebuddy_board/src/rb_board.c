@@ -225,7 +225,8 @@ esp_err_t rb_board_init(void)
         .io_handle = lcd_io, .panel_handle = panel, .buffer_size = 320 * 40,
         .double_buffer = true,
         .hres = 320, .vres = 240, .color_format = LV_COLOR_FORMAT_RGB565,
-        .rotation = {.swap_xy = true, .mirror_x = true},
+        /* Opposite landscape orientation: toggle both panel mirror axes. */
+        .rotation = {.swap_xy = true, .mirror_x = false, .mirror_y = true},
         .flags.buff_dma = true
     };
     lv_display_t *display = lvgl_port_add_disp(&display_config);

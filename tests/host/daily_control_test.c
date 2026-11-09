@@ -189,6 +189,17 @@ int main(int argc,char **argv)
         c.target[0]+=.11f;until(RB_DC_BRAKING,10);
         assert(strstr(c.status.error,"following") && c.status.bad_motor==1 && !disables);
         until(RB_DC_PROTECTIVE_HOLD,150);assert(!disables);
+    } else if(!strcmp(argv[1],"pause_home")) {
+        rb_daily_control_home(&c);until(RB_DC_HOME,10);
+        rb_daily_control_pause(&c);until(RB_DC_PROTECTIVE_HOLD,150);
+        assert(!disables && c.status.hold.source_state==RB_DC_HOME);
+        assert(rb_daily_control_request(&c,RB_DAILY_PROBE,88)==ESP_ERR_INVALID_STATE);
+        float held[7];memcpy(held,c.target,sizeof(held));
+        for(unsigned i=0;i<100;++i)tick(true);
+        assert(!disables && !memcmp(held,c.target,sizeof(held)));
+    } else if(!strcmp(argv[1],"invalid_target_hold")) {
+        c.target[0]=NAN;until(RB_DC_PROTECTIVE_HOLD,150);
+        assert(!disables && strstr(c.status.error,"invalid target"));
     } else if(!strcmp(argv[1],"recovery_stale")) {
         rb_daily_control_pause(&c);until(RB_DC_BRAKING,10);
         stale=true;until(RB_DC_DISABLING,20);

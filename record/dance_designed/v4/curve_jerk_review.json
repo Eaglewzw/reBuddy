@@ -1,0 +1,579 @@
+{
+  "schema": "rebuddy.dance_curve_jerk_review.v1",
+  "sample_period_s": 0.002,
+  "velocity_sign_threshold_deg_s": 0.5,
+  "actions": [
+    {
+      "number": 2,
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/02_lift.json",
+      "sha256": "550530de2306f587714dca8b7d158069d0170e74987b427a7a0051bb95e5fde0",
+      "same_v4_sha256": "550530de2306f587714dca8b7d158069d0170e74987b427a7a0051bb95e5fde0",
+      "sampled_peak_jerk_rad_s3_per_axis": [
+        0.21357291061563866,
+        0.35540374701230487,
+        0.5587227969854073,
+        0.315935582057004,
+        0.20835780449050767,
+        8.20942075882295e-15
+      ],
+      "reversal_analysis": [
+        {
+          "axis": 1,
+          "reversals": 2,
+          "times_s": [
+            3.234,
+            6.766
+          ],
+          "minimum_interval_s": 3.532
+        },
+        {
+          "axis": 2,
+          "reversals": 1,
+          "times_s": [
+            3.84
+          ],
+          "minimum_interval_s": null
+        },
+        {
+          "axis": 3,
+          "reversals": 1,
+          "times_s": [
+            4.21
+          ],
+          "minimum_interval_s": null
+        },
+        {
+          "axis": 4,
+          "reversals": 2,
+          "times_s": [
+            3.0420000000000003,
+            6.176
+          ],
+          "minimum_interval_s": 3.134
+        },
+        {
+          "axis": 5,
+          "reversals": 2,
+          "times_s": [
+            3.314,
+            6.352
+          ],
+          "minimum_interval_s": 3.0380000000000003
+        },
+        {
+          "axis": 6,
+          "reversals": 0,
+          "times_s": [],
+          "minimum_interval_s": null
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/03_dip.json",
+      "sha256": "58ecbdb6c8c6f786d1a41fd756f19ad7cfd9176ba6d2cfdefabdaca451343fa7",
+      "same_v4_sha256": "58ecbdb6c8c6f786d1a41fd756f19ad7cfd9176ba6d2cfdefabdaca451343fa7",
+      "sampled_peak_jerk_rad_s3_per_axis": [
+        0.6652388115364863,
+        1.4098111105510798,
+        1.6096925713831995,
+        1.0181213973572725,
+        0.22058276389525178,
+        8.20942075882295e-15
+      ],
+      "reversal_analysis": [
+        {
+          "axis": 1,
+          "reversals": 4,
+          "times_s": [
+            1.848,
+            3.8200000000000003,
+            5.796,
+            7.942
+          ],
+          "minimum_interval_s": 1.9720000000000002
+        },
+        {
+          "axis": 2,
+          "reversals": 4,
+          "times_s": [
+            1.9020000000000001,
+            3.864,
+            5.8180000000000005,
+            7.984
+          ],
+          "minimum_interval_s": 1.9540000000000006
+        },
+        {
+          "axis": 3,
+          "reversals": 4,
+          "times_s": [
+            1.85,
+            3.848,
+            5.804,
+            7.912
+          ],
+          "minimum_interval_s": 1.9560000000000004
+        },
+        {
+          "axis": 4,
+          "reversals": 4,
+          "times_s": [
+            1.8980000000000001,
+            3.874,
+            5.8100000000000005,
+            7.954
+          ],
+          "minimum_interval_s": 1.9360000000000004
+        },
+        {
+          "axis": 5,
+          "reversals": 4,
+          "times_s": [
+            1.464,
+            3.5740000000000003,
+            5.988,
+            8.42
+          ],
+          "minimum_interval_s": 2.1100000000000003
+        },
+        {
+          "axis": 6,
+          "reversals": 0,
+          "times_s": [],
+          "minimum_interval_s": null
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/04_reach.json",
+      "sha256": "8b1d7a3df128707cd58e3bc9fca929b1e537fdd827fa8f81fb0d5286c6ed61b7",
+      "same_v4_sha256": "8b1d7a3df128707cd58e3bc9fca929b1e537fdd827fa8f81fb0d5286c6ed61b7",
+      "sampled_peak_jerk_rad_s3_per_axis": [
+        0.27332729132249267,
+        0.3843793500546102,
+        0.37195575070560194,
+        0.5695007668619991,
+        0.3631577706673951,
+        8.20942075882295e-15
+      ],
+      "reversal_analysis": [
+        {
+          "axis": 1,
+          "reversals": 2,
+          "times_s": [
+            3.13,
+            6.392
+          ],
+          "minimum_interval_s": 3.2620000000000005
+        },
+        {
+          "axis": 2,
+          "reversals": 1,
+          "times_s": [
+            4.176
+          ],
+          "minimum_interval_s": null
+        },
+        {
+          "axis": 3,
+          "reversals": 1,
+          "times_s": [
+            4.114
+          ],
+          "minimum_interval_s": null
+        },
+        {
+          "axis": 4,
+          "reversals": 1,
+          "times_s": [
+            3.994
+          ],
+          "minimum_interval_s": null
+        },
+        {
+          "axis": 5,
+          "reversals": 2,
+          "times_s": [
+            3.2720000000000002,
+            6.17
+          ],
+          "minimum_interval_s": 2.8979999999999997
+        },
+        {
+          "axis": 6,
+          "reversals": 0,
+          "times_s": [],
+          "minimum_interval_s": null
+        }
+      ]
+    },
+    {
+      "number": 5,
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/05_base_turn.json",
+      "sha256": "9d54f90e4668ed438724533cd8e3fcba0cfee1b29eaf00cc7a0e553512e83c84",
+      "same_v4_sha256": "9d54f90e4668ed438724533cd8e3fcba0cfee1b29eaf00cc7a0e553512e83c84",
+      "sampled_peak_jerk_rad_s3_per_axis": [
+        0.9977895914714817,
+        0.40678334287881235,
+        0.5191129073625795,
+        4.4408920984991434e-13,
+        0.45112769994300395,
+        0.4036508761478234
+      ],
+      "reversal_analysis": [
+        {
+          "axis": 1,
+          "reversals": 2,
+          "times_s": [
+            3.114,
+            6.93
+          ],
+          "minimum_interval_s": 3.816
+        },
+        {
+          "axis": 2,
+          "reversals": 3,
+          "times_s": [
+            3.012,
+            5.08,
+            7.0280000000000005
+          ],
+          "minimum_interval_s": 1.9480000000000004
+        },
+        {
+          "axis": 3,
+          "reversals": 3,
+          "times_s": [
+            2.996,
+            5.062,
+            7.0360000000000005
+          ],
+          "minimum_interval_s": 1.9740000000000002
+        },
+        {
+          "axis": 4,
+          "reversals": 0,
+          "times_s": [],
+          "minimum_interval_s": null
+        },
+        {
+          "axis": 5,
+          "reversals": 2,
+          "times_s": [
+            3.144,
+            6.95
+          ],
+          "minimum_interval_s": 3.806
+        },
+        {
+          "axis": 6,
+          "reversals": 2,
+          "times_s": [
+            2.984,
+            6.998
+          ],
+          "minimum_interval_s": 4.014
+        }
+      ]
+    },
+    {
+      "number": 6,
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/06_sway.json",
+      "sha256": "57e9abc3e46aaab77ca90740da234086044fab880a6b3d04a8a66af3cc72d140",
+      "same_v4_sha256": "57e9abc3e46aaab77ca90740da234086044fab880a6b3d04a8a66af3cc72d140",
+      "sampled_peak_jerk_rad_s3_per_axis": [
+        1.8940614666286975,
+        0.6096944828191333,
+        0.8129259770921777,
+        0.8598170593681633,
+        0.8658566704590658,
+        0.7523399269471387
+      ],
+      "reversal_analysis": [
+        {
+          "axis": 1,
+          "reversals": 4,
+          "times_s": [
+            1.938,
+            3.96,
+            6.0600000000000005,
+            8.118
+          ],
+          "minimum_interval_s": 2.0220000000000002
+        },
+        {
+          "axis": 2,
+          "reversals": 3,
+          "times_s": [
+            2.954,
+            5.024,
+            7.1240000000000006
+          ],
+          "minimum_interval_s": 2.07
+        },
+        {
+          "axis": 3,
+          "reversals": 3,
+          "times_s": [
+            2.944,
+            5.018,
+            7.114
+          ],
+          "minimum_interval_s": 2.074
+        },
+        {
+          "axis": 4,
+          "reversals": 4,
+          "times_s": [
+            2.286,
+            4.3180000000000005,
+            6.42,
+            8.51
+          ],
+          "minimum_interval_s": 2.0320000000000005
+        },
+        {
+          "axis": 5,
+          "reversals": 4,
+          "times_s": [
+            1.968,
+            3.97,
+            6.07,
+            8.152000000000001
+          ],
+          "minimum_interval_s": 2.0020000000000002
+        },
+        {
+          "axis": 6,
+          "reversals": 4,
+          "times_s": [
+            2.2920000000000003,
+            4.32,
+            6.422,
+            8.526
+          ],
+          "minimum_interval_s": 2.028
+        }
+      ]
+    },
+    {
+      "number": 7,
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/07_elbow.json",
+      "sha256": "a015c21a69fc940b62e503c616bcd704800fc3bf2ff8012a52659ab15055227b",
+      "same_v4_sha256": "a015c21a69fc940b62e503c616bcd704800fc3bf2ff8012a52659ab15055227b",
+      "sampled_peak_jerk_rad_s3_per_axis": [
+        0.34764129954147466,
+        0.2350744369877634,
+        0.7640288208809417,
+        0.6374726183032668,
+        0.24686332143127654,
+        6.956178753593772e-15
+      ],
+      "reversal_analysis": [
+        {
+          "axis": 1,
+          "reversals": 2,
+          "times_s": [
+            3.064,
+            7.09
+          ],
+          "minimum_interval_s": 4.026
+        },
+        {
+          "axis": 2,
+          "reversals": 2,
+          "times_s": [
+            3.136,
+            6.702
+          ],
+          "minimum_interval_s": 3.566
+        },
+        {
+          "axis": 3,
+          "reversals": 2,
+          "times_s": [
+            3.0700000000000003,
+            6.8260000000000005
+          ],
+          "minimum_interval_s": 3.7560000000000002
+        },
+        {
+          "axis": 4,
+          "reversals": 2,
+          "times_s": [
+            2.986,
+            6.756
+          ],
+          "minimum_interval_s": 3.77
+        },
+        {
+          "axis": 5,
+          "reversals": 4,
+          "times_s": [
+            1.426,
+            3.678,
+            6.42,
+            8.8
+          ],
+          "minimum_interval_s": 2.252
+        },
+        {
+          "axis": 6,
+          "reversals": 0,
+          "times_s": [],
+          "minimum_interval_s": null
+        }
+      ]
+    },
+    {
+      "number": 8,
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/08_wrist.json",
+      "sha256": "14a42c42a0aab32fe4633ec0a2ede2738ef5419147fc7ba31be42562e377e93e",
+      "same_v4_sha256": "14a42c42a0aab32fe4633ec0a2ede2738ef5419147fc7ba31be42562e377e93e",
+      "sampled_peak_jerk_rad_s3_per_axis": [
+        2.7755575615619646e-14,
+        0.12218943717424822,
+        0.17392372459893587,
+        0.8283321659882825,
+        0.5072341244311337,
+        0.4241439487967276
+      ],
+      "reversal_analysis": [
+        {
+          "axis": 1,
+          "reversals": 0,
+          "times_s": [],
+          "minimum_interval_s": null
+        },
+        {
+          "axis": 2,
+          "reversals": 2,
+          "times_s": [
+            3.218,
+            6.808
+          ],
+          "minimum_interval_s": 3.59
+        },
+        {
+          "axis": 3,
+          "reversals": 2,
+          "times_s": [
+            3.092,
+            6.944
+          ],
+          "minimum_interval_s": 3.852
+        },
+        {
+          "axis": 4,
+          "reversals": 2,
+          "times_s": [
+            3.052,
+            6.958
+          ],
+          "minimum_interval_s": 3.906
+        },
+        {
+          "axis": 5,
+          "reversals": 2,
+          "times_s": [
+            3.0260000000000002,
+            6.986
+          ],
+          "minimum_interval_s": 3.9599999999999995
+        },
+        {
+          "axis": 6,
+          "reversals": 2,
+          "times_s": [
+            3.0340000000000003,
+            6.956
+          ],
+          "minimum_interval_s": 3.922
+        }
+      ]
+    },
+    {
+      "number": 10,
+      "file": "/home/verser/esp32/reBuddy/record/dance_designed/v3/10_wave.json",
+      "sha256": "6e4c95798b8e823d05aa934fbc3def1714c8b9be4d06959ba37b454c4755b308",
+      "same_v4_sha256": "6e4c95798b8e823d05aa934fbc3def1714c8b9be4d06959ba37b454c4755b308",
+      "sampled_peak_jerk_rad_s3_per_axis": [
+        0.8598170593682708,
+        0.8658566704588331,
+        1.215715434393367,
+        1.3022765201258508,
+        0.6096944828191333,
+        0.7621181035238216
+      ],
+      "reversal_analysis": [
+        {
+          "axis": 1,
+          "reversals": 4,
+          "times_s": [
+            1.6620000000000001,
+            3.624,
+            5.72,
+            7.804
+          ],
+          "minimum_interval_s": 1.962
+        },
+        {
+          "axis": 2,
+          "reversals": 4,
+          "times_s": [
+            1.968,
+            3.97,
+            6.07,
+            8.152000000000001
+          ],
+          "minimum_interval_s": 2.0020000000000002
+        },
+        {
+          "axis": 3,
+          "reversals": 4,
+          "times_s": [
+            2.5460000000000003,
+            4.604,
+            6.702,
+            8.782
+          ],
+          "minimum_interval_s": 2.058
+        },
+        {
+          "axis": 4,
+          "reversals": 4,
+          "times_s": [
+            1.242,
+            3.16,
+            5.246,
+            7.332
+          ],
+          "minimum_interval_s": 1.9180000000000001
+        },
+        {
+          "axis": 5,
+          "reversals": 3,
+          "times_s": [
+            2.954,
+            5.024,
+            7.1240000000000006
+          ],
+          "minimum_interval_s": 2.07
+        },
+        {
+          "axis": 6,
+          "reversals": 3,
+          "times_s": [
+            2.946,
+            5.018,
+            7.1160000000000005
+          ],
+          "minimum_interval_s": 2.0719999999999996
+        }
+      ]
+    }
+  ],
+  "conclusion": "02..08 and10 have no planned short rapid reversal sequence: retained reversals are at least about1.9s apart. Peak planned jerk is finite (about0.56..1.90rad/s³); position/velocity/acceleration are continuous. This does not exclude mechanical friction, tracking, command-timing, or endpoint jerk changes. Preserve current curves while runtime/feedback is reviewed."
+}

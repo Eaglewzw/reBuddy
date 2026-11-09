@@ -101,7 +101,7 @@ class Tests(unittest.TestCase):
                 self.assertLessEqual(curve.peak_acceleration,acceleration+1e-8)
 
     def test_probe_body_is_twenty_five_percent_faster_without_changing_path(self):
-        from rs_probe_trial import Curve
+        from rs_motion import Curve
         spec=json.loads((prepare.BUNDLE/'probe.json').read_text())
         stage=next(s for s in spec['stages'] if s['label']=='recorded_gesture')
         old=Curve(stage['t_s'],stage['q_rad'],velocity_limit=1.,acceleration_limit=2.)
@@ -333,7 +333,7 @@ class Tests(unittest.TestCase):
             def home(*args,**kw):events.append('home');return True
             return SimpleNamespace(args=SimpleNamespace(exit_zero_tolerance_deg=2.),run=home)
         args=SimpleNamespace(port='can-test',calibration=DEFAULT_CALIBRATION,urdf=DEFAULT_URDF)
-        from rs_probe_trial import Curve
+        from rs_motion import Curve
         plans={'REST':prepare.Plan([('rest',Curve([0,1],[idle,zero]))]),
                'WAKE':prepare.Plan([('wake',Curve([0,1],[zero,idle]))])}
         session=runtime.Session(args,dict(idle_rad=idle.tolist(),zero_rad=zero.tolist()),plans,

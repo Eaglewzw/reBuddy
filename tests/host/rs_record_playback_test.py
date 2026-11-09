@@ -22,6 +22,26 @@ def recording(points):
 
 
 class Tests(unittest.TestCase):
+    def test_startup_reports_require_fresh_complete_set(self):
+        from unittest.mock import Mock
+        for missing in ([], [7], list(range(1,8))):
+            hw=object.__new__(m.Hardware);clock=[10.]
+            hw.states={mid:(0.,0,0) for mid in range(1,8)}
+            hw.motors=[Mock() for _ in range(7)]
+            def drain():
+                hw.states.update({mid:(clock[0],0,0) for mid in range(1,8) if mid not in missing})
+            hw.drain=drain
+            def sleep(delay):clock[0]+=delay
+            with patch.object(m.time,'monotonic',side_effect=lambda:clock[0]), \
+                    patch.object(m.time,'sleep',side_effect=sleep):
+                if missing:
+                    with self.assertRaisesRegex(RuntimeError, '缺失电机 ID：'+', '.join(map(str,missing))):
+                        hw.reports()
+                else:hw.reports()
+            for motor in hw.motors:
+                motor.enable.assert_not_called()
+                motor.robstride_set_active_report.assert_called_once_with(True)
+
     def test_watchdog_start_drains_observer_while_waiting_for_child(self):
         from unittest.mock import Mock
         clock=[0.];drains=[]

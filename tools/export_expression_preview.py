@@ -11,7 +11,7 @@ OUTPUT = ROOT / 'assets/gifs/expressions'
 def main():
     cfg = json.loads((DESIGN / 'timing.json').read_text())
     protected = [ROOT / p for p in ('assets/animation/frames.bin', 'assets/animation/manifest.json',
-                                     'main/pet_animation_table.c', 'main/pet_animation_table.h')]
+                                     'main/generated/pet_animation_table.c', 'main/generated/pet_animation_table.h')]
     before = {str(p.relative_to(ROOT)): sha(p) for p in protected}
     source = DESIGN / 'atlas.png'
     check_cavity_source('three-joint-expressions', source)

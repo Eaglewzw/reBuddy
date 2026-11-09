@@ -1,0 +1,52 @@
+{
+  "schema": "rebuddy.gripper_profile_review.v1",
+  "hardware_accepted": false,
+  "source_control_log": "/home/verser/esp32/reBuddy/build/dance-trials/session-1794043194577772490/control.jsonl",
+  "source_sha256": "83866841167b411b9878023c076431206238fdb038bd4b0c326dd074fb30bbfb",
+  "new_action": "/home/verser/esp32/reBuddy/record/dance_designed/v4/09_grip.json",
+  "new_action_sha256": "f551a0378b9ea27f325f5ac636f712c2ae4a2c47d1f0fe7c8a0502f2e2aa9412",
+  "observed_v3": {
+    "planned_duration_s": 20.0,
+    "action_elapsed_s": 20.766048084,
+    "peak_target_speed_rad_s": 0.9624873257971868,
+    "peak_following_error_deg": 4.858691880307607,
+    "peak_controller_estimated_torque_nm": 0.5106588352723472,
+    "high_speed_samples": 252,
+    "high_speed_threshold_rad_s": 0.8,
+    "equivalent_position_lag_ms_percentiles_50_95": [
+      50.81286041634531,
+      55.47112645070709
+    ],
+    "note": "e/v is only summarized at high commanded speed; low-speed static friction makes that ratio a poor delay estimate. Torque is controller estimate, not a measured load."
+  },
+  "new_v4": {
+    "duration_s": 11.126646259971649,
+    "open_or_close_s": 5.363323129985824,
+    "ramp_s": 1.0,
+    "cruise_s": 3.363323129985824,
+    "holds_s": [
+      0.1,
+      0.2,
+      0.1
+    ],
+    "peak_speed_rad_s": 1.0,
+    "peak_acceleration_rad_s2": 1.875,
+    "velocity_budget_rad_s": 1.0,
+    "acceleration_budget_rad_s2": 2.0,
+    "following_limit_deg": 10.8,
+    "kp": 5.0,
+    "kd": 0.3,
+    "torque_budget_nm": 1.5,
+    "trajectory": "q integral of a quintic smoothstep velocity ramp, then cruise, then symmetric ramp; q/v/a/jerk continuous at ramp boundaries"
+  },
+  "projection": {
+    "delay_s": 0.06,
+    "additional_friction_error_deg": 4.858691880307607,
+    "position_bound_formula": "abs(q(t)-q(max(0,t-delay))) + observed_max_abs_tracking_error",
+    "torque_bound_formula": "5*position_bound + 0.3*abs(v(t)-v(max(0,t-delay)))",
+    "max_following_error_deg": 8.296438651092576,
+    "peak_controller_estimated_torque_bound_nm": 0.7256926795377574,
+    "status": "offline sensitivity scenario; combines measured worst-case residual with a chosen 60ms delay, not a proven hardware bound"
+  },
+  "unchanged": "six-axis trajectories, arm limits 1rad/s and 2rad/s², J7 1rad/s and 2rad/s², gains, 10.8deg following window and 1.5Nm estimate cap"
+}
