@@ -1,0 +1,116 @@
+{
+  "PROBE": {
+    "gif_s": 5.0,
+    "motion_s": 4.999999999999999,
+    "matched": true,
+    "path_preserved": true,
+    "fixed_gripper_timing": true,
+    "stages": [
+      {
+        "name": "idle_to_recording",
+        "duration_s": 0.4052252232187142
+      },
+      {
+        "name": "recorded_gesture",
+        "duration_s": 3.736615377029032
+      },
+      {
+        "name": "generated_return_to_idle",
+        "duration_s": 0.8581593997522535
+      }
+    ]
+  },
+  "NUZZLE": {
+    "gif_s": 6.0,
+    "motion_s": 9.539894648531023,
+    "matched": false,
+    "path_preserved": true,
+    "fixed_gripper_timing": true,
+    "stages": [
+      {
+        "name": "idle_to_recording",
+        "duration_s": 0.39794297663093026
+      },
+      {
+        "name": "recorded_gesture",
+        "duration_s": 8.25963204915464
+      },
+      {
+        "name": "generated_return_to_idle",
+        "duration_s": 0.8823196227454544
+      }
+    ]
+  },
+  "TILT": {
+    "gif_s": 5.0,
+    "motion_s": 11.438579317663288,
+    "matched": false,
+    "path_preserved": true,
+    "fixed_gripper_timing": true,
+    "stages": [
+      {
+        "name": "idle_to_recording",
+        "duration_s": 0.12492184818737193
+      },
+      {
+        "name": "recorded_gesture",
+        "duration_s": 10.686467815168994
+      },
+      {
+        "name": "generated_return_to_idle",
+        "duration_s": 0.6271896543069229
+      }
+    ]
+  },
+  "HAPPY": {
+    "gif_s": 8.0,
+    "motion_s": 9.59247285029744,
+    "matched": false,
+    "path_preserved": true,
+    "fixed_gripper_timing": true,
+    "stages": [
+      {
+        "name": "idle_to_recording",
+        "duration_s": 0.32736547154421164
+      },
+      {
+        "name": "recorded_rise",
+        "duration_s": 2.5822076865994994
+      },
+      {
+        "name": "gripper_open_close_twice",
+        "duration_s": 5.4
+      },
+      {
+        "name": "direct_return_to_idle",
+        "duration_s": 1.2828996921537295
+      }
+    ]
+  },
+  "REST": {
+    "gif_s": 7.0,
+    "motion_s": 7.0,
+    "matched": true,
+    "path_preserved": true,
+    "fixed_gripper_timing": true,
+    "stages": [
+      {
+        "name": "rest",
+        "duration_s": 7.0
+      }
+    ]
+  },
+  "WAKE": {
+    "gif_s": 5.5,
+    "motion_s": 5.5,
+    "matched": true,
+    "path_preserved": true,
+    "fixed_gripper_timing": true,
+    "stages": [
+      {
+        "name": "wake",
+        "duration_s": 5.5
+      }
+    ]
+  }
+}

@@ -27,6 +27,17 @@ class Tests(unittest.TestCase):
     def setUp(self):
         tmp=tempfile.TemporaryDirectory();self.addCleanup(tmp.cleanup);self.root=Path(tmp.name)
 
+    def test_daily_and_dance_share_idle_and_bookend_arm_motion(self):
+        from rs_daily_prepare import load_bundle
+        manifest,daily,_,_=load_bundle(DEFAULT_CALIBRATION,DEFAULT_URDF)
+        np.testing.assert_array_equal(self.idle[:6],manifest['idle_rad'][:6])
+        for code,name in (('00','WAKE'),('11','REST')):
+            dance=self.plans[code];reference=daily[name]
+            self.assertAlmostEqual(dance.duration,reference.duration)
+            for t in np.linspace(0,dance.duration,101):
+                for actual,expected in zip(dance.at(t),reference.at(t)):
+                    np.testing.assert_allclose(actual[:6],expected[:6],atol=1e-12,rtol=0)
+
 
     def test_pivot_override_scales_selected_10_only(self):
         self.assertEqual(speed.pivot_code_for(self.plans),'10')

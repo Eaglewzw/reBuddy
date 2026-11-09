@@ -5,7 +5,7 @@
       "label": "idle_to_recording",
       "t_s": [
         0.0,
-        1.0
+        0.39794297663093026
       ],
       "q_rad": [
         [
@@ -27,7 +27,7 @@
           0.0010715288443344773
         ]
       ],
-      "speed": 0.5,
+      "speed": 1.0,
       "limits": {
         "velocity_limit": 0.5,
         "acceleration_limit": 1.0
@@ -324,8 +324,8 @@
       "input_samples": 258,
       "knots": 28,
       "limits": {
-        "velocity_limit": 1.0,
-        "acceleration_limit": 2.0
+        "velocity_limit": 1.2,
+        "acceleration_limit": 5.5
       }
     },
     {
@@ -333,7 +333,7 @@
       "label": "generated_return_to_idle",
       "t_s": [
         0.0,
-        1.0
+        0.8823196227454544
       ],
       "q_rad": [
         [
@@ -355,10 +355,10 @@
           0.0010715288443344773
         ]
       ],
-      "speed": 0.7491286348579086,
+      "speed": 1.0,
       "limits": {
-        "velocity_limit": 0.5,
-        "acceleration_limit": 1.0
+        "velocity_limit": 1.0,
+        "acceleration_limit": 3.0
       }
     }
   ]

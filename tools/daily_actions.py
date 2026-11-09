@@ -142,7 +142,9 @@ def trial(port,supported,initial_action=None):
     from rs_daily_session import run_session
     args=SimpleNamespace(port=port,supported=True,calibration=DEFAULT_CALIBRATION,urdf=DEFAULT_URDF,bundle=BUNDLE)
     result=run_session(args,initial_action)
-    emit(result,True)
+    print(f'日志：{result["folder"]}')
+    for error in result.get('errors',[]):
+        print(error,file=sys.stderr)
     return 0 if result['success'] else 1
 
 

@@ -44,26 +44,47 @@
       "exit": "ATTENTIVE_ENABLED",
       "generated_return": true,
       "gripper": "idle opening",
-      "duration_s": 9.080454513723165,
+      "duration_s": 4.999999999999999,
       "plan_file": "probe.json",
-      "plan_sha256": "86df420b255e224c25a243e68aacff1e6696c45476767f6bb6c745c32d0d72ec",
+      "plan_sha256": "72ea8931bd49b26129e1e24deb76c6ace39c32f9eece26098c2f667269b85bfc",
       "preview_csv": "probe.csv",
-      "preview_sha256": "5caee535d1397de1ebe8db09c27e504289827b5655520b1dafa0f907ed6a39f1",
+      "preview_sha256": "10e0d4c076082f01d2b4d13cd4a2e355f91a5137612f6f50e35ca2ad7d16f915",
       "stages": [
         {
           "name": "idle_to_recording",
-          "duration_s": 2.0
+          "duration_s": 0.4052252232187142
         },
         {
           "name": "recorded_gesture",
-          "duration_s": 5.080454513723164
+          "duration_s": 3.736615377029032
         },
         {
           "name": "generated_return_to_idle",
-          "duration_s": 2.0
+          "duration_s": 0.8581593997522535
         }
       ],
-      "hardware_accepted": false
+      "hardware_accepted": false,
+      "gif_timing": {
+        "gif_s": 5.0,
+        "motion_s": 4.999999999999999,
+        "matched": true,
+        "path_preserved": true,
+        "fixed_gripper_timing": true,
+        "stages": [
+          {
+            "name": "idle_to_recording",
+            "duration_s": 0.4052252232187142
+          },
+          {
+            "name": "recorded_gesture",
+            "duration_s": 3.736615377029032
+          },
+          {
+            "name": "generated_return_to_idle",
+            "duration_s": 0.8581593997522535
+          }
+        ]
+      }
     },
     "NUZZLE": {
       "source": "record/gravity/20261101T074356Z-1793519036406134122/nuzzle.csv",
@@ -84,26 +105,47 @@
       "exit": "ATTENTIVE_ENABLED",
       "generated_return": true,
       "gripper": "idle opening",
-      "duration_s": 17.619217206456337,
+      "duration_s": 9.539894648531023,
       "plan_file": "nuzzle.json",
-      "plan_sha256": "b35fad816b7b1212aaf937c9c4663b393866be7519710ee0d7b2bf2da319fc7c",
+      "plan_sha256": "2abb2851e83d0a0463c50ac6836b0f597f994f0ce75d9b506222bac1bd8b1854",
       "preview_csv": "nuzzle.csv",
-      "preview_sha256": "be9d349e9b11bd96ee1390fd78c4d1785e394a328061a9c2cdb80de0a2d8c509",
+      "preview_sha256": "16ccc81f963a45cb589cf92ac60e8198a66cf45c8926a326058918e1737eae8d",
       "stages": [
         {
           "name": "idle_to_recording",
-          "duration_s": 2.0
+          "duration_s": 0.39794297663093026
         },
         {
           "name": "recorded_gesture",
-          "duration_s": 13.619217206456337
+          "duration_s": 8.25963204915464
         },
         {
           "name": "generated_return_to_idle",
-          "duration_s": 2.0
+          "duration_s": 0.8823196227454544
         }
       ],
-      "hardware_accepted": false
+      "hardware_accepted": false,
+      "gif_timing": {
+        "gif_s": 6.0,
+        "motion_s": 9.539894648531023,
+        "matched": false,
+        "path_preserved": true,
+        "fixed_gripper_timing": true,
+        "stages": [
+          {
+            "name": "idle_to_recording",
+            "duration_s": 0.39794297663093026
+          },
+          {
+            "name": "recorded_gesture",
+            "duration_s": 8.25963204915464
+          },
+          {
+            "name": "generated_return_to_idle",
+            "duration_s": 0.8823196227454544
+          }
+        ]
+      }
     },
     "TILT": {
       "source": "record/gravity/20261101T074356Z-1793519036406134122/tilt.csv",
@@ -124,26 +166,47 @@
       "exit": "ATTENTIVE_ENABLED",
       "generated_return": true,
       "gripper": "idle opening",
-      "duration_s": 21.721502038562292,
+      "duration_s": 11.438579317663288,
       "plan_file": "tilt.json",
-      "plan_sha256": "3f2f52c3a230fdb07eb8a9f16ed8fc772eee3a5323e8f5c21bc6f5a618797d5a",
+      "plan_sha256": "9a8ffed23efcd4a7712a1c25e63eaba1d17f67c55b884aad7784df1f15c1f97a",
       "preview_csv": "tilt.csv",
-      "preview_sha256": "833c7a380c1b8a288a25dd8e87fc778511d248477d3af5f6e516602703f9d0a0",
+      "preview_sha256": "af7518aacd67aeacc900a031e77dc390dfcf0cbceec3fa32c521680f0c5efcad",
       "stages": [
         {
           "name": "idle_to_recording",
-          "duration_s": 2.0
+          "duration_s": 0.12492184818737193
         },
         {
           "name": "recorded_gesture",
-          "duration_s": 17.721502038562292
+          "duration_s": 10.686467815168994
         },
         {
           "name": "generated_return_to_idle",
-          "duration_s": 2.0
+          "duration_s": 0.6271896543069229
         }
       ],
-      "hardware_accepted": false
+      "hardware_accepted": false,
+      "gif_timing": {
+        "gif_s": 5.0,
+        "motion_s": 11.438579317663288,
+        "matched": false,
+        "path_preserved": true,
+        "fixed_gripper_timing": true,
+        "stages": [
+          {
+            "name": "idle_to_recording",
+            "duration_s": 0.12492184818737193
+          },
+          {
+            "name": "recorded_gesture",
+            "duration_s": 10.686467815168994
+          },
+          {
+            "name": "generated_return_to_idle",
+            "duration_s": 0.6271896543069229
+          }
+        ]
+      }
     },
     "HAPPY": {
       "source": "record/gravity/20261101T080255Z-1793520175597405200/happy.csv",
@@ -168,67 +231,118 @@
       "entry": "ATTENTIVE",
       "exit": "ATTENTIVE_ENABLED",
       "generated_return": true,
-      "gripper": "120 motor degrees, two 1.8-second open-close cycles",
-      "duration_s": 11.011150330254521,
+      "gripper": "0-90-0 motor degrees, two 2-second open-close cycles",
+      "duration_s": 9.59247285029744,
       "plan_file": "happy.json",
-      "plan_sha256": "d1a80f2da06f20276b291cb8bd77aae8aec37cfb2f0c50f8a9c1bd267b1d776d",
+      "plan_sha256": "dc92a58068f5cb9bb05deae053dc281a124923884206a30e5f548fea57d5f914",
       "preview_csv": "happy.csv",
-      "preview_sha256": "dfd4dab1c2834ee5b621f1497c38bee2b086f138ee29a34b8c48a51747170b29",
+      "preview_sha256": "a61cd5e383ec00159da7011452ea2f70b082dc7974dbc0410536968748e463a0",
       "stages": [
         {
           "name": "idle_to_recording",
-          "duration_s": 2.0
+          "duration_s": 0.32736547154421164
         },
         {
           "name": "recorded_rise",
-          "duration_s": 3.615090761239299
+          "duration_s": 2.5822076865994994
         },
         {
           "name": "gripper_open_close_twice",
-          "duration_s": 3.6
+          "duration_s": 5.4
         },
         {
           "name": "direct_return_to_idle",
-          "duration_s": 1.7960595690152215
+          "duration_s": 1.2828996921537295
         }
       ],
-      "hardware_accepted": false
+      "hardware_accepted": false,
+      "gif_timing": {
+        "gif_s": 8.0,
+        "motion_s": 9.59247285029744,
+        "matched": false,
+        "path_preserved": true,
+        "fixed_gripper_timing": true,
+        "stages": [
+          {
+            "name": "idle_to_recording",
+            "duration_s": 0.32736547154421164
+          },
+          {
+            "name": "recorded_rise",
+            "duration_s": 2.5822076865994994
+          },
+          {
+            "name": "gripper_open_close_twice",
+            "duration_s": 5.4
+          },
+          {
+            "name": "direct_return_to_idle",
+            "duration_s": 1.2828996921537295
+          }
+        ]
+      }
     },
     "REST": {
       "source": null,
       "entry": "ATTENTIVE",
       "exit": "ZERO_ENABLED",
       "recording_required": false,
-      "duration_s": 4.36428823015269,
+      "duration_s": 7.0,
       "plan_file": "rest.json",
-      "plan_sha256": "f10bcaf9714564f0fa683f089cc5daacb0c528423983b37863c7b9d915353fcc",
+      "plan_sha256": "b94cdb33b476e5b3941753f754087e9cdb607981d1f83541e0349d902f6bad07",
       "preview_csv": "rest.csv",
-      "preview_sha256": "1335ff12540d035bc4e772578ce8c20191478a212cbc0d4fc31eefcbbac10f61",
+      "preview_sha256": "1fb58fbd7d11ea290ad95aa09ffc8093246c49ecec5efe5e1cc299cd0bb5dba9",
       "stages": [
         {
           "name": "rest",
-          "duration_s": 4.36428823015269
+          "duration_s": 7.0
         }
       ],
-      "hardware_accepted": false
+      "hardware_accepted": false,
+      "gif_timing": {
+        "gif_s": 7.0,
+        "motion_s": 7.0,
+        "matched": true,
+        "path_preserved": true,
+        "fixed_gripper_timing": true,
+        "stages": [
+          {
+            "name": "rest",
+            "duration_s": 7.0
+          }
+        ]
+      }
     },
     "WAKE": {
       "source": null,
       "entry": "ZERO_DISABLED",
       "exit": "ATTENTIVE_ENABLED",
       "recording_required": false,
-      "duration_s": 4.36428823015269,
+      "duration_s": 5.5,
       "plan_file": "wake.json",
-      "plan_sha256": "196e816572a09d032ee3b5d896f622692ee3ebb04da209ace7e2a45b528f84d0",
+      "plan_sha256": "9ebbda15e801139c09be3e5eee7c4ee2bd680d07e57ccc24c5d2123fedc7945f",
       "preview_csv": "wake.csv",
-      "preview_sha256": "4772ec27d6bdc6abc965ca5aa98e6207dffbd92577bbac1796bf2fc2fba0db9b",
+      "preview_sha256": "4d3e2fe35c1870d22d5434f926d47bec24277060e7bb37d7364de2329043e261",
       "stages": [
         {
           "name": "wake",
-          "duration_s": 4.36428823015269
+          "duration_s": 5.5
         }
       ],
-      "hardware_accepted": false
+      "hardware_accepted": false,
+      "gif_timing": {
+        "gif_s": 5.5,
+        "motion_s": 5.5,
+        "matched": true,
+        "path_preserved": true,
+        "fixed_gripper_timing": true,
+        "stages": [
+          {
+            "name": "wake",
+            "duration_s": 5.5
+          }
+        ]
+      }
     },
     "IDLE": {
       "source": null,

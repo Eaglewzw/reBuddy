@@ -128,6 +128,7 @@ int main(int argc,char **argv)
         assert(!enables && !references);
         assert(rb_daily_control_request(&c,RB_DAILY_WAKE,1)==ESP_OK);
         until(RB_DC_ENTRY,1200);assert(enables==1 && c.status.action==RB_DAILY_WAKE);
+        assert(c.duration>=rb_daily_find(RB_DAILY_WAKE)->duration_s);
         until(RB_DC_HOLD,1000);assert(c.status.completed_id==1 && !disables);return 0;
     }
     if(!strcmp(argv[1],"stale_start")) {

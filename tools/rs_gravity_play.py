@@ -141,7 +141,7 @@ def prepare(path, calibration, urdf, speed):
 
 
 def prepare_entry(initial, recorded_start, gravity, speed, *, hold_gripper=True, validate_gravity=True,
-                  velocity_limit=VMAX,acceleration_limit=AMAX):
+                  velocity_limit=VMAX,acceleration_limit=AMAX,minimum_duration=2.):
     """Reuse the bounded C2 curve for a synchronized six-axis approach."""
     initial, target = vector(initial).copy(), vector(recorded_start).copy()
     if not math.isfinite(speed) or not 0 < speed <= 1:
@@ -149,7 +149,7 @@ def prepare_entry(initial, recorded_start, gravity, speed, *, hold_gripper=True,
     if hold_gripper:
         target[6] = initial[6]  # Playback preserves the current gripper opening.
     entry = Curve([0., 1.], np.array([initial, target]),
-                  minimum_duration=2., initial_position_margin=MEASUREMENT_TOLERANCE_RAD,
+                  minimum_duration=minimum_duration, initial_position_margin=MEASUREMENT_TOLERANCE_RAD,
                   velocity_limit=velocity_limit,acceleration_limit=acceleration_limit)
     entry.scale *= speed
     entry.duration /= speed

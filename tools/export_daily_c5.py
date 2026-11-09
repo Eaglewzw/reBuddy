@@ -22,8 +22,7 @@ def f(value):
 
 def pieces(curve):
     if isinstance(curve,Clap):
-        boundaries=np.unique(np.r_[np.arange(5)*curve.half_s,curve.sway_times,
-                                    curve.sway_times+2*curve.half_s])
+        boundaries=curve.breakpoints
     else:
         boundaries=np.unique(curve.spline.t)/curve.scale
     out=[]

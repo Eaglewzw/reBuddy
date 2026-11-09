@@ -55,7 +55,7 @@ class Session:
                 except queue.Empty:break
                 if word in ('quit','exit','eof','退出'):self.request_stop()
                 elif word=='status':print(f'当前状态：{self.state}',flush=True)
-                elif word:print('动作正在进行；请等完成后再输入下一个动作。',flush=True)
+                elif word:print('动作进行中，请完成后再输入编号。',flush=True)
         if self.stop:raise StopRequested(self.stop)
 
     def verify(self):
@@ -175,7 +175,10 @@ class Session:
         for _ in range(3):
             time.sleep(PERIOD);measured,_,_=self.backend.read()
             if np.max(abs(measured-q))>math.radians(.2):raise RuntimeError('启动姿态仍在移动')
-        entry=prepare_entry(q,target,self.gravity,1.,hold_gripper=False,**DAILY_POSITION_LIMITS)
+        opening=self.plans.get('WAKE',self.plans.get('00'))
+        minimum=opening.duration if opening is not None and state=='ATTENTIVE' else 2.
+        entry=prepare_entry(q,target,self.gravity,1.,hold_gripper=False,
+                            minimum_duration=minimum,**DAILY_POSITION_LIMITS)
         self.event('positioning_plan',state=state,duration_s=entry.duration,**DAILY_POSITION_LIMITS)
         print(f'正在前往{ "待机" if state=="ATTENTIVE" else "零位" }，计划运动约 {entry.duration:.1f} 秒。',flush=True)
         measured,_,_=self.backend.read()
@@ -291,7 +294,11 @@ class Session:
             self.ensure_idle();self.execute_plan(action,'ATTENTIVE')
         else:raise ValueError('unknown daily action')
         self.event('action_completed',action=action,state=self.state)
-        print(f'{action} 完成；'+('已失能，等待唤醒。' if self.state=='SLEEP' else '持续保持位置，可输入下一个动作。'),flush=True)
+        from daily_actions import NAMES
+        number=f'{tuple(NAMES).index(action)+1:02d}'
+        print(f'{number} {NAMES[action][0]} 完成，'+
+              ('已失能。输入 08 唤醒；quit 退出。' if self.state=='SLEEP' else
+               '保持位置。输入下个编号；quit 回零退出。'),flush=True)
 
     def disconnect(self):
         if self.backend is None:return
@@ -318,7 +325,7 @@ class Session:
         if not self.enabled:return
         if self.stop=='abort':return
         self.homing=True;self.backend.returning_to_zero=True
-        print('正在回零后退出；再次 Ctrl+C 中断并失能。',flush=True)
+        print('正在回零退出；再次 Ctrl+C 中断并失能。',flush=True)
         command=self.last_command or dict(kp=[0.]*7,kd=[0.]*7)
         try:
             completed=self.home.run(lambda:self.stop=='abort',initial_gravity_gain=self.last_gain,
@@ -341,12 +348,16 @@ def run_session(args,initial_action=None,*,commands=None,backend_factory=None,ze
         commands=queue.Queue();threading.Thread(target=read_commands,args=(commands,),daemon=True).start()
     session=Session(args,manifest,plans,gravity,identity,journal,raw,commands,backend_factory,zero_factory)
     handlers={}
-    from daily_actions import catalog,resolve_action
+    from daily_actions import catalog,resolve_action,NAMES
     _,actions=catalog()
     try:
         for sig in (signal.SIGINT,signal.SIGTERM):handlers[sig]=signal.signal(sig,session.request_stop)
-        print('本地动作试播：输入名称/编号；status 查看状态；quit 或 Ctrl+C 回零后退出。',flush=True)
-        print(f'七轴估算力矩预算（N·m）：{CAPS.tolist()}',flush=True)
+        print('日常动作 · 8组',flush=True)
+        for action in sorted(actions.values(),key=lambda item:item['file_order']):
+            name=action['id'];duration=manifest['actions'][name]['duration_s']
+            timing=f'{duration:.1f}s' if duration is not None else ('待机保持' if name=='IDLE' else '熟睡失能')
+            print(f'{action["file_order"]:02d} {NAMES[name][0]}  {timing}',flush=True)
+        print('输入编号播放；完成后保持。status 查看状态；quit/Ctrl+C 回零退出。',flush=True)
         session.event('torque_budget',torque_budget_nm=CAPS.tolist())
         if initial_action:session.execute(initial_action)
         while True:

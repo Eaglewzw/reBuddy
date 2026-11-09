@@ -231,6 +231,8 @@ static void approach(rb_daily_control_t *c)
         fabsf(c->motors[j].position-q[j])<(j==6?3.f:1.f)*RAD && fabsf(c->estimated_v[j])<RAD;
     if(already) {memcpy(c->target,q,sizeof(q));state(c,RB_DC_ENTRY_SETTLE);return;}
     move(c,q,false);
+    if(c->status.action==RB_DAILY_WAKE)
+        c->duration=fmaxf(c->duration,rb_daily_find(RB_DAILY_WAKE)->duration_s);
 }
 static bool arrived(rb_daily_control_t *c,bool zero)
 {

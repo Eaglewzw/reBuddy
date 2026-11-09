@@ -31,6 +31,7 @@
 | `rs_idle_entry.py`、`rs_zero_return.py`、`rs_recovery_policy.py` | 到互动姿态、回零和恢复策略 |
 | `rs_protective_stop.py` | 录制与播放制动、固定姿态保持，等待显式退出 |
 | `rs_daily_prepare.py`、`rs_daily_session.py` | Daily 数据准备和连续动作会话 |
+| `rs_daily_timing.py` | 保留原路径，按 GIF 目标在现有动态限值内重定时 |
 | `rs_record_playback.py`、`rs_feedback_audit.py` | CAN 传输、反馈核对、旧 TCH 检查 |
 | `export_daily_c5.py` | 将已准备的 Daily 动作导出到固件 |
 

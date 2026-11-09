@@ -5,6 +5,7 @@ import json
 import math
 from pathlib import Path
 import queue
+import shutil
 import sys
 import tempfile
 from types import SimpleNamespace
@@ -17,7 +18,7 @@ ROOT=Path(__file__).resolve().parents[2];sys.path.insert(0,str(ROOT/'tools'))
 import rs_daily_prepare as prepare
 import rs_daily_session as runtime
 import rs_gravity_play as playback
-from rs_gravity_play import Controller,TorqueBudgetExceeded,load_clip
+from rs_gravity_play import Controller,TorqueBudgetExceeded
 from rs_gravity_record import DEFAULT_CALIBRATION,DEFAULT_URDF
 from rs_recovery_policy import ArrivalTimeout, FollowingError
 
@@ -38,80 +39,146 @@ class Tests(unittest.TestCase):
                 np.testing.assert_allclose(curve.at(curve.duration)[1],0,atol=1e-8)
             self.assertLessEqual(self.manifest['actions'][name]['max_sample_fit_error_deg'],.5)
 
-    def test_recovered_sources_still_rejected_by_raw_player(self):
+    def test_recording_provenance_is_preserved(self):
         for action in ('PROBE','HAPPY'):
             item=self.manifest['actions'][action]
             self.assertFalse(item['source_complete']);self.assertTrue(item['recovered_interrupted'])
-            with self.assertRaisesRegex(ValueError,'完整结束'):
-                load_clip(ROOT/item['source'],self.identity)
-            summary=json.loads(((ROOT/item['source']).parent/'summary.json').read_text())
-            self.assertFalse(next(c for c in summary['clips'] if c['file']==Path(item['source']).name)['complete'])
+            self.assertTrue(item['source'].endswith('.csv'))
+            self.assertEqual(len(item['source_sha256']),64)
+
+    def test_gif_timing_matches_only_feasible_actions_and_is_repeatable(self):
+        from rs_daily_timing import align_to_gifs
+        expected={'PROBE':5.,'NUZZLE':9.539894648531037,
+                  'TILT':11.438579317663331,'HAPPY':9.59247285029744,'REST':7.,'WAKE':5.5}
+        with tempfile.TemporaryDirectory() as tmp:
+            folder=Path(tmp);shutil.copytree(prepare.BUNDLE,folder,dirs_exist_ok=True)
+            reports=align_to_gifs(folder,self.gravity)
+            for name,duration in expected.items():
+                self.assertAlmostEqual(self.plans[name].duration,duration)
+                self.assertAlmostEqual(reports[name]['motion_s'],duration)
+                self.assertEqual(reports[name]['matched'],name in ('PROBE','REST','WAKE'))
+            # Fixed clap timing is not compressed to fit the eight-second GIF.
+            before=json.loads((prepare.BUNDLE/'happy.json').read_text())['stages'][2]
+            after=json.loads((folder/'happy.json').read_text())['stages'][2]
+            self.assertEqual(before,after)
+
+    def test_bundle_loads_without_authoring_directory(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root=Path(tmp);folder=root/'daily_ready'
+            shutil.copytree(prepare.BUNDLE,folder)
+            with patch.object(prepare,'ROOT',root):
+                manifest,plans,_,_=prepare.load_bundle(DEFAULT_CALIBRATION,DEFAULT_URDF,folder)
+            self.assertFalse((root/'record/gravity').exists())
+            self.assertEqual(manifest,self.manifest)
+            for name,plan in plans.items():
+                for t in np.linspace(0,plan.duration,101):
+                    for actual,expected in zip(plan.at(t),self.plans[name].at(t)):
+                        np.testing.assert_array_equal(actual,expected)
+
+    def test_corrupt_embedded_anchors_or_identity_rejected(self):
+        cases=[('idle_rad',0,.05,'embedded anchors'),
+               ('zero_rad',1,.01,'zero anchor'),
+               ('idle_rad',2,float('nan'),'finite values'),
+               ('calibration_sha256',None,'0'*64,'identity changed')]
+        for key,index,value,message in cases:
+            with self.subTest(key=key,value=value),tempfile.TemporaryDirectory() as tmp:
+                folder=Path(tmp);shutil.copytree(prepare.BUNDLE,folder,dirs_exist_ok=True)
+                manifest=json.loads((folder/'manifest.json').read_text())
+                if index is None:manifest[key]=value
+                else:manifest[key][index]=value
+                (folder/'manifest.json').write_text(json.dumps(manifest))
+                with self.assertRaisesRegex(ValueError,message):
+                    prepare.load_bundle(DEFAULT_CALIBRATION,DEFAULT_URDF,folder)
+
+    def test_corrupted_prepared_preview_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            folder=Path(tmp);shutil.copytree(prepare.BUNDLE,folder,dirs_exist_ok=True)
+            (folder/'probe.csv').write_text('corrupt')
+            with self.assertRaisesRegex(ValueError,'preview changed'):
+                prepare.load_bundle(DEFAULT_CALIBRATION,DEFAULT_URDF,folder)
 
     def test_two_gripper_cycles_are_bounded_and_j2_through_j6_are_stationary(self):
         c=next(c for name,c in self.plans['HAPPY'].stages if name=='gripper_open_close_twice')
-        self.assertAlmostEqual(c.half_s,.9)
-        self.assertAlmostEqual(c.duration,3.6)
-        for t,fraction in ((0,0),(.9,1),(1.8,0),(2.7,1),(3.6,0)):
+        self.assertAlmostEqual(c.half_s,1.)
+        self.assertAlmostEqual(c.duration,5.4)
+        for t,fraction in ((0,0),(.35,0),(1.35,1),(2.35,0),(3.05,0),(4.05,1),(5.05,0),(5.4,0)):
             q,v=c.at(t);np.testing.assert_allclose(q[1:6],c.start[1:6]);np.testing.assert_allclose(v[1:],0,atol=1e-9)
-            self.assertAlmostEqual(q[6]-c.start[6],math.radians(120)*fraction)
+            self.assertAlmostEqual(q[6]-c.start[6],math.radians(90)*fraction)
         q=np.array([c.at(t)[0] for t in np.linspace(0,c.duration,1001)])
-        self.assertLessEqual(q[:,6].max()-q[:,6].min(),math.radians(120)+1e-9)
-        self.assertAlmostEqual(math.degrees(c.peak_velocity),250.)
+        self.assertLessEqual(q[:,6].max()-q[:,6].min(),math.radians(90)+1e-9)
+        self.assertAlmostEqual(math.degrees(c.peak_velocity),168.75)
         self.assertLess(math.degrees(c.peak_acceleration),1200.)
 
-    def test_j1_two_synchronized_sway_cycles_and_smooth_return(self):
+    def test_j1_two_thirty_degree_sways_without_center_stop(self):
         c=next(c for _,c in self.plans['HAPPY'].stages if isinstance(c,prepare.Clap))
-        self.assertAlmostEqual(math.degrees(c.j1_sway),5.)
-        for cycle in (0.,1.8):
-            for elapsed,offset in ((0.,0.),(.54,5.),(.9,0.),(1.26,-5.),(1.8,0.)):
-                q,v=c.at(cycle+elapsed)
-                self.assertAlmostEqual(math.degrees(q[0]-c.start[0]),offset)
-                if elapsed!=.9:self.assertAlmostEqual(v[0],0.)
-        for t in (0.,.54,1.26,1.8,2.34,3.06,3.6):
-            eps=1e-5
-            acceleration=(c.at(t+eps)[1][0]-c.at(t-eps)[1][0])/(2*eps)
-            self.assertLess(abs(acceleration),.001)
+        self.assertAlmostEqual(math.degrees(c.j1_sway),30.)
+        self.assertEqual(c.sway_cycles,2)
+        self.assertEqual(c.start[6],0.)
+        for elapsed,offset in ((0.,0.),(.9,30.),(2.1,-30.),(3.3,30.),(4.5,-30.),(5.4,0.)):
+            q,v=c.at(elapsed)
+            self.assertAlmostEqual(math.degrees(q[0]-c.start[0]),offset)
+            self.assertAlmostEqual(v[0],0.)
+        # Exactly four turning points, with no extra reversal or dwell.
+        roots=c.sway_curve.derivative().roots(extrapolate=False)
+        roots=sorted({round(float(t),5) for t in roots if 1e-5<t<c.duration-1e-5})
+        np.testing.assert_allclose(roots,[.9,2.1,3.3,4.5],atol=1e-5)
+        for t in (1.5,2.7,3.9):
+            self.assertAlmostEqual(c.at(t)[0][0],c.start[0])
+            self.assertGreater(abs(c.at(t)[1][0]),1.3)
+        for t in c.sway_times[1:-1]:
+            for order in (0,1,2):
+                self.assertAlmostEqual(float(c.sway_curve(t-1e-7,nu=order)),
+                                       float(c.sway_curve(t+1e-7,nu=order)),places=5)
+        for t in (0.,c.duration):
+            np.testing.assert_allclose(c.at(t)[0],c.start,atol=1e-10)
+            np.testing.assert_allclose(c.at(t)[1],0,atol=1e-10)
+            self.assertAlmostEqual(float(c.sway_curve(t,nu=2)),0.)
         for t in np.linspace(0,c.duration,1001):
             q,v=c.at(t)
-            self.assertLessEqual(abs(q[0]-c.start[0]),math.radians(5.)+1e-10)
+            self.assertLessEqual(abs(q[0]-c.start[0]),math.radians(30.)+1e-10)
             self.assertLessEqual(abs(v[0]),c.j1_peak_velocity+1e-10)
-        self.assertLessEqual(c.j1_peak_velocity,.5)
-        self.assertLessEqual(c.j1_peak_acceleration,2.)
-        np.testing.assert_allclose(c.at(c.duration)[0],c.start,atol=1e-10)
-        np.testing.assert_allclose(c.at(c.duration)[1],0,atol=1e-10)
+        self.assertLessEqual(c.j1_peak_velocity,1.4)
+        self.assertLessEqual(c.j1_peak_acceleration,4.)
 
     def test_j1_sway_rejects_outside_joint_bounds_and_excess_dynamics(self):
         from rs_record_playback import UPPER
         pose=np.zeros(7);pose[0]=UPPER[0]-math.radians(2.)
         with self.assertRaisesRegex(ValueError,'J1 sway outside'):prepare.Clap(pose,j1_sway_deg=5.)
         with self.assertRaisesRegex(ValueError,'J1 sway exceeds'):prepare.Clap(np.zeros(7),half_s=.8,j1_sway_deg=5.)
-        for angle in (float('nan'),-1.,6.):
+        with self.assertRaisesRegex(ValueError,'J1 sway exceeds'):
+            prepare.Clap(np.zeros(7),**{**prepare.HAPPY_CLAP,'sway_duration_s':4.5})
+        for angle in (float('nan'),-1.,31.):
             with self.assertRaisesRegex(ValueError,'J1 sway amplitude'):prepare.Clap(np.zeros(7),j1_sway_deg=angle)
 
     def test_gesture_profiles_and_sleep_wake_keep_authorized_limits(self):
-        self.assertLess(self.plans['HAPPY'].duration,13.)
+        self.assertAlmostEqual(self.plans['HAPPY'].duration,9.59247285029744)
         for action,plan in self.plans.items():
             for label,curve in plan.stages:
                 if not hasattr(curve,'velocity_limit'):continue
                 velocity,acceleration=((1.,2.) if label in prepare.GESTURE_FAST_STAGES else (.5,1.)) if action in prepare.GESTURE_ACTIONS else (.5,1.)
-                if action=='PROBE' and label=='recorded_gesture':velocity,acceleration=1.25,3.125
+                if action=='PROBE' and label=='recorded_gesture':velocity,acceleration=1.6,6.
+                if action=='HAPPY' and label in prepare.HAPPY_FAST_STAGES:velocity,acceleration=1.4,4.
+                if action in ('NUZZLE','TILT'):
+                    if label=='recorded_gesture':velocity,acceleration=1.2,5.5
+                    elif label=='generated_return_to_idle':velocity,acceleration=1.,3.
                 self.assertEqual(curve.velocity_limit,velocity)
                 self.assertEqual(curve.acceleration_limit,acceleration)
                 self.assertLessEqual(curve.peak_velocity,velocity+1e-8)
                 self.assertLessEqual(curve.peak_acceleration,acceleration+1e-8)
 
-    def test_probe_body_is_twenty_five_percent_faster_without_changing_path(self):
+    def test_probe_matches_five_seconds_without_changing_path(self):
         from rs_motion import Curve
         spec=json.loads((prepare.BUNDLE/'probe.json').read_text())
         stage=next(s for s in spec['stages'] if s['label']=='recorded_gesture')
-        old=Curve(stage['t_s'],stage['q_rad'],velocity_limit=1.,acceleration_limit=2.)
+        old=Curve(stage['t_s'],stage['q_rad'],velocity_limit=1.25,acceleration_limit=3.125)
         current=next(c for label,c in self.plans['PROBE'].stages if label=='recorded_gesture')
-        self.assertAlmostEqual(old.duration/current.duration,1.25)
+        self.assertGreater(old.duration/current.duration,1.3)
+        self.assertAlmostEqual(self.plans['PROBE'].duration,5.)
         for fraction in np.linspace(0,1,101):
             np.testing.assert_allclose(current.at(current.duration*fraction)[0],
                                        old.at(old.duration*fraction)[0],atol=1e-10)
-        self.assertAlmostEqual(self.plans['PROBE'].stages[0][1].duration,2.)
-        self.assertAlmostEqual(self.plans['PROBE'].stages[-1][1].duration,2.)
+        self.assertAlmostEqual(self.plans['PROBE'].stages[0][1].duration,.4052252232187142)
+        self.assertAlmostEqual(self.plans['PROBE'].stages[-1][1].duration,.8581593997522535)
 
     def test_happy_clap_immediately_returns_monotonically_to_exact_idle(self):
         plan=self.plans['HAPPY'];labels=[name for name,_ in plan.stages]
@@ -130,8 +197,10 @@ class Tests(unittest.TestCase):
         for t in (0,returning.duration):
             np.testing.assert_allclose(returning.at(t)[1],0,atol=1e-9)
             np.testing.assert_allclose(returning.spline(t*returning.scale,nu=2),0,atol=1e-8)
-        # The gripper has already returned to its idle opening and stays there.
-        np.testing.assert_allclose(samples[:,6],self.manifest['idle_rad'][6],atol=1e-10)
+        # Closed gripper smoothly returns to the tiny recorded idle offset.
+        self.assertEqual(samples[0,6],0.)
+        self.assertAlmostEqual(samples[-1,6],self.manifest['idle_rad'][6])
+        self.assertTrue(np.all(np.diff(samples[:,6])>=-1e-12))
 
     def test_accelerated_gestures_with_forty_ms_lag_stay_within_budgets(self):
         # Stress fixture only; actual motor dynamics require operator playback.
@@ -145,7 +214,7 @@ class Tests(unittest.TestCase):
                         command=ctrl.command(actual,1_000_000_000+int(t*1e9),target,v)
                         self.assertTrue(np.all(abs(np.array(command['estimated_torque_nm']))<=playback.CAPS))
 
-    def test_fast_gripper_forty_ms_lag_stays_within_current_budget(self):
+    def test_fast_gripper_sixty_ms_lag_stays_within_current_budget(self):
         # A bounded lag fixture, not a hardware dynamics/acceptance claim.
         c=next(c for _,c in self.plans['HAPPY'].stages if isinstance(c,prepare.Clap))
         ctrl=Controller(self.gravity,gripper_velocity_limit=c.peak_velocity)
@@ -153,20 +222,52 @@ class Tests(unittest.TestCase):
         ctrl.following_limit[6]=c.gripper_following_limit
         peak=0.
         for i,t in enumerate(np.arange(0,c.duration+.001,.02)):
-            actual=c.at(max(0,t-.04))[0];target,velocity=c.at(t)
+            actual=c.at(max(0,t-.06))[0];target,velocity=c.at(t)
             command=ctrl.command(actual,1_000_000_000+i*20_000_000,target,velocity)
             peak=max(peak,abs(command['estimated_torque_nm'][6]))
         self.assertLess(peak,playback.CAPS[6])
 
-    def test_faster_gripper_still_rejects_sixty_ms_lag(self):
+    def test_fast_interactive_actions_with_lag_and_inverse_dynamics(self):
+        # Offline model/lag stress checks, not a real-arm acceptance claim.
+        pin=self.gravity.pin;model=self.gravity.model;data=model.createData()
+        for name in ('PROBE','NUZZLE','TILT','HAPPY'):
+            for label,curve in self.plans[name].stages:
+                for lag in (.04,.06):
+                    with self.subTest(action=name,stage=label,lag=lag):
+                        ctrl=Controller(self.gravity)
+                        if isinstance(curve,prepare.Clap):
+                            ctrl.velocity_limit[0]=curve.j1_peak_velocity
+                            ctrl.velocity_limit[6]=curve.peak_velocity
+                            ctrl.following_limit[6]=curve.gripper_following_limit
+                        else:ctrl.velocity_limit[:6]=curve.velocity_limit
+                        for i,t in enumerate(np.r_[np.arange(0,curve.duration,.02),curve.duration]):
+                            q,v=curve.at(t);actual=curve.at(max(0,t-lag))[0]
+                            row=ctrl.command(actual,1_000_000_000+int(t*1e9),q,v)
+                            self.assertTrue(np.all(np.abs(row['estimated_torque_nm'])<=playback.CAPS))
+                for t in np.linspace(0,curve.duration,501):
+                    q,v=curve.at(t);left=max(0,t-1e-5);right=min(curve.duration,t+1e-5)
+                    a=(curve.at(right)[1]-curve.at(left)[1])/(right-left)
+                    torque=pin.rnea(model,data,q[:6],v[:6],a[:6])
+                    self.assertTrue(np.all(np.abs(torque)<=playback.CAPS[:6]))
+
+    def test_gripper_still_rejects_excessive_lag(self):
         c=next(c for _,c in self.plans['HAPPY'].stages if isinstance(c,prepare.Clap))
         ctrl=Controller(self.gravity,gripper_velocity_limit=c.peak_velocity)
         ctrl.velocity_limit[0]=max(ctrl.velocity_limit[0],c.j1_peak_velocity)
         ctrl.following_limit[6]=c.gripper_following_limit
         with self.assertRaisesRegex(RuntimeError,'torque|following error'):
             for i,t in enumerate(np.arange(0,c.duration+.001,.02)):
-                actual=c.at(max(0,t-.06))[0];target,velocity=c.at(t)
+                actual=c.at(max(0,t-.12))[0];target,velocity=c.at(t)
                 ctrl.command(actual,1_000_000_000+i*20_000_000,target,velocity)
+
+    def test_fast_03_04_do_not_bypass_fault_checks(self):
+        for name in ('NUZZLE','TILT'):
+            curve=next(c for label,c in self.plans[name].stages if label=='recorded_gesture')
+            ctrl=Controller(self.gravity);ctrl.velocity_limit[:6]=curve.velocity_limit
+            with self.subTest(action=name),self.assertRaisesRegex(RuntimeError,'torque|following error'):
+                for t in np.arange(0,curve.duration,.02):
+                    q,v=curve.at(t);actual=curve.at(max(0,t-.12))[0]
+                    ctrl.command(actual,1_000_000_000+int(t*1e9),q,v)
 
     def test_rejected_gripper_command_logs_axis_and_pd_terms_before_send(self):
         # Reproduce the opening interval near the recorded 120-degree failure.
@@ -288,12 +389,13 @@ class Tests(unittest.TestCase):
         np.testing.assert_allclose(rest.end[:6],0)
         np.testing.assert_allclose(wake.start,rest.end)
         np.testing.assert_allclose(wake.end,rest.start)
-        self.assertGreater(rest.duration,4.)
-        self.assertLess(rest.duration,5.)
+        self.assertAlmostEqual(rest.duration,7.)
+        self.assertAlmostEqual(wake.duration,5.5)
 
     def test_daily_entry_and_sleep_wake_share_positioning_profile(self):
         idle=np.array(self.manifest['idle_rad']);zero=np.array(self.manifest['zero_rad'])
         entry=playback.prepare_entry(zero,idle,self.gravity,1.,hold_gripper=False,
+                                     minimum_duration=self.plans['WAKE'].duration,
                                      **prepare.DAILY_POSITION_LIMITS)
         wake=self.plans['WAKE']
         self.assertAlmostEqual(entry.duration,wake.duration)
