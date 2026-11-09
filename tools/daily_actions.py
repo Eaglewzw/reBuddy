@@ -68,24 +68,12 @@ def inspect_action(name):
             motion_ready=True,hardware_accepted=False,hardware_opened=False,prepared=prepared,
             transition_note='慢慢入睡到零位保持使能；熟睡在零位失能；唤醒使能后慢慢回待机。',
             note='PC 本地实机试播；C5 可选原生 CAN 联动固件已接入，尚未进行 C5 实机验收。',blockers=[])
-    reference = action.get('recording_reference')
-    record = None
-    if reference:
-        records = json.loads((ROOT/'record/manifest.json').read_text())['clips']
-        record = next((r for r in records if r['file'] == reference), None)
-        if record is None:
-            raise ValueError('录制参考未登记')
-        source = (ROOT/'record'/reference).resolve()
-        if not source.is_relative_to(ROOT/'record'):
-            raise ValueError('录制参考路径不正确')
-        if hashlib.sha256(source.read_bytes()).hexdigest() != record['sha256']:
-            raise ValueError('录制参考校验失败')
     return dict(action=action['id'], name=NAMES[action['id']][0],
         file_order=action['file_order'], intent=action['intent'],
         entry_pose=action['entry_pose'], exit_pose=action['exit_pose'],
         screen_duration_s=action['screen_duration_ms']/1000,
         physical_duration_s=None if action['physical_duration_ms'] is None else action['physical_duration_ms']/1000,
-        phases=action['phases'], gif=str(path), recording_reference=record,
+        phases=action['phases'], gif=str(path), recording_reference=None,
         motion_ready=False, hardware_opened=False,
         note='当前为动作设计检查，不播放 GIF，也不驱动机械臂。眨眼和 Z 仅由屏幕表现。',
         transition_note=('从正常互动状态需要先完成已验收的入睡过渡。' if action['id']=='SLEEP' else

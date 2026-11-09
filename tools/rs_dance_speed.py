@@ -6,7 +6,7 @@ import numpy as np
 def checked_trial_speed(value):
     speed=float(value)
     if not math.isfinite(speed) or not 0.1 <= speed <= 1.:
-        raise ValueError('21 试播速度需在 0.1～1.0 之间')
+        raise ValueError('定点动作试播速度需在 0.1～1.0 之间')
     return speed
 
 
@@ -45,13 +45,20 @@ class ScaledPlan(ScaledSegment):
         return self.stages[index][1].jerk_at(stamp-(self.ends[index-1] if index else 0.))
 
 
+def pivot_code_for(plans):
+    # Identify the pivot by its trajectory metadata rather than a menu number.
+    return next((code for code,plan in plans.items() if hasattr(plan,'default_trial_speed')),
+                None)
+
+
 def trial_speed_for(plans, requested=None):
     return checked_trial_speed(requested if requested is not None else
-                               getattr(plans.get('21'),'default_trial_speed',.3))
+                               getattr(plans.get(pivot_code_for(plans)),'default_trial_speed',.3))
 
 
 def apply_trial_speed(plans, speed=None):
     speed=trial_speed_for(plans,speed)
     result=dict(plans)
-    if '21' in result:result['21']=ScaledPlan(result['21'],speed)
+    code=pivot_code_for(plans)
+    if code is not None:result[code]=ScaledPlan(result[code],speed)
     return result

@@ -5,10 +5,10 @@ import math
 import numpy as np
 from scipy.spatial.transform import Rotation
 
-import rs_dance_design as base
+import rs_dance_motion as base
 import rs_dance_pivot_kinematics as kin
 from rs_dance_pivot_trajectory import _DenseCurve
-from rs_dance_virtual_pivot_scan import VirtualIK, config_dict
+from rs_dance_pivot_ik import VirtualIK, config_dict
 from rs_dance_speed import checked_trial_speed
 
 CONFIG = dict(offset_m=.20, amplitude_deg=2., amplitude_scales=[1.,.75,.5],

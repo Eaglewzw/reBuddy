@@ -1,0 +1,129 @@
+{
+  "schema": "rebuddy.dance_library.v2",
+  "library_version": "current",
+  "actions": [
+    {
+      "number": 0,
+      "name": "开场",
+      "file": "00_start.json",
+      "sha256": "328ac1a79f1631a57b8970aab49064fc254cc229ebfda131155828bf52558f52",
+      "duration_s": 4.36428823015269,
+      "gripper_motion": false
+    },
+    {
+      "number": 1,
+      "name": "点头打拍",
+      "file": "01_nod.json",
+      "sha256": "c2ad5ce386cad68b6a22c60d67526c718cd1526de3ecd7f8dbb98fc485866326",
+      "duration_s": 6.46748496977188,
+      "gripper_motion": false
+    },
+    {
+      "number": 2,
+      "name": "歪头招手",
+      "file": "02_hello.json",
+      "sha256": "18d8891efb4080a9726e0044eff0f34fd57180214e26ea2c44aa1e1c9ccc6a0b",
+      "duration_s": 6.526990816987241,
+      "gripper_motion": true
+    },
+    {
+      "number": 3,
+      "name": "深蹲回升",
+      "file": "03_dip.json",
+      "sha256": "0ebccaea45ad5847f15b039abb39f24bdabdad38840e9a965fc449fe9a9b75d6",
+      "duration_s": 5.677529562937908,
+      "gripper_motion": false
+    },
+    {
+      "number": 4,
+      "name": "前探伸展",
+      "file": "04_reach.json",
+      "sha256": "e63169da5e5c6a62b5f5b5eb68be44943f1b8ec6ce8618268a7c7c498833d619",
+      "duration_s": 3.6620769578350245,
+      "gripper_motion": false
+    },
+    {
+      "number": 5,
+      "name": "探头撒娇",
+      "file": "05_nuzzle.json",
+      "sha256": "2db78b18113d3a19e76e442935cdd34b4fec7ef2ab0d9859e67a9de871fda026",
+      "duration_s": 4.659186327897799,
+      "gripper_motion": false
+    },
+    {
+      "number": 6,
+      "name": "开心欢呼",
+      "file": "06_happy.json",
+      "sha256": "5bf66ad8701f3dc1b4f501b3b1e4cbe6e507e4e7c51e627cab791ba336e0a0b7",
+      "duration_s": 6.526990816987241,
+      "gripper_motion": true
+    },
+    {
+      "number": 7,
+      "name": "蛇形波浪",
+      "file": "07_wave.json",
+      "sha256": "4c32d81bfaf2fa7891ded389dca9e48909f5b89b76ca145f561e0012819d6c5e",
+      "duration_s": 7.009187865433585,
+      "gripper_motion": false
+    },
+    {
+      "number": 8,
+      "name": "稳定摇摆",
+      "file": "08_steady.json",
+      "sha256": "c39db147e24e0e87124bd26a5706edf594bea4b4935ce1cad0e8cc6369123fee",
+      "duration_s": 8.741765684435624,
+      "gripper_motion": false
+    },
+    {
+      "number": 9,
+      "name": "空间8字",
+      "file": "09_eight.json",
+      "sha256": "7408d09d309612a620126b94261e4ee27bcea8e193801ff098767951283802a6",
+      "duration_s": 5.0967546494191165,
+      "gripper_motion": false
+    },
+    {
+      "number": 10,
+      "name": "大幅定点左右上下",
+      "file": "10_pivot.json",
+      "sha256": "9ec257533aa31a12eb8c109c2efe7aaf9801242052fd9c655a7dad68f8c46d34",
+      "duration_s": 16.74407760875935,
+      "gripper_motion": false
+    },
+    {
+      "number": 11,
+      "name": "收尾",
+      "file": "11_end.json",
+      "sha256": "c0e0b7df769f9eda80748f3ef75328dd74fed6990566a073e468b41999d23da3",
+      "duration_s": 4.36428823015269,
+      "gripper_motion": false
+    }
+  ],
+  "idle_rad": [
+    -0.02854241178754498,
+    0.783538395283269,
+    1.1638101947073842,
+    -0.49324551224708557,
+    -0.05379759951257238,
+    -0.012223720568798337,
+    0.0
+  ],
+  "zero_rad": [
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "dependencies": {
+    "/home/verser/esp32/reBuddy/record/daily_ready/manifest.json": "ddfe27c3b7b3cbaaf8c60762131b6f20219c483d59a0ba5e5c042be9245b3466",
+    "/home/verser/esp32/reBuddy/record/daily_ready/wake.json": "196e816572a09d032ee3b5d896f622692ee3ebb04da209ace7e2a45b528f84d0",
+    "/home/verser/esp32/reBuddy/record/daily_ready/rest.json": "f10bcaf9714564f0fa683f089cc5daacb0c528423983b37863c7b9d915353fcc"
+  },
+  "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+  "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+  "hardware_accepted": false,
+  "firmware_integrated": false
+}

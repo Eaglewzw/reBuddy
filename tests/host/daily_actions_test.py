@@ -4,6 +4,7 @@ import importlib.util
 import io
 import json
 from pathlib import Path
+import shutil
 import tempfile
 import types
 import unittest
@@ -41,16 +42,24 @@ class Tests(unittest.TestCase):
                 self.assertEqual(m.main(['play',name,'--json']),3)
         self.assertIn('未打开 CAN',out.getvalue())
 
+    def test_design_inspection_without_bundle_or_legacy_recordings(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp)
+            (root/'record').mkdir()
+            (root/'record/daily_design.json').write_bytes((ROOT/'record/daily_design.json').read_bytes())
+            shutil.copytree(ROOT/'assets/gifs/daily',root/'assets/gifs/daily')
+            with patch.object(m,'ROOT',root):
+                for name in m.NAMES:
+                    data=m.inspect_action(name)
+                    self.assertFalse(data['motion_ready'])
+                    self.assertIsNone(data['recording_reference'])
+
     def test_named_trial_routes_only_with_explicit_support(self):
-        from unittest.mock import Mock
-        play=Mock(return_value={'success':True})
-        with patch.dict('sys.modules',rs_probe_trial=types.SimpleNamespace(play=play)), \
-                patch.object(m,'trial',return_value=0) as trial,contextlib.redirect_stdout(io.StringIO()):
+        with patch.object(m,'trial',return_value=0) as trial,contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(m.main(['02','--supported']),0)
             trial.assert_called_with('can0',True,'PROBE')
             self.assertEqual(m.main(['05','--supported']),0)
             trial.assert_called_with('can0',True,'HAPPY')
-            play.assert_not_called()
 
     def test_command_errors_and_default_play(self):
         with contextlib.redirect_stdout(io.StringIO()) as out,contextlib.redirect_stderr(io.StringIO()):

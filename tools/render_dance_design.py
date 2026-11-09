@@ -137,35 +137,31 @@ def canvas_pose(skeleton, q, bounds, size=(480, 390), ghost=None,
 def render_library(folder, output, calibration, urdf, fps=12, sheet_only=False):
     folder, output = Path(folder), Path(output)
     schema = json.loads((folder/'manifest.json').read_text()).get('schema')
-    if schema == 'rebuddy.dance_library.v1':
-        from rs_dance_design import load_library
-        title = '机械臂舞蹈姿态'
-    elif schema == 'rebuddy.dance_showcase.v1':
-        from rs_dance_showcase import load_library
-        title = '机械臂舞台动作'
-    else:
-        raise ValueError(f'unsupported dance preview schema: {schema}')
+    if schema != 'rebuddy.dance_library.v2':
+        raise ValueError('preview requires the current dance library')
+    from rs_dance_library import load_library
+    title = '基础舞蹈'
     skeleton = Skeleton(urdf)
     manifest, plans, _, _, reports = load_library(calibration, urdf, folder)
     codes = [f'{int(action["number"]):02d}' for action in manifest['actions']]
     if not codes or len(codes) != len(set(codes)) or set(codes) != set(plans):
         raise ValueError('preview action index does not match loaded plans')
-    if schema == 'rebuddy.dance_showcase.v1' and '11' in codes:
+    if '11' in codes:
         codes = [code for code in codes if code != '11']+['11']
     loaded = [(code, plans[code], reports[code]) for code in codes]
     pose_options = {code: {} for code in codes}
-    if schema == 'rebuddy.dance_showcase.v1' and '21' in codes:
-        action = next(a for a in manifest['actions'] if int(a['number']) == 21)
+    if '10' in codes:
+        action = next(a for a in manifest['actions'] if int(a['number']) == 10)
         action_spec = json.loads((folder/action['file']).read_text())
         design = action_spec.get('pivot_sway_design', action_spec.get('virtual_pivot_design', action_spec.get('body_design', action_spec.get('pivot_design'))))
         if design is None:
-            raise ValueError('21 preview requires a fixed-TCP design description')
+            raise ValueError('10 preview requires a fixed-TCP design description')
         if 'virtual_pivot_design' in action_spec or 'pivot_sway_design' in action_spec:
-            pose_options['21'] = dict(tcp_offset=design['model_tcp_offset_m'],
+            pose_options['10'] = dict(tcp_offset=design['model_tcp_offset_m'],
                                       fixed_point=design['P_world_m'],
                                       virtual_offset=design['virtual_offset_m'])
         else:
-            pose_options['21'] = dict(tcp_offset=design['tcp_offset_m'],
+            pose_options['10'] = dict(tcp_offset=design['tcp_offset_m'],
                                       fixed_point=design['tcp_anchor_m'])
     # Include the floor and all sampled poses in one constant scene scale.
     all_points = [np.array([[-.35, -.35, 0], [.35, .35, 0]])]
@@ -204,18 +200,18 @@ def render_library(folder, output, calibration, urdf, fps=12, sheet_only=False):
         draw.text((16, 12), f'{code}  {name}', font=font(23), fill=INK)
         draw.text((16, 43), f'第 {representative:.1f} 秒  ·  J7 {np.degrees(pose[6]):.1f}°',
                   font=font(16), fill='#687777')
-        time_label = '名义 ' if code == '21' else ''
+        time_label = '名义 ' if code == '10' else ''
         draw.text((16, 350), f'{time_label}{plan.duration:.2f} 秒  ·  灰线为起始姿态', font=font(17), fill='#687777')
         stem = code
         still.save(output/f'{stem}.png')
         sheet.paste(still, ((tile % columns)*480, 95+(tile//columns)*390))
         item = dict(number=stem, name=name, duration_s=plan.duration,
                     still=f'{stem}.png', representative_s=representative)
-        if schema == 'rebuddy.dance_showcase.v1' and code in ('19', '20', '21'):
+        if code in ('08', '09', '10'):
             sample_file = f'{stem}-tip-samples.json'
             export_tip_samples(skeleton, plan, output/sample_file, **pose_options[code])
             item['tip_samples'] = sample_file
-            if code == '21':
+            if code == '10':
                 item['tcp_offset_m'] = pose_options[code]['tcp_offset']
                 item['fixed_point_m'] = pose_options[code]['fixed_point']
                 if pose_options[code].get('virtual_offset') is not None:
@@ -232,7 +228,7 @@ def render_library(folder, output, calibration, urdf, fps=12, sheet_only=False):
                 draw = ImageDraw.Draw(frame)
                 draw.text((16, 12), f'{code}  {name}', font=font(23), fill=INK)
                 subtitle = ('名义速度 / 舞段固定 P，TCP 绕行' if pose_options[code].get('virtual_offset') is not None
-                            else '名义速度 / 模型 TCP 定点 / 非指尖标定') if code == '21' else '骨架预览 / 无碰撞验证'
+                            else '名义速度 / 模型 TCP 定点 / 非指尖标定') if code == '10' else '骨架预览 / 无碰撞验证'
                 draw.text((16, 42), subtitle, font=font(15), fill='#687777')
                 draw.text((16, 338), f'{stamp:4.1f} / {plan.duration:.1f} 秒     J7 {np.degrees(q[6]):.1f}°',
                           font=font(17), fill=INK)
@@ -253,10 +249,10 @@ def render_library(folder, output, calibration, urdf, fps=12, sheet_only=False):
 
 
 def main():
-    from rs_dance_design import DEFAULT_OUTPUT
+    from rs_dance_library import DEFAULT_OUTPUT
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--library', type=Path, default=DEFAULT_OUTPUT)
-    parser.add_argument('--output', type=Path, default=ROOT/'build/dance-design-preview')
+    parser.add_argument('--output', type=Path, default=ROOT/'build/dance-preview')
     parser.add_argument('--calibration', type=Path, default=DEFAULT_CALIBRATION)
     parser.add_argument('--urdf', type=Path, default=DEFAULT_URDF)
     parser.add_argument('--fps', type=int, default=12, choices=range(4, 31))

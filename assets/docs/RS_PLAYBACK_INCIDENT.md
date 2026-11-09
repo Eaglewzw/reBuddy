@@ -1,5 +1,7 @@
 # RS 主机试播异常记录（2026-10-31）
 
+> 本文保留历史事故事实。文中早期 trajectory-1～4 录制及旧试播派生数据已在仅保留 Daily、Dance 动作库时删除；不再作为当前播放输入。旧 `build/record-review/` 日志也已清理，文中日志路径仅记录当时的输出位置。
+
 状态：**实机播放停用，原因尚未查清**。`tools/rs_record_playback.py` 的命令行 `play` 和底层 `Hardware.enable()` 均设有硬性阻断，无命令行跳过开关。保留离线 `inspect` 与不使能电机的 `probe`；不得将本工具视为已验收的控制后端。
 
 本次只尝试 trajectory-1（用户命名“待机”），未试播其余三段。连接为 PCAN-USB / SocketCAN can0、1 Mbit/s、七台 RS 电机；使用录制坐标，不写零点或清故障。操作者已确认同一机械臂、未重新校零及现场清空。

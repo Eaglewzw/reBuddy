@@ -1,16 +1,17 @@
-# 动作数据
+# 机械臂动作数据
 
-| 路径 | 内容 | 使用方式 |
+当前只维护两套可执行动作库：
+
+| 路径 | 内容 | 说明 |
 | --- | --- | --- |
-| `dance/` | 当前基础舞蹈录制，包含独立姿态预设 | [录制说明](../assets/docs/DANCE_RECORDING.md) |
-| `dance_designed/` | 生成的基础舞蹈，保留各版本用于比较 | [基础舞蹈试播](../assets/docs/DANCE_DESIGNED.md) |
-| `dance_showcase/` | 独立舞台编舞，包含回眸、涟漪和夹爪鼓点等动作 | [舞台动作试播](../assets/docs/DANCE_SHOWCASE.md) |
-| `gravity/` | Daily 原始采样、标定身份、会话摘要及姿态预设 | 保留 CSV 与同目录 metadata、summary |
-| `daily_ready/` | 当前已处理的 Daily 轨迹和清单 | 由准备脚本生成，供播放及 C5 导出读取 |
-| `daily_ready_history/` | 本地旧版处理结果 | 不纳入 Git，保留用于调参对比 |
-| `daily_design.json` | Daily 动作设计和阶段语义 | 设计资料，不是执行轨迹 |
-| `trajectory-*.tch`、`trajectory-*.csv`、`manifest.json` | 早期校零前录制及来源记录 | 历史诊断，不作为新舞蹈录制输入 |
+| `daily_ready/` | Daily 当前轨迹与清单 | [日常动作](../assets/docs/DAILY_COMMANDS.md) |
+| `dance_library/` | Dance 当前 10 组动作、开场、收尾 | [基础舞蹈](../assets/docs/DANCE_LIBRARY.md) |
 
-原始采样不能由程序重新生成，因此不按“旧文件”删除。部分失败会话虽无 CSV，仍记录故障和校零身份。各会话的 `complete`、校验和与标定信息决定能否进一步处理，文件存在不等于轨迹已经验收。
+`daily_design.json` 是 Daily 的阶段与屏幕设计资料。
+旧 `dance/` 原始录制已清理；它不是当前 Dance 播放依赖。下次录制时工具会自动重新创建该目录。
+Daily 录制工具保存到 `gravity/`，其中的来源 CSV 和待机预设仍是 Daily 加载校验的依赖。
+截至本次整理，`gravity/` 已缺失，需要恢复匹配清单校验和的原始文件才能运行 Daily；不能用生成轨迹冒充原始采样。
 
-高频 `session.jsonl`、`can.jsonl` 仅在本机保留，不提交；CSV、metadata 和 summary 保留用于追溯。`build/record-review/` 是额外诊断证据，也不属于可无条件清除的普通编译缓存。
+早期四段 TCH/CSV、其清单、旧抬头试播方案和旧点头派生文件已删除。
+旧基础舞蹈、showcase 和精选历史库也已清理。今后录制后临时生成的 `dance_prepared/` 仅供素材处理，不作为额外动作库。
+旧录制及 `build/record-review/`、`build/dance-trials/` 历史日志已清理；下次运行会自动创建新的日志目录。文档中的事故摘要保留，所提到的旧日志路径仅作历史记录。

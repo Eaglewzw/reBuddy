@@ -62,7 +62,6 @@
       "intent": "保持已保存的七轴待机位置；眨眼仅为屏幕效果。",
       "entry_pose": "ATTENTIVE",
       "exit_pose": "ATTENTIVE_ENABLED",
-      "recording_reference": null,
       "recording_use": "no teaching required",
       "phases": [
         {
@@ -101,7 +100,6 @@
       "intent": "使用本次抬头示教数据，衔接统一待机起终点。",
       "entry_pose": "ATTENTIVE",
       "exit_pose": "ATTENTIVE_ENABLED",
-      "recording_reference": null,
       "recording_use": "explicit gravity CSV source and derived plan",
       "phases": [
         {
@@ -156,7 +154,6 @@
       "intent": "使用本次轻蹭示教数据，衔接统一待机起终点。",
       "entry_pose": "ATTENTIVE",
       "exit_pose": "ATTENTIVE_ENABLED",
-      "recording_reference": null,
       "recording_use": "explicit gravity CSV source and derived plan",
       "phases": [
         {
@@ -211,7 +208,6 @@
       "intent": "使用本次歪头示教数据，衔接统一待机起终点。",
       "entry_pose": "ATTENTIVE",
       "exit_pose": "ATTENTIVE_ENABLED",
-      "recording_reference": null,
       "recording_use": "explicit gravity CSV source and derived plan",
       "phases": [
         {
@@ -266,7 +262,6 @@
       "intent": "从待机平稳切入，快速展开，夹爪开合两次同时J1左右摆动两轮，随后立即平滑返回待机。",
       "entry_pose": "ATTENTIVE",
       "exit_pose": "ATTENTIVE_ENABLED",
-      "recording_reference": null,
       "recording_use": "explicit gravity CSV source and derived plan",
       "phases": [
         {
@@ -331,7 +326,6 @@
       "intent": "慢慢回到机械零位，保持使能。",
       "entry_pose": "ATTENTIVE",
       "exit_pose": "ZERO_ENABLED",
-      "recording_reference": null,
       "recording_use": "no teaching required",
       "phases": [
         {
@@ -381,7 +375,6 @@
       "intent": "机械零位确认到位后失能；无需实体呼吸动作。",
       "entry_pose": "ZERO_ENABLED",
       "exit_pose": "ZERO_DISABLED",
-      "recording_reference": null,
       "recording_use": "no teaching required",
       "phases": [
         {
@@ -412,7 +405,6 @@
       "intent": "从熟睡使能，缓慢回到保存的待机姿态。",
       "entry_pose": "ZERO_DISABLED",
       "exit_pose": "ATTENTIVE_ENABLED",
-      "recording_reference": null,
       "recording_use": "no teaching required",
       "phases": [
         {
@@ -449,144 +441,6 @@
         "character": "从熟睡使能，缓慢回到保存的待机姿态。"
       },
       "prepared_reference": "record/daily_ready/manifest.json#WAKE"
-    }
-  ],
-  "recording_review": [
-    {
-      "file": "trajectory-1.tch",
-      "sha256": "15bb8e9984d9326121afbd729b2f5dbdc9df114bec6dbdc74e21390f513e6ab0",
-      "samples": 537,
-      "duration_s": 13.87,
-      "start_deg": [
-        -3.008,
-        0.201,
-        1.604,
-        1.427,
-        0.218,
-        2.79,
-        0.0
-      ],
-      "end_deg": [
-        -3.14,
-        0.155,
-        1.341,
-        2.154,
-        1.008,
-        2.922,
-        0.0
-      ],
-      "range_deg": [
-        0.544,
-        51.2,
-        76.868,
-        38.325,
-        1.186,
-        0.201,
-        0.0
-      ],
-      "interpretation": "Large joint excursions are measured; setup/expressive/return phase boundaries require review. Recorded motion is not proof of safe replay."
-    },
-    {
-      "file": "trajectory-2.tch",
-      "sha256": "cb5e417e820ae724c6e43bcb03af0e7fc9c63be73cf672c28c9be40d03aa3c7f",
-      "samples": 553,
-      "duration_s": 14.38,
-      "start_deg": [
-        -1.14,
-        0.218,
-        1.558,
-        1.667,
-        2.154,
-        2.744,
-        0.0
-      ],
-      "end_deg": [
-        -1.495,
-        0.155,
-        1.364,
-        2.55,
-        -1.364,
-        2.991,
-        0.0
-      ],
-      "range_deg": [
-        2.217,
-        65.592,
-        89.101,
-        60.006,
-        4.945,
-        3.209,
-        0.0
-      ],
-      "interpretation": "Large joint excursions are measured; setup/expressive/return phase boundaries require review. Recorded motion is not proof of safe replay."
-    },
-    {
-      "file": "trajectory-3.tch",
-      "sha256": "6c2c2c059953dba4ace7aafd224d2459d27582b893b42575d73945252aef7049",
-      "samples": 507,
-      "duration_s": 12.969,
-      "start_deg": [
-        1.1,
-        0.155,
-        1.341,
-        2.332,
-        -0.9,
-        2.922,
-        0.0
-      ],
-      "end_deg": [
-        1.581,
-        0.155,
-        1.364,
-        2.309,
-        -0.178,
-        3.008,
-        0.0
-      ],
-      "range_deg": [
-        3.449,
-        88.396,
-        100.525,
-        82.294,
-        7.357,
-        0.178,
-        0.0
-      ],
-      "interpretation": "Large joint excursions are measured; setup/expressive/return phase boundaries require review. Recorded motion is not proof of safe replay."
-    },
-    {
-      "file": "trajectory-4.tch",
-      "sha256": "b30f0a79f85cdd71df32f0990d0cc472ca8e05acbabcc6759388d07e3ac033c9",
-      "samples": 421,
-      "duration_s": 10.83,
-      "start_deg": [
-        0.659,
-        0.155,
-        1.341,
-        2.263,
-        -0.596,
-        5.363,
-        0.0
-      ],
-      "end_deg": [
-        1.627,
-        0.155,
-        1.364,
-        2.945,
-        -4.131,
-        7.93,
-        0.0
-      ],
-      "range_deg": [
-        4.526,
-        59.416,
-        63.043,
-        7.317,
-        31.725,
-        67.282,
-        0.0
-      ],
-      "interpretation": "Large joint excursions are measured; setup/expressive/return phase boundaries require review. Recorded motion is not proof of safe replay."
     }
   ],
   "release_blockers": [

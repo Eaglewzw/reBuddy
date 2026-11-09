@@ -28,7 +28,7 @@
 
 动画资源约 4.55 MB，构建强制为后续机械臂数据、代码增长及余量预留至少 2 MiB。已加入通用关键帧和受关节速度／加速度约束的过渡计算接口；Daily 已有处理后的实机数据，基础舞蹈正在录制，尚未接入实体编舞。详见 [舞蹈优化与空间预算](assets/docs/DANCE_OPTIMIZATION.md)。活泼与慵懒仍使用相同日常播放速度；连续 30 分钟及实际屏幕帧率需上板验收。
 
-PC 端可独立试播[基础舞蹈](assets/docs/DANCE_DESIGNED.md)和[舞台编舞](assets/docs/DANCE_SHOWCASE.md)：`./tools/dance --showcase --list` 查看舞台菜单，`--showcase --supported` 进入实机终端。这些动作尚未接入 ESP32 屏幕编排，也未写入固件 Flash。
+PC 端使用唯一的[基础舞蹈库](assets/docs/DANCE_LIBRARY.md)：`./tools/dance --list` 查看 10 组动作及开场/收尾，`./tools/dance --supported` 进入实机终端。动作尚未接入 ESP32 屏幕编排，也未写入固件 Flash。
 
 ## 开发
 

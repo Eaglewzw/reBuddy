@@ -1,0 +1,332 @@
+{
+  "schema": "rebuddy.dance_action.v2",
+  "number": 6,
+  "name": "开心欢呼",
+  "action_id": null,
+  "gripper_motion": true,
+  "hardware_accepted": false,
+  "firmware_integrated": false,
+  "description": "身体连续两次扬起欢呼，配合左右轻倾与两次夹爪开合；不定格。",
+  "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+  "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+  "duration_s": 6.526990816987241,
+  "start_rad": [
+    -0.02854241178754498,
+    0.783538395283269,
+    1.1638101947073842,
+    -0.49324551224708557,
+    -0.05379759951257238,
+    -0.012223720568798337,
+    0.0
+  ],
+  "end_rad": [
+    -0.02854241178754498,
+    0.783538395283269,
+    1.1638101947073842,
+    -0.49324551224708557,
+    -0.05379759951257238,
+    -0.012223720568798337,
+    0.0
+  ],
+  "gripper_control": {
+    "motor_id": 7,
+    "closed_deg": 0.0,
+    "open_deg": 90.0,
+    "physical_max_deg": 250.0,
+    "pulses": 2,
+    "pulse_duration_s": 2.0,
+    "pulse_starts_s": [
+      0.6317477042468103,
+      3.895243112740431
+    ],
+    "velocity_limit_rad_s": 2.8,
+    "acceleration_limit_rad_s2": 10.0
+  },
+  "collision_identity": {
+    "schema": "rebuddy.rs_collision.v1",
+    "resources": [
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/base_link.STL",
+        "sha256": "af1df69639fb1f1022ad94ca1537157f8dbef379ec37fd75d8901d30d4061cbe"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/gripper_end.STL",
+        "sha256": "d52ed4bb37754fa9d57cc21b4be3b9f90373b6d5594c521e7c3cd3a1adf5ba62"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link1.STL",
+        "sha256": "60860556dd91b15eff0bb7d3a5bffcf4b34ac98156c542f203ad6ce755be2d1d"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link2.STL",
+        "sha256": "f3653afa47f7f2ee9733416e56c52745b5eaafd23ca6c84360dffd440e12668d"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link3.STL",
+        "sha256": "3d6502345c14bd2d6c5b9c394672efdaa2b787cc81a0bed23a0bde574e787a28"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link4.STL",
+        "sha256": "431e5e7365ba31df598207dee6d48ff3051ec32f6d42dcae8e3b25e7807617c4"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link5.STL",
+        "sha256": "e8888083f0cf597e7f0afb7b273b81f55df7ef45eee706dbf840c9ef365c7b1e"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link6.STL",
+        "sha256": "29a7809bde57f21b536588e78e66bec137f1fbe50308b71ffa842b6efbb109fd"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/pla_left.STL",
+        "sha256": "0e774ab0bf2975792982adf646465c7ed1ff35b9ed0ad9bf3fb14c9d7480ebef"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/pla_right.STL",
+        "sha256": "43556446abbbecd847bb09a4dc13d4ef2aa266a9ba904e5ac9ccff89a3c8280d"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/urdf/rebot_b601_rs.urdf",
+        "sha256": "dc29e21ffb77d282f99882f035b6162c187de665637e4f3b12837c9c84d06887"
+      },
+      {
+        "path": "/home/verser/CPP/reBotArmController_ROS2/src/rebotarm_moveit_config/config/rebotarm_rs.srdf",
+        "sha256": "046860efe2c516060ced0b5c75906182805c964a4fbe1cb6af5a6f480991f095"
+      }
+    ],
+    "geometry_count": 10,
+    "checked_pair_count": 35,
+    "disabled_pairs": [
+      {
+        "links": [
+          "base_link",
+          "link1"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link1",
+          "link2"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link2",
+          "link3"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link3",
+          "link4"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link4",
+          "link5"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link5",
+          "link6"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "gripper_end",
+          "link6"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "gripper_end",
+          "gripper_left"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "gripper_end",
+          "gripper_right"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "gripper_left",
+          "gripper_right"
+        ],
+        "reason": "Never"
+      }
+    ],
+    "scope": "source URDF collision meshes; closed fingers; robot self-collision only",
+    "environment_checked": false,
+    "physical_geometry_calibrated": false
+  },
+  "stages": [
+    {
+      "kind": "body_gripper_fast_wide_overlay",
+      "label": "cute_06_with_gripper",
+      "duration_s": 6.526990816987241,
+      "body_stages": [
+        {
+          "kind": "spline",
+          "label": "fast_cute_06",
+          "duration_s": 6.526990816987241,
+          "t_s": [
+            0.0,
+            1.3053981633974483,
+            2.6107963267948966,
+            3.916194490192344,
+            5.221592653589793,
+            6.52699081698724
+          ],
+          "q_rad": [
+            [
+              -0.02854241178754498,
+              0.783538395283269,
+              1.1638101947073842,
+              -0.49324551224708557,
+              -0.05379759951257238,
+              -0.012223720568798337,
+              0.0
+            ],
+            [
+              -0.13326216690720477,
+              0.5740988850439495,
+              1.4779694600663635,
+              -0.283806002007766,
+              -0.15851735463223215,
+              -0.18675664576823128,
+              0.0
+            ],
+            [
+              -0.02854241178754498,
+              0.8882581504029288,
+              1.0416371470677812,
+              -0.6677784374465185,
+              -0.05379759951257238,
+              -0.012223720568798337,
+              0.0
+            ],
+            [
+              0.0761773433321148,
+              0.5391923000040628,
+              1.5128760451062502,
+              -0.23144612444793616,
+              0.0509221556070874,
+              0.1623092046306346,
+              0.0
+            ],
+            [
+              -0.02854241178754498,
+              0.8708048578829855,
+              1.0590904395877245,
+              -0.6328718524066319,
+              -0.05379759951257238,
+              -0.012223720568798337,
+              0.0
+            ],
+            [
+              -0.02854241178754498,
+              0.783538395283269,
+              1.1638101947073842,
+              -0.49324551224708557,
+              -0.05379759951257238,
+              -0.012223720568798337,
+              0.0
+            ]
+          ]
+        }
+      ],
+      "pulse_stages": [
+        {
+          "kind": "gripper_wide_pulse",
+          "label": "wide_two_second_pulse",
+          "duration_s": 2.0,
+          "base_rad": [
+            -0.02854241178754498,
+            0.783538395283269,
+            1.1638101947073842,
+            -0.49324551224708557,
+            -0.05379759951257238,
+            -0.012223720568798337,
+            0.0
+          ],
+          "amplitude_rad": 1.5707963267948966
+        }
+      ],
+      "pulse_starts_s": [
+        0.6317477042468103,
+        3.895243112740431
+      ]
+    }
+  ],
+  "validation": {
+    "gravity_peak_nm": [
+      6.092506725085146e-16,
+      4.720745662576852,
+      6.268060790846953,
+      2.0122741426239426,
+      0.07851993918229856,
+      0.0008190873788644664
+    ],
+    "inverse_dynamics_checked": true,
+    "inverse_dynamics_peak_nm": [
+      0.022893007379082175,
+      5.606247201627944,
+      6.765828714203834,
+      2.107288206779157,
+      0.08628474828599923,
+      0.001081924708202312
+    ],
+    "check_period_s": 0.02,
+    "collision_checked": false,
+    "tool_xyz_min_m": [
+      0.09781433430068312,
+      -0.01324179877398664,
+      0.29244305415408817
+    ],
+    "tool_xyz_max_m": [
+      0.3414910589020202,
+      0.0075055650587938045,
+      0.692063817316421
+    ],
+    "inner_quiet_fraction": 0.0,
+    "peak_velocity_rad_s": [
+      0.16967683998481287,
+      0.4059349263639741,
+      0.5518233482969027,
+      0.5031105095354688,
+      0.16967683998481287,
+      0.2827947333080212,
+      2.6975288567196545
+    ],
+    "peak_acceleration_rad_s2": [
+      0.2873139509020483,
+      0.9554405347136231,
+      1.3192823405431067,
+      1.1602736175115251,
+      0.28731395090204825,
+      0.4788565848367469,
+      9.424777960769388
+    ],
+    "closed_gripper_proxy_checked": true,
+    "collision_samples": 1307,
+    "moving_fingers_collision_checked": false,
+    "environment_collision_checked": false
+  },
+  "origin": {
+    "library": "showcase",
+    "number": "14"
+  }
+}

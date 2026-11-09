@@ -15,7 +15,7 @@
 
 新版 GIF 导出按 [逐姿态种子配置](../config/preview_cavity_seeds.json) 清除连杆空隙的源图底色，保留金属高光与眼睛。修改源图或时间轴后，先导出 GIF，再运行 `build_screen_preview.py` 转换并重新编译；不能仅替换 GIF 文件后直接烧录旧固件。
 
-`python3 tools/rs_record_playback.py record/trajectory-1.tch` 仅离线检查录制格式与轨迹约束，需要 NumPy/SciPy。这个旧 TCH 播放器的实机播放因已观察到的下落而锁定，见 [异常记录](RS_PLAYBACK_INCIDENT.md)。
+机械臂动作仅维护 `tools/daily` 和 `tools/dance` 两套库。早期 TCH 录制和旧抬头试播方案已清理；`rs_record_playback.py` 仍为当前录制、Daily、Dance 提供共享 CAN 支持，旧 TCH 实机播放保持锁定。历史故障见 [异常记录](RS_PLAYBACK_INCIDENT.md)。
 
 `./tools/play_daily inspect record/gravity/<会话目录>/<片段>.csv` 离线检查新重力录制 CSV；`./tools/play_daily play <同一CSV路径> --supported` 在独立承重支撑下，从当前姿态平滑移动到录制起点、确认到位后试播一次；过渡不包含避障，夹爪保持当前开度。保留同目录元数据和摘要，不需转换 TCH。首次 Ctrl+C 先回零再失能，回零中再次 Ctrl+C 会中止；自然播放结束、SIGTERM 或故障仍失能。见 [CSV 播放说明](GRAVITY_RECORDING.md#直接播放-csv)。
 

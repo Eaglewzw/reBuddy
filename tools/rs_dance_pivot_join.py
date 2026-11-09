@@ -5,10 +5,10 @@ import numpy as np
 from scipy.interpolate import make_interp_spline, PPoly
 from scipy.spatial.transform import Rotation
 
-import rs_dance_design as base
+import rs_dance_motion as base
 import rs_dance_pivot_sway as sway
 import rs_dance_pivot_kinematics as kin
-from rs_dance_virtual_pivot_scan import VirtualIK
+from rs_dance_pivot_ik import VirtualIK
 from rs_record_playback import LOWER,UPPER
 
 
