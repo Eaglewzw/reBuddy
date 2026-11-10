@@ -1,0 +1,60 @@
+{
+  "schema": "rebuddy.dance.c5.touch.v1",
+  "hardware_tested": false,
+  "flashed": false,
+  "can_opened": false,
+  "application": "build/reBuddy.bin",
+  "sha256": {
+    "build/reBuddy.bin": "fd9d98553a9e60a358e05a786fb3624794914797ef5cc2c62244fdfc055b8b84",
+    "sdkconfig": "ca7e67f2fdf403f8f8815aa5ca33f2ee046d6286e05e7ae103ff901953d88de4",
+    "sdkconfig.defaults": "f90279be794d104a47e22e983c96e71632166db5dbe88ea76f1f49daf94f5c3c",
+    "main/ui/choreo_ui.c": "989941092030cd47b0cf58ec25237a128823b3e5497fe21c86af856f696453a9",
+    "main/ui/choreo_motion.h": "ad02a9765a9bc869dd0f590298753536391ead0eed98bc5dd265695483f55bd0",
+    "main/ui/pet_ui.c": "8c3743a1eb68484c555d787e075c01f0b917a59c9fbcc7a0e7c1b8aac0d488a7",
+    "main/app/app_dance.c": "f28518b40e5e06d0811538c94e916cd24374c4c4ab3ee010ee1bf052d8fc0965",
+    "main/app/app_arm.c": "f32b479e4936c02c2b81f26b4c08190b7975383078649b6fa828b8f76da451e5",
+    "main/generated/room_font.c": "2d0e96cdc9e5177f50e3eb32ebd733936faeee1db1afa94a46f166c3831128cc",
+    "tests/host/choreo_ui_test.c": "188e995b09a20ae6cf5c554efb7b670049fe261f9fd719cd7af1e4288d2cd5c7",
+    "tests/host/dance_app_test.c": "f1e49a9b24b9e4236c802b4ecc36eb5c7a650d1a584b29515558f3d94e17723c",
+    "build/previews/dance_cards.png": "48be73ac4ee626bbdf4580cf4d79deb54f0df60e9f4d1d630fc71b671e3298b4",
+    "build/previews/dance_motor.png": "27a35391012b4de81673ac5676fe8ea6aeb0b1c191be67cac62d24e9ea06e8ad"
+  },
+  "flash_budget": {
+    "application_bytes": 5760784,
+    "application_limit_bytes": 6225920,
+    "reserved_bytes": 2097152,
+    "free_bytes": 2562288,
+    "unreserved_headroom_bytes": 465136,
+    "animation_bytes": 4628420
+  },
+  "host_tests": {
+    "passed": 8,
+    "failed": 0,
+    "names": [
+      "dance_c5",
+      "dance_app",
+      "project_assets",
+      "ui_rgb565",
+      "choreography_ui",
+      "choreography_model",
+      "choreography_storage",
+      "daily_control"
+    ]
+  },
+  "features": [
+    "Two-column action cards, four fully visible per screen, distinct RGB565 thumbnails loaded one per UI tick.",
+    "Explicit touch motor Play submits repeat-expanded sequence to existing Dance controller.",
+    "No motor requests on browsing, editing, saving or screen preview.",
+    "Healthy Dance ownership and normal homing do not fault the preview UI.",
+    "Brief status mutex contention retries; sustained status loss requests hold.",
+    "Back during active motor playback requests hold and retains the control page."
+  ],
+  "limits": [
+    "Motor tempo supports standard (100%) and slow (50%) only.",
+    "WAIT and nonzero end holds rejected with an explicit message; saved works preserved.",
+    "Motor and GIF playback remain separate.",
+    "Hardware motion, touch/display responsiveness and peak PSRAM use still require board testing."
+  ],
+  "thumbnail_psram_bytes": 122880,
+  "source_animation_files_changed": false
+}

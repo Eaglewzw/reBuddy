@@ -1,0 +1,181 @@
+{
+  "schema": "rebuddy.dance_3d.verification.v1",
+  "created_at": "2026-11-09T13:21:59.525176+00:00",
+  "offline_only": true,
+  "firmware_assets_replaced": false,
+  "physical_motion_data_changed": false,
+  "actions": [
+    "08",
+    "09"
+  ],
+  "independent_checks": {
+    "schema": "rebuddy.dance_3d.qa.v1",
+    "created_at": "2026-11-09T13:09:57.229404+00:00",
+    "read_only_hardware": true,
+    "physical_robot_connected": false,
+    "motion_sha256": "378940574a6c241938da1f559f789edb6a0503fadaa9ed76e035549003ee13e9",
+    "independent_fk": {
+      "reference": "source visual URDF, eight coordinates with finger sliders zero",
+      "frames": 174,
+      "max_transform_element_error": 0.0
+    },
+    "gltf": {
+      "cad": {
+        "mesh_nodes": 23,
+        "verified_matrix_max_error": 0.0,
+        "verification": "all CAD nodes vs FK * visual origin",
+        "has_animation_channels": false,
+        "embedded_images": 0,
+        "sha256": "46e763f337ad773e80d1aa1e90a11f440565a5667087cb35147682c0f2fdb398"
+      },
+      "cartoon": {
+        "mesh_nodes": 43,
+        "verified_matrix_max_error": 0.0,
+        "verification": "41 rigid shell nodes vs FK * local origin, plus head and visor vs true gripper_end transform",
+        "has_animation_channels": false,
+        "embedded_images": 1,
+        "sha256": "fc2a72e97c9bf30d6f217b56de92e148641613858fe158acd526a757df5c28a8",
+        "rigid_shell_bindings_verified": 41,
+        "shell_max_transform_element_error": 0.0
+      }
+    },
+    "projection": {
+      "09": {
+        "camera": {
+          "direction": [
+            0.9474288386994197,
+            -0.19335282422437142,
+            0.2549377982275838
+          ],
+          "up": [
+            -0.24978908943992698,
+            0.05097736519182184,
+            0.9669574546146649
+          ],
+          "target": [
+            0.09,
+            0,
+            0.34
+          ],
+          "parallel_scale": 0.44
+        },
+        "horizontal_span_m": 0.39956224359255826,
+        "vertical_span_m": 0.23965218552689938,
+        "sampled_principal_axis_tilt_deg": 0.2244172354703835,
+        "plane_u_vs_screen_right_dot": 1.0000000000000002,
+        "plane_v_vs_screen_up_dot": 1.0,
+        "description": "Actual action plane is viewed front-on; sampled covariance tilt is not a camera roll. Side-by-side loops form horizontal infinity."
+      }
+    },
+    "gifs": [
+      {
+        "mode": "cad",
+        "number": "08",
+        "size": [
+          640,
+          640
+        ],
+        "encoded_frames": 110,
+        "duration_ms": 8740,
+        "expected_duration_ms": 8740,
+        "duration_matches": true,
+        "minimum_foreground_border_px": 73,
+        "clipped_frames": [],
+        "sha256": "fc0d7f8ebdf901fb9d1c63e0a03a4fa635cdfe4b15e3f617935698e3e890ed58"
+      },
+      {
+        "mode": "cad",
+        "number": "09",
+        "size": [
+          640,
+          640
+        ],
+        "encoded_frames": 64,
+        "duration_ms": 5100,
+        "expected_duration_ms": 5100,
+        "duration_matches": true,
+        "minimum_foreground_border_px": 81,
+        "clipped_frames": [],
+        "sha256": "0abc4323b78451a045f0b7d5688a8288efb75cfc53854c3bd2ad80a5866182d3"
+      },
+      {
+        "mode": "cartoon",
+        "number": "08",
+        "size": [
+          640,
+          640
+        ],
+        "encoded_frames": 110,
+        "duration_ms": 8740,
+        "expected_duration_ms": 8740,
+        "duration_matches": true,
+        "minimum_foreground_border_px": 80,
+        "clipped_frames": [],
+        "sha256": "fdafd61860c55c34d7cddc64fe49d1bfcd2af149a132c1f6359a1adf3e1d5a65"
+      },
+      {
+        "mode": "cartoon",
+        "number": "09",
+        "size": [
+          640,
+          640
+        ],
+        "encoded_frames": 64,
+        "duration_ms": 5100,
+        "expected_duration_ms": 5100,
+        "duration_matches": true,
+        "minimum_foreground_border_px": 83,
+        "clipped_frames": [],
+        "sha256": "c6b4351c5b14c5fc429c8ef6ba3f38d967869eda572e403727875fa1c2853583"
+      }
+    ],
+    "limitations": [
+      "GLTF files are posed static models; animated transforms are stored separately in motion.json.",
+      "Cartoon rigid shells follow URDF joint frames but are decorative and do not represent exact CAD shape.",
+      "Offline checks do not establish device rendering performance or physical robot motion."
+    ],
+    "passed": true
+  },
+  "browser_checks": {
+    "passed": true,
+    "webgl_errors": 0,
+    "exceptions": 0,
+    "mesh_count": 23,
+    "drag_rotated_model": true,
+    "action_switch": true,
+    "timeline_seek": true,
+    "nonnegative_time": true
+  },
+  "files": {
+    "tools/export_dance_3d.py": "ac33f523fb7f5f28e49ad27a1e3a6092d7fd217bbb953cb847abdbcb780ef97a",
+    "tools/render_dance_3d.py": "08798f0b9ae3fd5202f3677a38cfe2eb5453a18c870a09814c83bbd1333d2137",
+    "tools/build_dance_3d_viewer.py": "202936ec524b3b5dca800e0db4875527ba26408f883eefacac3c0f01e56c53a5",
+    "assets/models/rebot_rs/manifest.json": "28e8ca9d57d014520c023b8bcc7798351421b977e9e1f5d0d95be77cf53d7633",
+    "assets/models/rebot_rs/rebot_rs_visual.urdf": "d420332483cdf5af2bf19d230fca640f24097da83c140343347ed271fa9633d7",
+    "assets/models/rebot_rs/README.md": "7bfc01305b10cbdf4a1f6df6964f679a53a9e66af0d9882a663050e3aa2bd2f5",
+    "assets/models/rebot_rs/meshes/motor_4.STL": "2251e479b009b2c1335e0c932dd44bf3f170cf55fec1febd944ae087bbbcac22",
+    "assets/models/rebot_rs/meshes/cnc_right.STL": "d7be82297465675b19b5651f3e25c5bab82d33a20bab2aa48ddffbbcf8c65072",
+    "assets/models/rebot_rs/meshes/pla3_black.STL": "c016b5474dcb126363ee3e9ff74441de7cc6414f2b38eccee57c5e824ae59d9e",
+    "assets/models/rebot_rs/meshes/cnc4.STL": "6a85571eaedbbf06a799a89fd56d9cf3778070cd852ec6cb6da285ec34a35dec",
+    "assets/models/rebot_rs/meshes/pla_right.STL": "43556446abbbecd847bb09a4dc13d4ef2aa266a9ba904e5ac9ccff89a3c8280d",
+    "assets/models/rebot_rs/meshes/motor_2_3.STL": "509d445fa6cade769d0c9865b5ae7e6d7ae7cf05496ade798e293edc834f9725",
+    "assets/models/rebot_rs/meshes/cnc2.STL": "fa41ae81c68a7ce3ad49c3680ac7cde88fa5d02984298846f3c6fa6a28d009db",
+    "assets/models/rebot_rs/meshes/base_link.STL": "af1df69639fb1f1022ad94ca1537157f8dbef379ec37fd75d8901d30d4061cbe",
+    "assets/models/rebot_rs/meshes/motor_6.STL": "a488f0f5d5727b2086f1511570f06a722b6e6312894ba12d7eacd0614208d527",
+    "assets/models/rebot_rs/meshes/pla2_green.STL": "3c1445d686ec45637f2ca16546b23c06a1671ae4266b7df0ae00671e1b093431",
+    "assets/models/rebot_rs/meshes/cnc_left.STL": "8f8ed951fad05dd5e3fec04f697864a64e394db9138d72fdfa62f8f047388aa6",
+    "assets/models/rebot_rs/meshes/pla2_black.STL": "3334ffafff11e43f2bc6102e734e2fe0b61369ae5dd657163c01e005f5fa753d",
+    "assets/models/rebot_rs/meshes/pla3_green.STL": "7aee9689f19b6cb697bc81e2005b2652a1fad2887798108d96500bd82796b212",
+    "assets/models/rebot_rs/meshes/motor_5.STL": "87a9380b8441116d1e31eafcdd2900a06eb3ad9a0858b7715b41485660af07b4",
+    "assets/models/rebot_rs/meshes/cnc7.STL": "2d6088744c7d5195fc3f78d930dba9a9843ad208b2a6243fade1aaf17fecc782",
+    "assets/models/rebot_rs/meshes/link6.STL": "29a7809bde57f21b536588e78e66bec137f1fbe50308b71ffa842b6efbb109fd",
+    "assets/models/rebot_rs/meshes/link1.STL": "60860556dd91b15eff0bb7d3a5bffcf4b34ac98156c542f203ad6ce755be2d1d",
+    "assets/models/rebot_rs/meshes/pla_left.STL": "0e774ab0bf2975792982adf646465c7ed1ff35b9ed0ad9bf3fb14c9d7480ebef",
+    "assets/models/rebot_rs/meshes/motor_7.STL": "4e019eae9e44376b9d876eae995535bcca7761e4083a3ed0d8705d25cffa9dc1",
+    "assets/models/rebot_rs/meshes/cnc5.STL": "1772159cd66b600c0ed0db67c7f5c33865ee09e9b2dae02339d95d9cef158489",
+    "assets/models/rebot_rs/meshes/cnc3.STL": "4018cd61ac7d6dd97cfe45cb7b0480d0275476757c2afc61bf05bd287fad3ca4",
+    "assets/models/rebot_rs/meshes/pla5_green.STL": "d8810ec3fe0a9cb56d5fb9939d6f826b8cc62dd2691131aa44ccf9f9d01cc547",
+    "assets/models/rebot_rs/meshes/pla7_green.STL": "00b3c3d51f6f756ab96fc65a229610b952ce4a8be927e2ec404bacbcf43f4afc",
+    "build/dance-3d/viewer.html": "f1a0d3fcffb0dd9fe88165c86ee6046e22bc65db87b3efcfddb39967fd7ed75f"
+  }
+}

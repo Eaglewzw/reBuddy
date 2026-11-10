@@ -1,0 +1,63 @@
+{
+  "schema": "rebuddy.dance_multiview_qa.v3",
+  "passed": true,
+  "checks": [
+    {
+      "number": "08",
+      "gif_outputs": [
+        {
+          "file": "build/dance-3d/multiview/08.gif",
+          "frames": 110,
+          "duration_ms": 8740,
+          "sha256": "b09f507e58a256d2fa433b2a8f601fd81c88e0f7af54eb1248c13e7500c9f4bd"
+        },
+        {
+          "file": "build/dance-3d/multiview/preview/08.gif",
+          "frames": 110,
+          "duration_ms": 8740,
+          "sha256": "9b2490cf860fdf31f04cf1f8ddee9cf005da0ca81d3ee7a1fde99c934925116c"
+        }
+      ],
+      "tcp_timing_and_attitude_unchanged": true,
+      "idle_endpoints_pixel_identical": true,
+      "stationary_lower_foot_identical": true,
+      "minimum_solid_border_px": 73
+    },
+    {
+      "number": "09",
+      "gif_outputs": [
+        {
+          "file": "build/dance-3d/multiview/09.gif",
+          "frames": 64,
+          "duration_ms": 5100,
+          "sha256": "6405da4a999c3b1fea4ef1e778e2299f09b1adaa9576b1ce3e8a175abd171c61"
+        },
+        {
+          "file": "build/dance-3d/multiview/preview/09.gif",
+          "frames": 64,
+          "duration_ms": 5100,
+          "sha256": "c54f67d9c7f90bfe5daeba330d6fbedc0cacea3f695fe265ac4a930836896e3d"
+        }
+      ],
+      "tcp_timing_and_attitude_unchanged": true,
+      "idle_endpoints_pixel_identical": true,
+      "stationary_lower_foot_identical": true,
+      "minimum_solid_border_px": 38
+    }
+  ],
+  "original_head_atlas_unchanged": true,
+  "original_artwork_unchanged": true,
+  "preview_09_byte_identical": true,
+  "wrist_anchor_registration_error": 0.0,
+  "fixed_arm_length_error": 4.263256414560601e-14,
+  "wrist_derivative_gap_at_key_views": [
+    1.1999929938610876e-05,
+    2.2184138970260392e-05,
+    7.312337402254343e-06
+  ],
+  "rendering": "08 C1 head/hinge interpolation, one native vector wrist cover, fixed-length connected body; original face drawings without cross-dissolve. 09 unchanged.",
+  "active_preview_actions": [
+    "09"
+  ],
+  "08_superseded_by": "dance_whole_turn.json"
+}

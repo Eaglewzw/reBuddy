@@ -2,14 +2,14 @@
 #pragma once
 #include <stdint.h>
 typedef struct { uint32_t offset, bytes, crc32; int16_t claw_region[4][2]; } rb_frame_meta_t;
-typedef struct { unsigned count; uint16_t duration_ms; uint16_t frames[128], at[128]; } rb_clip_meta_t;
+typedef struct { unsigned count; uint16_t duration_ms; uint16_t frames[256], at[256]; } rb_clip_meta_t;
 extern const rb_frame_meta_t rb_frames[];
 extern const rb_clip_meta_t rb_clips[];
 extern const uint8_t rb_clip_map[3][9];
-extern const uint8_t rb_choreo_clip_map[45];
+extern const uint8_t rb_choreo_clip_map[55];
 #define RB_FRAME_WIDTH 320u
 #define RB_FRAME_HEIGHT 240u
 #define RB_FRAME_X 0
 #define RB_FRAME_Y 0
 #define RB_FRAME_BYTES 153600u
-#define RB_FRAME_COUNT 486u
+#define RB_FRAME_COUNT 1043u

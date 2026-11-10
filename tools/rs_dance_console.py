@@ -34,7 +34,9 @@ class DanceSession(Session):
         original = self.controller.following_limit[6]
         def closed_target(q, v):
             if q is not None and abs(q[6]) < 1e-9 and (v is None or abs(v[6]) < 1e-9):
-                self.controller.following_limit[6] = max(original, self.closed_gripper_tolerance)
+                # The post-feedback sampler may have switched from a gripper
+                # pulse to an ordinary sequence phase. Use its current profile.
+                self.controller.following_limit[6] = max(self.controller.following_limit[6], self.closed_gripper_tolerance)
         sampler = kwargs.get('target_sampler')
         if sampler is not None:
             def sample():

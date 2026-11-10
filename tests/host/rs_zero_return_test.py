@@ -195,6 +195,13 @@ class Tests(unittest.TestCase):
         class Home:
             def run(self, should_stop, **kwargs):
                 events.append('home')
+                if case in ('ctrl_c_twice', 'home_failure', 'timeout_failure', 'timeout_interrupt',
+                            'temperature_feedback_fault', 'temperature_interrupt', 'sigterm_twice'):
+                    # A failed return now latches torque hold when feedback is
+                    # usable. Simulate an explicit operator release so this exit
+                    # test does not wait forever for input. Hold behavior itself
+                    # is exercised by rs_protective_stop_test.py.
+                    commands.put('release')
                 if case.startswith('temperature'):
                     backends[0].read()  # Threshold must not immediately abort the return.
                 if case in ('home_failure', 'timeout_failure'): raise RuntimeError('zero-pose stalled')
@@ -239,6 +246,8 @@ class Tests(unittest.TestCase):
             self.assertFalse(result['zero_return_completed'])
             self.assertEqual(result['reason'], 'zero_return_failed')
             self.assertEqual(events[-2:], ['disable', 'close'])
+            if result.get('protective_hold_exit'):
+                self.assertEqual(result['protective_hold_exit'], 'release')
 
     def test_hot_startup_does_not_enable_or_attempt_return(self):
         result,events,_=self.exit_case('temperature_startup')

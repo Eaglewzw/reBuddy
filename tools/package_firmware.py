@@ -55,7 +55,7 @@ source=Path(description['config_file'])
 shutil.copy2(source,out/'sdkconfig')
 for relative in ['LICENSE', 'assets/docs/THIRD_PARTY_NOTICES.md',
                  'assets/config/behavior_defaults.json', 'assets/config/claw_touch_regions.json',
-                 'assets/config/flash_budget.json', 'assets/config/arm_components.json', 'assets/config/dance_cavity_seeds.json', 'assets/docs/DANCE_OPTIMIZATION.md',
+                 'assets/config/flash_budget.json', 'assets/config/arm_components.json', 'assets/docs/DANCE_OPTIMIZATION.md',
                  'assets/animation/manifest.json', 'assets/fonts/OFL.txt',
                  'assets/docs/GETTING_STARTED.md', 'assets/docs/HARDWARE.md',
                  'assets/docs/TESTING.md', 'assets/docs/ACCEPTANCE.md', 'assets/docs/DISPLAY_PERFORMANCE.md',

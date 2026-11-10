@@ -1,4 +1,5 @@
 #include "app_arm.h"
+#include "app_dance.h"
 #include "pet_ui.h"
 #include "rb_board.h"
 #include "rb_arm.h"
@@ -15,6 +16,7 @@ static rb_pet_t *pet;
 static bool initialized;
 #ifdef CONFIG_REBUDDY_ARM_DAILY_CONTROL
 static bool arm_linked;
+static bool dance_linked;
 
 static void enter_key_worker(void *unused)
 {
@@ -52,6 +54,15 @@ static void follow_arm(uint64_t now)
     rb_dc_status_t s;
     if(rb_arm_daily_status(&s)!=ESP_OK)return;
     rb_ui_arm_status(rb_daily_control_state_name(s.state),s.state!=RB_DC_OFF);
+    if(s.action==RB_DANCE_CONTROL_ACTION) {
+        if(s.state==RB_DC_OFF && s.disable_confirmed && dance_linked) {
+            arm_linked=false;dance_linked=false;reset_sleep_screen();
+        } else if(s.state!=RB_DC_OFF) {
+            dance_linked=true;arm_linked=false;rb_pet_stop(pet,s.error?s.error:"DANCE CONTROL");
+            if(s.error)pet->stop_reason=s.error;
+        }
+        return; /* No Daily auto-action, auto-HOME or GIF phase ownership. */
+    }
     if(!arm_linked)return;
     if(s.state==RB_DC_FAULT || s.state==RB_DC_PROTECTIVE_HOLD || s.error) {
         rb_pet_stop(pet,s.error?s.error:"ARM FAULT");pet->stop_reason=s.error?s.error:"ARM FAULT";return;
@@ -75,6 +86,11 @@ void rb_app_arm_action(void *context,const rb_pet_event_t *event)
     const rb_daily_action_t *action=rb_daily_find(event->action_id);
     if (!action) { ESP_LOGE("rb_daily","Unmapped daily action %u",(unsigned)event->action_id);return; }
 #ifdef CONFIG_REBUDDY_ARM_DAILY_CONTROL
+    rb_dc_status_t active;
+    if(rb_arm_daily_status(&active)==ESP_OK && active.action==RB_DANCE_CONTROL_ACTION &&
+       active.state!=RB_DC_OFF && !(active.state==RB_DC_FAULT && !active.enabled)) {
+        rb_pet_stop(pet,"DANCE CONTROL");return;
+    }
     if(arm_linked || action->id==RB_DAILY_WAKE) {
         arm_linked=true;
         esp_err_t e=rb_arm_daily_request(action->id,event->request_id);
@@ -127,6 +143,7 @@ void rb_app_arm_start_input(void)
 {
 #ifdef CONFIG_REBUDDY_ARM_DAILY_CONTROL
     if(initialized) {
+        rb_app_dance_console_start();
         if(xTaskCreate(enter_key_worker,"enter_home",3072,NULL,2,NULL)!=pdPASS)
             ESP_LOGE("rb_input","ENTER input task unavailable; screen HOME remains available");
         else ESP_LOGI("rb_input","Physical ENTER: verified zero return then disable, same as HOME; does not wake");

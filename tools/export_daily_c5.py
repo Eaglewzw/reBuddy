@@ -7,6 +7,8 @@ import math
 from pathlib import Path
 import numpy as np
 from rs_daily_prepare import load_bundle, Clap, BUNDLE
+from rs_motion_timewarp import TimeWarpedCurve
+from rs_daily_nuzzle import Nuzzle
 from rs_gravity_record import ROOT, DEFAULT_CALIBRATION, DEFAULT_URDF, CAPS, digest
 from rs_gravity_play import KP, KD
 
@@ -21,14 +23,15 @@ def f(value):
     return s+('f' if '.' in s or 'e' in s else '.0f')
 
 def pieces(curve):
-    if isinstance(curve,Clap):
+    if isinstance(curve,TimeWarpedCurve):return curve.polynomial_pieces()
+    if isinstance(curve,(Clap,Nuzzle)):
         boundaries=curve.breakpoints
     else:
         boundaries=np.unique(curve.spline.t)/curve.scale
     out=[]
     for begin,end in zip(boundaries[:-1],boundaries[1:]):
         if end-begin<1e-9:continue
-        if isinstance(curve,Clap):
+        if isinstance(curve,(Clap,Nuzzle)):
             # Both synchronized channels are piecewise quintics. Interior
             # points avoid choosing the neighbouring polynomial at a boundary.
             u=np.linspace(.05,.95,6)

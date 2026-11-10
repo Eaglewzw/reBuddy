@@ -1,0 +1,12 @@
+Edit target image1: correct ONLY the viewing-direction sequence of this COMPLETE robot turnaround atlas. Image2 is the authoritative reference for the exact NINE directions and occlusion. Image3 is the approved character identity. Keep the full-body 2D hand-drawn style, green/black colors, silver disks, stable pedestal, identical proportions, transparent background, 3x3 equal cells.
+The previous atlas has incorrect directions, with random left-facing and right-facing poses. REDRAW all nine complete figures to follow this exact ordering matching image2:
+TOP LEFT: strong LEFT profile (face on screen LEFT, silver joints on screen RIGHT).
+TOP CENTER: LEFT three-quarter.
+TOP RIGHT: slight LEFT three-quarter.
+MIDDLE LEFT: nearly FRONT, looking a little LEFT.
+MIDDLE CENTER: straight FRONT; head/shoulder/pedestal centered on ONE vertical line, elbow mostly behind head; two green shoulder cheeks, NO slanted neck.
+MIDDLE RIGHT: nearly FRONT, looking a little RIGHT.
+BOTTOM LEFT: slight RIGHT three-quarter; silver disks on screen LEFT.
+BOTTOM CENTER: RIGHT three-quarter; silver disks on screen LEFT.
+BOTTOM RIGHT: strong RIGHT three-quarter/profile matching image3; silver disks on screen LEFT.
+Do NOT reverse these directions. All nine cells contain a COMPLETE physically connected arm and pedestal, no head-only cutouts. Every upper assembly rotates coherently around the SAME vertical pedestal axis; don't move the shoulder sideways on the base. Stationary round pedestal is identical in every cell (same shape, green panel on screen front-left, same white glint) with exactly aligned bottom y and center x within each cell. Consistent head size and arm link lengths, closed fingers, crisp 2D ink outlines, painted silver highlights, exact friendly crescent eyes with the dark cutout on left/upper-left. No text, no labels, no 3D rendering or sculpture lighting. True transparent alpha.

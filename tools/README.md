@@ -9,6 +9,7 @@
 | `play_daily` | 单份 CSV 检查与试播 | 默认先查看 `--help`，实机播放需明确选择 |
 | `play_dance` | 舞蹈数据整理与保护保持试播 | `prepare 原始.csv`、`inspect 处理后.json`、`play 处理后.json --supported`；保留时长并缩小幅度 |
 | `dance` | 基础舞蹈逐组试播 | [当前 10 组动作](../assets/docs/DANCE_LIBRARY.md)；`--list` 菜单，`--check` 离线检查，`--supported` 实机终端 |
+| `dance_sequence` | 连续实机动作组合 | `check` 离线校验，`preview` 曲线预览，`play 编号… --supported`；`play --random 5 --supported` 随机五组，`--seed` 复现 |
 | `daily` | 中文 Daily 动作终端 | [动作命令](../assets/docs/DAILY_COMMANDS.md) |
 
 ## 实机工具分层
@@ -18,9 +19,13 @@
 | `rs_dance_record.py`、`daily_actions.py` | 动作名称、交互命令和录制规则 |
 | `rs_gravity_record.py` | 重力补偿、反馈采样、日志、片段导出 |
 | `rs_motion.py` | 通用曲线、极值检查与时间缩放，不发送电机指令 |
+| `rs_motion_timewarp.py` | 04 原路径的平滑变速时钟、链式导数和 C5 自适应多项式导出 |
+| `rs_daily_nuzzle.py` | 03 下探完成后 J5 左右一轮再抬起，重复两次，C2 多项式及离线编排 |
 | `rs_gravity_play.py` | CSV 导入、运动控制和单段播放 |
 | `rs_dance_play.py` | 独立生成舞蹈处理版本，校验来源，保留节奏并约束幅度 |
 | `rs_dance_library.py`、`rs_dance_console.py` | 唯一动作库的加载、身份校验、逐组播放与保护保持 |
+| `rs_dance_sequence.py`、`rs_dance_sequence_cli.py`、`plot_dance_sequence.py` | 动作首尾窗口、五次 Hermite 衔接、单时钟组合执行和离线关节曲线 |
+| `export_dance_c5.py` | 十组动作与 100 种连接导出为 C5 多项式，检查原速/半速的 C 浮点误差、极值和模型约束 |
 | `rs_dance_motion.py`、`rs_dance_plan.py` | 关节样条、Daily 首尾、90°/2 秒夹爪脉冲、同步播放轨迹 |
 | `rs_dance_nod.py`、`rs_dance_cute.py`、`rs_dance_steady.py` | 当前双点头、拟人动作和双来回摇摆的生成与验证 |
 | `rs_dance_spatial.py` | 蛇形波、稳定朝向与空间 8 字的运动学检查 |
@@ -39,6 +44,10 @@
 
 ## 资源工具
 
-`build_screen_preview.py` 生成固件动画，复用 `dance_assets.py`、`cavity_background.py` 和 `interpolate_turn.py`。其余生成、预览、字体、预算与打包命令见 [工具说明](../assets/docs/TOOLS.md)。
+`build_screen_preview.py` 生成固件动画，复用 `dance_assets.py` 的 RGBA 覆盖率与索引压缩；已审核舞蹈渲染通过 `install_dance_cartoon.py --reviewed` 安装当前已确认的整套预览（含 08/09 独立渲染）；其他整套渲染可用 `--input 目录` 安装 GIF 和透明 PNG 源帧。其余生成、预览、字体、预算与打包命令见 [工具说明](../assets/docs/TOOLS.md)。
+
+08 当前使用 `render_dance_whole_turn.py`：直接播放 `assets/images/source/dance/rigid_turn/` 的19张完整角色原画，不使用局部形变、光流或叠图。保留两轮摇摆和8.74秒时长，屏幕侧转终点收至62°，避开头部过窄的极侧面。重建先运行 `python3 -B tools/prepare_dance_rigid_turn.py`，再运行 `python3 -B tools/render_dance_whole_turn.py`。09和实机动作数据不改。
+
+运动核对资料：08、09 的三维运动和卡通实体预览由 `export_dance_3d.py`、`render_dance_3d.py`、`render_dance_toon3d.py` 生成；`build_dance_3d_viewer.py` 生成可旋转 CAD 查看器。旧 `render_dance_illustrated.py` 的二维锚点适配已退出预览入口。[重建步骤和外观映射说明](../assets/models/rebot_rs/README.md)。这些工具不连接 CAN，也不替换固件素材。
 
 命令入口保持在本目录，避免修改已有终端命令。Python 缓存不属于源码，可随时删除；诊断日志和原始录制不要混入工具目录。

@@ -22,7 +22,7 @@
   },
   "NUZZLE": {
     "gif_s": 6.0,
-    "motion_s": 9.539894648531023,
+    "motion_s": 9.680262599376384,
     "matched": false,
     "path_preserved": true,
     "fixed_gripper_timing": true,
@@ -33,7 +33,7 @@
       },
       {
         "name": "recorded_gesture",
-        "duration_s": 8.25963204915464
+        "duration_s": 8.4
       },
       {
         "name": "generated_return_to_idle",
@@ -43,7 +43,7 @@
   },
   "TILT": {
     "gif_s": 5.0,
-    "motion_s": 11.438579317663288,
+    "motion_s": 7.6225413485740745,
     "matched": false,
     "path_preserved": true,
     "fixed_gripper_timing": true,
@@ -54,7 +54,7 @@
       },
       {
         "name": "recorded_gesture",
-        "duration_s": 10.686467815168994
+        "duration_s": 6.87042984607978
       },
       {
         "name": "generated_return_to_idle",

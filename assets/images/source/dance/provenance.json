@@ -1,0 +1,15 @@
+{
+  "archive": "/home/verser/Documents/Gifs/robot_dance_2d_perspective_v4.zip",
+  "archive_sha256": "95fdfef7783ad1f289dc0f28b68a464fff9a9fad88d4f40f62b087136cde96de",
+  "source": {
+    "draw_robot.py": "48b1d886c3dfa52f7d7a0879e37c92aa1bbb229da9e82ee4ee7988a37605c2cd",
+    "package.py": "1a91df2eed6f7045d1b278adb9806dab333776cdb5df2589a826a664771bcfc8",
+    "neutral.svg": "c14fb982d0dd339a41e527f7e9b3c7b45309c26f0b8c0ec8337d5817386121e5",
+    "turn_renderer.py": "9deabcaf63867ae5e2e3b882a7761b2ede97beb9586c43982771381573bd0522",
+    "verify_geometry.py": "fe9cad94774bc2c647f1a4d491df3c86dadf04bf577f95ab21defb4e1b7f8c55",
+    "motions.json": "3de0672913fe612e535dfd4d9f7ae38eebabb192a04eb7d97deabb0ccd19cabd",
+    "export.py": "d7e63cd0eba333b8f618f84b2611ecb1279359bed992c111a3dd9991ae7f9adb",
+    "artwork.py": "aaecb613a80f676e00755b970c9a1de233bbb26463b3802e15c9da33225ba548"
+  },
+  "matching_original_gif_sha256": "c419c553452c96c6bb39c77e991c15f7f0e2d6be921afcac351e4f4be18bb78d"
+}

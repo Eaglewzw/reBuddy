@@ -109,6 +109,27 @@ def indexed_frame(image, palette_rgb, cavities=()):
     return indices.tobytes() + alpha.tobytes(), pixels
 
 
+def indexed_rgba_frame(image, palette_rgb, alpha_levels=16):
+    """Use renderer alpha directly, including enclosed gaps and white details.
+
+    Quantize coverage first, then matte with that same alpha. The native device
+    compositor recovers premultiplied foreground before bilinear reconstruction.
+    """
+    rgba=image.convert('RGBA')
+    if alpha_levels<2:raise ValueError('alpha needs at least two levels')
+    alpha=np.asarray(rgba.getchannel('A'),dtype=float)
+    step=255/(alpha_levels-1)
+    alpha=np.rint(np.rint(alpha/step)*step).clip(0,255).astype(np.uint8)
+    rgba.putalpha(Image.fromarray(alpha))
+    matte=Image.new('RGBA',rgba.size,(255,255,255,255))
+    rgb=Image.alpha_composite(matte,rgba).convert('RGB')
+    palette=Image.new('P',(1,1));palette.putpalette(palette_rgb)
+    indexed=rgb.quantize(palette=palette,dither=0)
+    pixels=rgb565_array(indexed)
+    indices=np.asarray(indexed).copy();indices[alpha==0]=0
+    return indices.tobytes()+alpha.tobytes(),pixels
+
+
 def composite(planes, palette565, key, room):
     count = room.size
     data = np.frombuffer(planes, dtype=np.uint8)
@@ -122,3 +143,30 @@ def composite(planes, palette565, key, room):
     result[alpha == 0] = room[alpha == 0]
     result[alpha == 255] = pixels[alpha == 255]
     return result.astype('<u2').tobytes()
+
+
+def composite_native(planes, palette565, key, room, size):
+    """Reconstruct a native square with fixed-point premultiplied bilinear alpha.
+
+    Coordinates/rounding mirror the C decoder; only the central 240px square is
+    touched, so transparent pixels and the room borders stay byte-exact.
+    """
+    n=size*size;data=np.frombuffer(planes,dtype=np.uint8)
+    indices=data[:n].reshape(size,size);alpha=data[n:].reshape(size,size).astype(np.int32)
+    rgb=channels(np.asarray(palette565,dtype=np.uint16)[indices])
+    matte=channels(np.array(key,dtype=np.uint16))
+    premul=np.clip(rgb-((255-alpha[...,None])*matte)//255,0,alpha[...,None])
+    source=np.concatenate((premul,alpha[...,None]),axis=-1).astype(np.uint32)
+    coord=np.clip(((2*np.arange(240)+1)*size*128)//240-128,0,(size-1)*256)
+    lo=coord//256;hi=np.minimum(lo+1,size-1);weight=coord%256
+    wx=weight[None,:,None];wy=weight[:,None,None]
+    values=(source[lo[:,None],lo[None,:]]*(256-wx)*(256-wy)+
+            source[lo[:,None],hi[None,:]]*wx*(256-wy)+
+            source[hi[:,None],lo[None,:]]*(256-wx)*wy+
+            source[hi[:,None],hi[None,:]]*wx*wy+32768)//65536
+    a=values[:,:,3];background=channels(room[:,40:280]).astype(np.uint32)
+    c=np.minimum(255,values[:,:,:3]+((255-a[...,None])*background)//255)
+    result=((c[:,:,0]>>3)<<11)|((c[:,:,1]>>2)<<5)|(c[:,:,2]>>3)
+    result[a==0]=room[:,40:280][a==0]
+    out=room.copy();out[:,40:280]=result
+    return out.astype('<u2').tobytes()

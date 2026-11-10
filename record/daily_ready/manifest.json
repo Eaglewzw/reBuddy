@@ -105,11 +105,11 @@
       "exit": "ATTENTIVE_ENABLED",
       "generated_return": true,
       "gripper": "idle opening",
-      "duration_s": 9.539894648531023,
+      "duration_s": 9.680262599376384,
       "plan_file": "nuzzle.json",
-      "plan_sha256": "2abb2851e83d0a0463c50ac6836b0f597f994f0ce75d9b506222bac1bd8b1854",
+      "plan_sha256": "055d6395efc089305ad4f2e61e7efcd3243d6a6c35a1f76d82b90d1fcb355006",
       "preview_csv": "nuzzle.csv",
-      "preview_sha256": "16ccc81f963a45cb589cf92ac60e8198a66cf45c8926a326058918e1737eae8d",
+      "preview_sha256": "0968491d868090611547862e5c65248d4c4ec23a21d94a92792dc2c857eb9e80",
       "stages": [
         {
           "name": "idle_to_recording",
@@ -117,7 +117,7 @@
         },
         {
           "name": "recorded_gesture",
-          "duration_s": 8.25963204915464
+          "duration_s": 8.4
         },
         {
           "name": "generated_return_to_idle",
@@ -127,7 +127,7 @@
       "hardware_accepted": false,
       "gif_timing": {
         "gif_s": 6.0,
-        "motion_s": 9.539894648531023,
+        "motion_s": 9.680262599376384,
         "matched": false,
         "path_preserved": true,
         "fixed_gripper_timing": true,
@@ -138,7 +138,7 @@
           },
           {
             "name": "recorded_gesture",
-            "duration_s": 8.25963204915464
+            "duration_s": 8.4
           },
           {
             "name": "generated_return_to_idle",
@@ -166,11 +166,11 @@
       "exit": "ATTENTIVE_ENABLED",
       "generated_return": true,
       "gripper": "idle opening",
-      "duration_s": 11.438579317663288,
+      "duration_s": 7.6225413485740745,
       "plan_file": "tilt.json",
-      "plan_sha256": "9a8ffed23efcd4a7712a1c25e63eaba1d17f67c55b884aad7784df1f15c1f97a",
+      "plan_sha256": "311c9a4835a14e92d0ccf8c7e8c1b97b4ccbb2a746c1b0762579c6a1a959ed69",
       "preview_csv": "tilt.csv",
-      "preview_sha256": "af7518aacd67aeacc900a031e77dc390dfcf0cbceec3fa32c521680f0c5efcad",
+      "preview_sha256": "cbf522b992c1af04b053a4b0b071a86d16e4e2a207d150f58d3017870b40bd95",
       "stages": [
         {
           "name": "idle_to_recording",
@@ -178,7 +178,7 @@
         },
         {
           "name": "recorded_gesture",
-          "duration_s": 10.686467815168994
+          "duration_s": 6.87042984607978
         },
         {
           "name": "generated_return_to_idle",
@@ -188,7 +188,7 @@
       "hardware_accepted": false,
       "gif_timing": {
         "gif_s": 5.0,
-        "motion_s": 11.438579317663288,
+        "motion_s": 7.6225413485740745,
         "matched": false,
         "path_preserved": true,
         "fixed_gripper_timing": true,
@@ -199,7 +199,7 @@
           },
           {
             "name": "recorded_gesture",
-            "duration_s": 10.686467815168994
+            "duration_s": 6.87042984607978
           },
           {
             "name": "generated_return_to_idle",

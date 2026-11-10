@@ -2,14 +2,61 @@
 #include "choreo_store.h"
 #include "pet_assets.h"
 #include "rb_pet.h"
+#include "choreo_motion.h"
+#include "src/misc/cache/instance/lv_image_cache.h"
+#include "src/misc/cache/instance/lv_image_header_cache.h"
+#include <stdlib.h>
+#ifdef ESP_PLATFORM
+#include "esp_heap_caps.h"
+#endif
 #include <stdio.h>
 #include <string.h>
 
 extern const lv_font_t rb_choreo_font,rb_choreo_small_font;
-enum page { LIBRARY,EDITOR,ADD,PARAMS,TEMPO,UNSAVED,REPLACE,PLAY_CHOICE,PREVIEW,ERROR_PAGE };
+enum page { LIBRARY,EDITOR,ADD,PARAMS,TEMPO,UNSAVED,REPLACE,PLAY_CHOICE,PREVIEW,MOTION,ERROR_PAGE };
 enum command { NONE,BACK,OPEN,REBUILD,SAMPLE,CONFIRM_REPLACE,SAVE,SAVE_EXIT,DISCARD,
     CONTINUE,ADD_PAGE,GROUP,ADD_ACTION,SELECT_STEP,MOVE_UP,MOVE_DOWN,DELETE_STEP,
-    HOLD_LESS,HOLD_MORE,REPEAT_LESS,REPEAT_MORE,TEMPO_PAGE,SET_TEMPO,PLAY_PAGE,PLAY,STOP };
+    HOLD_LESS,HOLD_MORE,REPEAT_LESS,REPEAT_MORE,TEMPO_PAGE,SET_TEMPO,PLAY_PAGE,PLAY,STOP,MOTOR_PLAY,MOTOR_STOP,MOTOR_HOME };
+static rb_choreo_motion_backend_t motion;
+void rb_choreo_ui_set_motion(const rb_choreo_motion_backend_t *backend)
+{ motion=backend?*backend:(rb_choreo_motion_backend_t){0}; }
+enum { THUMB_W=96, THUMB_H=64, THUMB_COUNT=10 };
+static lv_image_dsc_t thumbs[THUMB_COUNT];
+static lv_obj_t *thumb_widgets[THUMB_COUNT];
+static unsigned thumb_ids[THUMB_COUNT],thumb_pending,thumb_total;
+static void free_thumbs(void)
+{
+    for(unsigned i=0;i<THUMB_COUNT;++i) if(thumbs[i].data) {
+        lv_image_cache_drop(&thumbs[i]);lv_image_header_cache_drop(&thumbs[i]);
+        free((void *)thumbs[i].data);memset(&thumbs[i],0,sizeof(thumbs[i]));
+    }
+    memset(thumb_widgets,0,sizeof(thumb_widgets));thumb_pending=thumb_total=0;
+}
+static const lv_image_dsc_t *thumbnail(unsigned number,unsigned id)
+{
+    if(number>=THUMB_COUNT || id>=sizeof(rb_choreo_clip_map))return NULL;
+    unsigned clip_index=rb_choreo_clip_map[id];
+    if(clip_index==UINT8_MAX)return NULL;
+    const rb_clip_meta_t *clip=&rb_clips[clip_index];
+    const rb_frame_meta_t *meta=NULL;
+    unsigned frame=clip->frames[clip->count/3];
+    const lv_image_dsc_t *source=rb_assets_dance_frame(frame,&meta);
+    if(!source || meta!=&rb_frames[frame])return NULL;
+    /* Own each small bitmap: decoder slots are reused by the next card. */
+#ifdef ESP_PLATFORM
+    uint16_t *pixels=heap_caps_malloc(THUMB_W*THUMB_H*2,MALLOC_CAP_SPIRAM|MALLOC_CAP_8BIT);
+#else
+    uint16_t *pixels=malloc(THUMB_W*THUMB_H*2);
+#endif
+    if(!pixels)return NULL;
+    const uint16_t *src=(const uint16_t *)source->data;
+    for(unsigned y=0;y<THUMB_H;++y)for(unsigned x=0;x<THUMB_W;++x)
+        pixels[y*THUMB_W+x]=src[(y*3)*RB_FRAME_WIDTH+16+x*3];
+    thumbs[number]=(lv_image_dsc_t){.header={.magic=LV_IMAGE_HEADER_MAGIC,
+        .cf=LV_COLOR_FORMAT_RGB565,.w=THUMB_W,.h=THUMB_H,.stride=THUMB_W*2},
+        .data_size=THUMB_W*THUMB_H*2,.data=(const uint8_t *)pixels};
+    return &thumbs[number];
+}
 static struct {
     lv_obj_t *root,*image,*progress,*stop,*bar;
     void (*on_exit)(void *); void *context;
@@ -22,6 +69,9 @@ static struct {
     rb_choreo_plan_t plan;
     rb_choreo_player_t player;
     unsigned frame;
+    float motion_duration;
+    uint64_t motion_status_at;
+    bool motion_active,motion_status_lost;
     char notice[128];
 } ui;
 static const char *const tempos[]={"慢","标准","快"};
@@ -71,6 +121,7 @@ static void header(const char *title,bool save)
 static const char *store_error(rb_choreo_store_result_t status)
 {
     switch (status) {
+    case RB_CHOREO_STORE_OLD_LIBRARY:return "作品使用旧版动作库。原数据已保留，请返回后选择重建。";
     case RB_CHOREO_STORE_VERSION:return "作品版本不兼容，已保留原数据。";
     case RB_CHOREO_STORE_CORRUPT:return "作品数据损坏，无法打开。";
     case RB_CHOREO_STORE_INVALID:return "作品参数无效，请检查后重试。";
@@ -96,7 +147,7 @@ static void fresh_work(void)
 static void close_page(void)
 {
     void (*callback)(void *)=ui.on_exit; void *context=ui.context;
-    lv_obj_delete(ui.root); ui.root=NULL; ui.command=NONE;
+    lv_obj_delete(ui.root);free_thumbs(); ui.root=NULL; ui.command=NONE;
     if (callback) callback(context);
 }
 static void back(void)
@@ -106,6 +157,10 @@ static void back(void)
     case EDITOR:ui.page=ui.dirty?UNSAVED:LIBRARY;break;
     case ADD:case PARAMS:case TEMPO:case PLAY_CHOICE:ui.page=EDITOR;break;
     case PREVIEW:rb_choreo_player_stop(&ui.player,ui.now);ui.page=EDITOR;break;
+    case MOTION:
+        if(ui.motion_active) {if(motion.stop)motion.stop();}
+        else ui.page=EDITOR;
+        break;
     case UNSAVED:ui.page=EDITOR;break;
     case REPLACE:ui.page=LIBRARY;break;
     case ERROR_PAGE:ui.page=ui.error_return;break;
@@ -199,6 +254,14 @@ static void handle(enum command command,int arg)
         ui.frame=UINT32_MAX;ui.page=PREVIEW;break;
     }
     case STOP:rb_choreo_player_stop(&ui.player,ui.now);break;
+    case MOTOR_PLAY: {
+        if(ui.faulted || !motion.play) {error_page("机械臂暂不可用，请先恢复控制。",PLAY_CHOICE);break;}
+        const char *error=motion.play(&ui.work,&ui.motion_duration);
+        if(error) {error_page(error,PLAY_CHOICE);break;}
+        ui.motion_active=true;ui.motion_status_at=ui.now;ui.motion_status_lost=false;ui.page=MOTION;break;
+    }
+    case MOTOR_STOP:if(motion.stop)motion.stop();break;
+    case MOTOR_HOME:if(motion.home)motion.home();break;
     default:break;
     }
 }
@@ -219,19 +282,41 @@ static lv_obj_t *list(int y,int h)
 static void draw_library(void)
 {
     header("我的编排",false);
-    label(ui.root,242,15,70,"最多10条",true);
-    lv_obj_t *items=list(48,140);
+    label(ui.root,186,15,128,"10个 · 滑动选择",true);
+    lv_obj_t *items=list(44,188);
     for (unsigned i=0;i<RB_CHOREO_SLOTS;++i) {
         rb_choreo_work_t work; char value[80];
         rb_choreo_store_result_t result=rb_choreo_store_load(i,&work);
         bool saved=result==RB_CHOREO_STORE_OK;
-        bool rebuild=saved || result==RB_CHOREO_STORE_CORRUPT;
+        bool rebuild=saved || result==RB_CHOREO_STORE_CORRUPT || result==RB_CHOREO_STORE_OLD_LIBRARY;
         if (saved) snprintf(value,sizeof(value),"%u  %s · %u 步",i+1,work.name,work.count);
-        else snprintf(value,sizeof(value),"%u  %s",i+1,result==RB_CHOREO_STORE_EMPTY?"新建作品":"作品无法读取");
-        button(items,0,(int)i*48,rebuild?224:296,40,value,OPEN,(int)i,true,0xffffff);
-        if (rebuild) button(items,232,(int)i*48,64,40,"重建",REBUILD,(int)i,true,0xe8e8da);
+        else snprintf(value,sizeof(value),"%u  %s",i+1,result==RB_CHOREO_STORE_EMPTY?"新建作品":
+                      result==RB_CHOREO_STORE_OLD_LIBRARY?"旧版作品":"作品无法读取");
+        lv_obj_t *card=button(items,(i%2)*152,(i/2)*94,144,88,"",OPEN,(int)i,true,0xffffff);
+        lv_obj_t *title=label(card,2,66,140,value,true);
+        lv_label_set_long_mode(title,LV_LABEL_LONG_DOT);
+        lv_obj_set_height(title,18);lv_obj_set_style_text_align(title,LV_TEXT_ALIGN_CENTER,0);
+        if(saved && work.count) {
+            unsigned cover=RB_CHOREO_START;
+            for(unsigned j=0;j<work.count;++j) {
+                const rb_choreo_action_t *action=rb_choreo_action(work.steps[j].action_id);
+                if(action && action->group==RB_CHOREO_PERFORMANCE) {cover=action->action_id;break;}
+            }
+            lv_obj_t *image=lv_image_create(card);
+            lv_obj_set_pos(image,0,0);lv_obj_remove_flag(image,LV_OBJ_FLAG_CLICKABLE);
+            thumb_widgets[thumb_total]=image;thumb_ids[thumb_total++]=cover;
+            rb_choreo_plan_t plan;
+            if(rb_choreo_compile(&work,&plan,NULL)==RB_CHOREO_OK) {
+                snprintf(value,sizeof(value),"%.0fs",plan.total_ms/1000.0);
+                label(card,99,2,43,value,true);label(card,99,17,43,"预览",true);
+            }
+        } else if(result==RB_CHOREO_STORE_EMPTY) {
+            panel(card,60,19,24,4,0x91aa47,2);panel(card,70,9,4,24,0x91aa47,2);
+            lv_obj_t *hint=label(card,4,40,136,"点击新建",true);
+            lv_obj_set_style_text_align(hint,LV_TEXT_ALIGN_CENTER,0);
+        } else label(card,10,22,84,saved?"空作品":"待重建",false);
+        if(rebuild) button(card,98,34,42,28,"重建",REBUILD,(int)i,true,0xe8e8da);
     }
-    label(ui.root,12,204,296,"共10个编排 · 上下滑动查看",true);
 }
 static void draw_editor(void)
 {
@@ -263,20 +348,28 @@ static void draw_editor(void)
     }
     button(ui.root,8,198,104,34,ui.work.count<RB_CHOREO_MAX_STEPS?"添加动作":"已满 8 步",ADD_PAGE,0,ui.work.count<RB_CHOREO_MAX_STEPS,0xd8ef79);
     button(ui.root,120,198,72,34,"节奏",TEMPO_PAGE,0,true,0xe8e8da);
-    button(ui.root,200,198,112,34,"预览",PLAY_PAGE,0,valid,0xe4edbf);
+    button(ui.root,200,198,112,34,"播放",PLAY_PAGE,0,valid,0xe4edbf);
 }
 static void draw_add(void)
 {
     header("添加动作",false);
-    label(ui.root,12,48,296,"共10组舞蹈 · 上下滑动查看",true);
-    lv_obj_t *items=list(72,118); int row=0;
+    label(ui.root,186,15,128,"10组 · 滑动选择",true);
+    lv_obj_t *items=list(44,188); unsigned tile=0;
     for (unsigned i=0;i<rb_choreo_action_count;++i) {
         const rb_choreo_action_t *action=&rb_choreo_actions[i];
         if (action->group!=RB_CHOREO_PERFORMANCE) continue;
-        char value[80];snprintf(value,sizeof(value),"%s%s",action->name,action->available?"":" · 待素材");
-        button(items,0,row++*44,296,38,value,ADD_ACTION,action->action_id,action->available,0xffffff);
+        lv_obj_t *card=button(items,(tile%2)*152,(tile/2)*94,144,88,"",ADD_ACTION,
+            action->action_id,action->available,0xffffff);
+        lv_obj_t *image=lv_image_create(card);
+        lv_obj_set_pos(image,24,0);lv_obj_remove_flag(image,LV_OBJ_FLAG_CLICKABLE);
+        thumb_widgets[tile]=image;thumb_ids[tile]=action->action_id;thumb_total=tile+1;
+        char value[32];snprintf(value,sizeof(value),"%02u",tile+1);label(card,4,4,24,value,true);
+        snprintf(value,sizeof(value),"%.1fs",action->duration_ms/1000.0);label(card,104,4,40,value,true);
+        lv_obj_t *name=label(card,2,66,140,action->name,true);
+        lv_obj_set_style_text_align(name,LV_TEXT_ALIGN_CENTER,0);
+        ++tile;
     }
-    button(ui.root,8,198,304,34,"＋ 停留积木",ADD_ACTION,RB_CHOREO_WAIT,true,0xe4edbf);
+    button(items,0,((tile+1)/2)*94,296,42,"＋ 停留积木",ADD_ACTION,RB_CHOREO_WAIT,true,0xe4edbf);
 }
 static void draw_params(void)
 {
@@ -304,7 +397,7 @@ static void draw_params(void)
 static void draw(void)
 {
     if (!ui.root) return;
-    lv_obj_clean(ui.root);ui.image=NULL;ui.progress=NULL;ui.stop=NULL;ui.bar=NULL;
+    lv_obj_clean(ui.root);free_thumbs();ui.image=NULL;ui.progress=NULL;ui.stop=NULL;ui.bar=NULL;
     switch (ui.page) {
     case LIBRARY:draw_library();break;
     case EDITOR:draw_editor();break;
@@ -314,7 +407,7 @@ static void draw(void)
         header("屏幕节奏",false);
         const char *names[]={"慢 · 约67 BPM","标准 · 100 BPM","快 · 125 BPM"};
         for (int i=0;i<3;++i) button(ui.root,8,48+i*46,304,38,names[i],SET_TEMPO,i,true,ui.work.tempo==i?0xd8ef79:0xffffff);
-        label(ui.root,12,197,296,"仅调整屏幕预览，实体节奏待标定",true);break;
+        label(ui.root,12,197,296,"实机：慢为半速，标准为原速\n快节奏仅用于屏幕预览",true);break;
     }
     case UNSAVED:
         header("修改尚未保存",false);
@@ -329,8 +422,18 @@ static void draw(void)
     case PLAY_CHOICE:
         header("预览与表演",false);
         button(ui.root,16,59,288,46,"屏幕预览",PLAY,0,!ui.faulted,0xd8ef79);
-        button(ui.root,16,121,288,46,"同步表演 · 待接入",NONE,0,false,0xe8e8da);
-        label(ui.root,20,186,280,"当前只播放屏幕动画\n机械臂动作与标定后续接入",true);break;
+        button(ui.root,16,121,288,46,motion.play?"机械臂播放":"机械臂未接入",MOTOR_PLAY,0,motion.play && !ui.faulted,0xe4edbf);
+        label(ui.root,20,186,280,"预览只播放动画\n机械臂播放将实际运动",true);break;
+    case MOTION:
+        header("机械臂表演",false);
+        ui.progress=label(ui.root,16,55,288,"正在准备动作",false);
+        lv_obj_set_height(ui.progress,54);lv_label_set_long_mode(ui.progress,LV_LABEL_LONG_DOT);
+        ui.image=label(ui.root,16,114,288,"",true);
+        label(ui.root,16,151,288,"停止后保持 · 回零后失能",true);
+        ui.bar=panel(ui.root,8,179,1,4,0x96b833,0);
+        button(ui.root,8,198,148,34,"停止保持",MOTOR_STOP,0,true,0xf1c6ad);
+        button(ui.root,164,198,148,34,"回零",MOTOR_HOME,0,true,0xe8e8da);
+        break;
     case PREVIEW:
         /* The room is static. Clip frame invalidations to the 240px dance
            viewport instead of transmitting unchanged side walls each frame. */
@@ -374,6 +477,7 @@ void rb_choreo_ui_fault(void)
 {
     if (!ui.root || ui.faulted) return;
     ui.faulted=true;
+    if(ui.page==MOTION && motion.stop)motion.stop();
     if (ui.player.running) { rb_choreo_player_stop(&ui.player,ui.now);draw(); }
 }
 void rb_choreo_ui_update(uint64_t now)
@@ -383,6 +487,35 @@ void rb_choreo_ui_update(uint64_t now)
     if (ui.command!=NONE) {
         enum command command=ui.command;int arg=ui.arg;ui.command=NONE;
         handle(command,arg);if (!ui.root) return;draw();
+    }
+    if((ui.page==ADD || ui.page==LIBRARY) && thumb_pending<thumb_total) {
+        /* One decode per UI tick keeps controller heartbeats and touch live. */
+        unsigned tile=thumb_pending++;
+        const lv_image_dsc_t *pic=thumbnail(tile,thumb_ids[tile]);
+        if(pic)lv_image_set_src(thumb_widgets[tile],pic);
+    }
+    if(ui.page==MOTION) {
+        rb_choreo_motion_status_t s={0};char value[128];
+        if(!motion.status || !motion.status(&s)) {
+            /* The status API takes the controller mutex without waiting.
+             * A busy control tick is not a fault; sustained loss requests hold. */
+            if(now-ui.motion_status_at>500 && !ui.motion_status_lost) {
+                if(motion.stop)motion.stop();
+                ui.motion_status_lost=true;
+                lv_label_set_text(ui.progress,"控制状态暂不可用，已请求停止保持");
+            }
+            ui.motion_active=true;
+            return;
+        }
+        ui.motion_status_at=now;ui.motion_status_lost=false;
+        ui.motion_active=s.active;
+        snprintf(value,sizeof(value),"%s%s%s",s.state?s.state:"准备中",s.error?"\n":"",s.error?s.error:"");
+        lv_label_set_text(ui.progress,value);
+        const rb_choreo_action_t *action=s.number?rb_choreo_action(RB_CHOREO_DANCE_NOD+s.number-1):NULL;
+        snprintf(value,sizeof(value),"%s  %.1f / %.1f 秒",s.bridge?"平滑衔接":action?action->name:"待机",(double)s.elapsed_s,(double)ui.motion_duration);
+        lv_label_set_text(ui.image,value);
+        float phase=s.phase<0?0:s.phase>1?1:s.phase;
+        lv_obj_set_width(ui.bar,1+(int)(303*phase));return;
     }
     if (ui.page!=PREVIEW) return;
     bool running=ui.player.running;

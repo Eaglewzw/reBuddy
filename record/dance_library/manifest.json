@@ -118,7 +118,7 @@
     0.0
   ],
   "dependencies": {
-    "/home/verser/esp32/reBuddy/record/daily_ready/manifest.json": "8337a9d5773fcdbca2a43c166ed4a5d6258aa3db800959032d0c5d9639110f18",
+    "/home/verser/esp32/reBuddy/record/daily_ready/manifest.json": "f80cd9f0138046df216568676f54f538ddd36d437e2af97245e5fb1bdf896b7d",
     "/home/verser/esp32/reBuddy/record/daily_ready/wake.json": "9ebbda15e801139c09be3e5eee7c4ee2bd680d07e57ccc24c5d2123fedc7945f",
     "/home/verser/esp32/reBuddy/record/daily_ready/rest.json": "b94cdb33b476e5b3941753f754087e9cdb607981d1f83541e0349d902f6bad07"
   },

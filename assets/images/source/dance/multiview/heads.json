@@ -1,0 +1,138 @@
+{
+  "schema": "rebuddy.multiview_heads.v1",
+  "size": [
+    512,
+    512
+  ],
+  "pixels_per_character_unit": 2,
+  "sheet_sha256": "869444f97602ce55619a2fd386321f1f15cb177c81feb443619da1a09184c23b",
+  "generation": "built-in image_gen; exact prompt in prompt.txt",
+  "views": [
+    {
+      "index": 0,
+      "view_deg": -80,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        451.67938931297715,
+        247.75572519083968
+      ],
+      "source": "imagegen turnaround sheet",
+      "sha256": "2578dfdde0f5e48203f1732492e9d69d86a2cf4f90528e9d80ae85e0db5d9184"
+    },
+    {
+      "index": 1,
+      "view_deg": -60,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        453.6455223880597,
+        250.54477611940297
+      ],
+      "source": "imagegen turnaround sheet",
+      "sha256": "eaa7f775e006c57f76c2b3baa591e444ea0c37e4ade2508d18dfa0cd63d8ce1f"
+    },
+    {
+      "index": 2,
+      "view_deg": -40,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        492.8736059479554,
+        240.92193308550188
+      ],
+      "source": "imagegen turnaround sheet",
+      "sha256": "3506a2872f4a30229730f6feb33a178857b00da118f53a98a1dd5f202560f793"
+    },
+    {
+      "index": 3,
+      "view_deg": -20,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        441.3370786516854,
+        231.73033707865167
+      ],
+      "source": "imagegen turnaround sheet",
+      "sha256": "5235cf22642b5052f447c3afd6c91cd522a65b2169390e8c1124b2b4fdda59a5"
+    },
+    {
+      "index": 4,
+      "view_deg": 0,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        142.0,
+        238.0
+      ],
+      "source": "imagegen turnaround sheet",
+      "sha256": "903eb9a8ebfce666d5dd2676da99fad30beb8a2533b068d320bcf1566024676e"
+    },
+    {
+      "index": 5,
+      "view_deg": 20,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        106.0,
+        240.0
+      ],
+      "source": "imagegen turnaround sheet",
+      "sha256": "f4d818318357f08a1fe65165258325acb1688dc2c996d1081872289e19c0504e"
+    },
+    {
+      "index": 6,
+      "view_deg": 40,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        104.0,
+        208.0
+      ],
+      "source": "original vector drawing",
+      "sha256": "2449c866f3c4642c5098c61a70f65add34edb85e2b585ba9eb9886432f4f6bac"
+    },
+    {
+      "index": 7,
+      "view_deg": 60,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        87.0,
+        244.0
+      ],
+      "source": "imagegen turnaround sheet",
+      "sha256": "50b99d851df0985558beb3679947576ef2f95eb872c0b1fe4b53345ecfee3fdb"
+    },
+    {
+      "index": 8,
+      "view_deg": 80,
+      "tip": [
+        280.0,
+        430.0
+      ],
+      "wrist": [
+        95.0,
+        265.0
+      ],
+      "source": "imagegen turnaround sheet",
+      "sha256": "a2a835eaba43cac767303c4b4a5e2cde10da66b15a89557feac4b67dfebee8bb"
+    }
+  ]
+}

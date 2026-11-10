@@ -13,7 +13,8 @@ typedef enum {
     RB_CHOREO_STORE_CORRUPT,
     RB_CHOREO_STORE_IO,
     RB_CHOREO_STORE_VERSION,
-    RB_CHOREO_STORE_INVALID
+    RB_CHOREO_STORE_INVALID,
+    RB_CHOREO_STORE_OLD_LIBRARY
 } rb_choreo_store_result_t;
 
 /* Keys are 0..19: two independently committed records for each of ten slots.

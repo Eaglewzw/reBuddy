@@ -38,6 +38,7 @@ CONFIG_LV_USE_SPINNER=n
 # Daily arm control is the normal firmware. Boot stays asleep and does not
 # enable any motor; only clicking the wake arrow starts physical WAKE.
 CONFIG_REBUDDY_ARM_DAILY_CONTROL=y
+CONFIG_REBUDDY_ARM_DANCE_CONTROL=y
 
 # Touch-only UI: GT911 touch-key inputs are unused.
 CONFIG_ESP_LCD_TOUCH_MAX_BUTTONS=0

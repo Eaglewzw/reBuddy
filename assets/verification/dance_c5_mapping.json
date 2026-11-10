@@ -1,0 +1,1119 @@
+{
+  "schema": "rebuddy.dance.c5.v1",
+  "hardware_tested": false,
+  "motor_output_enabled": false,
+  "data_sha256": "d619b7fd1c5a910c4cfbb3f1c403a3648eb42ef15f0eb1d2f423ac5eff75dc76",
+  "sources": {
+    "record/dance_library/manifest.json": "066833a19795ad3d19a150a143aa2923ce2ab5dcdf6957c807981ddd66a242fd",
+    "record/dance_library/00_start.json": "862d61e2a7c0e6a22c2fde31c805d0c652d30ee042a592e6006c35656d011954",
+    "record/dance_library/01_nod.json": "c2ad5ce386cad68b6a22c60d67526c718cd1526de3ecd7f8dbb98fc485866326",
+    "record/dance_library/02_hello.json": "18d8891efb4080a9726e0044eff0f34fd57180214e26ea2c44aa1e1c9ccc6a0b",
+    "record/dance_library/03_dip.json": "0ebccaea45ad5847f15b039abb39f24bdabdad38840e9a965fc449fe9a9b75d6",
+    "record/dance_library/04_reach.json": "e63169da5e5c6a62b5f5b5eb68be44943f1b8ec6ce8618268a7c7c498833d619",
+    "record/dance_library/05_nuzzle.json": "2db78b18113d3a19e76e442935cdd34b4fec7ef2ab0d9859e67a9de871fda026",
+    "record/dance_library/06_happy.json": "5bf66ad8701f3dc1b4f501b3b1e4cbe6e507e4e7c51e627cab791ba336e0a0b7",
+    "record/dance_library/07_wave.json": "4c32d81bfaf2fa7891ded389dca9e48909f5b89b76ca145f561e0012819d6c5e",
+    "record/dance_library/08_steady.json": "c39db147e24e0e87124bd26a5706edf594bea4b4935ce1cad0e8cc6369123fee",
+    "record/dance_library/09_eight.json": "7408d09d309612a620126b94261e4ee27bcea8e193801ff098767951283802a6",
+    "record/dance_library/10_pivot.json": "9ec257533aa31a12eb8c109c2efe7aaf9801242052fd9c655a7dad68f8c46d34",
+    "record/dance_library/11_end.json": "ab7065d30be3358ea5493357063d04293ee0a9203e1caf882a610f0d6c360d41",
+    "tools/rs_dance_sequence.py": "7b99bc0028f48be6604edf7f95e5e65d337b86d17d3d7f7736032faafb5de2e0",
+    "tools/export_dance_c5.py": "6487db9f233f2418680df400f4ccf4e34010b8bceb74a4903befe4bf1b7e65ac",
+    "components/rebuddy_core/src/rb_dance.c": "4695c4b8cbfe6436e83162702b33e9edf6b8e93de0c7e5467d1cf38b51d3074a"
+  },
+  "calibration_sha256": "60124cf3143977b9b45e9f0c27530fdf07a4ff789fa571a42cb403082b865b81",
+  "urdf_sha256": "5bdd810befb456e43222c5ed1fcc9c1a2e4a58100eeace1cbe42d8e023c64948",
+  "piece_counts": [
+    37,
+    37,
+    33,
+    23,
+    28,
+    37,
+    60,
+    72,
+    54,
+    112
+  ],
+  "polynomial_data_bytes": 87968,
+  "connection_count": 100,
+  "checks": {
+    "max_action_error_q_v_a": [
+      2.047715892183888e-06,
+      2.7007866786110668e-05,
+      0.0009045371482168107
+    ],
+    "max_join_error_q_v_a": [
+      5.893590534350457e-07,
+      3.174614295498035e-06,
+      1.3530994831922882e-05
+    ],
+    "tolerance_q_v_a": [
+      2e-05,
+      0.0003,
+      0.005
+    ],
+    "validated_native_joins": 200,
+    "validated_speeds": [
+      0.5,
+      1.0
+    ],
+    "native_plan_ram_bytes": 6264,
+    "actions": [
+      {
+        "number": 1,
+        "speed": 1.0,
+        "validation": {
+          "samples": 325,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            4.3026005479805674e-16,
+            0.37863920129661444,
+            5.717844356358228,
+            2.0113982301176025,
+            0.02560373059811176,
+            0.0008191270413591759
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.000747584367102763,
+            0.36600523344728564,
+            5.807154317758884,
+            2.053120594835237,
+            0.02559945282593666,
+            0.0008603088439253444
+          ],
+          "sampled_peak_velocity_rad_s": [
+            2.5822249383300575e-16,
+            1.916193169849284e-14,
+            8.9937373886728e-15,
+            0.8481754064559937,
+            2.865836715361419e-16,
+            7.510488942071171e-17,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            1.2511001891597762e-14,
+            9.042004991965946e-12,
+            5.976354394005012e-13,
+            1.97958505153656,
+            1.333590695013799e-14,
+            3.3138798220697053e-15,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 1,
+        "speed": 0.5,
+        "validation": {
+          "samples": 648,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            4.162853306424047e-16,
+            0.37864836025923476,
+            5.717844348441241,
+            2.0113982222006164,
+            0.025604077583072888,
+            0.0008191270679325598
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.00018692377040588478,
+            0.37548733904185094,
+            5.740027377484667,
+            2.0217454097720444,
+            0.02560299921590753,
+            0.0008269628988174171
+          ],
+          "sampled_peak_velocity_rad_s": [
+            1.2735737255498424e-16,
+            1.3157149116949443e-14,
+            4.481359521072174e-15,
+            0.4241192042827606,
+            1.4295315493806723e-16,
+            3.7474726128722824e-17,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            3.773588531225374e-15,
+            5.589800540842238e-13,
+            1.5029079055480649e-13,
+            0.49501392245292664,
+            4.900745015015565e-15,
+            1.3587565732723164e-15,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 2,
+        "speed": 1.0,
+        "validation": {
+          "samples": 328,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            5.329539498524078e-16,
+            2.0645304821977173,
+            5.717828061464371,
+            2.0119844045215434,
+            0.07695863664900758,
+            0.0008187038583676667
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.04534656991889181,
+            2.1641581684992426,
+            5.8093843644906435,
+            2.0517581570011267,
+            0.09818534957763755,
+            0.0010841708703554897
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.2598384916782379,
+            0.10472908616065979,
+            0.1676589548587799,
+            0.2116236686706543,
+            0.8163266181945801,
+            0.3626665472984314,
+            2.6973679065704346
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.3889666795730591,
+            0.18211127817630768,
+            0.2946854531764984,
+            0.45199447870254517,
+            1.926600694656372,
+            0.5492082834243774,
+            9.42337703704834
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 200,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 2,
+        "speed": 0.5,
+        "validation": {
+          "samples": 654,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            7.088396447498674e-16,
+            2.0645564059784567,
+            5.717828061464371,
+            2.011984199684213,
+            0.07696008401354676,
+            0.0008187062955540617
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.011336509922207158,
+            2.0894222616008182,
+            5.7336438255220195,
+            2.021865317613413,
+            0.08227173699258168,
+            0.0008839219988443798
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.12992654740810394,
+            0.0523633137345314,
+            0.08382930606603622,
+            0.10581579804420471,
+            0.4082454741001129,
+            0.18133920431137085,
+            1.348763346672058
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.0972449779510498,
+            0.04552656039595604,
+            0.07367689162492752,
+            0.11301975697278976,
+            0.4817432761192322,
+            0.13730692863464355,
+            2.356168031692505
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 400,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 3,
+        "speed": 1.0,
+        "validation": {
+          "samples": 285,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            5.26672422470828e-16,
+            2.777704918786133,
+            6.866971565222233,
+            2.0124041381907523,
+            0.04818613066056916,
+            0.0008191267308443786
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.08662720072850792,
+            3.8030804269690917,
+            7.458637301450077,
+            2.0737975720260593,
+            0.07261713499383786,
+            0.0010694184654155639
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.2964184880256653,
+            0.5701047778129578,
+            0.7068571448326111,
+            0.41911476850509644,
+            0.2161153107881546,
+            1.2721684449507883e-16,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.8618768453598022,
+            1.6112382411956787,
+            1.9800214767456055,
+            1.1735161542892456,
+            0.4649015963077545,
+            8.248219646081034e-15,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 3,
+        "speed": 0.5,
+        "validation": {
+          "samples": 569,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            5.26672422470828e-16,
+            2.777704918786133,
+            6.866971565222233,
+            2.0124615311551257,
+            0.04818613066056916,
+            0.0008191267308443786
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.021675432128961277,
+            3.034048795831874,
+            7.014149571595864,
+            2.024501204506668,
+            0.054262109517656906,
+            0.0008323983270729138
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.14821109175682068,
+            0.2851409614086151,
+            0.35342857241630554,
+            0.20963551104068756,
+            0.1080576553940773,
+            6.360842224753941e-17,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.21551190316677094,
+            0.4028095602989197,
+            0.49500536918640137,
+            0.2933790385723114,
+            0.11622539907693863,
+            4.358123427026725e-15,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 4,
+        "speed": 1.0,
+        "validation": {
+          "samples": 185,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            4.982294728422387e-16,
+            4.291855186984222,
+            7.039384230605275,
+            2.01154032234739,
+            0.07388178181088961,
+            0.0008139580560952411
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.2895275346486878,
+            4.650067028098744,
+            7.2591596020077285,
+            2.0115438210684577,
+            0.02566383186142944,
+            0.0009699463217605558
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.5964356064796448,
+            0.5076752305030823,
+            0.3510081470012665,
+            0.5199389457702637,
+            0.7445816993713379,
+            6.476052602214817e-17,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            1.4227203130722046,
+            1.0548127889633179,
+            0.8681700825691223,
+            1.3095864057540894,
+            1.9790480136871338,
+            1.6668827437587262e-14,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 4,
+        "speed": 0.5,
+        "validation": {
+          "samples": 368,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            5.94147236401485e-16,
+            4.292003195169863,
+            7.039395691580179,
+            2.011541763199058,
+            0.07388566674314212,
+            0.0008139580710499655
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.07237678025286996,
+            4.381561427655265,
+            7.09114319072073,
+            2.011422586457476,
+            0.060101263463596455,
+            0.0008283908770392416
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.2982577681541443,
+            0.25384649634361267,
+            0.17549610137939453,
+            0.2599826455116272,
+            0.37230947613716125,
+            5.2128654196573337e-17,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.35566776990890503,
+            0.2637062072753906,
+            0.21703477203845978,
+            0.32767537236213684,
+            0.495013952255249,
+            4.106298837742127e-15,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 5,
+        "speed": 1.0,
+        "validation": {
+          "samples": 234,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            6.856531957054758e-16,
+            3.472455606448052,
+            6.912711069662021,
+            2.0114749678288666,
+            0.12782843194817886,
+            0.0008138695673549254
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.08322550366693143,
+            3.4973571439392312,
+            6.995306879057477,
+            2.0113819352237465,
+            0.13788775681888418,
+            0.0011594232780548926
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.3981761336326599,
+            0.3654231131076813,
+            0.23934407532215118,
+            0.3918808698654175,
+            0.7963522672653198,
+            0.5972642302513123,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.98966383934021,
+            0.7367033958435059,
+            0.5028989911079407,
+            0.9992422461509705,
+            1.97932767868042,
+            1.484495759010315,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 5,
+        "speed": 0.5,
+        "validation": {
+          "samples": 467,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            6.856531957054758e-16,
+            3.472463475388806,
+            6.912711069662021,
+            2.0114761455482313,
+            0.12784611378665023,
+            0.0008138695673549254
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.02081178255570548,
+            3.4775939992617464,
+            6.909087110066634,
+            2.0113819352237465,
+            0.1303612953906494,
+            0.0008464136152597954
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.1991627812385559,
+            0.18273930251598358,
+            0.11967203766107559,
+            0.1959710568189621,
+            0.3983255624771118,
+            0.29874417185783386,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.2475167214870453,
+            0.18417584896087646,
+            0.12572474777698517,
+            0.24981056153774261,
+            0.4950334429740906,
+            0.37127506732940674,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 6,
+        "speed": 1.0,
+        "validation": {
+          "samples": 328,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            6.319771876227721e-16,
+            4.7207467095065425,
+            6.268060746169164,
+            2.0122741419036987,
+            0.07851993098798976,
+            0.0008190873790035205
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.022893007988947757,
+            5.6062482878457525,
+            6.76582879620162,
+            2.10728821506041,
+            0.08628560385121346,
+            0.0010819247062983414
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.1696673035621643,
+            0.40589094161987305,
+            0.5518158078193665,
+            0.5031095743179321,
+            0.1696673035621643,
+            0.2827788293361664,
+            2.6973679065704346
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.2872961759567261,
+            0.955114483833313,
+            1.3192293643951416,
+            1.160254716873169,
+            0.2872961759567261,
+            0.47882694005966187,
+            9.42337703704834
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 200,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 6,
+        "speed": 0.5,
+        "validation": {
+          "samples": 654,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            5.94994183913608e-16,
+            4.721012733682392,
+            6.268077300969504,
+            2.0123253039421,
+            0.0785233725124166,
+            0.0008190910604541091
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.005723103142167219,
+            4.9425491673504975,
+            6.38747451746101,
+            2.0344076969831613,
+            0.08046617445146313,
+            0.0008847305868986854
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.08483834564685822,
+            0.2029663473367691,
+            0.27590593695640564,
+            0.2515440583229065,
+            0.08483834564685822,
+            0.14139725267887115,
+            1.348763346672058
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.07182703167200089,
+            0.23884731531143188,
+            0.3298143446445465,
+            0.2900521457195282,
+            0.07182703167200089,
+            0.1197117269039154,
+            2.356168031692505
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 400,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 7,
+        "speed": 1.0,
+        "validation": {
+          "samples": 352,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            6.089678052730203e-16,
+            2.200715790487,
+            6.258532137609287,
+            2.0118639815257793,
+            0.1806036884708086,
+            0.0008191394742659388
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.11873706305276022,
+            2.617547065595617,
+            6.6110253916501245,
+            2.051685030045791,
+            0.15673647100303734,
+            0.0011504183939966559
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.533789873123169,
+            0.6256574988365173,
+            0.7710298299789429,
+            0.8896498680114746,
+            0.5630917549133301,
+            0.3558599352836609,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            1.1880701780319214,
+            1.2235209941864014,
+            1.7161012887954712,
+            1.980116844177246,
+            1.1011688709259033,
+            0.7920467257499695,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 7,
+        "speed": 0.5,
+        "validation": {
+          "samples": 702,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            5.329533984542879e-16,
+            2.200944130435992,
+            6.258557050387261,
+            2.011864081872697,
+            0.18062564927203206,
+            0.0008191401592999436
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.02969549400069295,
+            2.3051004311904766,
+            6.34454186745739,
+            2.0199924451830418,
+            0.17452446215761538,
+            0.0008962083766571391
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.2669171690940857,
+            0.31288740038871765,
+            0.385547012090683,
+            0.4448619484901428,
+            0.28159865736961365,
+            0.17794477939605713,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.2970172166824341,
+            0.3059506118297577,
+            0.429024875164032,
+            0.49502864480018616,
+            0.2753555476665497,
+            0.19801147282123566,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 8,
+        "speed": 1.0,
+        "validation": {
+          "samples": 439,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            4.294131072859336e-16,
+            0.3065871392695436,
+            5.718998523497241,
+            2.0125523972566173,
+            0.07381014819849559,
+            0.0008138757157218993
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.11408486255895488,
+            0.30378563442270035,
+            5.732784528746838,
+            2.012219414182098,
+            0.0869999988991561,
+            0.0008164261047404368
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.9757438898086548,
+            8.151116636040748e-15,
+            3.181055611522869e-14,
+            0.046511199325323105,
+            0.9695294499397278,
+            0.11100024729967117,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            1.9801239967346191,
+            4.892162521440147e-13,
+            9.576855367759984e-13,
+            0.17286300659179688,
+            1.9674736261367798,
+            0.2830066978931427,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 8,
+        "speed": 0.5,
+        "validation": {
+          "samples": 876,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            4.1797922566665095e-16,
+            0.3065989565492895,
+            5.7190018453922,
+            2.0125557191515755,
+            0.07381330689890031,
+            0.0008138757512037316
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.028521409286943234,
+            0.3058996082133951,
+            5.722445161452336,
+            2.012420774561093,
+            0.077098515184257,
+            0.0008145099452889437
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.48789623379707336,
+            7.796823082995008e-15,
+            1.6207936482195463e-14,
+            0.023259954527020454,
+            0.4847875237464905,
+            0.055501602590084076,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.49503520131111145,
+            1.5389248035624359e-12,
+            1.614152821821646e-12,
+            0.043243177235126495,
+            0.49187228083610535,
+            0.07075846940279007,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 9,
+        "speed": 1.0,
+        "validation": {
+          "samples": 256,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            5.2829564833011e-16,
+            3.2626008798420076,
+            6.705327362540354,
+            2.0115783963707985,
+            0.08066270835059483,
+            0.000818616553629175
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.14806354572887184,
+            3.9217817240208555,
+            7.169168279809101,
+            2.1224406657695964,
+            0.0751775271354915,
+            0.0011419177389525301
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.618233323097229,
+            0.6787108182907104,
+            0.4697640836238861,
+            0.5213636755943298,
+            0.41103294491767883,
+            0.3796559274196625,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            1.6282975673675537,
+            1.9801000356674194,
+            1.735645055770874,
+            1.6497982740402222,
+            1.0129443407058716,
+            0.9162833094596863,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 9,
+        "speed": 0.5,
+        "validation": {
+          "samples": 511,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            5.2829564833011e-16,
+            3.2626008798420076,
+            6.705327362540354,
+            2.0115783963707985,
+            0.08067684517331362,
+            0.000818616553629175
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.037015886432218106,
+            3.420433569173492,
+            6.819233584371563,
+            2.038895198877939,
+            0.07914232265071562,
+            0.0008930862078916919
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.3091166615486145,
+            0.3394935727119446,
+            0.23502527177333832,
+            0.2609056830406189,
+            0.20551647245883942,
+            0.1898479014635086,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.4070743918418884,
+            0.49502500891685486,
+            0.43393880128860474,
+            0.41244956851005554,
+            0.2532360851764679,
+            0.2292288839817047,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 10,
+        "speed": 1.0,
+        "validation": {
+          "samples": 839,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            6.992054586956853e-16,
+            3.0239731894604516,
+            6.94754780002777,
+            2.011389192750049,
+            0.36343714093375323,
+            0.0008190748930975744
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.07740415180733838,
+            3.09984839006089,
+            7.122218500940741,
+            2.1209828624315037,
+            0.3690838924935388,
+            0.0008429293828233791
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.7642621397972107,
+            0.6257851719856262,
+            0.9949875473976135,
+            0.7959733009338379,
+            0.9950098395347595,
+            0.39678433537483215,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            1.350046992301941,
+            1.211452841758728,
+            1.980121374130249,
+            1.816290020942688,
+            1.7612192630767822,
+            0.7670440673828125,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      },
+      {
+        "number": 10,
+        "speed": 0.5,
+        "validation": {
+          "samples": 1676,
+          "check_period_s": 0.02,
+          "gravity_peak_nm": [
+            7.269610343113142e-16,
+            3.023974048500717,
+            6.947547804085406,
+            2.0113897918989934,
+            0.3634372416857884,
+            0.000819075011834429
+          ],
+          "inverse_dynamics_peak_nm": [
+            0.019350361479461425,
+            3.035633056171039,
+            6.981992204070721,
+            2.0191666592582536,
+            0.3642689789891046,
+            0.0008243585404426339
+          ],
+          "sampled_peak_velocity_rad_s": [
+            0.382129967212677,
+            0.3129010796546936,
+            0.49751242995262146,
+            0.3980323374271393,
+            0.4975118339061737,
+            0.19841642677783966,
+            0.0
+          ],
+          "sampled_peak_acceleration_rad_s2": [
+            0.3376586437225342,
+            0.3031632900238037,
+            0.49501755833625793,
+            0.45456448197364807,
+            0.44031044840812683,
+            0.19120919704437256,
+            0.0
+          ],
+          "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+          "open_gripper_proxy_samples": 0,
+          "open_finger_geometry_checked": false,
+          "environment_checked": false
+        }
+      }
+    ]
+  },
+  "collision_identity": {
+    "schema": "rebuddy.rs_collision.v1",
+    "resources": [
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/base_link.STL",
+        "sha256": "af1df69639fb1f1022ad94ca1537157f8dbef379ec37fd75d8901d30d4061cbe"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/gripper_end.STL",
+        "sha256": "d52ed4bb37754fa9d57cc21b4be3b9f90373b6d5594c521e7c3cd3a1adf5ba62"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link1.STL",
+        "sha256": "60860556dd91b15eff0bb7d3a5bffcf4b34ac98156c542f203ad6ce755be2d1d"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link2.STL",
+        "sha256": "f3653afa47f7f2ee9733416e56c52745b5eaafd23ca6c84360dffd440e12668d"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link3.STL",
+        "sha256": "3d6502345c14bd2d6c5b9c394672efdaa2b787cc81a0bed23a0bde574e787a28"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link4.STL",
+        "sha256": "431e5e7365ba31df598207dee6d48ff3051ec32f6d42dcae8e3b25e7807617c4"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link5.STL",
+        "sha256": "e8888083f0cf597e7f0afb7b273b81f55df7ef45eee706dbf840c9ef365c7b1e"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link6.STL",
+        "sha256": "29a7809bde57f21b536588e78e66bec137f1fbe50308b71ffa842b6efbb109fd"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/pla_left.STL",
+        "sha256": "0e774ab0bf2975792982adf646465c7ed1ff35b9ed0ad9bf3fb14c9d7480ebef"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/pla_right.STL",
+        "sha256": "43556446abbbecd847bb09a4dc13d4ef2aa266a9ba904e5ac9ccff89a3c8280d"
+      },
+      {
+        "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/urdf/rebot_b601_rs.urdf",
+        "sha256": "dc29e21ffb77d282f99882f035b6162c187de665637e4f3b12837c9c84d06887"
+      },
+      {
+        "path": "/home/verser/CPP/reBotArmController_ROS2/src/rebotarm_moveit_config/config/rebotarm_rs.srdf",
+        "sha256": "046860efe2c516060ced0b5c75906182805c964a4fbe1cb6af5a6f480991f095"
+      }
+    ],
+    "geometry_count": 10,
+    "checked_pair_count": 35,
+    "disabled_pairs": [
+      {
+        "links": [
+          "base_link",
+          "link1"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link1",
+          "link2"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link2",
+          "link3"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link3",
+          "link4"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link4",
+          "link5"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "link5",
+          "link6"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "gripper_end",
+          "link6"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "gripper_end",
+          "gripper_left"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "gripper_end",
+          "gripper_right"
+        ],
+        "reason": "Adjacent"
+      },
+      {
+        "links": [
+          "gripper_left",
+          "gripper_right"
+        ],
+        "reason": "Never"
+      }
+    ],
+    "scope": "source URDF collision meshes; closed fingers; robot self-collision only",
+    "environment_checked": false,
+    "physical_geometry_calibrated": false
+  },
+  "limitations": [
+    "Sampled self-collision with closed-finger geometry only; no environment or payload validation.",
+    "On-board random seed algorithm differs from Python; save the printed sequence to reproduce across platforms."
+  ]
+}

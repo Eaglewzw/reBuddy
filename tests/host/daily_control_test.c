@@ -9,6 +9,7 @@ static can_console_motor_state_t motors[7];
 static uint64_t now;
 static unsigned enables,disables,references,reports;
 static bool stale,stall_tx,fail_tx,ignore_disable,fault_bus;
+static bool closed_stop;
 static float tracking_bias[7];
 static int feedback_skew_us;
 static can_console_motor_target_t queued[7];
@@ -48,6 +49,7 @@ esp_err_t can_console_motor_get_reference_status(uint32_t seq,can_console_motor_
     assert(seq==serial);*s=(can_console_motor_reference_status_t){.owned=true,.sequence=seq,
         .state=fail_tx?CAN_CONSOLE_MOTOR_REFERENCE_FAILED:stall_tx?CAN_CONSOLE_MOTOR_REFERENCE_PENDING:CAN_CONSOLE_MOTOR_REFERENCE_DELIVERED};
     if(!stall_tx && !fail_tx)for(unsigned j=0;j<7;++j){motors[j].position=queued[j].value.position+tracking_bias[j];motors[j].velocity=queued[j].value.velocity;}
+    if(closed_stop && !stall_tx && !fail_tx)motors[6].position=fmaxf(motors[6].position,4.5f*.0174532925199433f);
     return ESP_OK;
 }
 static rb_daily_control_t c;
@@ -123,6 +125,40 @@ static void screen_lifecycle(void)
 int main(int argc,char **argv)
 {
     assert(argc==2);init();
+    if(!strncmp(argv[1],"dance_",6)) {
+        static rb_dance_plan_t dance,other;uint8_t numbers[]={1,2,3,4,5,6,7,8,9,10};
+        assert(rb_dance_compile(&dance,numbers,10,1));assert(rb_dance_compile(&other,numbers,2,1));
+        assert(!references && !enables);
+        assert(rb_daily_control_dance(&c,&dance,123)==ESP_OK);
+        if(!strcmp(argv[1],"dance_cancel_start")) {
+            rb_daily_control_pause(&c);until(RB_DC_FAULT,20);
+            assert(!references && !enables && !disables);return 0;
+        }
+        until(RB_DC_PLAY,1800);assert(enables==1 && c.status.action==RB_DANCE_CONTROL_ACTION);
+        if(!strcmp(argv[1],"dance_busy")) {
+            assert(rb_daily_control_dance(&c,&other,124)==ESP_ERR_INVALID_STATE);
+            assert(rb_daily_control_request(&c,RB_DAILY_PROBE,2)==ESP_ERR_INVALID_STATE);
+            assert(c.dance==&dance && c.status.request_id==123);return 0;
+        }
+        if(!strcmp(argv[1],"dance_stop")) {
+            rb_daily_control_pause(&c);until(RB_DC_PROTECTIVE_HOLD,400);
+            assert(!disables && c.status.enabled);
+            assert(rb_daily_control_dance(&c,&other,124)==ESP_ERR_INVALID_STATE);return 0;
+        }
+        if(!strcmp(argv[1],"dance_gripper_closed"))closed_stop=true;
+        unsigned played=0,settles=0;rb_dc_state_t previous=c.status.state;
+        for(unsigned i=0;i<4500 && c.status.completed_id!=123;++i) {
+            tick(true);
+            if(c.status.state==RB_DC_PLAY)++played;
+            if(c.status.state==RB_DC_SETTLE && previous!=RB_DC_SETTLE)++settles;
+            assert(c.status.state!=RB_DC_FAULT && c.status.state!=RB_DC_DISABLING);
+            assert(c.status.state!=RB_DC_BRAKING && c.status.state!=RB_DC_PROTECTIVE_HOLD);
+            previous=c.status.state;
+        }
+        assert(c.status.completed_id==123 && c.status.state==RB_DC_HOLD && c.status.enabled);
+        assert(played>3000 && settles==1 && enables==1 && !disables);
+        rb_daily_control_home(&c);until(RB_DC_OFF,1500);assert(c.status.disable_confirmed);return 0;
+    }
     if(!strcmp(argv[1],"screen_lifecycle")) {screen_lifecycle();puts("screen_lifecycle");return 0;}
     if(!strcmp(argv[1],"boot_wake")) {
         assert(!enables && !references);

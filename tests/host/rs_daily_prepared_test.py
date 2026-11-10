@@ -46,10 +46,155 @@ class Tests(unittest.TestCase):
             self.assertTrue(item['source'].endswith('.csv'))
             self.assertEqual(len(item['source_sha256']),64)
 
+    def test_nuzzle_sways_only_after_each_of_two_descents(self):
+        from scipy.signal import find_peaks
+        from scipy.interpolate import PPoly
+        from rs_daily_nuzzle import Nuzzle
+        curve=self.plans['NUZZLE'].stages[1][1]
+        self.assertIsInstance(curve,Nuzzle)
+        spec=json.loads((prepare.BUNDLE/'nuzzle.json').read_text())['stages'][1]
+        self.assertEqual(spec['design']['descents'],2)
+        self.assertEqual(spec['design']['j5_cycles_per_descent'],1)
+        self.assertEqual(spec['design']['sway_timing'],'after_descent_before_rise')
+        center=curve.start[4]
+        other=[0,1,2,3,5,6]
+        for index,(begin,end) in enumerate(curve.sway_windows):
+            self.assertEqual(begin,curve.descent_windows[index][1])
+            roots=PPoly(curve.spline.c[:,:,4],curve.breakpoints).derivative().roots(extrapolate=False)
+            roots=roots[np.isfinite(roots)&(roots>=begin)&(roots<=end)]
+            stamps=np.unique(np.r_[np.linspace(begin,end,1001),roots])
+            q,v=curve.at(stamps);offset=np.degrees(q[:,4]-center)
+            low=np.asarray(spec['poses_rad'][1+2*index])
+            np.testing.assert_allclose(curve.at(begin)[0],low,atol=1e-12)
+            np.testing.assert_allclose(q[:,other],np.broadcast_to(low[other],(len(q),6)),atol=1e-12)
+            np.testing.assert_allclose(v[:,other],0.,atol=1e-12)
+            self.assertEqual(len(find_peaks(offset,prominence=1.)[0]),1)
+            self.assertEqual(len(find_peaks(-offset,prominence=1.)[0]),1)
+            self.assertAlmostEqual(end-begin,2.1)
+            self.assertAlmostEqual(max(offset),20.,places=6)
+            self.assertAlmostEqual(min(offset),-20.,places=6)
+            np.testing.assert_allclose(offset[[0,-1]],0.,atol=1e-10)
+            self.assertGreater(curve.at(begin+.25*(end-begin))[0][4],center)
+            self.assertLess(curve.at(begin+.75*(end-begin))[0][4],center)
+        # No sway during either descent or rise. Only the final rise retains
+        # the tiny original J5 endpoint adjustment.
+        for i in (0,2,3,5):
+            stamps=np.linspace(curve.phase_times[i],curve.phase_times[i+1],101)
+            q,v=curve.at(stamps)
+            self.assertLess(max(abs(np.degrees(v[:,4]))),.1)
+            self.assertLess(np.ptp(np.degrees(q[:,4])),.04)
+        for stamp in curve.breakpoints:
+            if 0<stamp<curve.duration:
+                for k in (0,1,2):
+                    np.testing.assert_allclose(curve.spline(stamp-1e-7,nu=k),
+                                               curve.spline(stamp+1e-7,nu=k),atol=5e-5,rtol=0)
+        for index,stamp in enumerate(curve.phase_times):
+            np.testing.assert_allclose(curve.at(stamp)[1],0.,atol=1e-10)
+            if index!=3:np.testing.assert_allclose(curve.spline(stamp,nu=2),0.,atol=1e-9)
+        # Verify the physical effect from FK, independently of the phase names.
+        model=self.gravity.model;data=model.createData();frame=model.getFrameId('gripper_end')
+        stamps=np.linspace(0,curve.duration,2001);heights=[]
+        for q in curve.at(stamps)[0]:
+            self.gravity.pin.framesForwardKinematics(model,data,q[:6])
+            heights.append(data.oMf[frame].translation[2])
+        bottoms,_=find_peaks(-np.array(heights),prominence=.03)
+        self.assertEqual(len(bottoms),2)
+        for bottom,(begin,end) in zip(bottoms,curve.sway_windows):
+            self.assertGreaterEqual(stamps[bottom],begin-.005)
+            self.assertLessEqual(stamps[bottom],end+.005)
+        for begin,end in curve.descent_windows:
+            selected=(stamps>=begin)&(stamps<=end)
+            self.assertLess(np.max(np.diff(np.array(heights)[selected])),1e-6)
+
+    def test_nuzzle_rejects_excessive_speed_or_noncentered_j5(self):
+        from rs_daily_nuzzle import Nuzzle
+        spec=json.loads((prepare.BUNDLE/'nuzzle.json').read_text())['stages'][1]
+        with self.assertRaisesRegex(ValueError,'dynamic budget'):
+            Nuzzle(spec['poses_rad'],np.array(spec['durations_s'])*.3)
+        poses=np.array(spec['poses_rad']);poses[2,4]+=.1
+        with self.assertRaisesRegex(ValueError,'centered J5'):
+            Nuzzle(poses,spec['durations_s'])
+
+    def test_nuzzle_upper_turn_reverses_without_flat_stop(self):
+        from rs_daily_nuzzle import Nuzzle
+        spec=json.loads((prepare.BUNDLE/'nuzzle.json').read_text())['stages'][1]
+        previous=Nuzzle(spec['poses_rad'],[1.1,2.1,1.15,1.1,2.1,1.35],20.,sway_scurve=spec['sway_scurve'])
+        current=self.plans['NUZZLE'].stages[1][1]
+        np.testing.assert_allclose(np.diff(current.phase_times),[1.1,2.1,.85,.9,2.1,1.35],atol=1e-12)
+        self.assertAlmostEqual(previous.duration-current.duration,.5)
+        fractions=np.linspace(0,1,501)
+        for phase in range(6):
+            old_t=previous.phase_times[phase]+fractions*np.diff(previous.phase_times)[phase]
+            new_t=current.phase_times[phase]+fractions*np.diff(current.phase_times)[phase]
+            old_q,old_v=previous.at(old_t);new_q,new_v=current.at(new_t)
+            np.testing.assert_allclose(new_q[[0,-1]],old_q[[0,-1]],atol=1e-11,rtol=0)
+            if phase not in (2,3):
+                np.testing.assert_allclose(new_q,old_q,atol=1e-11,rtol=0)
+                np.testing.assert_allclose(new_v,old_v,atol=1e-11,rtol=0)
+            else:
+                self.assertTrue(np.all(new_v[:,3]*(1 if phase==2 else -1)>=-1e-10))
+        turn=current.phase_times[3]
+        self.assertLess(current.spline(turn,nu=2)[3],-3.)
+        self.assertGreater(current.at(turn-.05)[1][3],.15)
+        self.assertLess(current.at(turn+.05)[1][3],-.15)
+        def near_top_time(curve):
+            t=np.linspace(curve.phase_times[2],curve.phase_times[4],10001)
+            offset=curve.at(t)[0][:,3]-curve.at(curve.phase_times[3])[0][3]
+            return np.sum(abs(offset)<math.radians(1))*(t[1]-t[0])
+        self.assertLess(near_top_time(current),near_top_time(previous)*.6)
+
+    def test_faster_j5_sway_preserves_descent_rise_and_other_axes(self):
+        from rs_daily_nuzzle import Nuzzle
+        spec=json.loads((prepare.BUNDLE/'nuzzle.json').read_text())['stages'][1]
+        previous=Nuzzle(spec['poses_rad'],[1.1,2.25,.85,.9,2.25,1.35],20.,turnaround_factor=6.,
+                        sway_peak_fraction=.28,sway_acceleration_factor=72.)
+        current=self.plans['NUZZLE'].stages[1][1]
+        self.assertAlmostEqual(previous.duration-current.duration,.3)
+        fractions=np.linspace(0,1,501)
+        for phase in range(6):
+            old_t=previous.phase_times[phase]+fractions*np.diff(previous.phase_times)[phase]
+            new_t=current.phase_times[phase]+fractions*np.diff(current.phase_times)[phase]
+            old_q,old_v=previous.at(old_t);new_q,new_v=current.at(new_t)
+            axes=[0,1,2,3,5,6] if phase in (1,4) else list(range(7))
+            np.testing.assert_allclose(new_q[:,axes],old_q[:,axes],atol=1e-11,rtol=0)
+            np.testing.assert_allclose(new_v[:,axes],old_v[:,axes],atol=1e-11,rtol=0)
+
+    def test_tilt_variable_clock_preserves_path_and_c2_continuity(self):
+        from rs_motion_timewarp import TimeWarpedCurve, author_tilt_clock
+        curve=self.plans['TILT'].stages[1][1]
+        self.assertIsInstance(curve,TimeWarpedCurve)
+        rebuilt=TimeWarpedCurve(curve.source,author_tilt_clock(curve.source))
+        self.assertAlmostEqual(rebuilt.duration,curve.duration)
+        phase=np.linspace(0,curve.source.duration,2001)
+        clock=curve.time_at(phase)
+        self.assertTrue(np.all(np.diff(clock)>0))
+        np.testing.assert_allclose(curve.at(clock)[0],curve.source.at(phase)[0],atol=1e-10,rtol=0)
+        np.testing.assert_allclose(curve.source_at(clock),phase,atol=1e-10,rtol=0)
+        for stamp in curve.breakpoints[1:-1]:
+            before=curve.sample(stamp-1e-7);after=curve.sample(stamp+1e-7)
+            for left,right in zip(before,after):np.testing.assert_allclose(left,right,atol=5e-5,rtol=0)
+        for stamp in (0.,curve.duration):
+            np.testing.assert_allclose(curve.at(stamp)[1],0.,atol=1e-10)
+            np.testing.assert_allclose(curve.acceleration_at(stamp),0.,atol=1e-8)
+        # Independent finite differences check the clock chain rule.
+        for stamp in np.linspace(.001,curve.duration-.001,301):
+            eps=1e-6
+            finite=(curve.at(stamp+eps)[1]-curve.at(stamp-eps)[1])/(2*eps)
+            np.testing.assert_allclose(curve.acceleration_at(stamp),finite,atol=1e-5,rtol=1e-5)
+
+    def test_tilt_clock_rejects_reversal_and_excess_speed(self):
+        from rs_motion_timewarp import TimeWarpedCurve
+        curve=self.plans['TILT'].stages[1][1]
+        spec=json.loads((prepare.BUNDLE/'tilt.json').read_text())['stages'][1]
+        bad=json.loads(json.dumps(spec['time_warp']));bad['dt_ds'][10]=-.1
+        with self.assertRaisesRegex(ValueError,'positive and bounded'):TimeWarpedCurve(curve.source,bad)
+        bad=json.loads(json.dumps(spec['time_warp']));bad['dt_ds']=(np.array(bad['dt_ds'])*.7).tolist()
+        with self.assertRaisesRegex(ValueError,'dynamic budget'):TimeWarpedCurve(curve.source,bad)
+
     def test_gif_timing_matches_only_feasible_actions_and_is_repeatable(self):
         from rs_daily_timing import align_to_gifs
-        expected={'PROBE':5.,'NUZZLE':9.539894648531037,
-                  'TILT':11.438579317663331,'HAPPY':9.59247285029744,'REST':7.,'WAKE':5.5}
+        expected={'PROBE':5.,'NUZZLE':9.680262599376384,
+                  'TILT':7.6225413485740745,'HAPPY':9.59247285029744,'REST':7.,'WAKE':5.5}
         with tempfile.TemporaryDirectory() as tmp:
             folder=Path(tmp);shutil.copytree(prepare.BUNDLE,folder,dirs_exist_ok=True)
             reports=align_to_gifs(folder,self.gravity)
@@ -240,7 +385,7 @@ class Tests(unittest.TestCase):
                             ctrl.velocity_limit[6]=curve.peak_velocity
                             ctrl.following_limit[6]=curve.gripper_following_limit
                         else:ctrl.velocity_limit[:6]=curve.velocity_limit
-                        for i,t in enumerate(np.r_[np.arange(0,curve.duration,.02),curve.duration]):
+                        for i,t in enumerate(np.linspace(0,curve.duration,math.ceil(curve.duration/.02)+1)):
                             q,v=curve.at(t);actual=curve.at(max(0,t-lag))[0]
                             row=ctrl.command(actual,1_000_000_000+int(t*1e9),q,v)
                             self.assertTrue(np.all(np.abs(row['estimated_torque_nm'])<=playback.CAPS))

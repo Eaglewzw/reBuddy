@@ -3,24 +3,24 @@
 #include <string.h>
 
 const rb_choreo_action_t rb_choreo_actions[]={
-    {RB_CHOREO_2D_NOD,"点头打拍",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_LIFT,"抬臂舒展",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_DIP,"深蹲回升",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_REACH,"前探伸展",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_BASE_TURN,"底盘回转",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_SWAY,"大幅摇摆",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_ELBOW,"折肘展开",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_WRIST,"抬头俯看",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_GRIP,"夹爪开合",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-    {RB_CHOREO_2D_WAVE,"大幅波浪",RB_CHOREO_PERFORMANCE,3,true,2400,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_NOD,"点头打拍",RB_CHOREO_PERFORMANCE,3,true,6470,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_HELLO,"歪头招手",RB_CHOREO_PERFORMANCE,3,true,6530,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_DIP,"深蹲回升",RB_CHOREO_PERFORMANCE,3,true,5680,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_REACH,"前探伸展",RB_CHOREO_PERFORMANCE,3,true,3660,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_NUZZLE,"探头撒娇",RB_CHOREO_PERFORMANCE,3,true,4660,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_HAPPY,"开心欢呼",RB_CHOREO_PERFORMANCE,3,true,6530,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_WAVE,"蛇形波浪",RB_CHOREO_PERFORMANCE,3,true,7010,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_STEADY,"稳定摇摆",RB_CHOREO_PERFORMANCE,3,true,8740,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_EIGHT,"空间8字",RB_CHOREO_PERFORMANCE,3,true,5100,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+    {RB_CHOREO_DANCE_PIVOT,"大幅定点左右上下",RB_CHOREO_PERFORMANCE,3,true,16740,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
     {RB_CHOREO_WAIT,"停留",RB_CHOREO_CONTROL,1,true,0,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE}
 };
 const size_t rb_choreo_action_count=sizeof(rb_choreo_actions)/sizeof(rb_choreo_actions[0]);
 const rb_choreo_action_t *rb_choreo_action(unsigned id)
 {
     static const rb_choreo_action_t bookends[]={
-        {RB_CHOREO_START,"开场",RB_CHOREO_CONTROL,1,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
-        {RB_CHOREO_END,"收尾",RB_CHOREO_CONTROL,1,true,3000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE}
+        {RB_CHOREO_START,"开场",RB_CHOREO_CONTROL,1,true,5500,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE},
+        {RB_CHOREO_END,"收尾",RB_CHOREO_CONTROL,1,true,7000,RB_CHOREO_POSE_IDLE,RB_CHOREO_POSE_IDLE}
     };
     if(id==RB_CHOREO_START || id==RB_CHOREO_END) return &bookends[id-RB_CHOREO_START];
     for (size_t i=0;i<rb_choreo_action_count;++i)
@@ -142,22 +142,6 @@ uint16_t rb_choreo_beat_ms(unsigned tempo)
     static const uint16_t beats[]={900,600,480};
     return tempo<RB_CHOREO_TEMPO_COUNT?beats[tempo]:0;
 }
-/* Only the first/last half-beat changes speed. The polynomial reaches the
- * shared neutral with zero speed/acceleration, and joins the central linear
- * phase with unit speed and zero acceleration. Internal beat markers stay put.
- * This is time remapping of a visual clip, not a calibrated arm trajectory. */
-static unsigned joined_time(unsigned time,unsigned duration)
-{
-    const unsigned edge=RB_CHOREO_HALF_BEAT_MS;
-    if(duration<=edge*2 || time>=duration) return time;
-    bool tail=time>duration-edge;
-    unsigned distance=tail?duration-time:time;
-    if(distance>=edge) return time;
-    double u=(double)distance/edge;
-    unsigned mapped=(unsigned)(edge*u*u*u*(6+u*(-8+3*u)));
-    unsigned result=tail?duration-mapped:mapped;
-    return result>=duration?duration-1:result;
-}
 static bool append(rb_choreo_plan_t *plan,unsigned action,unsigned step,bool transition,bool holding,
     unsigned source_duration,unsigned clip_time,unsigned duration)
 {
@@ -177,8 +161,10 @@ rb_choreo_status_t rb_choreo_compile(const rb_choreo_work_t *work,rb_choreo_plan
     rb_choreo_status_t status=rb_choreo_validate(work,bad_step);
     if (status!=RB_CHOREO_OK) return status;
     if (!work->count) return RB_CHOREO_EMPTY;
-    if(!append(plan,RB_CHOREO_START,RB_CHOREO_NO_STEP,true,false,3000,0,scaled(2400,work->tempo))) return RB_CHOREO_TOO_MANY_EVENTS;
-    unsigned last_action=RB_CHOREO_START,last_source=3000,last_time=2999;
+    const unsigned opening=rb_choreo_action(RB_CHOREO_START)->duration_ms;
+    const unsigned closing=rb_choreo_action(RB_CHOREO_END)->duration_ms;
+    if(!append(plan,RB_CHOREO_START,RB_CHOREO_NO_STEP,true,false,opening,0,scaled(opening,work->tempo))) return RB_CHOREO_TOO_MANY_EVENTS;
+    unsigned last_action=RB_CHOREO_START,last_source=opening,last_time=opening-1;
     for (unsigned i=0;i<work->count;++i) {
         const rb_choreo_step_t *step=&work->steps[i];
         const rb_choreo_action_t *action=rb_choreo_action(step->action_id);
@@ -198,7 +184,7 @@ full:
         if (bad_step) *bad_step=(uint8_t)i;
         return RB_CHOREO_TOO_MANY_EVENTS;
     }
-    if(!append(plan,RB_CHOREO_END,RB_CHOREO_NO_STEP,true,false,3000,0,scaled(2400,work->tempo))) {
+    if(!append(plan,RB_CHOREO_END,RB_CHOREO_NO_STEP,true,false,closing,0,scaled(closing,work->tempo))) {
         memset(plan,0,sizeof(*plan));return RB_CHOREO_TOO_MANY_EVENTS;
     }
     return RB_CHOREO_OK;
@@ -216,7 +202,7 @@ bool rb_choreo_sample(const rb_choreo_plan_t *plan,uint32_t elapsed_ms,rb_choreo
     unsigned time=event->holding?event->clip_time_ms:
         (unsigned)((uint64_t)local*event->source_duration_ms/event->duration_ms);
     if (done && !event->holding) time=event->source_duration_ms?event->source_duration_ms-1:0;
-    if (!event->holding && !event->transition && !done) time=joined_time(time,event->source_duration_ms);
+    /* Authored trajectories already ease at their joins. Preserve their timing. */
     *sample=(rb_choreo_sample_t){.action_id=event->action_id,.step_index=event->step_index,
         .clip_time_ms=(uint16_t)time,.holding=event->holding || done,.transition=event->transition,.done=done,
         .phase_q16=event->source_duration_ms>1?(uint16_t)((uint32_t)time*65535/(event->source_duration_ms-1)):0};

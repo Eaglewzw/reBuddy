@@ -33,7 +33,7 @@ typedef enum {
     RB_CHOREO_DANCE_TUT=30,
     RB_CHOREO_DANCE_HIT=31,
     RB_CHOREO_DIME_STOP=32,
-    /* User-selected 2D library; retired 23..32 are never reused. */
+    /* Retired imported 2D library, kept only to identify old saved works. */
     RB_CHOREO_2D_NOD=33,
     RB_CHOREO_2D_LIFT=34,
     RB_CHOREO_2D_DIP=35,
@@ -44,7 +44,18 @@ typedef enum {
     RB_CHOREO_2D_WRIST=40,
     RB_CHOREO_2D_GRIP=41,
     RB_CHOREO_2D_WAVE=42,
-    RB_CHOREO_START=43, RB_CHOREO_END=44
+    RB_CHOREO_START=43, RB_CHOREO_END=44,
+    /* Trajectory-backed current library. Retired 33..42 never change meaning. */
+    RB_CHOREO_DANCE_NOD=45,
+    RB_CHOREO_DANCE_HELLO=46,
+    RB_CHOREO_DANCE_DIP=47,
+    RB_CHOREO_DANCE_REACH=48,
+    RB_CHOREO_DANCE_NUZZLE=49,
+    RB_CHOREO_DANCE_HAPPY=50,
+    RB_CHOREO_DANCE_WAVE=51,
+    RB_CHOREO_DANCE_STEADY=52,
+    RB_CHOREO_DANCE_EIGHT=53,
+    RB_CHOREO_DANCE_PIVOT=54
 } rb_choreo_action_id_t;
 typedef enum { RB_CHOREO_INTERACTION, RB_CHOREO_EMOTION, RB_CHOREO_PERFORMANCE, RB_CHOREO_CONTROL } rb_choreo_group_t;
 typedef enum { RB_CHOREO_POSE_IDLE } rb_choreo_pose_t;

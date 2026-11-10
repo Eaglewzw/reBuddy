@@ -30,7 +30,7 @@ int main(void)
         if (action->action_id==RB_CHOREO_WAIT) continue;
         assert(action->action_id<sizeof(rb_choreo_clip_map)/sizeof(rb_choreo_clip_map[0]) && rb_choreo_clip_map[action->action_id]!=UINT8_MAX);
         const rb_clip_meta_t *clip=&rb_clips[rb_choreo_clip_map[action->action_id]];
-        assert(clip->count && clip->count<=128 && clip->duration_ms==action->duration_ms);
+        assert(clip->count && clip->count<=256 && clip->duration_ms==action->duration_ms);
         assert(clip->at[0]==0 && clip->at[clip->count-1]<clip->duration_ms);
         for (unsigned frame=0;frame<clip->count;++frame) {
             assert(clip->frames[frame]<RB_FRAME_COUNT);
@@ -64,7 +64,7 @@ int main(void)
         init(); memcpy(work.name,invalid_names[i],sizeof(invalid_names[i]));
         assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_NAME);
     }
-    init(); add(RB_CHOREO_2D_NOD,0,0);
+    init(); add(RB_CHOREO_DANCE_NOD,0,0);
     work.steps[0].action_id=RB_ANIM_REST; assert(rb_choreo_validate(&work,&bad)==RB_CHOREO_UNKNOWN_ACTION && bad==0);
     work.steps[0].action_id=RB_ANIM_WAKE; assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_UNKNOWN_ACTION);
     /* Retired saved IDs never alias the replacement dance library. */
@@ -81,7 +81,7 @@ int main(void)
         assert(rb_choreo_compile(&work,&plan,NULL)==RB_CHOREO_UNKNOWN_ACTION);
     }
     assert(rb_choreo_action_count==11 && !rb_choreo_action(99));
-    init(); add(RB_CHOREO_2D_NOD,0,0); work.steps[0].repeat=4;
+    init(); add(RB_CHOREO_DANCE_NOD,0,0); work.steps[0].repeat=4;
     assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_REPEAT);
     work.steps[0].repeat=0; assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_REPEAT);
     work.steps[0].repeat=1; work.steps[0].hold_ms=3500; assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_HOLD);
@@ -94,10 +94,10 @@ int main(void)
     work.steps[0].duration_ms=500; work.steps[0].hold_ms=500; assert(rb_choreo_validate(&work,NULL)==RB_CHOREO_BAD_HOLD);
 
     /* Bounded edits are transactional and support copying from the same array. */
-    init(); add(RB_CHOREO_2D_NOD,0,0); add(RB_CHOREO_2D_LIFT,0,0);
+    init(); add(RB_CHOREO_DANCE_NOD,0,0); add(RB_CHOREO_DANCE_HELLO,0,0);
     assert(rb_choreo_add_after(&work,0,&work.steps[1])==RB_CHOREO_OK);
-    assert(work.count==3 && work.steps[1].action_id==RB_CHOREO_2D_LIFT);
-    assert(rb_choreo_move(&work,1,-1)==RB_CHOREO_OK && work.steps[0].action_id==RB_CHOREO_2D_LIFT);
+    assert(work.count==3 && work.steps[1].action_id==RB_CHOREO_DANCE_HELLO);
+    assert(rb_choreo_move(&work,1,-1)==RB_CHOREO_OK && work.steps[0].action_id==RB_CHOREO_DANCE_HELLO);
     assert(rb_choreo_delete(&work,1)==RB_CHOREO_OK && work.count==2);
     rb_choreo_work_t before=work;
     assert(rb_choreo_move(&work,0,-1)==RB_CHOREO_BAD_INDEX);
@@ -122,49 +122,49 @@ int main(void)
         init();rb_choreo_step_t step={id,1,0,0};
         assert(rb_choreo_add_after(&work,-1,&step)==RB_CHOREO_UNKNOWN_ACTION);
     }
-    init(); add(RB_CHOREO_2D_NOD,1000,0); add(RB_CHOREO_WAIT,0,1500); add(RB_CHOREO_2D_LIFT,0,0); compile();
-    assert(work.count==3 && plan.count==6 && plan.total_ms==12100 && plan.base_ms==7300);
+    const unsigned opening=5500,closing=7000,nod=6470,hello=6530;
+    init(); add(RB_CHOREO_DANCE_NOD,1000,0); add(RB_CHOREO_WAIT,0,1500); add(RB_CHOREO_DANCE_HELLO,0,0); compile();
+    unsigned hello_at=opening+nod+2500,end_at=hello_at+hello;
+    assert(work.count==3 && plan.count==6 && plan.total_ms==end_at+closing && plan.base_ms==nod+hello+2500);
     assert(at(0).action_id==RB_CHOREO_START && at(0).step_index==RB_CHOREO_NO_STEP);
-    assert(at(2399).clip_time_ms>=2998 && at(2400).action_id==RB_CHOREO_2D_NOD);
-    rb_choreo_sample_t sample=at(5800); assert(sample.holding && sample.action_id==RB_CHOREO_2D_NOD && sample.clip_time_ms==2399);
-    sample=at(7300);assert(sample.action_id==RB_CHOREO_2D_LIFT && sample.clip_time_ms==0 && !sample.transition);
-    assert(at(9700).action_id==RB_CHOREO_END && at(9700).clip_time_ms==0);
-    assert(at(12100).done && at(12100).action_id==RB_CHOREO_END && at(12100).clip_time_ms==2999);
-    init();add(RB_CHOREO_WAIT,0,500);compile();sample=at(2400);
-    assert(sample.holding && sample.action_id==RB_CHOREO_START && sample.clip_time_ms==2999);
-    assert(at(2900).action_id==RB_CHOREO_END && at(5300).done);
+    assert(at(opening-1).clip_time_ms==opening-1 && at(opening).action_id==RB_CHOREO_DANCE_NOD);
+    rb_choreo_sample_t sample=at(opening+nod); assert(sample.holding && sample.action_id==RB_CHOREO_DANCE_NOD && sample.clip_time_ms==nod-1);
+    sample=at(hello_at);assert(sample.action_id==RB_CHOREO_DANCE_HELLO && sample.clip_time_ms==0 && !sample.transition);
+    assert(at(end_at).action_id==RB_CHOREO_END && at(end_at).clip_time_ms==0);
+    assert(at(plan.total_ms).done && at(plan.total_ms).clip_time_ms==closing-1);
+    init();add(RB_CHOREO_WAIT,0,500);compile();sample=at(opening);
+    assert(sample.holding && sample.action_id==RB_CHOREO_START && sample.clip_time_ms==opening-1);
+    assert(at(opening+500).action_id==RB_CHOREO_END && at(opening+500+closing).done);
     /* Automatic bookends follow tempo, but never consume authored steps. */
-    init();add(RB_CHOREO_2D_NOD,1000,0);work.tempo=RB_CHOREO_SLOW;compile();
-    assert(plan.total_ms==12300 && at(5400).clip_time_ms==1200 && at(7200).holding);
+    init();add(RB_CHOREO_DANCE_NOD,1000,0);work.tempo=RB_CHOREO_SLOW;compile();
+    assert(plan.total_ms==(opening+nod+1000+closing)*3/2);
+    assert(at(opening*3/2+1500).clip_time_ms==1000);
     work.tempo=RB_CHOREO_FAST;compile();
-    assert(plan.total_ms==6560 && at(2880).clip_time_ms==1200 && at(3840).holding);
-    init();for(unsigned i=0;i<RB_CHOREO_MAX_STEPS;++i) {add(RB_CHOREO_2D_LIFT,3000,0);work.steps[i].repeat=3;}compile();
-    assert(work.count==8 && plan.count==34 && plan.total_ms==86400 && plan.base_ms==81600);
+    assert(plan.total_ms==(opening+nod+1000+closing)*4/5);
+    assert(at(opening*4/5+800).clip_time_ms==1000);
+    init();for(unsigned i=0;i<RB_CHOREO_MAX_STEPS;++i) {add(RB_CHOREO_DANCE_HELLO,3000,0);work.steps[i].repeat=3;}compile();
+    assert(work.count==8 && plan.count==34 && plan.base_ms==8*(hello*3+3000) && plan.total_ms==plan.base_ms+opening+closing);
     for(unsigned i=1;i+1<plan.count;++i)assert(!plan.events[i].transition);
     work.tempo=255;assert(rb_choreo_compile(&work,&plan,NULL)==RB_CHOREO_BAD_TEMPO && plan.count==0);
-    for(unsigned id=RB_CHOREO_2D_NOD;id<=RB_CHOREO_2D_WAVE;++id) {
+    for(unsigned id=RB_CHOREO_DANCE_NOD;id<=RB_CHOREO_DANCE_PIVOT;++id) {
+        unsigned duration=rb_choreo_action(id)->duration_ms;
         init();add(id,500,0);work.steps[0].repeat=3;compile();
-        assert(plan.total_ms==12500 && at(2400).action_id==id);
-        assert(at(4799).clip_time_ms==2399 && at(4800).clip_time_ms==0);
-        assert(at(9600).holding && at(10100).action_id==RB_CHOREO_END && at(12500).done);
+        assert(plan.total_ms==opening+3*duration+500+closing && at(opening).action_id==id);
+        assert(at(opening+duration-1).clip_time_ms==duration-1 && at(opening+duration).clip_time_ms==0);
+        assert(at(opening+3*duration).holding && at(opening+3*duration+500).action_id==RB_CHOREO_END && at(plan.total_ms).done);
     }
-
-    /* Every new hold edit lies on a half-beat; legacy 500ms values remain valid.
-       The shared authored phase is monotonic and slows into/out of neutral. */
-    init();add(RB_CHOREO_2D_NOD,300,0);compile();
+    /* Follow the authored timeline exactly: no second easing of real motion. */
+    init();add(RB_CHOREO_DANCE_NOD,300,0);compile();
     assert(rb_choreo_beat_ms(RB_CHOREO_STANDARD)==600 && rb_choreo_beat_ms(99)==0);
-    unsigned previous=0;
-    for(unsigned t=0;t<2400;++t) {
-        rb_choreo_sample_t s=at(2400+t);
-        assert(s.clip_time_ms>=previous);
-        previous=s.clip_time_ms;
+    for(unsigned t=0;t<nod;++t) assert(at(opening+t).clip_time_ms==t);
+    assert(at(opening).phase_q16==0 && at(opening+nod-1).phase_q16==65535);
+    for(unsigned id=33;id<=42;++id) {
+        assert(!rb_choreo_action(id) && rb_choreo_clip_map[id]==UINT8_MAX);
     }
-    assert(at(2450).clip_time_ms<50 && at(4750).clip_time_ms>2350);
-    assert(at(2400).phase_q16==0 && at(4799).phase_q16==65535);
 
     /* Stable new wire IDs, independently selectable and repeatable. */
     _Static_assert(RB_CHOREO_WAIT==15 && RB_CHOREO_GROOVE_BOUNCE==23 && RB_CHOREO_DIME_STOP==32,"wire IDs");
-    _Static_assert(sizeof(rb_choreo_clip_map)/sizeof(rb_choreo_clip_map[0])==45,"sparse mapping preserves retired IDs");
+    _Static_assert(sizeof(rb_choreo_clip_map)/sizeof(rb_choreo_clip_map[0])==55,"sparse mapping preserves retired IDs");
     for (unsigned slot=0;slot<RB_CHOREO_SLOTS;++slot) {
         rb_choreo_work_demo(&work,slot);
         assert(work.count==0 && rb_choreo_compile(&work,&plan,NULL)==RB_CHOREO_EMPTY);
@@ -172,22 +172,22 @@ int main(void)
     rb_choreo_work_demo(NULL,0);
 
     /* Stop holds current pixels; clock jumps cannot overflow or auto-restart. */
-    init(); add(RB_CHOREO_2D_LIFT,0,0); compile();
+    init(); add(RB_CHOREO_DANCE_HELLO,0,0); compile();
     rb_choreo_player_t player;
     assert(rb_choreo_player_start(&player,&plan,1000));
-    rb_choreo_player_tick(&player,3000); assert(player.elapsed_ms==2000 && player.sample.clip_time_ms==2500);
+    rb_choreo_player_tick(&player,3000); assert(player.elapsed_ms==2000 && player.sample.clip_time_ms==2000);
     rb_choreo_player_tick(&player,2000); assert(player.elapsed_ms==2000);
-    rb_choreo_player_stop(&player,3200); assert(!player.running && player.sample.holding && !player.sample.done && player.sample.clip_time_ms==2750);
-    rb_choreo_player_tick(&player,999999); assert(player.sample.clip_time_ms==2750);
+    rb_choreo_player_stop(&player,3200); assert(!player.running && player.sample.holding && !player.sample.done && player.sample.clip_time_ms==2200);
+    rb_choreo_player_tick(&player,999999); assert(player.sample.clip_time_ms==2200);
     assert(rb_choreo_player_start(&player,&plan,5000));
-    rb_choreo_player_tick(&player,UINT64_MAX); assert(!player.running && player.elapsed_ms==7200 && player.sample.done && player.sample.clip_time_ms==2999);
-    rb_choreo_player_tick(&player,UINT64_MAX); assert(player.elapsed_ms==7200);
-    assert(rb_clips[rb_choreo_clip_map[RB_CHOREO_START]].duration_ms==3000);
-    assert(rb_clips[rb_choreo_clip_map[RB_CHOREO_END]].duration_ms==3000);
-    assert(rb_choreo_player_start(&player,&plan,0));rb_choreo_player_tick(&player,6000);
+    rb_choreo_player_tick(&player,UINT64_MAX); assert(!player.running && player.elapsed_ms==plan.total_ms && player.sample.done && player.sample.clip_time_ms==closing-1);
+    rb_choreo_player_tick(&player,UINT64_MAX); assert(player.elapsed_ms==plan.total_ms);
+    assert(rb_clips[rb_choreo_clip_map[RB_CHOREO_START]].duration_ms==5500);
+    assert(rb_clips[rb_choreo_clip_map[RB_CHOREO_END]].duration_ms==7000);
+    assert(rb_choreo_player_start(&player,&plan,0));rb_choreo_player_tick(&player,opening+hello+1500);
     assert(player.sample.action_id==RB_CHOREO_END && player.sample.clip_time_ms==1500);
-    rb_choreo_player_stop(&player,6100);rb_choreo_player_tick(&player,100000);
-    assert(!player.running && player.sample.action_id==RB_CHOREO_END && player.sample.clip_time_ms==1625);
+    rb_choreo_player_stop(&player,opening+hello+1600);rb_choreo_player_tick(&player,100000);
+    assert(!player.running && player.sample.action_id==RB_CHOREO_END && player.sample.clip_time_ms==1600);
     assert(rb_choreo_player_start(&player,&plan,200000));
     assert(player.sample.action_id==RB_CHOREO_START && player.sample.clip_time_ms==0);
     assert(!rb_choreo_player_start(&player,NULL,0) && !player.running);

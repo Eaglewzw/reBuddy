@@ -5,6 +5,7 @@
 | `python3 tools/generate_pet_config.py` | 当前行为 JSON → `rb_pet_config.h`；`--check` 只检查 |
 | `python3 tools/build_screen_preview.py` | 8 个日常、10 个舞蹈与开场收尾 GIF → 去重压缩的 RGB565 帧、小屋背景、清单与 C 帧表 |
 | `python3 tools/check_flash_budget.py --app build/reBuddy.bin` | 检查整个应用与动画预算，保留未来机械臂空间 |
+| RS Python 环境运行 `tools/export_dance_c5.py` | 十组 Dance 与 100 种连接窗口 → 紧凑 C 多项式、原速/半速校验报告；不连接 CAN |
 | `python3 tools/build_room_font.py` | Noto Sans CJK → 中文菜单字形子集 |
 | `python3 tools/export_gifs_v2.py` | 新版源图和时间轴 → `assets/gifs/daily/` 的 8 个动作 GIF |
 | `python3 tools/export_expression_preview.py` | 三关节待机、开心、好奇 → 三个独立表情 GIF，不替换触摸动作 |
@@ -23,4 +24,4 @@
 
 `tools/record_daily` 提供本地 RS 重力补偿拖动录制：默认离线检查，`mock` 验证数据导出，`record --supported` 进入实机交互录制。操作、输出和停机行为见 [重力补偿录制](GRAVITY_RECORDING.md)。
 
-`tools/record_dance --supported` 提供基础舞蹈编号录制，独立保存到 `record/dance`，检查统一首尾姿态；录制 01～08、10，09 夹爪开合留待程序生成，开场和收尾无需录制。`--check` 离线检查，`--list` 显示菜单。见 [舞蹈录制](DANCE_RECORDING.md)。
+`tools/record_dance --supported` 保留历史示教菜单（不等于当前十组 Dance 库），提供编号录制，独立保存到 `record/dance`，检查统一首尾姿态；录制 01～08、10，09 夹爪开合留待程序生成，开场和收尾无需录制。`--check` 离线检查，`--list` 显示菜单。见 [舞蹈录制](DANCE_RECORDING.md)。

@@ -5,7 +5,7 @@ from pathlib import Path
 root = Path(__file__).resolve().parents[2]
 for path in (
     'assets/gifs/dance-preview', 'assets/gifs/dance-review',
-    'assets/gifs/cat-v6', 'assets/images/source/dance',
+    'assets/gifs/cat-v6',
     'assets/images/source/cat-v6', 'assets/images/source/shared',
     'tools/export_dance_gifs.py', 'tools/export_whole_dance_preview.py',
     'tools/export_claw_sway_preview.py', 'tools/export_bounce_review.py',
@@ -20,10 +20,15 @@ runtime = json.loads((root / 'assets/animation/manifest.json').read_text())
 assert len(runtime['source_gifs']) == 20
 assert all(path.startswith(('assets/gifs/daily/', 'assets/gifs/dance/')) for path in runtime['source_gifs'])
 assert runtime['dance_source'] == 'assets/gifs/dance/manifest.json'
-assert all(runtime['choreography_clip_map'][i] == 255 for i in range(23, 33))
+assert all(runtime['choreography_clip_map'][i] == 255 for i in range(23, 43))
 print('PASS removed dance artwork/generators absent; only daily and selected dance GIFs enter runtime')
 
-assert not list((root/'assets').rglob('*prompt*.txt')), 'unused generation prompts returned'
+# Keep reproducible drawing prompts with the documented Dance source atlases;
+# they are not runtime inputs. Retired Daily generation prompts stay removed.
+source_atlases={root/'assets/images/source/dance'/name for name in
+                ('multiview','whole_turn','integrated_turn','rigid_turn')}
+for prompt in (root/'assets').rglob('*prompt*.txt'):
+    assert prompt.parent in source_atlases and (prompt.parent/'README.md').is_file(), prompt
 for name in ('middle.png', 'moderate.png', 'strong-peak.png', 'pose-analysis.json', 'timing-suggestion.json'):
     assert not (root/'assets/images/source/daily/tilt'/name).exists()
 

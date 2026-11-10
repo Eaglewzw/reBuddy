@@ -8,10 +8,13 @@
 #include "freertos/queue.h"
 #include "esp_timer.h"
 #include "esp_log.h"
+#include <stdlib.h>
+#include <string.h>
 static rb_daily_control_t control;
 static SemaphoreHandle_t mutex;
 static QueueHandle_t log_queue;
 static bool ready;
+static rb_dance_plan_t dance_plan;
 static void log_worker(void *unused)
 {
     (void)unused;rb_dc_status_t s;
@@ -68,6 +71,20 @@ esp_err_t rb_arm_daily_request(unsigned action,unsigned request)
     if(xSemaphoreTake(mutex,pdMS_TO_TICKS(20))!=pdTRUE)return ESP_ERR_TIMEOUT;
     esp_err_t e=rb_daily_control_request(&control,action,request);
     xSemaphoreGive(mutex);return e;
+}
+esp_err_t rb_arm_dance_request(const uint8_t *numbers,unsigned count,float speed,unsigned request,float *seconds)
+{
+    if(!ready)return ESP_ERR_INVALID_STATE;
+    rb_dance_plan_t *candidate=malloc(sizeof(*candidate));
+    if(!candidate)return ESP_ERR_NO_MEM;
+    if(!rb_dance_compile(candidate,numbers,count,speed)) {free(candidate);return ESP_ERR_INVALID_ARG;}
+    if(xSemaphoreTake(mutex,pdMS_TO_TICKS(20))!=pdTRUE) {free(candidate);return ESP_ERR_TIMEOUT;}
+    esp_err_t result=rb_daily_control_dance(&control,candidate,request);
+    if(result==ESP_OK) {
+        memcpy(&dance_plan,candidate,sizeof(dance_plan));control.dance=&dance_plan;
+        if(seconds)*seconds=dance_plan.duration_s;
+    }
+    xSemaphoreGive(mutex);free(candidate);return result;
 }
 esp_err_t rb_arm_daily_status(rb_dc_status_t *out)
 {

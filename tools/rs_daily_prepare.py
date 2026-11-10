@@ -10,6 +10,8 @@ from scipy.interpolate import BPoly, PPoly
 from rs_gravity_record import ROOT, CAPS, PERIOD, digest, load_idle_pose, preflight, vector
 from rs_gravity_play import load_clip, prepare_entry
 from rs_motion import Curve
+from rs_motion_timewarp import TimeWarpedCurve, author_tilt_clock
+from rs_daily_nuzzle import Nuzzle, author_nuzzle
 from rs_record_playback import LOWER, UPPER
 
 BUNDLE = ROOT/'record/daily_ready'
@@ -204,7 +206,15 @@ def load_bundle(calibration,urdf,folder=BUNDLE):
             raise ValueError('daily preview changed')
         spec=json.loads(path.read_text());stages=[]
         for stage in spec['stages']:
-            if stage['kind']=='clap':
+            if stage['kind']=='nuzzle':
+                if action!='NUZZLE' or stage['label']!='recorded_gesture':
+                    raise ValueError('two-descent nuzzle is only valid for NUZZLE body')
+                curve=Nuzzle(stage['poses_rad'],stage['durations_s'],stage['amplitude_deg'],
+                             sway_scurve=stage.get('sway_scurve'),
+                             sway_peak_fraction=stage.get('sway_peak_fraction',.25),
+                             sway_acceleration_factor=stage.get('sway_acceleration_factor',4*math.pi**2),
+                             turnaround_factor=stage.get('turnaround_factor',0.),**stage['limits'])
+            elif stage['kind']=='clap':
                 curve=Clap(stage['pose_rad'],stage['amplitude_deg'],stage['half_s'],
                            stage.get('j1_sway_deg',0.),stage.get('sway_cycles',2),stage.get('sway_duration_s'))
             elif stage['kind']=='curve':
@@ -227,6 +237,10 @@ def load_bundle(calibration,urdf,folder=BUNDLE):
                 factor=stage.get('speed',1.)
                 if not 0<factor<=1:raise ValueError('invalid speed')
                 curve.scale*=factor;curve.duration/=factor
+                if 'time_warp' in stage:
+                    if action!='TILT' or stage['label']!='recorded_gesture':
+                        raise ValueError('time-warp is only authored for the TILT body')
+                    curve=TimeWarpedCurve(curve,stage['time_warp'])
             else:raise ValueError('unknown daily stage')
             stages.append((stage['label'],curve))
         plan=Plan(stages)
@@ -304,8 +318,20 @@ def prepare_bundle(calibration,urdf,folder=BUNDLE):
             if action=='PROBE':body_limits=PROBE_FAST_LIMITS
             if action=='HAPPY':body_limits=HAPPY_RESPONSE_LIMITS
             if action in ('NUZZLE','TILT'):body_limits=NUZZLE_TILT_FAST_LIMITS
-            c,fit=fit_recording(part_t,part_q,**body_limits);stages.append((label,c))
+            c,fit=fit_recording(part_t,part_q,**body_limits)
+            if action=='NUZZLE':
+                authored=author_nuzzle(fit,gravity)
+                c=Nuzzle(authored['poses_rad'],authored['durations_s'],authored['amplitude_deg'],
+                         sway_scurve=authored['sway_scurve'],
+                         turnaround_factor=authored['turnaround_factor'],**authored['limits'])
+                stages.append((label,c));specs.append(authored)
+                fit_errors.append(fit['max_sample_fit_error_deg'])
+                continue
+            clock=author_tilt_clock(c) if action=='TILT' else None
+            if clock is not None:c=TimeWarpedCurve(c,clock)
+            stages.append((label,c))
             specs.append(dict(kind='curve',label=label,**fit));fit_errors.append(fit['max_sample_fit_error_deg'])
+            if clock is not None:specs[-1]['time_warp']=clock
             if body_limits:specs[-1]['limits']=body_limits
             if action=='HAPPY' and i==0:
                 clap=Clap(part_q[-1],**HAPPY_CLAP);stages.append(('gripper_open_close_twice',clap))

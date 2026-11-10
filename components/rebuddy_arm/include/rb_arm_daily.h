@@ -7,3 +7,5 @@ esp_err_t rb_arm_daily_status(rb_dc_status_t *out);
 void rb_arm_daily_home(void);
 void rb_arm_daily_pause(void);
 void rb_arm_daily_heartbeat(uint64_t now);
+/* Same task/session as Daily. No independent CAN owner or playback loop. */
+esp_err_t rb_arm_dance_request(const uint8_t *numbers,unsigned count,float speed,unsigned request,float *seconds);

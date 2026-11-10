@@ -17,7 +17,7 @@ int main(int argc,char **argv)
     size_t bytes,room_bytes;uint8_t *blob=load(RB_ASSET_FILE,&bytes),*room=load(RB_ROOM_FILE,&room_bytes);
     assert(rb_assets_init(blob,bytes,2) && rb_assets_set_room(room,room_bytes));
     rb_choreo_work_t work;rb_choreo_work_init(&work,0);
-    const unsigned actions[]={RB_CHOREO_2D_NOD,RB_CHOREO_2D_SWAY,RB_CHOREO_2D_NOD,RB_CHOREO_2D_WAVE};
+    const unsigned actions[]={RB_CHOREO_DANCE_NOD,RB_CHOREO_DANCE_STEADY,RB_CHOREO_DANCE_NOD,RB_CHOREO_DANCE_PIVOT};
     for(unsigned i=0;i<4;++i) {
         rb_choreo_step_t step={(uint8_t)actions[i],1,0,0};
         assert(rb_choreo_add_after(&work,-1,&step)==RB_CHOREO_OK);

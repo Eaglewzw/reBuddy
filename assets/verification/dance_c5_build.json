@@ -1,0 +1,103 @@
+{
+  "schema": "rebuddy.dance.c5.build.v1",
+  "hardware_tested": false,
+  "flashed": false,
+  "can_opened": false,
+  "build_directory": "build/dance-c5",
+  "config": "build/dance-c5.sdkconfig",
+  "source_hashes_verified": true,
+  "artifacts_sha256": {
+    "build/dance-c5.sdkconfig": "ca7e67f2fdf403f8f8815aa5ca33f2ee046d6286e05e7ae103ff901953d88de4",
+    "build/dance-c5/reBuddy.bin": "dd219a70130c242949e9a63553b8362148fea1c0c9ce5cdb68cb11476f54bc33",
+    "assets/animation/frames.bin": "6bdc15bfc54744d206f7b11fafa99b8b65d58055c5268b6cc4eff7ab92b06b1a",
+    "assets/verification/dance_c5_mapping.json": "616ed283ed344c111b4ccdba164d844616595e1c0e6260d34bcbb2f8b7288af1",
+    "components/rebuddy_core/include/rb_dance.h": "e737d61a7d8dc427ff26266436061efab914d295ae217352859687499921639b",
+    "components/rebuddy_core/src/rb_dance.c": "4695c4b8cbfe6436e83162702b33e9edf6b8e93de0c7e5467d1cf38b51d3074a",
+    "components/rebuddy_core/src/rb_dance_data.c": "d619b7fd1c5a910c4cfbb3f1c403a3648eb42ef15f0eb1d2f423ac5eff75dc76",
+    "components/rebuddy_arm/src/rb_daily_control.c": "46a0aa6e4e94c344fc4983b0297cbd1fcb5033fd341614deb1201792f7532d90",
+    "components/rebuddy_arm/src/rb_arm_daily.c": "80f2355450d570fca8435bd9c4d9dc47d9dce48b6fa1bb048f16add85777cecd",
+    "main/app/app_dance.c": "82ea38d0bec6e0eee1ba4f3b51ce1045e365070f501a2cd0fdad5fdbd1367527",
+    "main/app/app_arm.c": "be2659d71bf269c7fde231b5fd55c1508b7356d5d490bfbf6fe76c4832a6b024"
+  },
+  "flash_budget": {
+    "application_bytes": 5745264,
+    "application_limit_bytes": 6225920,
+    "reserved_bytes": 2097152,
+    "free_bytes": 2577808,
+    "unreserved_headroom_bytes": 480656,
+    "animation_bytes": 4628420
+  },
+  "polynomial_data_bytes": 87968,
+  "native_plan_ram_bytes": 6264,
+  "temporary_compile_plan_ram_bytes": 6264,
+  "offline_checks": {
+    "max_action_error_q_v_a": [
+      2.047715892183888e-06,
+      2.7007866786110668e-05,
+      0.0009045371482168107
+    ],
+    "max_join_error_q_v_a": [
+      5.893590534350457e-07,
+      3.174614295498035e-06,
+      1.3530994831922882e-05
+    ],
+    "tolerance_q_v_a": [
+      2e-05,
+      0.0003,
+      0.005
+    ],
+    "validated_native_joins": 200,
+    "validated_speeds": [
+      0.5,
+      1.0
+    ],
+    "native_plan_ram_bytes": 6264
+  },
+  "validated_action_speed_cases": 20,
+  "host_tests": {
+    "passed": 10,
+    "failed": 0,
+    "names": [
+      "dance_c5",
+      "dance_app",
+      "daily_control",
+      "daily_recovery_parity",
+      "daily_c5_mapping",
+      "daily_gravity",
+      "arm_adapter",
+      "project_assets",
+      "flash_budget",
+      "choreography_ui"
+    ]
+  },
+  "scope": {
+    "manual_steps": [
+      1,
+      32
+    ],
+    "random_unique_actions": [
+      1,
+      10
+    ],
+    "speeds": [
+      0.5,
+      1.0
+    ],
+    "auto_motion_on_boot": false,
+    "gif_sync": false,
+    "touch_editor_motor_control": false,
+    "shared_daily_controller": true
+  },
+  "commands": [
+    "dance speed 50",
+    "dance random 5",
+    "dance play 01 08 07",
+    "dance status",
+    "dance stop",
+    "dance home"
+  ],
+  "validation_limits": [
+    "Sampled closed-finger URDF geometry only; open finger geometry and environment not checked.",
+    "Firmware built and host simulated; physical motor dynamics not verified."
+  ]
+}

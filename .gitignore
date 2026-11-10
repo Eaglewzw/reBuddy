@@ -14,3 +14,6 @@ __pycache__/
 /record/gravity/**/*.jsonl
 /record/dance/**/*.jsonl
 /record/daily_ready_history/
+
+# Regenerable dance render intermediates (see tools/render_dance_*.py).
+/assets/gifs/dance/rgba/

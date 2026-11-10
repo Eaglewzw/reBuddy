@@ -1,0 +1,8 @@
+Use case: illustration-story. Create FOUR COMPLETE-CHARACTER 2D animation INBETWEEN drawings as a transparent 2x2 atlas. Input images 1 through 5 are an ordered sequence of FIVE whole green cartoon robot-arm views, from front to right profile, and must be matched exactly in character identity, ink outlines, lime/charcoal palette, crescent eyes, metallic disk shading, stationary base and proportions.
+Draw only these four missing views:
+TOP LEFT = a view exactly HALFWAY between input1 and input2: almost front, elbow only just emerging behind the head, shoulder/head/base still nearly centered.
+TOP RIGHT = halfway between input2 and input3: modest right turn, elbow slightly more visible, silver covers appropriately elliptical.
+BOTTOM LEFT = halfway between input3 and input4: moderate right three-quarter view, whole linked arm turns coherently.
+BOTTOM RIGHT = halfway between input4 and input5: stronger right three-quarter view, far eye narrower.
+Each cell contains the ENTIRE figure, including pedestal, shoulder, BOTH links, elbow, wrist, head and closed fingers. ALL body parts change view together, correct occlusion, never an isolated head. Pedestal green front-left panel, white glint, center and bottom baseline exactly consistent. Same overall scale and head-to-body ratio as the references. Use one common base-center registration per cell. No labels or borders.
+Original crescent-eye notch is LEFT/UPPER LEFT, never mirrored. STRICT flat hand-drawn 2D illustration, matching input art; no 3D/plastic lighting, no glossy sculpture. Completely transparent alpha background, no shadows, no gray haze, no colored noise. Generous transparent margins; no clipping.

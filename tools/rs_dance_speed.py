@@ -29,6 +29,14 @@ class ScaledSegment:
     def acceleration_at(self, stamp):
         return self.source.acceleration_at(float(np.clip(stamp,0,self.duration))*self.speed)*self.speed**2
 
+    def gripper_profile_at(self, stamp):
+        # Sequence profiles follow the SAME scaled clock as their targets.
+        # Ordinary curves keep their existing fixed profile.
+        from rs_gravity_play import FOLLOW_TOLERANCE
+        if hasattr(self.source,'gripper_profile_at'):
+            return self.source.gripper_profile_at(float(np.clip(stamp,0,self.duration))*self.speed)
+        return self.source.gripper_velocity_limit, getattr(self.source,'gripper_following_limit',FOLLOW_TOLERANCE)
+
     def jerk_at(self, stamp):
         return self.source.jerk_at(float(np.clip(stamp,0,self.duration))*self.speed)*self.speed**3
 

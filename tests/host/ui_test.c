@@ -135,7 +135,7 @@ int main(void)
     }
     unsigned dance_delta=RB_FRAME_COUNT;
     for(unsigned i=0;i<RB_FRAME_COUNT;++i)
-        if(read_u32(blob+rb_frames[i].offset+12)==5){dance_delta=i;break;}
+        if(read_u32(blob+rb_frames[i].offset+12)==7){dance_delta=i;break;}
     assert(dance_delta<RB_FRAME_COUNT);
     unsigned reference=rb_frames[dance_delta].offset+16;
     uint32_t saved_reference=read_u32(blob+reference);
@@ -170,7 +170,7 @@ int main(void)
     }
     /* Invalid palette sizes fail safely before reading entries/indices. */
     unsigned paletted=RB_FRAME_COUNT;
-    for(unsigned i=1;i<RB_FRAME_COUNT;++i)if(read_u32(blob+rb_frames[i].offset+12)==4){paletted=i;break;}
+    for(unsigned i=1;i<RB_FRAME_COUNT;++i)if(read_u32(blob+rb_frames[i].offset+12)==6){paletted=i;break;}
     assert(paletted<RB_FRAME_COUNT);
     unsigned count_at=rb_frames[paletted].offset+16;uint8_t saved_count[2]={blob[count_at],blob[count_at+1]};
     for(unsigned count=0;count<=257;count+=257) {
@@ -180,6 +180,18 @@ int main(void)
         assert(rb_assets_degraded());
     }
     blob[count_at]=saved_count[0];blob[count_at+1]=saved_count[1];
+    /* Native dimensions are validated before any size product or array read. */
+    unsigned size_at=rb_frames[paletted].offset+20;
+    uint8_t old_size[4];memcpy(old_size,blob+size_at,4);
+    const unsigned bad_sizes[]={0,1,241,65535};
+    for(unsigned b=0;b<sizeof(bad_sizes)/sizeof(bad_sizes[0]);++b) {
+        unsigned size=bad_sizes[b];
+        blob[size_at]=(uint8_t)size;blob[size_at+1]=(uint8_t)(size>>8);
+        blob[size_at+2]=(uint8_t)size;blob[size_at+3]=(uint8_t)(size>>8);
+        assert(rb_assets_init(blob,(size_t)bytes,2));
+        assert(rb_assets_frame(paletted,&meta) && meta==&rb_frames[0]);
+    }
+    memcpy(blob+size_at,old_size,4);
     /* A valid delta must also fall back when its independent base is damaged. */
     unsigned dependent=RB_FRAME_COUNT,base_frame=RB_FRAME_COUNT;
     for (unsigned i=1;i<RB_FRAME_COUNT;++i) {

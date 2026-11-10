@@ -44,7 +44,7 @@ for frame in manifest['frames']:
     assert 16 < frame['bytes'] and end <= len(blob)
     magic, width, height, raw_length, codec = struct.unpack_from('<4sHHII', blob, frame['offset'])
     assert (magic, width, height, raw_length) == (b'RBG2', 320, 240, 153600)
-    assert codec in (0, 1, 2, 3, 4, 5)
+    assert codec in (0, 1, 2, 3, 4, 5, 6, 7)
     records.append((codec, blob[frame['offset']+16:end]))
 assert end == len(blob)
 assert any(codec == 2 for codec, _ in records), 'lossless delta encoding is not present'
@@ -70,36 +70,51 @@ def independent_pixels(index):
 
 room_pixels=np.frombuffer(room[12:],dtype='<u2').reshape(240,320)
 planes_by_frame={}
+coverage_by_frame={}
 def dance_planes(index, depth=0):
     assert depth<=7
     codec,data=records[index]
-    if codec==5:
+    if codec==7:
         base=struct.unpack_from('<I',data)[0]
-        assert base<index and records[base][0] in (4,5)
-        plane,palette,key=dance_planes(base,depth+1)
-        return bytes(a^b for a,b in zip(plane,inflate(data[4:]))),palette,key
-    assert codec==4
-    count,key=struct.unpack_from('<HH',data)
-    assert 1<=count<=256
-    palette=np.frombuffer(data[4:4+2*count],dtype='<u2')
-    return inflate(data[4+2*count:]),palette,key
+        assert base<index and records[base][0] in (6,7)
+        plane,palette,key,size=dance_planes(base,depth+1)
+        delta=inflate(data[4:],2*size*size)
+        return bytes(a^b for a,b in zip(plane,delta)),palette,key,size
+    assert codec==6
+    count,key,width,height=struct.unpack_from('<HHHH',data)
+    assert 1<=count<=256 and width==height and 2<=width<=240
+    palette=np.frombuffer(data[8:8+2*count],dtype='<u2')
+    return inflate(data[8+2*count:],2*width*height),palette,key,width
 
 def composite_dance(index):
-    plane,palette,key=dance_planes(index)
-    indices=np.frombuffer(plane[:76800],dtype=np.uint8).reshape(240,320)
-    alpha=np.frombuffer(plane[76800:],dtype=np.uint8).reshape(240,320).astype(np.int32)
+    plane,palette,key,size=dance_planes(index)
+    n=size*size
+    indices=np.frombuffer(plane[:n],dtype=np.uint8).reshape(size,size)
+    alpha=np.frombuffer(plane[n:],dtype=np.uint8).reshape(size,size).astype(np.int32)
     assert int(indices.max())<len(palette)
     source=palette[indices]
     def unpack(p):
         p=p.astype(np.int32)
         return np.stack([(p>>11)*255//31,((p>>5)&63)*255//63,(p&31)*255//31],axis=-1)
-    rgb=unpack(source)
-    rgb+=np.trunc((255-alpha[...,None])*(unpack(room_pixels)-unpack(np.array(key)))/255).astype(np.int32)
-    rgb=np.clip(rgb,0,255).astype(np.uint16)
-    out=((rgb[:,:,0]>>3)<<11)|((rgb[:,:,1]>>2)<<5)|(rgb[:,:,2]>>3)
-    out[alpha==0]=room_pixels[alpha==0]
-    out[alpha==255]=source[alpha==255]
+    foreground=np.clip(unpack(source)-(255-alpha[...,None])*unpack(np.array(key))//255,0,alpha[...,None])
+    rgba=np.concatenate((foreground,alpha[...,None]),axis=2)
+    coordinates=[max(0,min((size-1)*256,((2*x+1)*size*128)//240-128)) for x in range(240)]
+    low=np.array([x//256 for x in coordinates]);high=np.minimum(low+1,size-1)
+    weight=np.array([x%256 for x in coordinates])
+    total=np.zeros((240,240,4),dtype=np.int64)
+    for yy,wy in ((low,256-weight),(high,weight)):
+        for xx,wx in ((low,256-weight),(high,weight)):
+            total+=rgba[yy[:,None],xx[None,:]]*wy[:,None,None]*wx[None,:,None]
+    interpolated=(total+32768)//65536
+    a=interpolated[:,:,3]
+    color=np.clip(interpolated[:,:,:3]+(255-a[...,None])*unpack(room_pixels[:,40:280])//255,0,255)
+    out=room_pixels.copy()
+    center=((color[:,:,0]>>3)<<11)|((color[:,:,1]>>2)<<5)|(color[:,:,2]>>3)
+    center[a==0]=room_pixels[:,40:280][a==0]
+    out[:,40:280]=center
+    coverage=np.zeros((240,320),dtype=np.uint8);coverage[:,40:280]=a
     planes_by_frame[index]=(source,alpha)
+    coverage_by_frame[index]=coverage
     return out.astype('<u2').tobytes()
 
 decoded = []
@@ -135,7 +150,7 @@ assert len(manifest['clips']) == len(source_by_id)
 assert len([c for c in manifest['clips'] if c.get('source_gif')]) == len(source_by_id)
 checked = 0
 for clip in manifest['clips']:
-    assert len(clip['frames']) == len(clip['at_ms']) <= 128
+    assert len(clip['frames']) == len(clip['at_ms']) <= 256
     assert clip['at_ms'][0] == 0
     assert clip['at_ms'] == sorted(set(clip['at_ms']))
     assert clip['at_ms'][-1] < clip['duration_ms']
@@ -153,54 +168,71 @@ for clip in manifest['clips']:
             gif.seek(i)
             source_times.append(source_elapsed)
             source_elapsed += gif.info['duration']
-        sampling = clip.get('runtime_sampling_ms')
-        assert len(clip['frames']) == (source_elapsed // sampling if sampling else gif.n_frames)
+        assert source_elapsed == source['duration_ms'] == clip['duration_ms']
         elapsed = 0
-        for tick, frame_id in enumerate(clip['frames']):
-            source_tick = max(i for i, start in enumerate(source_times) if start <= elapsed)
-            if source.get('screen_fit'): source_tick=clip['source_ticks'][tick]
-            gif.seek(source_tick)
-            assert clip['at_ms'][tick] == elapsed
-            assert gif.info['duration'] > 0 and gif.info['duration'] % 10 == 0
-            screen = gif.convert('RGB')
-            if source.get('screen_fit'):
-                fitted = screen.resize((240,240),getattr(Image,'Resampling',Image).LANCZOS)
-                screen = Image.new('RGB',(320,240),fitted.getpixel((0,0)))
-                screen.paste(fitted,(40,0))
+        if source.get('screen_fit'):
+            assert clip['alpha_source']=='renderer_rgba' and clip['runtime_sampling_ms'] is None
+            assert len(clip['frames'])==len(clip['source_ticks'])
+            assert clip['source_ticks'][0]==0 and clip['source_ticks'][-1]==len(source['rgba_frames'])-1
+            starts=np.cumsum([0]+[row['duration_ms'] for row in source['rgba_frames']]).tolist()
+            for tick,frame_id in enumerate(clip['frames']):
+                source_tick=clip['source_ticks'][tick];row=source['rgba_frames'][source_tick]
+                frame_path=root/'assets/gifs/dance'/row['file']
+                assert hashlib.sha256(frame_path.read_bytes()).hexdigest()==row['sha256']
+                with Image.open(frame_path) as rgba:
+                    size=manifest['dance_render_size']
+                    fitted=rgba.convert('RGBA').resize((size,size),Image.Resampling.LANCZOS)
+                screen=fitted
+                step=255/(manifest['dance_alpha_levels']-1)
+                expected_alpha=np.rint(np.rint(np.asarray(screen.getchannel('A'),dtype=float)/step)*step).astype(np.uint8)
+                screen.putalpha(Image.fromarray(expected_alpha))
+                matte=Image.alpha_composite(Image.new('RGBA',screen.size,(255,255,255,255)),screen).convert('RGB')
                 palette=Image.new('P',(1,1));palette.putpalette(manifest['dance_palette_rgb'])
-                before=screen;screen=screen.quantize(palette=palette,dither=0).convert('RGB')
-                from PIL import ImageChops
-                histogram=ImageChops.difference(before,screen).histogram()
-                mean_error=sum((i%256)*n for i,n in enumerate(histogram))/(320*240*3)
-                assert mean_error<4.0,(clip['id'],tick,mean_error)
-            if source.get('screen_fit'):
+                quantized=matte.quantize(palette=palette,dither=0).convert('RGB')
+                expected=np.frombuffer(rgb565(quantized),dtype='<u2').reshape(size,size)
                 actual,alpha=planes_by_frame[frame_id]
-                # Source pixels remain exact after the documented palette conversion;
-                # only precomputed matte pixels may differ. Sparse turn bridges are
-                # derived visual assets and checked by CRC/seam tests below.
-                if clip['id']!='DANCE_BASE_TURN' and tick not in (0,len(clip['frames'])-1):
-                    expected=np.frombuffer(rgb565(screen),dtype='<u2').reshape(240,320)
-                    assert np.array_equal(actual[alpha==255],expected[alpha==255]),(clip['id'],tick)
+                assert np.array_equal(alpha,expected_alpha),(clip['id'],tick,'alpha changed')
+                assert np.array_equal(actual[alpha>0],expected[alpha>0]),(clip['id'],tick,'palette color changed')
                 scene=np.frombuffer(decoded[frame_id],dtype='<u2').reshape(240,320)
-                assert np.array_equal(scene[:,:40],room_pixels[:,:40])
-                assert np.array_equal(scene[:,280:],room_pixels[:,280:])
-                assert len(clip['frames'])==clip['duration_ms']//50
-            else:
-                assert decoded[frame_id] == rgb565(screen), (clip['id'], tick, 'firmware changes source GIF pixels')
-            elapsed += sampling or gif.info['duration']
-            checked += 1
-        assert elapsed == clip['duration_ms'] == source['duration_ms']
-        if not source.get('screen_fit'): assert elapsed == gif.n_frames * 125
+                coverage=coverage_by_frame[frame_id]
+                assert np.array_equal(scene[coverage==0],room_pixels[coverage==0]),(clip['id'],tick,'room hole filled')
+                assert clip['at_ms'][tick]==elapsed
+                assert row['duration_ms']>0 and row['duration_ms']%10==0
+                next_tick=clip['source_ticks'][tick+1] if tick+1<len(clip['source_ticks']) else len(source['rgba_frames'])
+                elapsed+=starts[next_tick]-starts[source_tick];checked+=1
+            trajectory=root/source['trajectory']
+            assert hashlib.sha256(trajectory.read_bytes()).hexdigest()==source['trajectory_sha256']
+        else:
+            assert len(clip['frames'])==gif.n_frames
+            for tick,frame_id in enumerate(clip['frames']):
+                gif.seek(tick)
+                assert clip['at_ms'][tick]==elapsed
+                assert decoded[frame_id]==rgb565(gif.convert('RGB')),(clip['id'],tick,'Daily source pixels changed')
+                elapsed+=gif.info['duration'];checked+=1
+            assert elapsed==gif.n_frames*125
+        assert elapsed==clip['duration_ms']
+        if clip['id']=='DANCE_EIGHT' and source.get('trajectory_overlay'):
+            # The thin path must survive the device palette, not turn grey or
+            # disappear into the room after downsampling and alpha compositing.
+            visible=0
+            for frame_id in clip['frames']:
+                pixels=np.frombuffer(decoded[frame_id],dtype='<u2').reshape(240,320)
+                red=(pixels>>11)*255//31
+                green=((pixels>>5)&63)*255//63
+                blue=(pixels&31)*255//31
+                cyan=(red<120)&(green>150)&(blue>170)&(pixels!=room_pixels)
+                visible=max(visible,int(cyan.sum()))
+            assert visible>=10,'figure-eight trail lost its cyan ink in the firmware palette'
 assert {c['id'] for c in manifest['clips']} >= set(source_by_id)
 assert checked == sum(len(c['frames']) for c in manifest['clips'] if c.get('source_gif'))
 assert {i for c in manifest['clips'] for i in c['frames']} == set(range(len(decoded))), 'obsolete unused frames remain in runtime'
 assert set(manifest['source_gifs']) == {str(p.relative_to(root)) for p in source_paths.values()}
 
 choreo = manifest['choreography_clip_map']
-assert len(choreo) == 45 and choreo[15] == 255
+assert len(choreo) == 55 and choreo[15] == 255
 retired_ids = {4, 5} | set(range(9, 15)) | set(range(16, 23))
 assert all(choreo[action] == 255 for action in retired_ids), 'retired work IDs alias new animation'
-assert all(choreo[action] == 255 for action in range(23, 33)), 'removed dances still mapped'
+assert all(choreo[action] == 255 for action in range(23, 43)), 'removed dances still mapped'
 for action, name in {0:'IDLE', 1:'PROBE', 2:'NUZZLE', 3:'TILT', 6:'HAPPY'}.items():
     assert manifest['clips'][choreo[action]]['id'] == name, 'daily mapping changed'
 mapping = manifest['clip_map']
@@ -226,12 +258,16 @@ for c in dance['clips']:
     assert manifest['clips'][choreo[c['action_id']]]['id'] == c['id']
 assert hashlib.sha256((root/manifest['dance_source']).read_bytes()).hexdigest() == manifest['dance_source_sha256']
 
-# Every selectable action returns to exactly the same shared neutral. Check all
-# 100 action pairs and repeats, including the formerly discontinuous base turn.
+# Every selectable action loops exactly; shared-artwork groups also match
+# across actions. The approved whole-character 08 has its own drawn neutral.
 dances=[c for c in manifest['clips'] if c['id'].startswith('DANCE_') and c['id'] not in ('DANCE_START','DANCE_END')]
+groups={c['id']:c.get('endpoint_group','shared_neutral') for c in dance['clips']}
+assert {k:v for k,v in groups.items() if v!='shared_neutral'} in ({},{'DANCE_STEADY':'whole_character_turn'})
 for a in dances:
+    assert decoded[a['frames'][-1]]==decoded[a['frames'][0]],(a['id'],'loop seam')
     for b in dances:
-        assert decoded[a['frames'][-1]]==decoded[b['frames'][0]],(a['id'],b['id'],'seam')
+        if groups[a['id']]==groups[b['id']]:
+            assert decoded[a['frames'][-1]]==decoded[b['frames'][0]],(a['id'],b['id'],'seam')
 assert decoded[manifest['clips'][choreo[43]]['frames'][-1]]==decoded[dances[0]['frames'][0]]
 assert decoded[manifest['clips'][choreo[44]]['frames'][0]]==decoded[dances[0]['frames'][0]]
 for i,frame in enumerate(manifest['frames']):assert zlib.crc32(decoded[i])==frame['crc32']

@@ -15,9 +15,14 @@ for obsolete in ('gifs-v2','gifs-preview','design','approved','reference','previ
     assert not (root/'assets'/obsolete).exists(), f'obsolete asset directory: {obsolete}'
 for path in (root/'assets').rglob('*'):
     if path.suffix.lower() == '.gif':
-        assert path.is_relative_to(root/'assets/gifs'), path
+        if path == root/'assets/images/source/dance/github_turn_reference.gif':
+            # Archived drawing reference, never a runtime clip.
+            reference=json.loads(path.with_suffix('.json').read_text())
+            assert hashlib.sha256(path.read_bytes()).hexdigest()==reference['sha256']
+        else:
+            assert path.is_relative_to(root/'assets/gifs'), path
     elif path.suffix.lower() in ('.png','.jpg','.jpeg','.webp','.svg'):
-        assert path.is_relative_to(root/'assets/images'), path
+        assert path.is_relative_to(root/'assets/images') or (path.suffix.lower()=='.png' and path.is_relative_to(root/'assets/gifs/dance/rgba')), path
 assert {p.name for p in gif_dir.glob('*.gif')} == {g['file'] for g in manifest['clips']}
 for folder, report in ((gif_dir, manifest), (root/'assets/gifs/expressions',
         json.loads((root/'assets/gifs/expressions/manifest.json').read_text()))):
@@ -47,9 +52,13 @@ selected = root/'assets/gifs/dance'
 report = json.loads((selected/'manifest.json').read_text())
 assert len(report['clips']) == 12
 assert {p.name for p in selected.glob('*.gif')} == {c['file'] for c in report['clips']}
-assert [c['action_id'] for c in report['clips']] == list(range(33,45))
+assert [c['action_id'] for c in report['clips']] == [43]+list(range(45,55))+[44]
+library=json.loads((root/'record/dance_library/manifest.json').read_text())
+authored={c['number']:c for c in library['actions']}
 for c in report['clips']:
     data = (selected/c['file']).read_bytes()
     assert hashlib.sha256(data).hexdigest() == c['sha256']
     assert struct.unpack_from('<HH',data,6) == (640,640)
-    assert sum(c['delays_ms']) == c['duration_ms'] == (3000 if c.get('role')=='automatic_bookend' else 2400)
+    assert sum(c['delays_ms']) == c['duration_ms'] == round(authored[c['number']]['duration_s']*100)*10
+    assert c['name']==authored[c['number']]['name']
+    assert sum(r['duration_ms'] for r in c['rgba_frames'])==c['duration_ms']

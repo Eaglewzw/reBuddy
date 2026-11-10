@@ -228,7 +228,9 @@ void rb_ui_update(void)
         rb_choreo_ui_open(lv_screen_active(),choreography_closed,NULL,pet->now);
     }
     if (rb_choreo_ui_active()) {
-        if (pet->state==RB_PET_STOPPED && (!pet->stop_reason || strcmp(pet->stop_reason,"SCREEN STOP")))
+        if (pet->state==RB_PET_STOPPED && (!pet->stop_reason ||
+            (strcmp(pet->stop_reason,"SCREEN STOP") && strcmp(pet->stop_reason,"DANCE CONTROL") &&
+             strcmp(pet->stop_reason,"ARM HOMING"))))
             rb_choreo_ui_fault();
         rb_choreo_ui_update(rb_platform_now_ms());
         if (rb_choreo_ui_active()) return;

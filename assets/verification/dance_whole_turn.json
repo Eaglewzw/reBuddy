@@ -1,0 +1,62 @@
+{
+  "schema": "rebuddy.whole_turn_qa.v3",
+  "passed": true,
+  "raw_frames": 110,
+  "complete_character_cels": 16,
+  "all_playback_frames_pixel_identical_to_selected_cel": true,
+  "runtime_deformation": false,
+  "optical_flow": false,
+  "crossfade": false,
+  "base_screenshot_reused": false,
+  "loop_endpoints_pixel_identical": true,
+  "minimum_solid_border_px": 50,
+  "base_center_range_px": [
+    282.0,
+    283.0
+  ],
+  "minimum_largest_foreground_component_fraction": 1.0,
+  "max_adjacent_cel_step": 2,
+  "visual_angle_range": [
+    5.010266417119546,
+    51.99606833859889
+  ],
+  "visual_turn_mapping": {
+    "input": [
+      5,
+      40,
+      75
+    ],
+    "screen": [
+      5,
+      40,
+      52
+    ]
+  },
+  "original_motion_sha256": "378940574a6c241938da1f559f789edb6a0503fadaa9ed76e035549003ee13e9",
+  "preview_09_unchanged": true,
+  "gif_outputs": [
+    {
+      "file": "build/dance-3d/whole_turn/08.gif",
+      "frames": 56,
+      "duration_ms": 8740,
+      "sha256": "305d2e94350707d7f49f484be89c9d34c2894aa013c16980c37815f4869cbf59",
+      "bytes": 4142765
+    },
+    {
+      "file": "build/dance-3d/whole_turn/preview/08.gif",
+      "frames": 56,
+      "duration_ms": 8740,
+      "sha256": "4a625af1a914e92bbb6197baa4a626fe1540ce6411f037691f773a08b21b809d",
+      "bytes": 4630962
+    }
+  ],
+  "yaw_extrema_counts": [
+    2,
+    2
+  ],
+  "excluded_view_degrees": [
+    56,
+    59,
+    62
+  ]
+}

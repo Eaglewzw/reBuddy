@@ -1,5 +1,6 @@
 #pragma once
 #include "rb_daily.h"
+#include "rb_dance.h"
 #include "can_console_arm_gravity.h"
 #include "can_console_motor_client.h"
 /* Serialized by one application task. Motor service owns protocol and TX. */
@@ -21,6 +22,9 @@ typedef struct {
     const char *error;
     const char *stop_error;
     unsigned bad_motor;
+    unsigned dance_number;
+    bool dance_transition;
+    float dance_seconds;
     /* Latched before protective hold replaces the failed target with measured
      * position. Reading it later must not erase the original arrival error. */
     rb_dc_hold_snapshot_t hold;
@@ -30,6 +34,7 @@ typedef struct {
     can_console_arm_gravity_t gravity;
     can_console_motor_state_t motors[7];
     int channel;
+    const rb_dance_plan_t *dance; /* immutable for the lifetime of a request */
     bool initialized,owned,pending,disable_sent,home_requested,pause_requested;
     uint32_t sequence,fence;
     uint64_t now,changed,last_tick,sent,still_since,report_at,ui_at,enable_at;
@@ -43,6 +48,7 @@ typedef struct {
 } rb_daily_control_t;
 esp_err_t rb_daily_control_init(rb_daily_control_t *c,int channel);
 esp_err_t rb_daily_control_request(rb_daily_control_t *c,unsigned action,unsigned request_id);
+esp_err_t rb_daily_control_dance(rb_daily_control_t *c,const rb_dance_plan_t *plan,unsigned request_id);
 void rb_daily_control_home(rb_daily_control_t *c);
 void rb_daily_control_pause(rb_daily_control_t *c);
 void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now_ms);

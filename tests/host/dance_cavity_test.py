@@ -1,5 +1,4 @@
-"""Regression: reviewed linkage holes show the room; white highlights survive."""
-import hashlib
+"""True alpha clears enclosed holes while opaque white highlights stay painted."""
 import importlib.util
 import json
 import struct
@@ -7,62 +6,48 @@ import zlib
 from functools import lru_cache
 from pathlib import Path
 import numpy as np
-
+from PIL import Image
 root=Path(__file__).resolve().parents[2]
 spec=importlib.util.spec_from_file_location('dance_assets',root/'tools/dance_assets.py')
 module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
 
-# Two identical cream patches enclosed in dark material: color alone cannot
-# distinguish a linkage opening from a painted highlight. Only one is reviewed.
-pixels=np.full((32,48),0xffde,dtype=np.uint16)
-pixels[4:28,4:44]=0x1082
-pixels[10:18,10:18]=0xffde
-pixels[10:18,30:38]=0xffde
-cavity={'seed':[13,13],'bounds':[10,10,18,18],'area':64}
-before=module.coverage(pixels)
-after=module.coverage(pixels,[cavity])
-assert np.all(before[10:18,10:18]==255)
-assert np.all(after[10:18,10:18]==0)
-assert np.all(after[10:18,30:38]==255)
-assert np.all(after[4:9,4:44]==255)
-for stale in ({**cavity,'area':63},{**cavity,'seed':[0,0]},
-              {**cavity,'bounds':[9,10,18,18]}):
-    try:module.coverage(pixels,[stale])
-    except ValueError:pass
-    else:raise AssertionError('Stale cavity silently accepted')
+# Two identical white RGB patches: renderer alpha distinguishes the enclosed
+# opening from an opaque metal highlight, independent of the palette or color.
+pixels=np.full((32,48,4),(32,40,32,255),dtype=np.uint8)
+pixels[10:18,10:18]=(255,255,255,0)
+pixels[10:18,30:38]=(255,255,255,255)
+palette=[255,255,255,32,40,32]+[0]*762
+planes,_=module.indexed_rgba_frame(Image.fromarray(pixels,'RGBA'),palette)
+alpha=np.frombuffer(planes[len(planes)//2:],np.uint8).reshape(32,48)
+assert np.all(alpha[10:18,10:18]==0)
+assert np.all(alpha[10:18,30:38]==255)
 
-config_path=root/'assets/config/dance_cavity_seeds.json'
-config=json.loads(config_path.read_text())
+source=json.loads((root/'assets/gifs/dance/manifest.json').read_text())
 manifest=json.loads((root/'assets/animation/manifest.json').read_text())
 blob=(root/'assets/animation/frames.bin').read_bytes()
-assert manifest['dance_cavity_sha256']==hashlib.sha256(config_path.read_bytes()).hexdigest()
-assert config['palette_sha256']==hashlib.sha256(bytes(manifest['dance_palette_rgb'])).hexdigest()
-
-@lru_cache(None)
+assert 'dance_cavity_sha256' not in manifest
+assert manifest['dance_alpha_source'].startswith('renderer_rgba')
+@lru_cache(maxsize=32)
 def planes(frame):
-    meta=manifest['frames'][frame]
-    record=blob[meta['offset']:meta['offset']+meta['bytes']]
+    meta=manifest['frames'][frame];record=blob[meta['offset']:meta['offset']+meta['bytes']]
     codec=struct.unpack_from('<I',record,12)[0]
-    if codec==5:
-        base=struct.unpack_from('<I',record,16)[0]
-        assert base<frame
+    if codec==7:
+        base=struct.unpack_from('<I',record,16)[0];assert base<frame
         return np.frombuffer(zlib.decompress(record[20:]),np.uint8)^planes(base)
-    assert codec==4
+    assert codec==6
     count=struct.unpack_from('<H',record,16)[0]
-    return np.frombuffer(zlib.decompress(record[20+2*count:]),np.uint8)
-
-checked=0
-for clip in manifest['clips']:
-    if clip['id'] not in config['clips']:continue
-    assert clip['source_sha256']==config['source_sha256'][clip['id']]
-    for tick,regions in config['clips'][clip['id']].items():
-        alpha=planes(clip['frames'][int(tick)])[76800:].reshape(240,320)
-        for region in regions:
-            x,y=region['seed'];assert alpha[y,x]==0,(clip['id'],tick,'uncleared hole')
-            x0,y0,x1,y1=region['bounds']
-            assert np.count_nonzero(alpha[y0:y1,x0:x1]==0)>=region['area']
-        for x,y in config['protected_highlight_seeds'][clip['id']][tick]:
-            assert alpha[y,x]==255,(clip['id'],tick,'highlight erased')
+    return np.frombuffer(zlib.decompress(record[24+2*count:]),np.uint8)
+by_id={c['id']:c for c in manifest['clips']};checked=0
+for clip in source['clips']:
+    runtime=by_id[clip['id']]
+    for tick in {0,len(runtime['frames'])//2,len(runtime['frames'])-1}:
+        row=clip['rgba_frames'][runtime['source_ticks'][tick]]
+        with Image.open(root/'assets/gifs/dance'/row['file']) as im:
+            size=manifest['dance_render_size']
+            expected=np.asarray(im.convert('RGBA').resize((size,size),Image.Resampling.LANCZOS).getchannel('A'),dtype=float)
+        step=255/(manifest['dance_alpha_levels']-1)
+        expected=np.rint(np.rint(expected/step)*step).astype(np.uint8)
+        actual=planes(runtime['frames'][tick])[size*size:].reshape(size,size)
+        assert np.array_equal(actual,expected),(clip['id'],tick)
         checked+=1
-assert checked==25
-print(f'PASS {checked} affected timeline poses, enclosed cavity coverage, protected highlights and stale-seed rejection')
+print(f'PASS transparent cavities, opaque white highlights and {checked} authored alpha samples')

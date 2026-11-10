@@ -1,0 +1,54 @@
+{
+  "schema": "rebuddy.dance_reference.qa.v2",
+  "renderer_sha256": "48ef43ad7cc69abe4af99303bf02f88fa0dba82729dab98f7a2a5de9c08daab7",
+  "artwork_sha256": "aaecb613a80f676e00755b970c9a1de233bbb26463b3802e15c9da33225ba548",
+  "motion_sha256": "378940574a6c241938da1f559f789edb6a0503fadaa9ed76e035549003ee13e9",
+  "closed_beam_side_walls": true,
+  "joint_cylinder_shells": true,
+  "offline_only": true,
+  "firmware_replaced": false,
+  "checks": [
+    {
+      "number": "08",
+      "poses_and_scale_unchanged": true,
+      "first_last_match_original": true,
+      "min_content_border": 73,
+      "gifs": [
+        {
+          "path": "build/dance-3d/reference/08.gif",
+          "frames": 110,
+          "duration_ms": 8740,
+          "sha256": "66609990da64b8061e75060a0ab01d6f74c5f03c200b382fa043505144fd501a"
+        },
+        {
+          "path": "build/dance-3d/reference/preview/08.gif",
+          "frames": 110,
+          "duration_ms": 8740,
+          "sha256": "c8104e03bb7ca10cac90c897509ed9562e16874c6d698f1cf4c36ec4edde29a1"
+        }
+      ],
+      "near_rest_mean_channel_difference": 0.018340657552083334
+    },
+    {
+      "number": "09",
+      "poses_and_scale_unchanged": true,
+      "first_last_match_original": true,
+      "min_content_border": 30,
+      "gifs": [
+        {
+          "path": "build/dance-3d/reference/09.gif",
+          "frames": 64,
+          "duration_ms": 5100,
+          "sha256": "fecb8c08980fcb9590ab4c0e99e6a9ec1411f842ed6e9a36d4ab0bc153644ac0"
+        },
+        {
+          "path": "build/dance-3d/reference/preview/09.gif",
+          "frames": 64,
+          "duration_ms": 5100,
+          "sha256": "458cda67ba9bef7a8d1f25ff22440d5af368c060dac9e067c1254a37bac263a2"
+        }
+      ]
+    }
+  ],
+  "passed": true
+}

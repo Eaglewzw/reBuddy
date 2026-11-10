@@ -1,15 +1,175 @@
 {
-  "status": "daily_cleanup_verified_host_playback_quarantined",
-  "date": "2026-10-31",
+  "status": "reviewed_dance_gallery_installed_offline_verified",
+  "date": "2026-11-10",
   "target": "esp32c5",
-  "application_sha256": "ba0eb96e0fb7bf2c02a1f43c5786eb4892078f24ad6097271326e71db5804b0d",
-  "application_bytes": 5487808,
-  "application_note": "Local v5.5.5 build: build/reBuddy.bin; not flashed. Repository dependency lock remains 5.5.6.",
+  "application_sha256": "817e35390cca1c011456b611d76120a84cd6d0ebbd269f9758027c1ea3e9f938",
+  "application_bytes": 5649280,
+  "application_note": "Local ESP-IDF v5.5.5 build in build/reBuddy.bin; not flashed. Repository dependency lock unchanged.",
   "host_tests": {
-    "passed": 20,
+    "passed": 5,
     "failed": 0,
     "names": [
+      "project_assets",
+      "ui_rgb565",
+      "animation_resources",
+      "flash_budget",
+      "dance_cavities"
+    ],
+    "scope": "08 side-pose removal regression"
+  },
+  "coverage": [
+    "All 12 installed Dance GIFs are byte-identical to approved gallery sources; 1050 RGBA samples installed with hashes and frame delays.",
+    "08 uses 16 complete character cels; rejected 56/59/62-degree side poses removed without warping or blending; 09 preserves approved horizontal figure-eight artwork and trace.",
+    "Every selectable Dance loop has identical endpoints; nine actions share a neutral, while approved 08 has its own artwork endpoint group. Cross-group artwork differs.",
+    "Python independent decoder and firmware C decoder checks passed, including alpha, room background, timing, CRC, random seeks and corrupted payloads.",
+    "Daily GIF pixels and timestamps checked unchanged; no mechanical trajectory files changed in this integration.",
+    "All ten UI selections, choreography model/storage, source cleanup and Flash budget checks passed.",
+    "Current room and animation blobs verified inside the newly built ESP32-C5 binary. No flashing or hardware execution."
+  ],
+  "assets": {
+    "gif_count": 20,
+    "daily_gif_count": 8,
+    "dance_gif_count": 10,
+    "automatic_bookend_gif_count": 2,
+    "dance_source_frame_count": 1050,
+    "runtime_frame_count": 1043,
+    "runtime_bytes": 4628420,
+    "daily_nominal_fps": 8,
+    "dance_nominal_fps": 12.5,
+    "dance_runtime_colors": 32,
+    "dance_coverage_levels": 8,
+    "dance_stored_resolution": [
+      160,
+      160
+    ],
+    "dance_screen_resolution": [
+      240,
+      240
+    ],
+    "dance_source_resolution": [
+      640,
+      640
+    ],
+    "dance_max_delta_depth": 7,
+    "animation_frame_cache_peak_bytes": 614400,
+    "native_lookup_static_bytes": 5952,
+    "animation_manifest_sha256": "3f59f432af60817c86ea049c954c211497ec10d2c0ef26b16061bb5f00f705a6",
+    "trajectory_reserved_colors": [
+      [
+        17,
+        86,
+        111
+      ],
+      [
+        57,
+        224,
+        255
+      ],
+      [
+        155,
+        236,
+        247
+      ]
+    ]
+  },
+  "choreography": {
+    "schema_version": 1,
+    "max_steps": 8,
+    "slots": 10,
+    "screen_only": true,
+    "available_actions": 10,
+    "wait_block": true,
+    "persistence": "NVS dual-record CRC",
+    "motor_playback": false,
+    "new_action_ids": [
+      45,
+      46,
+      47,
+      48,
+      49,
+      50,
+      51,
+      52,
+      53,
+      54
+    ],
+    "retired_action_ids": [
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39,
+      40,
+      41,
+      42
+    ],
+    "old_works": "Preserved; explicit rebuild required, never silently mapped to different actions.",
+    "automatic_bookends": true,
+    "bookend_duration_ms": [
+      5500,
+      7000
+    ],
+    "bookends_consume_steps": false,
+    "standard_bpm": 100,
+    "new_hold_step_ms": 300,
+    "legacy_hold_values_preserved": true
+  },
+  "flash": {
+    "application_bytes": 5649280,
+    "application_limit_bytes": 6225920,
+    "reserved_bytes": 2097152,
+    "free_bytes": 2673792,
+    "unreserved_headroom_bytes": 576640,
+    "animation_bytes": 4628420
+  },
+  "daily03": {
+    "motion_duration_s": 9.680262599376384,
+    "j5_cycle_s": 2.1,
+    "j5_amplitude_deg": 20,
+    "repetitions": 2,
+    "sequence": "descend, J5 left/right cycle, rise; twice",
+    "control_limits_unchanged": true,
+    "hardware_tested": false
+  },
+  "arm": {
+    "channels": 7,
+    "gripper_motor_id": 7,
+    "firmware_daily_control_available": true,
+    "default_boot": "SLEEP with motors disabled; explicit wake arrow starts WAKE",
+    "dance_firmware_motor_control": false,
+    "hardware_tested": false
+  },
+  "hardware_tested": false,
+  "flashed": false,
+  "pushed": false,
+  "motor_commands_sent_this_change": false,
+  "dance_visual_revision": {
+    "date": "2026-11-10",
+    "08": "16 complete drawn cels; side poses 56/59/62 degrees excluded; original duration, neutral and two turns retained",
+    "09": "Approved full-character multiview horizontal figure-eight with trace, unchanged",
+    "physical_trajectories_changed": false,
+    "shared_endpoints_verified": "Within endpoint groups; 08 has its own drawn neutral",
+    "regression_tests_passed": [
+      "project_assets",
+      "ui_rgb565",
+      "animation_resources",
+      "flash_budget",
+      "dance_cavities"
+    ],
+    "firmware_built": true,
+    "hardware_tested": false
+  },
+  "previous_full_host_run": {
+    "date": "2026-11-09",
+    "passed": 36,
+    "failed": 0,
+    "names": [
+      "daily_c5_mapping",
       "board_input",
+      "daily_c5_export",
+      "daily_gravity",
       "behavior_config",
       "project_assets",
       "ui_rgb565",
@@ -25,112 +185,24 @@
       "flash_budget",
       "dance_cavities",
       "arm_adapter",
+      "daily_control",
+      "daily_recovery_parity",
       "arm_component_snapshot",
       "arm_vendor_joint_path",
       "arm_vendor_teach",
-      "rs_record_playback"
-    ]
-  },
-  "coverage": [
-    "Independent Python decoder and firmware C decoder CRC validation for every runtime frame.",
-    "Every one of the 100 selected-action seams shares exact neutral pixels, including repeat and base turn.",
-    "Remaining eight daily GIF bytes and all twenty active runtime frame CRCs/timestamps match previous Git HEAD; retired fold/unfold clips and triggers removed.",
-    "Forward/reverse seeks, bounded depth, self-reference/corrupt payload rejection, fallback and cache memory tested.",
-    "Real LVGL editing, half-beat adjustments, stop/replay, all ten actions, existing NVS schema and legacy 500ms holds tested.",
-    "Generic motion bridge joint bounds, analytic speed/acceleration duration, endpoints and invalid arguments tested; no calibrated trajectories or motor backend.",
-    "Full firmware build, application reserve enforcement and exact-boundary/over-budget tests passed.",
-    "25 reviewed enclosed-cavity samples reveal the room; eye/metal highlights preserved. All 600 dance samples compared to the pre-fix coverage: changes confined to reviewed holes plus one-pixel edges.",
-    "Pinned CAN/BSP/motor/IK/motion source checks and adapter/vendor regressions passed. Current default standby firmware built; prior passive-monitor build remains historical evidence only.",
-    "Retired IDs 4/5 rejected, repeated taps remain normal, gesture cleanup and sleep/wake regression passed. Host playback lock, rejected-frame logging, offline TCH/curve/bridge/status/watchdog tests passed; no hardware acceptance."
-  ],
-  "assets": {
-    "gif_count": 20,
-    "daily_gif_count": 8,
-    "dance_gif_count": 10,
-    "automatic_bookend_gif_count": 2,
-    "runtime_frame_count": 486,
-    "runtime_bytes": 4552514,
-    "nominal_fps": 8,
-    "dance_sampling_ms": 50,
-    "dance_standard_target_fps": 20,
-    "dance_runtime_colors": 64,
-    "dance_coverage_levels": 16,
-    "dance_max_delta_depth": 7,
-    "animation_cache_peak_bytes": 614400,
-    "previous_animation_cache_peak_bytes": 921600,
-    "previous_runtime_bytes": 5064506,
-    "base_turn_note": "Sparse original turn poses retained; offline neutral bridges only. Not 20 distinct turn poses per second.",
-    "saved_runtime_bytes": 511992
-  },
-  "choreography": {
-    "schema_version": 1,
-    "max_steps": 8,
-    "slots": 10,
-    "screen_only": true,
-    "available_actions": 10,
-    "wait_block": true,
-    "persistence": "NVS dual-record CRC",
-    "motor_playback": false,
-    "daily_actions_allowed": false,
-    "automatic_bookends": true,
-    "source_bookend_duration_ms": 3000,
-    "standard_bookend_duration_ms": 2400,
-    "bookends_consume_steps": false,
-    "standard_bpm": 100,
-    "new_hold_step_ms": 300,
-    "legacy_hold_values_preserved": true
-  },
-  "flash": {
-    "total_bytes": 8388608,
-    "application_partition_bytes": 8323072,
-    "application_bytes": 5487808,
-    "application_free_bytes": 2835264,
-    "reserved_bytes": 2097152,
-    "future_motion_data_bytes": 524288,
-    "future_code_growth_bytes": 1048576,
-    "unallocated_margin_bytes": 524288
-  },
-  "hardware_tested": false,
-  "flashed": false,
-  "pushed": false,
-  "build_log": "/tmp/rebuddy-cleanup-firmware.log",
-  "test_log": "/tmp/rebuddy-cleanup-tests.log",
-  "preview": "build/daily-cleanup-preview/contact-sheet.png",
-  "limitations": [
-    "Frame rate and decode/transfer latency need board measurements.",
-    "Shared-neutral joins do not provide arbitrary pose-to-pose dancing.",
-    "64-color runtime quantization trades some gradient detail for frame rate and Flash reserve.",
-    "Sparse base-turn artwork remains less smooth than the nine high-frame-count clips.",
-    "Motion helpers do not establish collision safety, payload limits or validated device control.",
-    "Arm components are integrated but action execution, calibrated seven-channel trajectories and physical stop/enable coordination are not connected. Passive monitoring has not been tested on hardware."
-  ],
-  "cavity_comparison": "build/cavity-fix/comparison.png",
-  "arm_components": {
-    "source_manifest": "assets/config/arm_components.json",
-    "channels": 7,
-    "kinematic_joints": 6,
-    "gripper_motor_id": 7,
-    "default_mode": "standby",
-    "optional_mode": "listen_only",
-    "motion_enabled": false,
-    "calibrated_actions": 0,
-    "hardware_tested": false,
-    "firmware_growth_bytes": 86336,
-    "monitor_build": {
-      "application_bytes": 6002528,
-      "sha256": "30d19f2479b92514ca9beea2641efac11f1e42df54d100a6f8a8543a559a60f5",
-      "build_log": "/tmp/rebuddy-arm-monitor-build.log",
-      "scope": "Historical pre-cleanup monitor build (2026-10-30); not rebuilt in this change."
-    }
-  },
-  "host_playback": {
-    "status": "quarantined_after_observed_drop",
-    "recorded_actions": 4,
-    "offline_checks_passed": 4,
-    "attempted_actions": 1,
-    "accepted_actions": 0,
-    "playback_enabled": false,
-    "incident": "assets/verification/rs_playback_incident.json",
-    "note": "PC SocketCAN trial; unrelated to ESP32 firmware hardware_tested flag. Disable was confirmed but does not establish safe mechanical support."
+      "rs_record_playback",
+      "daily_actions_cli",
+      "rs_gravity_record",
+      "rs_dance_record",
+      "rs_dance_play",
+      "rs_dance_library",
+      "rs_protective_stop",
+      "rs_feedback_audit",
+      "rs_gravity_play",
+      "rs_zero_return",
+      "rs_idle_entry",
+      "rs_daily_prepared"
+    ],
+    "note": "Full run plus successful targeted reruns after fixing the UI fixture title and simulating explicit operator release in the zero-return fault fixture. No production motor-control changes for these test fixes. The subsequent 08/09 visual revision reran the relevant asset/UI/storage tests; final palette retested independent pixels, C decoder, cavities and Flash budget. Other control tests were not repeated because physical trajectories and control code are unchanged."
   }
 }

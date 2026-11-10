@@ -1,0 +1,85 @@
+{
+  "schema": "rebuddy.dance_toon3d.qa.v1",
+  "created_at": "2026-11-09T14:07:28.938569+00:00",
+  "motion_sha256": "378940574a6c241938da1f559f789edb6a0503fadaa9ed76e035549003ee13e9",
+  "renderer_sha256": "d29ed9af1990806c9d8d93740691c287c8efd50e51b76f3721a97e0ce3e9f8ef",
+  "model_sha256": "bbea3b39680028f499824ae2d11884e3cbb4caf8a14743753a814c96303b4290",
+  "offline_only": true,
+  "firmware_replaced": false,
+  "real_motion_unchanged": true,
+  "actor_matrix_max_error": 0.0,
+  "rotation_orthogonality_max_error": 1.5543122344752192e-15,
+  "perspective_vs_vtk_max_error_px": 2.2737367544323206e-13,
+  "all_meshes_unchanged_across_174_frames": true,
+  "exported_bindings_verified": 70,
+  "outlines_backface_culled": 24,
+  "fixed_vertical_fov_deg": 30.642073454187955,
+  "gifs": [
+    {
+      "path": "build/dance-3d/toon3d/08.gif",
+      "frames": 110,
+      "duration_ms": 8740,
+      "minimum_content_border_px": 106,
+      "endpoint_max_channel_difference": 0,
+      "sha256": "c1edae6f4dd8b4743e87847fbb9b0cdfeaffaab8a7d0f21cc4ec2fc668b04e9a"
+    },
+    {
+      "path": "build/dance-3d/toon3d/preview/08.gif",
+      "frames": 110,
+      "duration_ms": 8740,
+      "minimum_content_border_px": 106,
+      "endpoint_max_channel_difference": 0,
+      "sha256": "9ddf2496200878939472e4694ba63d359404df16c747934102277433fd69327d"
+    },
+    {
+      "path": "build/dance-3d/toon3d/09.gif",
+      "frames": 64,
+      "duration_ms": 5100,
+      "minimum_content_border_px": 84,
+      "endpoint_max_channel_difference": 0,
+      "sha256": "bdf3a1c08c2e7c898e06c2dd50939a6d3480b9ec42d36bcb0f4f2844642e2328"
+    },
+    {
+      "path": "build/dance-3d/toon3d/preview/09.gif",
+      "frames": 64,
+      "duration_ms": 5100,
+      "minimum_content_border_px": 84,
+      "endpoint_max_channel_difference": 0,
+      "sha256": "6f2b8ceabd570559f96dcae77a90ed6897c44fea6d862847692e4fc31a72dae9"
+    }
+  ],
+  "flat_2d_rendering_verified": true,
+  "all_actor_lighting_disabled": true,
+  "specular_disabled": true,
+  "appearance": {
+    "render_style": "original_artwork_unlit_illustration",
+    "outline_width_m": 0.0032,
+    "vertical_fov_deg": 30.642073454187955,
+    "head_center": [
+      -0.155,
+      0.0,
+      0.105
+    ],
+    "head_radii": [
+      0.166,
+      0.139,
+      0.112
+    ],
+    "face_source": "artwork.face",
+    "joint_source": "artwork.cap",
+    "base_radius": 0.18,
+    "major_joint_radii": [
+      0.086,
+      0.08,
+      0.084
+    ]
+  },
+  "passed": true,
+  "artwork_sha256": "aaecb613a80f676e00755b970c9a1de233bbb26463b3802e15c9da33225ba548",
+  "artwork_functions": [
+    "artwork.face",
+    "artwork.cap"
+  ],
+  "render_helpers_sha256": "9a302d066257d20faaeae0c488f0fc53397a88ffe29f5633f716d815c0af16a7",
+  "original_artwork_unchanged": true
+}

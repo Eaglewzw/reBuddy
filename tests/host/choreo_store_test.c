@@ -297,11 +297,31 @@ int main(void)
         dance.steps[0].action_id=(uint8_t)id; writes=memory.writes;
         assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_INVALID && memory.writes==writes);
     }
-    for (unsigned id=RB_CHOREO_2D_NOD;id<=RB_CHOREO_2D_WAVE;++id) {
+    for (unsigned id=RB_CHOREO_DANCE_NOD;id<=RB_CHOREO_DANCE_PIVOT;++id) {
         dance.steps[0]=(rb_choreo_step_t){(uint8_t)id,3,0,0};
         assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_OK);
         restart(&memory); load_equal(8,&dance);
     }
+    /* A newer old-library record must never silently play older/current dances.
+       Loading preserves caller and bytes; explicit rebuild uses a newer bank. */
+    rb_choreo_work_init(&dance,8);dance.count=1;
+    dance.steps[0]=(rb_choreo_step_t){RB_CHOREO_DANCE_NOD,1,0,0};
+    assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_OK);
+    for(unsigned id=33;id<=42;++id) {
+        for(unsigned key=16;key<=17;++key) {
+            memory.records[key][57]=(uint8_t)id;reseal(&memory,key);
+        }
+        rb_choreo_work_t sentinel=dance,loaded=sentinel;writes=memory.writes;
+        restart(&memory);
+        assert(rb_choreo_store_load(8,&loaded)==RB_CHOREO_STORE_OLD_LIBRARY);
+        assert(!memcmp(&loaded,&sentinel,sizeof(loaded)) && memory.writes==writes);
+    }
+    memory.records[16][57]=RB_CHOREO_DANCE_NOD;
+    set_generation(&memory,16,200);set_generation(&memory,17,201);
+    rb_choreo_work_t untouched=dance;
+    assert(rb_choreo_store_load(8,&untouched)==RB_CHOREO_STORE_OLD_LIBRARY);
+    assert(rb_choreo_store_save(8,&dance)==RB_CHOREO_STORE_OK);
+    restart(&memory);load_equal(8,&dance);
     rb_choreo_store_backend_t incomplete={0};
     assert(rb_choreo_store_set_backend(&incomplete)==RB_CHOREO_STORE_INVALID);
     assert(rb_choreo_store_set_backend(NULL)==RB_CHOREO_STORE_OK);

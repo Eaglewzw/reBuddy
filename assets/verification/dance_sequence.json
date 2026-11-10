@@ -1,0 +1,266 @@
+{
+  "schema": "rebuddy.dance_sequence_verification.v1",
+  "date": "2026-11-10",
+  "hardware_tested": false,
+  "can_opened": false,
+  "animation_changed": false,
+  "source_library_unchanged": true,
+  "sequence": [
+    "01",
+    "02",
+    "03",
+    "04",
+    "05",
+    "06",
+    "07",
+    "08",
+    "09",
+    "10"
+  ],
+  "nominal_duration_s": 69.94509996505377,
+  "connections": 9,
+  "pair_checks_passed": 100,
+  "pair_checks_total": 100,
+  "max_c2_errors_q_v_a": [
+    4.440892098500626e-16,
+    2.1094237467877974e-15,
+    1.0436096431476471e-14
+  ],
+  "single_runtime_segment": true,
+  "no_intermediate_settle": true,
+  "fault_hold_mock_passed": true,
+  "tests_passed": [
+    "rs_dance_sequence",
+    "rs_dance_library",
+    "rs_daily_prepared",
+    "project_assets"
+  ],
+  "new_test_cases_passed": 8,
+  "limits": {
+    "arm_velocity_rad_s": 1.0,
+    "arm_acceleration_rad_s2": 2.0,
+    "bridge_jerk_rad_s3": 20.0
+  },
+  "validation": {
+    "samples": 3517,
+    "check_period_s": 0.02,
+    "gravity_peak_nm": [
+      7.456830545290831e-16,
+      4.720916934922979,
+      7.039377815554559,
+      2.01255462622699,
+      0.3634372556301161,
+      0.0008191352696666392
+    ],
+    "inverse_dynamics_peak_nm": [
+      0.28951735815771107,
+      5.606755830381349,
+      7.458858345821205,
+      2.1209871219493444,
+      0.3690590809889603,
+      0.0011595495553772875
+    ],
+    "sampled_peak_velocity_rad_s": [
+      0.9758189082794002,
+      0.6789846417483901,
+      0.9949663191462602,
+      0.8896888025037005,
+      0.995024803799096,
+      0.597406507093931,
+      2.6974967812412323
+    ],
+    "sampled_peak_acceleration_rad_s2": [
+      1.9265634101863636,
+      1.9798135861466581,
+      1.9800613261249707,
+      1.9800875537182605,
+      1.9798993077633829,
+      1.4849244808225366,
+      9.424707885808363
+    ],
+    "self_collision_scope": "closed-finger URDF mesh model; sampled, not continuous collision detection",
+    "open_gripper_proxy_samples": 400,
+    "open_finger_geometry_checked": false,
+    "environment_checked": false,
+    "seam_max_errors_q_v_a": [
+      4.440892098500626e-16,
+      2.1094237467877974e-15,
+      1.0436096431476471e-14
+    ],
+    "velocity_upper_bound_rad_s": [
+      0.9758214780735313,
+      0.6790084197723055,
+      0.9950248756218939,
+      0.889729463608997,
+      0.9950248756218905,
+      0.5974883400930207,
+      2.6975288567196545
+    ],
+    "acceleration_upper_bound_rad_s2": [
+      1.9801490062127192,
+      1.980149006212714,
+      1.9801490062133922,
+      1.98014900621272,
+      1.9801490062127192,
+      1.48511175465954,
+      9.424777960769388
+    ],
+    "bridge_jerk_budget_rad_s3": 20.0,
+    "source_bodies_preserved": true,
+    "internal_settle_calls": 0,
+    "collision_identity": {
+      "schema": "rebuddy.rs_collision.v1",
+      "resources": [
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/base_link.STL",
+          "sha256": "af1df69639fb1f1022ad94ca1537157f8dbef379ec37fd75d8901d30d4061cbe"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/gripper_end.STL",
+          "sha256": "d52ed4bb37754fa9d57cc21b4be3b9f90373b6d5594c521e7c3cd3a1adf5ba62"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link1.STL",
+          "sha256": "60860556dd91b15eff0bb7d3a5bffcf4b34ac98156c542f203ad6ce755be2d1d"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link2.STL",
+          "sha256": "f3653afa47f7f2ee9733416e56c52745b5eaafd23ca6c84360dffd440e12668d"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link3.STL",
+          "sha256": "3d6502345c14bd2d6c5b9c394672efdaa2b787cc81a0bed23a0bde574e787a28"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link4.STL",
+          "sha256": "431e5e7365ba31df598207dee6d48ff3051ec32f6d42dcae8e3b25e7807617c4"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link5.STL",
+          "sha256": "e8888083f0cf597e7f0afb7b273b81f55df7ef45eee706dbf840c9ef365c7b1e"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/link6.STL",
+          "sha256": "29a7809bde57f21b536588e78e66bec137f1fbe50308b71ffa842b6efbb109fd"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/pla_left.STL",
+          "sha256": "0e774ab0bf2975792982adf646465c7ed1ff35b9ed0ad9bf3fb14c9d7480ebef"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/meshes/pla_right.STL",
+          "sha256": "43556446abbbecd847bb09a4dc13d4ef2aa266a9ba904e5ac9ccff89a3c8280d"
+        },
+        {
+          "path": "/home/verser/CPP/JoyReBot/src/joyrebot_gazebo_sim/urdf/rebot_b601_rs.urdf",
+          "sha256": "dc29e21ffb77d282f99882f035b6162c187de665637e4f3b12837c9c84d06887"
+        },
+        {
+          "path": "/home/verser/CPP/reBotArmController_ROS2/src/rebotarm_moveit_config/config/rebotarm_rs.srdf",
+          "sha256": "046860efe2c516060ced0b5c75906182805c964a4fbe1cb6af5a6f480991f095"
+        }
+      ],
+      "geometry_count": 10,
+      "checked_pair_count": 35,
+      "disabled_pairs": [
+        {
+          "links": [
+            "base_link",
+            "link1"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "link1",
+            "link2"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "link2",
+            "link3"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "link3",
+            "link4"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "link4",
+            "link5"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "link5",
+            "link6"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "gripper_end",
+            "link6"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "gripper_end",
+            "gripper_left"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "gripper_end",
+            "gripper_right"
+          ],
+          "reason": "Adjacent"
+        },
+        {
+          "links": [
+            "gripper_left",
+            "gripper_right"
+          ],
+          "reason": "Never"
+        }
+      ],
+      "scope": "source URDF collision meshes; closed fingers; robot self-collision only",
+      "environment_checked": false,
+      "physical_geometry_calibrated": false
+    }
+  },
+  "source_hashes": {
+    "01": "c2ad5ce386cad68b6a22c60d67526c718cd1526de3ecd7f8dbb98fc485866326",
+    "02": "18d8891efb4080a9726e0044eff0f34fd57180214e26ea2c44aa1e1c9ccc6a0b",
+    "03": "0ebccaea45ad5847f15b039abb39f24bdabdad38840e9a965fc449fe9a9b75d6",
+    "04": "e63169da5e5c6a62b5f5b5eb68be44943f1b8ec6ce8618268a7c7c498833d619",
+    "05": "2db78b18113d3a19e76e442935cdd34b4fec7ef2ab0d9859e67a9de871fda026",
+    "06": "5bf66ad8701f3dc1b4f501b3b1e4cbe6e507e4e7c51e627cab791ba336e0a0b7",
+    "07": "4c32d81bfaf2fa7891ded389dca9e48909f5b89b76ca145f561e0012819d6c5e",
+    "08": "c39db147e24e0e87124bd26a5706edf594bea4b4935ce1cad0e8cc6369123fee",
+    "09": "7408d09d309612a620126b94261e4ee27bcea8e193801ff098767951283802a6",
+    "10": "9ec257533aa31a12eb8c109c2efe7aaf9801242052fd9c655a7dad68f8c46d34"
+  },
+  "report": "build/dance-sequence/all-ten/report.json",
+  "report_sha256": "e5528b874cda1c71d250ddfa65f674ddd3787c828c63dbf857fb75d5fb86eb99",
+  "first_trial_report": "build/dance-sequence/first-trial/report.json",
+  "code_hashes": {
+    "tools/rs_dance_sequence.py": "7b99bc0028f48be6604edf7f95e5e65d337b86d17d3d7f7736032faafb5de2e0",
+    "tools/rs_dance_sequence_cli.py": "0c573d6656d51e12e1cc6015a0773d7c3d761db258140ca4def0ea1679ee7236",
+    "tools/rs_daily_session.py": "2ff4184267bf326a7ec1333ff4896c128b8207e610f41a298e6f9afb9fffc58b",
+    "tools/rs_dance_speed.py": "fb476d5e0b768cdb3c1174053555e3e5d197d28777f2f78e6b5f05a76e11f195",
+    "tools/rs_dance_console.py": "6daad3a16a06e15bd7a3a590658f2a76dda169c6bebae465bd4b1a447a14a68a",
+    "tests/host/rs_dance_sequence_test.py": "6ca7cb134737f7d82950c735575381ded55a74b48c011a5f866ee09819cc50b5"
+  },
+  "gripper_profile_switch_test_passed": true
+}

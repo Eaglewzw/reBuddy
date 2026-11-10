@@ -10,6 +10,14 @@
 #define PERIOD .02f
 static const float bounds_lo[7]={-2.8f,0,0,-1.57f,-1.57f,-3.14f,-.12f};
 static const float bounds_hi[7]={2.8f,3.14f,3.14f,1.57f,1.57f,3.14f,4.48332313f};
+static bool dancing(const rb_daily_control_t *c) {return c->status.action==RB_DANCE_CONTROL_ACTION && c->dance;}
+static float plan_duration(const rb_daily_control_t *c)
+{return dancing(c)?c->dance->duration_s:rb_daily_find(c->status.action)->duration_s;}
+static bool plan_sample(rb_daily_control_t *c,float t,float q[7],float v[7],float a[7])
+{
+    if(dancing(c))return rb_dance_sample(c->dance,t,q,v,a,&c->status.dance_number,&c->status.dance_transition);
+    return rb_daily_sample(c->status.action,t,q,v,a);
+}
 static void state(rb_daily_control_t *c,rb_dc_state_t s)
 { c->status.state=s;c->changed=c->now;c->still_since=0;c->elapsed=0; }
 static void disable(rb_daily_control_t *c,const char *reason,unsigned motor)
@@ -82,8 +90,8 @@ static bool reference_ready(rb_daily_control_t *c)
     }
     c->pending=false;c->owned=true;c->elapsed=c->queued_elapsed;
     if(c->status.state==RB_DC_PLAY) {
-        const rb_daily_action_t *a=rb_daily_find(c->status.action);
-        c->status.phase=fminf(1,c->elapsed/a->duration_s);
+        c->status.phase=fminf(1,c->elapsed/plan_duration(c));
+        if(dancing(c))c->status.dance_seconds=c->elapsed;
     } else if(c->status.state==RB_DC_ENTRY && c->status.action==RB_DAILY_WAKE && c->duration>0) {
         c->status.phase=fminf(1,c->elapsed/c->duration);
     }
@@ -128,6 +136,17 @@ static bool send_target(rb_daily_control_t *c,const float q[7],const float v[7],
         bool clap=c->status.action==RB_DAILY_HAPPY && c->status.state==RB_DC_PLAY && plan->sync_count>=4 &&
             next>=plan->sync[2].motion_s && next<=plan->sync[3].motion_s;
         float limit=(j==6 && clap?10.8f:5.f)*RAD;
+        if(dancing(c) && j==6) {
+            bool pulse=c->status.state==RB_DC_PLAY && !c->status.dance_transition &&
+                (c->status.dance_number==2 || c->status.dance_number==6);
+            limit=(pulse?10.8f:5.f)*RAD;
+            if(fabsf(q[j])<1e-5f && fabsf(v[j])<1e-5f)limit=fmaxf(limit,6*RAD);
+        }
+        if(dancing(c) && fabsf(v[j])>(j==6?2.8f:1.f)+1e-3f) {
+            if(recoverable(c,gain))hold(c,"dance velocity limit",q,false);
+            else disable(c,"dance velocity limit",j+1);
+            return false;
+        }
         if(fabsf(q[j]-c->motors[j].position)>limit) {
             c->status.bad_motor=j+1;
             if(recoverable(c,gain))hold(c,"following error: protective braking",q,false);
@@ -225,10 +244,10 @@ static void approach(rb_daily_control_t *c)
     /* WAKE is a measured-position -> idle move. Do not home first or replay
      * another zero -> idle curve after arriving at the idle target. */
     unsigned source=c->status.action==RB_DAILY_WAKE?RB_DAILY_IDLE:c->status.action;
-    if(!rb_daily_sample(source,0,q,v,a)) {disable(c,"invalid action",0);return;}
+    if(!(dancing(c)?plan_sample(c,0,q,v,a):rb_daily_sample(source,0,q,v,a))) {disable(c,"invalid action",0);return;}
     bool already=true;
     for(unsigned j=0;j<7;++j)already &= fabsf(c->target[j]-q[j])<1e-5f &&
-        fabsf(c->motors[j].position-q[j])<(j==6?3.f:1.f)*RAD && fabsf(c->estimated_v[j])<RAD;
+        fabsf(c->motors[j].position-q[j])<(j==6?(dancing(c)?6.f:3.f):1.f)*RAD && fabsf(c->estimated_v[j])<RAD;
     if(already) {memcpy(c->target,q,sizeof(q));state(c,RB_DC_ENTRY_SETTLE);return;}
     move(c,q,false);
     if(c->status.action==RB_DAILY_WAKE)
@@ -240,6 +259,7 @@ static bool arrived(rb_daily_control_t *c,bool zero)
     for(unsigned j=0;j<7;++j) {
         float tolerance=(j==6?rb_daily_policy.gripper_tolerance_deg:
                          zero?rb_daily_policy.zero_tolerance_deg:rb_daily_policy.idle_tolerance_deg)*RAD;
+        if(dancing(c) && j==6 && fabsf(c->target[j])<1e-5f)tolerance=6*RAD;
         yes &= fabsf(c->motors[j].position-c->target[j])<=tolerance && fabsf(c->estimated_v[j])<=RAD;
     }
     if(!yes)c->still_since=0;
@@ -255,13 +275,14 @@ esp_err_t rb_daily_control_init(rb_daily_control_t *c,int channel)
     esp_err_t e=can_console_arm_gravity_init(&c->gravity,&g);
     c->initialized=e==ESP_OK;return e;
 }
-esp_err_t rb_daily_control_request(rb_daily_control_t *c,unsigned action,unsigned id)
+static esp_err_t request(rb_daily_control_t *c,unsigned action,unsigned id,const rb_dance_plan_t *dance)
 {
-    if(!c || !c->initialized || !rb_daily_find(action) || !id)return ESP_ERR_INVALID_ARG;
+    if(!c || !c->initialized || (!rb_daily_find(action) && !dance) || !id)return ESP_ERR_INVALID_ARG;
     rb_dc_state_t s=c->status.state;
     bool retry=s==RB_DC_FAULT && !c->status.enabled && !c->owned;
     if(s!=RB_DC_OFF && s!=RB_DC_HOLD && s!=RB_DC_ZERO_HOLD && !retry)return ESP_ERR_INVALID_STATE;
     if(action==RB_DAILY_SLEEP && s!=RB_DC_ZERO_HOLD)return ESP_ERR_INVALID_STATE;
+    c->dance=dance;c->status.dance_number=0;c->status.dance_transition=false;c->status.dance_seconds=0;
     c->status.action=action;c->status.request_id=id;c->status.phase=0;c->status.error=NULL;c->status.stop_error=NULL;c->status.bad_motor=0;
     memset(&c->status.hold,0,sizeof(c->status.hold));
     c->home_requested=c->pause_requested=false;c->ui_at=c->now;
@@ -274,6 +295,15 @@ esp_err_t rb_daily_control_request(rb_daily_control_t *c,unsigned action,unsigne
     }
     else {state(c,RB_DC_ENTRY);c->duration=0;} /* plan from next fresh sample */
     return ESP_OK;
+}
+esp_err_t rb_daily_control_request(rb_daily_control_t *c,unsigned action,unsigned id)
+{return request(c,action,id,NULL);}
+esp_err_t rb_daily_control_dance(rb_daily_control_t *c,const rb_dance_plan_t *plan,unsigned id)
+{
+    if(!plan || !plan->count || plan->count>RB_DANCE_MAX_STEPS || !(plan->duration_s>0) ||
+        strcmp(rb_daily_calibration_sha256,rb_dance_calibration_sha256) ||
+        strcmp(rb_daily_urdf_sha256,rb_dance_urdf_sha256))return ESP_ERR_INVALID_ARG;
+    return request(c,RB_DANCE_CONTROL_ACTION,id,plan);
 }
 void rb_daily_control_home(rb_daily_control_t *c)
 {
@@ -314,7 +344,7 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
         return;
     }
     if(!bus) {disable(c,"CAN offline",0);return;}
-    if(c->home_requested && !c->status.enabled) {disable(c,NULL,0);return;}
+    if((c->home_requested || c->pause_requested) && !c->status.enabled) {disable(c,NULL,0);return;}
     if(!fresh) {
         if(c->status.state==RB_DC_PRECHECK && now-c->changed<4000) {
             if(now-c->report_at>=200) {
@@ -427,10 +457,10 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
         (void)send_target(c,q,v,1,t);break;
     }
     case RB_DC_PLAY: {
-        const rb_daily_action_t *plan=rb_daily_find(c->status.action);
-        if(c->elapsed>=plan->duration_s) {state(c,RB_DC_SETTLE);break;}
-        float t=fminf(plan->duration_s,c->elapsed+PERIOD);
-        if(!rb_daily_sample(plan->id,t,q,v,a)){hold(c,"plan evaluation failed: protective braking",NULL,false);break;}
+        float duration=plan_duration(c);
+        if(c->elapsed>=duration) {state(c,RB_DC_SETTLE);break;}
+        float t=fminf(duration,c->elapsed+PERIOD);
+        if(!plan_sample(c,t,q,v,a)){hold(c,"plan evaluation failed: protective braking",NULL,false);break;}
         (void)send_target(c,q,v,1,t);break;
     }
     case RB_DC_ENTRY_SETTLE: case RB_DC_SETTLE: case RB_DC_HOME_SETTLE: {
@@ -438,7 +468,7 @@ void rb_daily_control_tick(rb_daily_control_t *c,uint64_t now)
         if(arrived(c,home || c->status.action==RB_DAILY_REST || c->status.action==RB_DAILY_SLEEP)) {
             if(home) {disable(c,NULL,0);break;}
             if(c->status.state==RB_DC_ENTRY_SETTLE && c->status.action!=RB_DAILY_WAKE &&
-                rb_daily_find(c->status.action)->piece_count)state(c,RB_DC_PLAY);
+                (dancing(c) || rb_daily_find(c->status.action)->piece_count))state(c,RB_DC_PLAY);
             else {
                 c->status.completed_id=c->status.request_id;c->status.phase=1;
                 state(c,c->status.action==RB_DAILY_REST?RB_DC_ZERO_HOLD:RB_DC_HOLD);

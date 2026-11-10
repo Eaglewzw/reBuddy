@@ -6,6 +6,15 @@ menu "reBuddy arm components"
             Active CAN1 with native RS motor service and gravity compensation.
             Boot shows SLEEP without enabling. Click the wake arrow to execute WAKE.
             Requires the exported calibration and independent support.
+    config REBUDDY_ARM_DANCE_CONTROL
+        bool "Enable touch and serial Dance choreography"
+        default n
+        depends on REBUDDY_ARM_DAILY_CONTROL
+        help
+            Ten offline-checked trajectories, seeded random selection and C2 joins.
+            Touch playback and serial commands share the Daily motor task.
+            Boot never starts motion.
+            No Dance GIF synchronization. Requires current calibration/support.
     config REBUDDY_ARM_MONITOR
         bool "Start CAN1 in passive listen-only mode"
         default n

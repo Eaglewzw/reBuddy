@@ -1,0 +1,119 @@
+{
+  "schema": "rebuddy.dance_gallery_install.v1",
+  "date": "2026-11-10",
+  "passed": true,
+  "installed_clips": [
+    {
+      "number": 0,
+      "file": "00_start.gif",
+      "sha256": "9dd225634da4f3714a8781069e5403062c0f551844ed28e84169754a10a188a3",
+      "duration_ms": 5500,
+      "rgba_frames": 69
+    },
+    {
+      "number": 1,
+      "file": "01_nod.gif",
+      "sha256": "10c8c9feddd77a1a85334c02ad3ac5307c18d600a6b6c155497534dfbb239530",
+      "duration_ms": 6470,
+      "rgba_frames": 81
+    },
+    {
+      "number": 2,
+      "file": "02_hello.gif",
+      "sha256": "a9a5d382c542a7f93d7558016b7612d4f40ab337c1d6ed1f7f4fed0be520b70c",
+      "duration_ms": 6530,
+      "rgba_frames": 82
+    },
+    {
+      "number": 3,
+      "file": "03_dip.gif",
+      "sha256": "a68c15148a2d64c5761cf19649615753eeea58082f75889337038d9edbe0a6b5",
+      "duration_ms": 5680,
+      "rgba_frames": 71
+    },
+    {
+      "number": 4,
+      "file": "04_reach.gif",
+      "sha256": "d221edfe1a699799b57ce4f39c44ffdae4c11af3b3f2c565010144606b21ae17",
+      "duration_ms": 3660,
+      "rgba_frames": 46
+    },
+    {
+      "number": 5,
+      "file": "05_nuzzle.gif",
+      "sha256": "9e9f5c57ad224d8c6d3cd5807bbbc1bf94274852310007f542af172c0fdbab28",
+      "duration_ms": 4660,
+      "rgba_frames": 59
+    },
+    {
+      "number": 6,
+      "file": "06_happy.gif",
+      "sha256": "d921c90ced646bc6bfd803299845c32c5fced5211b88098aa4f07d7c3f6322df",
+      "duration_ms": 6530,
+      "rgba_frames": 82
+    },
+    {
+      "number": 7,
+      "file": "07_wave.gif",
+      "sha256": "0da127320896466656ef0d832e30a7dff5e0da67e891a148141e437096b9d131",
+      "duration_ms": 7010,
+      "rgba_frames": 88
+    },
+    {
+      "number": 8,
+      "file": "08_steady.gif",
+      "sha256": "305d2e94350707d7f49f484be89c9d34c2894aa013c16980c37815f4869cbf59",
+      "duration_ms": 8740,
+      "rgba_frames": 110
+    },
+    {
+      "number": 9,
+      "file": "09_eight.gif",
+      "sha256": "6405da4a999c3b1fea4ef1e778e2299f09b1adaa9576b1ce3e8a175abd171c61",
+      "duration_ms": 5100,
+      "rgba_frames": 64
+    },
+    {
+      "number": 10,
+      "file": "10_pivot.gif",
+      "sha256": "a439c4aab5d4309a4d91fd61a19e85090090bc6cbc28f4acd6d7178cb4259227",
+      "duration_ms": 16740,
+      "rgba_frames": 210
+    },
+    {
+      "number": 11,
+      "file": "11_end.gif",
+      "sha256": "8210bc1cfa66e0325ad0ee067cd49b48c79dcee83b5b87fc9e53d08e29635a28",
+      "duration_ms": 7000,
+      "rgba_frames": 88
+    }
+  ],
+  "all_gifs_identical_to_approved_sources": true,
+  "gif_manifest_sha256": "729365f92e18a0991b841a0a460e373348c8be82bf1019d628eee85ada790099",
+  "animation_manifest_sha256": "3f59f432af60817c86ea049c954c211497ec10d2c0ef26b16061bb5f00f705a6",
+  "application_sha256": "817e35390cca1c011456b611d76120a84cd6d0ebbd269f9758027c1ea3e9f938",
+  "flash": {
+    "application_bytes": 5649280,
+    "application_limit_bytes": 6225920,
+    "reserved_bytes": 2097152,
+    "free_bytes": 2673792,
+    "unreserved_headroom_bytes": 576640,
+    "animation_bytes": 4628420
+  },
+  "regression_tests": {
+    "passed": 5,
+    "failed": 0,
+    "names": [
+      "project_assets",
+      "ui_rgb565",
+      "animation_resources",
+      "flash_budget",
+      "dance_cavities"
+    ],
+    "scope": "08 side-pose removal regression"
+  },
+  "embedded_resources_verified": true,
+  "hardware_tested": false,
+  "flashed": false,
+  "revision": "08 side-pose removal; all other GIFs unchanged"
+}

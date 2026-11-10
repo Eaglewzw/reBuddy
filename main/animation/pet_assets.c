@@ -62,11 +62,13 @@ static const uint8_t *frame_record(unsigned index)
     if (offset>blob_size || bytes<=16 || bytes>blob_size-offset) return NULL;
     const uint8_t *h=blob+offset;
     if (memcmp(h,"RBG2",4) || le16(h+4)!=RB_FRAME_WIDTH || le16(h+6)!=RB_FRAME_HEIGHT ||
-        le32(h+8)!=PIXEL_BYTES || le32(h+12)>5) return NULL;
+        le32(h+8)!=PIXEL_BYTES || le32(h+12)>7) return NULL;
     if (le32(h+12)==0 && bytes!=16+PIXEL_BYTES) return NULL;
     if (le32(h+12)==2 && bytes<=20) return NULL;
     if (le32(h+12)==5 && bytes<=20) return NULL;
     if (le32(h+12)==4 && bytes<=20) return NULL;
+    if (le32(h+12)==6 && bytes<=24) return NULL;
+    if (le32(h+12)==7 && bytes<=20) return NULL;
     return h;
 }
 static lv_image_dsc_t descriptor(const uint8_t *pixels)
@@ -99,23 +101,23 @@ bool rb_assets_init(const uint8_t *data,size_t bytes,unsigned cache_slots)
         }
         unsigned codec=le32(record+12);
         if(codec>=4)has_delta=true;
-        if (codec==2 || codec==5) {
+        if (codec==2 || codec==5 || codec==7) {
             has_delta=true;
             unsigned base=le32(record+16);
             const uint8_t *base_record=frame_record(base);
             /* A delta may reference only a complete raw, zlib or palette frame. This
                rules out self-references, cycles and unbounded decode chains. */
-            if (!base_record || (codec==5?(base>=i || le32(base_record+12)<4):
+            if (!base_record || (codec>=5?(base>=i || (le32(base_record+12)!=codec-1 && le32(base_record+12)!=codec)):
                 (le32(base_record+12)==2 || le32(base_record+12)>3))) {
                 blob=NULL; blob_size=0; degraded=true; return false;
             }
         }
-        if(codec==5) {
+        if(codec==5 || codec==7) {
             unsigned node=i,depth=0;
             const uint8_t *r=record;
-            while(le32(r+12)==5) {
+            while(le32(r+12)==codec) {
                 unsigned next=le32(r+16);
-                if(++depth>7 || next>=node || !(r=frame_record(next)) || le32(r+12)<4) {
+                if(++depth>7 || next>=node || !(r=frame_record(next)) || (le32(r+12)!=codec-1 && le32(r+12)!=codec)) {
                     blob=NULL;blob_size=0;degraded=true;return false;
                 }
                 node=next;
@@ -167,10 +169,63 @@ static bool inflate_pixels(const uint8_t *source,size_t length,uint8_t *pixels)
 static bool palette_planes(unsigned frame,const uint8_t *record,uint8_t *pixels)
 {
     size_t bytes=rb_frames[frame].bytes;
-    unsigned count=le16(record+16);
-    size_t header=20+count*2;
+    unsigned count=le16(record+16),size=le32(record+12)==6?le16(record+20):0;
+    if(le32(record+12)==6 && (size<2 || size>240 || le16(record+22)!=size))return false;
+    size_t header=(size?24:20)+count*2,expected=size?(size_t)size*size*2:PIXEL_BYTES;
     return count && count<=256 && bytes>header &&
-        inflate_pixels(record+header,bytes-header,pixels);
+        inflate_buffer(record+header,bytes-header,pixels,expected);
+}
+/* The stored colors have a white matte. Recover premultiplied foreground
+ * before interpolation; room pixels are sampled only at final screen size. */
+static bool composite_native(const uint8_t *palette,const uint8_t *planes,uint8_t *pixels)
+{
+    unsigned count=le16(palette+16),size=le16(palette+20),n=size*size;
+    if(!count || count>256 || size<2 || size>240 || le16(palette+22)!=size)return false;
+    uint16_t key=le16(palette+18);
+    int matte[3]={(key>>11)*255/31,((key>>5)&63)*255/63,(key&31)*255/31};
+    static int colors[256][3];
+    for(unsigned i=0;i<count;++i) {
+        uint16_t c=le16(palette+24+2*i);
+        colors[i][0]=(c>>11)*255/31;colors[i][1]=((c>>5)&63)*255/63;colors[i][2]=(c&31)*255/31;
+    }
+    for(unsigned i=0;i<n;++i)if(planes[i]>=count)return false;
+    static unsigned low[240],high[240],fraction[240];
+    for(unsigned i=0;i<240;++i) {
+        int coord=(int)(((2*i+1)*size*128)/240)-128;
+        if(coord<0)coord=0;
+        if(coord>(int)(size-1)*256)coord=(int)(size-1)*256;
+        low[i]=(unsigned)coord/256;high[i]=low[i]+1<size?low[i]+1:low[i];fraction[i]=(unsigned)coord%256;
+    }
+    memcpy(pixels,room_image.data,PIXEL_BYTES);
+    for(unsigned y=0;y<240;++y)for(unsigned x=0;x<240;++x) {
+        unsigned sx[4]={low[x],high[x],low[x],high[x]},sy[4]={low[y],low[y],high[y],high[y]};
+        if(!planes[n+sy[0]*size+sx[0]] && !planes[n+sy[1]*size+sx[1]] &&
+           !planes[n+sy[2]*size+sx[2]] && !planes[n+sy[3]*size+sx[3]])continue;
+        unsigned wx=fraction[x],wy=fraction[y];
+        unsigned weights[4]={(256-wx)*(256-wy),wx*(256-wy),(256-wx)*wy,wx*wy};
+        unsigned total[4]={0};
+        for(unsigned k=0;k<4;++k) {
+            unsigned i=sy[k]*size+sx[k],alpha=planes[n+i],index=planes[i];
+            if(!alpha)continue;
+            total[3]+=alpha*weights[k];
+            for(unsigned j=0;j<3;++j) {
+                int value=colors[index][j]-(int)((255-alpha)*(unsigned)matte[j]/255);
+                if(value>(int)alpha)value=(int)alpha;
+                total[j]+=(unsigned)(value>0?value:0)*weights[k];
+            }
+        }
+        unsigned alpha=(total[3]+32768)/65536;
+        if(!alpha)continue;
+        unsigned at=y*320+x+40;uint16_t bg=le16(room_image.data+2*at);
+        unsigned background[3]={(bg>>11)*255/31,((bg>>5)&63)*255/63,(bg&31)*255/31},c[3];
+        for(unsigned j=0;j<3;++j) {
+            c[j]=(total[j]+32768)/65536+(255-alpha)*background[j]/255;
+            if(c[j]>255)c[j]=255;
+        }
+        uint16_t value=(uint16_t)(((c[0]>>3)<<11)|((c[1]>>2)<<5)|(c[2]>>3));
+        pixels[2*at]=(uint8_t)value;pixels[2*at+1]=(uint8_t)(value>>8);
+    }
+    return true;
 }
 static bool decode_dance(unsigned frame,const uint8_t *record,uint8_t *pixels)
 {
@@ -184,12 +239,15 @@ static bool decode_dance(unsigned frame,const uint8_t *record,uint8_t *pixels)
         if(length>=8 || !palette)return false;
         chain[length++]=current;
         unsigned codec=le32(palette+12);
-        if(codec==4)break;
-        if(codec!=5)return false;
+        if(codec==4 || codec==6)break;
+        if(codec!=5 && codec!=7)return false;
         unsigned next=le32(palette+16);
         if(next>=current)return false;
         current=next;palette=frame_record(current);
     }
+    unsigned size=le32(palette+12)==6?le16(palette+20):0;
+    if(le32(palette+12)==6 && (size<2 || size>240 || le16(palette+22)!=size))return false;
+    unsigned plane_bytes=size?size*size*2:PIXEL_BYTES;
     int reuse=-1;
     for(unsigned n=0;n<length;++n)if(chain[n]==cached_base)reuse=(int)n;
     if(reuse<0) {
@@ -200,9 +258,13 @@ static bool decode_dance(unsigned frame,const uint8_t *record,uint8_t *pixels)
     while(reuse>0) {
         unsigned next=chain[--reuse];const uint8_t *delta=frame_record(next);
         cached_base=UINT32_MAX;
-        if(!delta || !inflate_pixels(delta+20,rb_frames[next].bytes-20,dance_planes))return false;
-        for(unsigned i=0;i<PIXEL_BYTES;++i)base_pixels[i]^=dance_planes[i];
+        if(!delta || !inflate_buffer(delta+20,rb_frames[next].bytes-20,dance_planes,plane_bytes))return false;
+        for(unsigned i=0;i<plane_bytes;++i)base_pixels[i]^=dance_planes[i];
         cached_base=next;
+    }
+    if(le32(palette+12)==6) {
+        if(composite_native(palette,base_pixels,pixels))return true;
+        cached_base=UINT32_MAX;return false;
     }
     unsigned count=le16(palette+16);
     uint16_t key=le16(palette+18);

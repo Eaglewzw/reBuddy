@@ -1,0 +1,32 @@
+{
+  "schema": "rebuddy.dance_volume_qa.v1",
+  "passed": true,
+  "checks": [
+    {
+      "number": "08",
+      "gif_duration_ms": [
+        8740,
+        8740
+      ],
+      "loop_exact": true,
+      "projection_scale_unchanged": true,
+      "preview_sha256": "26cd01135ae4f75952fc3d9094bb71dfba2b359d614b34d844c10ff08f337681"
+    },
+    {
+      "number": "09",
+      "gif_duration_ms": [
+        5100,
+        5100
+      ],
+      "loop_exact": true,
+      "projection_scale_unchanged": true,
+      "preview_sha256": "b089520c0060502ff75e832f09fbda7ff97d0c15b88d49fcd9d2f5b4c1f87750"
+    }
+  ],
+  "motion_sha256": "378940574a6c241938da1f559f789edb6a0503fadaa9ed76e035549003ee13e9",
+  "motion_unchanged": true,
+  "other_gallery_actions_unchanged": true,
+  "review": "Closed surfaces and changing occlusion visually checked. Reconstructed silhouette differs from original; no claim of pixel-identical appearance or exact CAD correspondence.",
+  "appearance_status": "rejected_by_user_3d_style_differs_from_original",
+  "active_preview": false
+}

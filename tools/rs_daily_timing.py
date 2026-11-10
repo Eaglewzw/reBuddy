@@ -7,10 +7,18 @@ from pathlib import Path
 import numpy as np
 
 from rs_daily_prepare import Clap, Curve, Plan, validate_gravity
+from rs_motion_timewarp import TimeWarpedCurve
+from rs_daily_nuzzle import Nuzzle
 from rs_gravity_record import ROOT, PERIOD, digest
 
 
 def stage_curve(stage):
+    if stage['kind']=='nuzzle':
+        return Nuzzle(stage['poses_rad'],stage['durations_s'],stage['amplitude_deg'],
+                      sway_scurve=stage.get('sway_scurve'),
+                      sway_peak_fraction=stage.get('sway_peak_fraction',.25),
+                      sway_acceleration_factor=stage.get('sway_acceleration_factor',4*np.pi**2),
+                      turnaround_factor=stage.get('turnaround_factor',0.),**stage['limits'])
     if stage['kind']=='clap':
         return Clap(stage['pose_rad'],stage['amplitude_deg'],stage['half_s'],
                     stage.get('j1_sway_deg',0.),stage.get('sway_cycles',2),stage.get('sway_duration_s'))
@@ -18,6 +26,7 @@ def stage_curve(stage):
     factor=stage.get('speed',1.)
     curve.scale*=factor;curve.duration/=factor
     curve.peak_velocity*=factor;curve.peak_acceleration*=factor**2
+    if 'time_warp' in stage:curve=TimeWarpedCurve(curve,stage['time_warp'])
     return curve
 
 
@@ -38,7 +47,7 @@ def align_to_gifs(folder, gravity):
         spec=json.loads((folder/item['plan_file']).read_text())
         curves=[stage_curve(stage) for stage in spec['stages']]
         old=np.array([c.duration for c in curves])
-        adjustable=np.array([s['kind']=='curve' for s in spec['stages']])
+        adjustable=np.array([s['kind']=='curve' and 'time_warp' not in s for s in spec['stages']])
         fastest=old.copy()
         for i,c in enumerate(curves):
             if adjustable[i]:

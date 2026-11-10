@@ -1,0 +1,54 @@
+{
+  "schema": "rebuddy.dance_random_verification.v1",
+  "date": "2026-11-10",
+  "passed": true,
+  "hardware_tested": false,
+  "can_opened": false,
+  "selection": {
+    "mode": "random",
+    "seed": 42,
+    "count": 5,
+    "replacement": false,
+    "pool": [
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10"
+    ],
+    "algorithm": "python-random-sample-v1"
+  },
+  "numbers": [
+    "02",
+    "01",
+    "05",
+    "10",
+    "07"
+  ],
+  "duration_s": 40.912761615497956,
+  "connections": 4,
+  "max_c2_errors_q_v_a": [
+    2.0816681711721685e-16,
+    1.0028680758714472e-15,
+    4.1040000078363695e-15
+  ],
+  "sequence_test_cases_passed": 11,
+  "tests_passed": [
+    "rs_dance_sequence",
+    "project_assets"
+  ],
+  "random_play_cli_mock_passed": true,
+  "random_playback_mock_passed": true,
+  "source_report": "build/dance-sequence/random-42/report.json",
+  "source_report_sha256": "79ec067fae202164ecb9f87a5af9e2709c322b27c57c208e1502da817bf710e6",
+  "code_sha256": {
+    "tools/rs_dance_sequence_cli.py": "2ad579dc1ca0ea34b16c37b7ce4196ae00f715f08b29e496c7a165159f7f459b",
+    "tools/rs_dance_sequence.py": "7b99bc0028f48be6604edf7f95e5e65d337b86d17d3d7f7736032faafb5de2e0",
+    "tests/host/rs_dance_sequence_test.py": "892ccf396d278e6bc1e783437e1461dce4ddd328c18d57edd73594474d89561d"
+  }
+}

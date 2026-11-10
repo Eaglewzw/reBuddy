@@ -173,9 +173,18 @@ static rb_choreo_store_result_t decode_payload(const uint8_t *data, size_t lengt
         decoded.steps[i].action_id=step[0]; decoded.steps[i].repeat=step[1];
         decoded.steps[i].hold_ms=get16(step+2); decoded.steps[i].duration_ms=get16(step+4);
     }
-    if (rb_choreo_validate(&decoded,NULL)!=RB_CHOREO_OK) return RB_CHOREO_STORE_CORRUPT;
+    bool old_library=false;
+    rb_choreo_work_t validation=decoded;
+    for (unsigned i=0;i<count;++i)
+        if (decoded.steps[i].action_id>=RB_CHOREO_2D_NOD && decoded.steps[i].action_id<=RB_CHOREO_2D_WAVE) {
+            old_library=true;
+            /* Validate the unchanged step wire fields without reinterpreting or
+             * exposing the retired action as a current playable work. */
+            validation.steps[i].action_id=RB_CHOREO_DANCE_NOD;
+        }
+    if (rb_choreo_validate(&validation,NULL)!=RB_CHOREO_OK) return RB_CHOREO_STORE_CORRUPT;
     *work=decoded;
-    return RB_CHOREO_STORE_OK;
+    return old_library?RB_CHOREO_STORE_OLD_LIBRARY:RB_CHOREO_STORE_OK;
 }
 
 typedef struct {
@@ -201,7 +210,7 @@ static record_t read_record(unsigned key)
         return record;
     }
     record.result=decode_payload(data+HEADER_SIZE,length-HEADER_SIZE,&record.work);
-    if (record.result==RB_CHOREO_STORE_OK && record.work.work_id!=key/2+1)
+    if ((record.result==RB_CHOREO_STORE_OK || record.result==RB_CHOREO_STORE_OLD_LIBRARY) && record.work.work_id!=key/2+1)
         record.result=RB_CHOREO_STORE_CORRUPT;
     return record;
 }
@@ -212,8 +221,8 @@ static bool newer(uint32_t a, uint32_t b)
 
 static int newest_valid(const record_t records[2])
 {
-    bool a=records[0].result==RB_CHOREO_STORE_OK;
-    bool b=records[1].result==RB_CHOREO_STORE_OK;
+    bool a=records[0].result==RB_CHOREO_STORE_OK || records[0].result==RB_CHOREO_STORE_OLD_LIBRARY;
+    bool b=records[1].result==RB_CHOREO_STORE_OK || records[1].result==RB_CHOREO_STORE_OLD_LIBRARY;
     if (a && b) return newer(records[1].generation,records[0].generation)?1:0;
     return a?0:b?1:-1;
 }
@@ -223,6 +232,8 @@ static rb_choreo_store_result_t absent_result(const record_t records[2])
         return RB_CHOREO_STORE_IO;
     if (records[0].result==RB_CHOREO_STORE_VERSION || records[1].result==RB_CHOREO_STORE_VERSION)
         return RB_CHOREO_STORE_VERSION;
+    if (records[0].result==RB_CHOREO_STORE_OLD_LIBRARY || records[1].result==RB_CHOREO_STORE_OLD_LIBRARY)
+        return RB_CHOREO_STORE_OLD_LIBRARY;
     if (records[0].result==RB_CHOREO_STORE_EMPTY && records[1].result==RB_CHOREO_STORE_EMPTY)
         return RB_CHOREO_STORE_EMPTY;
     return RB_CHOREO_STORE_CORRUPT;
@@ -238,6 +249,7 @@ rb_choreo_store_result_t rb_choreo_store_load(unsigned slot, rb_choreo_work_t *w
         return RB_CHOREO_STORE_VERSION;
     int index=newest_valid(records);
     if (index<0) return absent_result(records);
+    if (records[index].result==RB_CHOREO_STORE_OLD_LIBRARY) return RB_CHOREO_STORE_OLD_LIBRARY;
     *work=records[index].work;
     return RB_CHOREO_STORE_OK;
 }

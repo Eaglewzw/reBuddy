@@ -143,6 +143,12 @@ class Session:
             nonlocal elapsed,goal,velocity
             elapsed=min(time.monotonic()-started,duration)
             goal,velocity=curve.at(elapsed)
+            if hasattr(curve,'gripper_profile_at'):
+                # A continuous sequence can include both gripper pulses and
+                # closed-gripper transitions without restarting this clock.
+                speed,following=curve.gripper_profile_at(elapsed)
+                self.controller.velocity_limit[6]=speed
+                self.controller.following_limit[6]=following
             return goal,velocity,min(1.,elapsed/1.5) if ramp else 1.
         while True:
             if curve is not None:
